@@ -1,7 +1,7 @@
 from colour import Color
 
 class RpmGauge:
-    def __init__(self, led_count, start_color, end_color, redline, rpm=0, redline=0):
+    def __init__(self, led_count, start_color, end_color, rpm=0, redline=0):
         self.led_count = led_count
         self.start_color = start_color
         self.end_color = end_color
