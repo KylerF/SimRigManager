@@ -1,4 +1,5 @@
 import sacn
+import math
 
 class Wled:
     @staticmethod
@@ -20,8 +21,8 @@ class Wled:
         data = []
         
         for color in color_list:
-            data.append(color.rgb['r'])
-            data.append(color.rgb['g'])
-            data.append(color.rgb['b'])
+            data.append(math.floor(color.rgb[0] * 255))
+            data.append(math.floor(color.rgb[1] * 255))
+            data.append(math.floor(color.rgb[2] * 255))
 
         self.sender[1].dmx_data = tuple(data)
