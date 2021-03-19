@@ -1,18 +1,25 @@
 from colour import Color
 
 class RpmGauge:
-    def __init__(self, led_count, start_color, end_color, rpm=0, redline=20000):
+    def __init__(self, led_count, start_color, end_color, rpm=0, idle_rpm=0, redline=20000):
         self.led_count = led_count
         self.start_color = start_color
         self.end_color = end_color
-        self.redline = redline
         self.rpm = rpm
+        self.idle_rpm = idle_rpm
+        self.redline = redline
 
     def set_rpm(self, rpm):
         if rpm is None:
             raise TypeError
 
         self.rpm = rpm
+        
+    def set_idle_rpm(self, idle_rpm):
+        if idle_rpm is None:
+            raise TypeError
+            
+        self.idle_rpm = idle_rpm
 
     def set_redline(self, redline):
         if redline is None:
@@ -21,12 +28,17 @@ class RpmGauge:
         self.redline = redline
 
     def to_color_list(self):
+        color_list = []
+        
         if self.rpm == 0:
             return []
         
         length = self.translate(self.rpm, 0, self.redline, 0, self.led_count)
-
-        return list(self.start_color.range_to(self.end_color, length))
+        
+        if length > 0:
+            color_list = list(self.start_color.range_to(self.end_color, length))
+            
+        return color_list
 
     def translate(self, value, leftMin, leftMax, rightMin, rightMax):
         # Figure out how 'wide' each range is
