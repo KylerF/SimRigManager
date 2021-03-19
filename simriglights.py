@@ -11,10 +11,11 @@ def main():
     controller = Wled.connect('192.168.1.65', 1)
 
     # Grab redline RPM for current car
-    rpm_strip = RpmGauge(50, Color('red'), Color('green'))
+    rpm_strip = RpmGauge(50, Color('green'), Color('red'))
 
     try:
         while True:
+            sleep(1/60)
             latest = data_stream.latest()
 
             if not data_stream.is_active:
@@ -28,8 +29,6 @@ def main():
 
             rpm_strip.set_rpm(latest['rpm'])
             controller.update(rpm_strip.to_color_list())
-
-            sleep(1/60)
     except KeyboardInterrupt:
         data_stream.stop()
         controller.stop()
