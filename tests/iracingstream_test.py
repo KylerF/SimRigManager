@@ -4,11 +4,11 @@ from raceparse.iracingstream import IracingStream
 class TestIracingStream(unittest.TestCase):
     def test_empty_stream(self):
         iracing_stream = IracingStream.get_stream()
+        iracing_stream.update()
 
-        self.assertFalse(iracing_stream.is_active(), 
+        self.assertFalse(iracing_stream.is_active, 
         msg='Stream should not think it is active when there is no data')
         
-        iracing_stream.update()
         self.assertEqual(iracing_stream.latest(), {}, 
         msg='Stream should not have data when there is no data!')
 
@@ -19,7 +19,7 @@ class TestIracingStream(unittest.TestCase):
     def test_stationary_stream(self):
         iracing_stream = IracingStream.get_stream(test_file='tests/data/ir01_idle_watkins.bin')
 
-        self.assertTrue(iracing_stream.is_active(), 
+        self.assertTrue(iracing_stream.is_active, 
         msg="Stream should be active on test file")
 
         iracing_stream.update()
@@ -33,7 +33,7 @@ class TestIracingStream(unittest.TestCase):
     def test_stationary_rev_stream(self):
         iracing_stream = IracingStream.get_stream(test_file='tests/data/ir01_revlimiter_watkins.bin')
 
-        self.assertTrue(iracing_stream.is_active(), 
+        self.assertTrue(iracing_stream.is_active, 
         msg="Stream should be active on test file")
 
         iracing_stream.update()
@@ -47,7 +47,7 @@ class TestIracingStream(unittest.TestCase):
     def test_full_speed_stream(self):
         iracing_stream = IracingStream.get_stream(test_file='tests/data/ir01_fullspeed_watkins.bin')
 
-        self.assertTrue(iracing_stream.is_active(), 
+        self.assertTrue(iracing_stream.is_active, 
         msg="Stream should be active on test file")
 
         iracing_stream.update()
