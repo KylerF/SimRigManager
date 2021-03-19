@@ -41,7 +41,7 @@ class IracingStream:
                     'redline': math.floor(self.ir['DriverInfo']['DriverCarRedLine']), 
                     'gear': self.ir['Gear']
                 }
-            except (AttributeError, TypeError) as e:
+            except (AttributeError, TypeError):
                 self.stop()
                 return
 
