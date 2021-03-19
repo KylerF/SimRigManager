@@ -20,12 +20,16 @@ class IracingStream:
         else:
             self.ir.startup()
 
-        self.is_active = True
+        if self.ir.is_initialized and self.ir.is_connected:
+            self.is_active = True
 
     def stop(self):
-        self.ir.shutdown()
+        if self.ir:
+            self.ir.shutdown()
+
         self.is_active = False
         self.ir = None
+        self.state = {}
 
     def update(self):
         if self.ir:
@@ -38,7 +42,7 @@ class IracingStream:
                     'gear': self.ir['Gear']
                 }
             except (AttributeError, TypeError) as e:
-                self.is_active = False
+                self.stop()
                 return
 
         self.is_active = True
