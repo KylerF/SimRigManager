@@ -42,7 +42,8 @@ class IracingStream:
                     'gear': self.ir['Gear']
                 }
             except (AttributeError, TypeError):
-                self.stop()
+                self.active = False
+                self.state = {}
                 return
 
         self.is_active = True
