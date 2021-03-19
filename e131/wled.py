@@ -5,17 +5,23 @@ class Wled:
     @staticmethod
     def connect(ip, universe):
         wled = Wled()
-        wled.sender = sacn.sACNsender()
-        wled.sender.start()
-        wled.sender.activate_output(universe)
-        wled.sender[universe].destination = ip
+        wled.ip = ip
+        wled.universe = universe
+        wled.reconnect()
 
         return wled
 
     def stop(self):
-        self.sender.deactivate_output(1)
-        self.sender.stop()
-        self.sender = None
+        if self.sender:
+            self.sender.deactivate_output(1)
+            self.sender.stop()
+            self.sender = None
+
+    def reconnect(self):
+        self.sender = sacn.sACNsender()
+        self.sender.start()
+        self.sender.activate_output(self.universe)
+        self.sender[self.universe].destination = self.ip
 
     def update(self, color_list):
         data = []
