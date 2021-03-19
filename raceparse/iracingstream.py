@@ -2,6 +2,7 @@ import irsdk
 import math
 
 class IracingStream:
+    is_active = False
     state = {}
 
     @staticmethod
@@ -19,25 +20,28 @@ class IracingStream:
         else:
             self.ir.startup()
 
+        self.is_active = True
+
     def stop(self):
         self.ir.shutdown()
+        self.is_active = False
         self.ir = None
 
-    def is_active(self):
-        try:
-            return self.ir['RPM'] != None
-        except AttributeError:
-            return False
-
     def update(self):
-        if self.ir and self.is_active():
-            self.state = {
-                'speed': math.floor(self.ir['Speed']*2.236936), 
-                'rpm': math.floor(self.ir['RPM']), 
-                'idle_rpm': math.floor(self.ir['DriverInfo']['DriverCarIdleRPM']), 
-                'redline': math.floor(self.ir['DriverInfo']['DriverCarRedLine']), 
-                'gear': self.ir['Gear']
-            }
+        if self.ir:
+            try:
+                self.state = {
+                    'speed': math.floor(self.ir['Speed']*2.236936), 
+                    'rpm': math.floor(self.ir['RPM']), 
+                    'idle_rpm': math.floor(self.ir['DriverInfo']['DriverCarIdleRPM']), 
+                    'redline': math.floor(self.ir['DriverInfo']['DriverCarRedLine']), 
+                    'gear': self.ir['Gear']
+                }
+            except AttributeError:
+                self.is_active = False
+                return
+
+        self.is_active = True
 
     def latest(self, next=True):
         if next:
