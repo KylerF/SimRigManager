@@ -2,6 +2,7 @@ from raceparse.iracingstream import IracingStream
 from display.rpmgauge import RpmGauge
 from e131.wled import Wled
 from colour import Color
+from time import sleep
 
 def main():
     data_stream = IracingStream.get_stream()
@@ -27,6 +28,8 @@ def main():
 
             rpm_strip.set_rpm(latest['rpm'])
             controller.update(rpm_strip.to_color_list())
+
+            sleep(1/60)
     except KeyboardInterrupt:
         data_stream.stop()
         controller.stop()
