@@ -28,17 +28,12 @@ class RpmGauge:
         self.redline = redline
 
     def to_color_list(self):
-        color_list = []
-        
         if self.rpm == 0:
             return []
         
         length = self.translate(self.rpm, 0, self.redline, 0, self.led_count)
-        
-        if length > 0:
-            color_list = list(self.start_color.range_to(self.end_color, length))
-            
-        return color_list
+
+        return list(self.start_color.range_to(self.end_color, length))
 
     def translate(self, value, leftMin, leftMax, rightMin, rightMax):
         # Figure out how 'wide' each range is
