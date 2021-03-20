@@ -9,7 +9,7 @@ pyinstaller simriglights
 ```
 Run the executable generated in dist/simriglights
 - Windows: dist/simriglights/simriglights.exe
-- Unix: dist/rimriglights/simriglights
+- Unix: dist/simriglights/simriglights
 
 ### To run with python
 ```python
