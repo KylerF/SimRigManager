@@ -5,7 +5,7 @@ from colour import Color
 from time import sleep
 
 def main():
-    #TODO: Set IP externally
+    #TODO: Set IP, universe, gradient colors or color 'theme', framerate externally
     controller = Wled.connect('192.168.1.46', 1)
     
     data_stream = IracingStream.get_stream()
