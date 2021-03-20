@@ -16,7 +16,7 @@ python simriglights.py
 ```
 Dependencies are installed manually on you system, and the application is run with python in a console window
 
-### Testing
+## Testing
 ```python
 python setup.py test
 ```
