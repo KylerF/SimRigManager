@@ -39,7 +39,7 @@ class TestIracingStream(unittest.TestCase):
         snapshot = iracing_stream.latest()
 
         self.assertEqual(snapshot["rpm"], snapshot["idle_rpm"], 
-        msg="Car should be at idling")
+        msg="Car should be idling")
 
         iracing_stream.stop()
         self.assertIsNone(iracing_stream.ir, 
