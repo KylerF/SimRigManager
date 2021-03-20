@@ -18,7 +18,7 @@ Dependencies are installed manually on your system
 ## Usage
 ### Run the executable
 #### Windows
-Open simriglights.exe
+- Open simriglights.exe
 
 #### Unix
 ```
