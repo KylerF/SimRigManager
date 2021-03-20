@@ -10,11 +10,10 @@ def main():
     
     data_stream = IracingStream.get_stream()
 
-    rpm_strip = RpmGauge(50, Color('green'), Color('red'))
+    rpm_strip = RpmGauge(60, Color('green'), Color('red'))
 
     try:
         while True:
-            sleep(1/60)
             latest = data_stream.latest()
 
             if not data_stream.is_active or not latest['is_on_track']:
@@ -28,9 +27,11 @@ def main():
                 rpm_strip.set_redline(latest['redline'])
             if rpm_strip.idle_rpm != latest['idle_rpm']:
                 rpm_strip.set_idle_rpm(latest['idle_rpm'])
-
+                
             rpm_strip.set_rpm(latest['rpm'])
             controller.update(rpm_strip.to_color_list())
+            
+            sleep(1/25)
     except KeyboardInterrupt:
         data_stream.stop()
         controller.stop()

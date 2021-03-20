@@ -43,6 +43,7 @@ class IracingStream:
                 return
             
             try:
+                # TODO: Check whether driverinfo vars are updated
                 self.state = {
                     'speed': math.floor(self.ir['Speed']*2.236936), 
                     'rpm': math.floor(self.ir['RPM']), 

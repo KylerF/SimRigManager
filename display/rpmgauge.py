@@ -8,6 +8,8 @@ class RpmGauge:
         self.rpm = rpm
         self.idle_rpm = idle_rpm
         self.redline = redline
+        
+        self.full_gradient = list(self.start_color.range_to(self.end_color, self.led_count))
 
     def set_rpm(self, rpm):
         if rpm is None:
@@ -33,7 +35,7 @@ class RpmGauge:
         
         length = self.translate(self.rpm, 0, self.redline, 0, self.led_count)
 
-        return list(self.start_color.range_to(self.end_color, length))
+        return self.full_gradient[0:length]
 
     def translate(self, value, leftMin, leftMax, rightMin, rightMax):
         # Figure out how 'wide' each range is
