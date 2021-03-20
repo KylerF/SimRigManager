@@ -16,19 +16,18 @@ python setup.py install
 Dependencies are installed manually on your system
 
 ## Usage
-### Run with python
-```
-python simriglights.py
-```
-
-### Or using the executable
+### Run the executable
 #### Windows
-Run simriglights.exe
+Open simriglights.exe
 
 #### Unix
 ```
 cd dist/simriglights
 ./simriglights
+```
+### Start with python
+```
+python simriglights.py
 ```
 
 ## Testing
