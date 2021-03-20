@@ -3,6 +3,7 @@ from display.rpmgauge import RpmGauge
 from e131.wled import Wled
 from colour import Color
 from time import sleep
+import atexit
 
 def main():
     #TODO: Set IP, universe, gradient colors or color 'theme', framerate externally
@@ -11,6 +12,9 @@ def main():
     data_stream = IracingStream.get_stream()
 
     rpm_strip = RpmGauge(60, Color('green'), Color('red'))
+
+    atexit.register(data_stream.stop)
+    atexit.register(controller.stop)
 
     try:
         while True:
@@ -33,8 +37,7 @@ def main():
             
             sleep(1/25)
     except KeyboardInterrupt:
-        data_stream.stop()
-        controller.stop()
+       exit()
 
 if __name__ == '__main__':
     main()
