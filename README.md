@@ -7,7 +7,21 @@ Code for the badass sim rig lights
 pip install pyinstaller
 pyinstaller simriglights
 ```
-Run the executable generated in dist/simriglights
+An executable is generated in dist/simriglights
+
+### To run with python
+```
+python setup.py install
+```
+Dependencies are installed manually on your system
+
+## Usage
+### Run with python
+```
+python simriglights.py
+```
+
+### Run using the executable
 #### Windows
 Run simriglights.exe
 
@@ -16,13 +30,6 @@ Run simriglights.exe
 cd dist/simriglights
 ./simriglights
 ```
-
-### To run with python
-```
-python setup.py install
-python simriglights.py
-```
-Dependencies are installed manually on your system, and the application is run with python in a console window
 
 ## Testing
 ```
