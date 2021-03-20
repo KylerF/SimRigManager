@@ -21,7 +21,7 @@ Dependencies are installed manually on your system
 python simriglights.py
 ```
 
-### Run using the executable
+### Or using the executable
 #### Windows
 Run simriglights.exe
 
