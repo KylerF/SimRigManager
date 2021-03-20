@@ -14,21 +14,39 @@ class TestRpmGauge(unittest.TestCase):
         self.rpm_strip.set_rpm(0)
 
         self.assertEqual(self.rpm_strip.rpm, 0, 
-        msg='Rpm should be 0')
+        msg='RPM should be 0')
 
         self.assertEqual(len(self.rpm_strip.to_color_list()), 0, 
-        msg='Color list should be empty at 0 rpm')
+        msg='Color list should be empty at 0 RPM')
+
+    def test_rpm_negative(self):
+        self.rpm_strip.set_rpm(-1000)
+
+        self.assertEqual(self.rpm_strip.rpm, 0, 
+        msg='A negative RPM should not be allowed')
+
+    def test_idle_rpm_negative(self):
+        self.rpm_strip.set_idle_rpm(-1000)
+
+        self.assertEqual(self.rpm_strip.idle_rpm, 0, 
+        msg='A negative idle RPM should not be allowed')
+
+    def test_redline_negative(self):
+        self.rpm_strip.set_redline(-1000)
+
+        self.assertEqual(self.rpm_strip.redline, 0, 
+        msg='A negative redline RPM should not be allowed')
 
     def test_rpm_10000(self):
         self.rpm_strip.set_rpm(10000)
 
         self.assertEqual(self.rpm_strip.rpm, 10000, 
-        msg='Rpm should be 5000')
+        msg='RPM should be 10000')
         
         self.assertEqual(
             len(self.rpm_strip.to_color_list()), 
             int((10000/20000) * 50), 
-            msg='Color list has incorrect size at 5000 rpm'
+            msg='Color list has incorrect size at 10000 RPM'
         )
 
         self.assertEqual(self.rpm_strip.to_color_list()[0], Color('green'), 
@@ -50,7 +68,7 @@ class TestRpmGauge(unittest.TestCase):
         self.assertEqual(
             len(self.rpm_strip.to_color_list()), 
             int((20000/20000) * 50), 
-            msg='Color list has incorrect size at 20000 rpm'
+            msg='Color list has incorrect size at 20000 RPM'
         )
 
         self.assertEqual(self.rpm_strip.to_color_list()[0], Color('green'), 
