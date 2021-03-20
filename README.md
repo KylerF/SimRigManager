@@ -8,8 +8,14 @@ pip install pyinstaller
 pyinstaller simriglights
 ```
 Run the executable generated in dist/simriglights
-- Windows: dist/simriglights/simriglights.exe
-- Unix: dist/simriglights/simriglights
+#### Windows
+Run simriglights.exe
+
+#### Unix
+```bash
+cd dist/simriglights
+./simriglights
+```
 
 ### To run with python
 ```python
