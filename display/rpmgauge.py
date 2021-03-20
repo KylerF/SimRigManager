@@ -15,19 +15,19 @@ class RpmGauge:
         if rpm is None:
             raise TypeError
 
-        self.rpm = rpm
+        self.rpm = rpm if rpm > 0 else 0
         
     def set_idle_rpm(self, idle_rpm):
         if idle_rpm is None:
             raise TypeError
             
-        self.idle_rpm = idle_rpm
+        self.idle_rpm = idle_rpm if idle_rpm > 0 else 0
 
     def set_redline(self, redline):
         if redline is None:
             raise TypeError
 
-        self.redline = redline
+        self.redline = redline if redline > 0 else 0
 
     def to_color_list(self):
         if self.rpm == 0:
