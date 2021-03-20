@@ -23,7 +23,7 @@ setup(
     },
     install_requires=[
         'pyirsdk', 
-	    'colour', 
+	'colour', 
         'sacn',
     ],
 )
