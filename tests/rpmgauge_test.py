@@ -19,23 +19,27 @@ class TestRpmGauge(unittest.TestCase):
         self.assertEqual(len(self.rpm_strip.to_color_list()), 0, 
         msg='Color list should be empty at 0 rpm')
 
-    def test_rpm_5000(self):
-        self.rpm_strip.set_rpm(5000)
+    def test_rpm_10000(self):
+        self.rpm_strip.set_rpm(10000)
 
-        self.assertEqual(self.rpm_strip.rpm, 5000, 
+        self.assertEqual(self.rpm_strip.rpm, 10000, 
         msg='Rpm should be 5000')
         
         self.assertEqual(
             len(self.rpm_strip.to_color_list()), 
-            int((5000/20000) * 50), 
+            int((10000/20000) * 50), 
             msg='Color list has incorrect size at 5000 rpm'
         )
 
         self.assertEqual(self.rpm_strip.to_color_list()[0], Color('green'), 
         msg='Wrong start color')
 
-        self.assertEqual(self.rpm_strip.to_color_list()[-1], Color('red'), 
-        msg='Wrong end color')
+        self.assertAlmostEqual(
+            self.rpm_strip.to_color_list()[-1].rgb[0], 
+            self.rpm_strip.to_color_list()[-1].rgb[1], 
+            delta=0.2, 
+            msg='At half revs, end color should be yellowish'
+        )
 
     def test_rpm_20000(self):
         self.rpm_strip.set_rpm(20000)
