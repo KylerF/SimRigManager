@@ -10,7 +10,7 @@ def main():
     #TODO: Set IP, universe, gradient colors or color 'theme', framerate externally
     controller = Wled.connect('192.168.1.46', 1)
     data_stream = IracingStream.get_stream()
-    rpm_strip = RpmGauge(60, Color('green'), Color('red'))
+    rpm_strip = RpmGauge(120, Color('green'), Color('red'))
 
     atexit.register(data_stream.stop)
     atexit.register(controller.stop)
