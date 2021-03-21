@@ -32,7 +32,7 @@ python simriglights.py
 
 ## Testing
 ```
-python setup.py test
+python setup.py nosetests
 ```
 All unit tests are run using [nose](https://nose.readthedocs.io/en/latest/testing.html)
 
