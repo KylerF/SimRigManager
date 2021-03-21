@@ -3,6 +3,7 @@ from display.rpmgauge import RpmGauge
 from e131.wled import Wled
 from colour import Color
 from time import sleep
+from sys import exit
 import atexit
 
 def main():
