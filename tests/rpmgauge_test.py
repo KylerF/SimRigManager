@@ -45,18 +45,28 @@ class TestRpmGauge(unittest.TestCase):
         
         self.assertEqual(
             len(self.rpm_strip.to_color_list()), 
-            int((10000/20000) * 50), 
+            50, 
             msg='Color list has incorrect size at 10000 RPM'
         )
 
         self.assertEqual(self.rpm_strip.to_color_list()[0], Color('green'), 
-        msg='Wrong start color')
+        msg='Wrong start color on first strip')
+
+        self.assertEqual(self.rpm_strip.to_color_list()[-1], Color('green'), 
+        msg='Wrong start color on second strip')
 
         self.assertAlmostEqual(
-            self.rpm_strip.to_color_list()[-1].rgb[0], 
-            self.rpm_strip.to_color_list()[-1].rgb[1], 
+            self.rpm_strip.to_color_list()[12].rgb[0], 
+            self.rpm_strip.to_color_list()[12].rgb[1], 
             delta=0.2, 
-            msg='At half revs, end color should be yellowish'
+            msg='At half revs, end color should be yellowish on first strip'
+        )
+
+        self.assertAlmostEqual(
+            self.rpm_strip.to_color_list()[36].rgb[0], 
+            self.rpm_strip.to_color_list()[36].rgb[1], 
+            delta=0.2, 
+            msg='At half revs, end color should be yellowish on second strip'
         )
 
     def test_rpm_20000(self):
@@ -67,15 +77,21 @@ class TestRpmGauge(unittest.TestCase):
 
         self.assertEqual(
             len(self.rpm_strip.to_color_list()), 
-            int((20000/20000) * 50), 
+            50, 
             msg='Color list has incorrect size at 20000 RPM'
         )
 
         self.assertEqual(self.rpm_strip.to_color_list()[0], Color('green'), 
-        msg='Wrong start color')
+        msg='Wrong start color on the first strip')
 
-        self.assertEqual(self.rpm_strip.to_color_list()[-1], Color('red'), 
-        msg='Wrong end color')
+        self.assertEqual(self.rpm_strip.to_color_list()[-1], Color('green'), 
+        msg='Wrong start color on the second strip')
+
+        self.assertEqual(self.rpm_strip.to_color_list()[24], Color('red'), 
+        msg='Wrong end color on the first strip')
+
+        self.assertEqual(self.rpm_strip.to_color_list()[25], Color('red'), 
+        msg='Wrong start color on the second strip')
 
 if __name__ == '__main__':
     unittest.main()
