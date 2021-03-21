@@ -17,7 +17,10 @@ setup(
         'Topic :: Utilities',
     ],
     test_suite='nose.collector',
-    tests_require=['nose'],
+    setup_requires=[
+        'nose', 
+        'coverage'
+    ],
     entry_points={
         'console_scripts': ['simriglights = simriglights:main'],
     },
