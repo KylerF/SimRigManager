@@ -6,6 +6,8 @@ import sacn
 import math
 
 class Wled:
+    is_connected = False
+    
     """
     Used to connect to the WLED controller
     """
@@ -29,6 +31,8 @@ class Wled:
             self.sender.deactivate_output(1)
             self.sender.stop()
             self.sender = None
+            
+            self.is_connected = False
 
     def reconnect(self):
         """
@@ -38,6 +42,8 @@ class Wled:
         self.sender.start()
         self.sender.activate_output(self.universe)
         self.sender[self.universe].destination = self.ip
+        
+        self.is_connected = True
 
     def update(self, color_list):
         """

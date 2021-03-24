@@ -38,7 +38,8 @@ def main():
                 sleep(1)
                 continue
             else:
-                controller.reconnect()
+                if not controller.is_connected:
+                    controller.reconnect()
 
             if rpm_strip.redline != latest['redline']:
                 rpm_strip.set_redline(latest['redline'])
