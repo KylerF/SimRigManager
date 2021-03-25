@@ -1,10 +1,12 @@
 from raceparse.iracingstream import IracingStream
 from display.rpmgauge import RpmGauge
 from e131.wled import Wled
+
 from colour import Color
 from time import sleep
 from sys import exit
 import configparser
+import logging
 import atexit
 
 def main():
@@ -18,40 +20,54 @@ def main():
     start_color = Color(config['colors']['rpm_gauge_start_color']) or Color('green')
     end_color = Color(config['colors']['rpm_gauge_end_color']) or Color('red')
     framerate = int(config['data']['framerate']) or 25
+    log_level = config['logging']['level'] or 'INFO'
+
+    # Set up logging
+    logging.basicConfig(level=log_level)
+    log = logging.getLogger(__name__)
 
     # Set up WLED controller and iRacing data stream
+    log.info('Connecting to WLED')
     controller = Wled.connect(ip, universe)
     rpm_strip = RpmGauge(led_count, start_color, end_color)
 
+    log.info('Connecting to iRacing')
     data_stream = IracingStream.get_stream()
 
     # Clean up resources upon exit
     atexit.register(data_stream.stop)
     atexit.register(controller.stop)
 
+    log.info('Waiting for iRacing')
+
     try:
         while True:
             latest = data_stream.latest()
 
             if not data_stream.is_active or not latest['is_on_track']:
+                log.warning('iRacing data lost - retrying')
                 controller.stop()
                 sleep(1)
                 continue
             else:
                 if not controller.is_connected:
+                    log.info('Reconnecting')
                     controller.reconnect()
 
             if rpm_strip.redline != latest['redline']:
                 rpm_strip.set_redline(latest['redline'])
+                log.debug('Setting redline to new value: ' + latest['redline'])
             if rpm_strip.idle_rpm != latest['idle_rpm']:
                 rpm_strip.set_idle_rpm(latest['idle_rpm'])
+                log.debug('Setting idle RPM to new value: ' + latest['idle_rpm'])
                 
             rpm_strip.set_rpm(latest['rpm'])
             controller.update(rpm_strip.to_color_list())
             
             sleep(1/framerate)
     except KeyboardInterrupt:
-       exit()
+        log.info('Keyboard interrupt received - exiting')
+        exit()
 
 if __name__ == '__main__':
     main()
