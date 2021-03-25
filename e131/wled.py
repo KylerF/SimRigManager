@@ -1,11 +1,11 @@
-"""
-WLED controller class to handle ACN communications and update
-the color of the LEDs
-"""
 import sacn
 import math
 
 class Wled:
+    """
+    WLED controller object to handle ACN communications and update
+    the color of the connected LEDs
+    """
     is_connected = False
     
     """
