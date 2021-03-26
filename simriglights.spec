@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['simriglights.py'],
-             pathex=['C:\\Users\\freas\\Documents\\GitHub\\SimRigLights'],
+             pathex=[],
              binaries=[],
              datas=[('config.ini', '.')],
              hiddenimports=[],
