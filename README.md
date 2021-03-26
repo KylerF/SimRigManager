@@ -1,5 +1,5 @@
 # SimRigLights
-Code for the badass sim rig lights
+Code for the badass sim rig lights.
 
 ## Installation
 ### As an executable
