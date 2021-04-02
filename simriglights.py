@@ -38,15 +38,15 @@ def main():
     atexit.register(data_stream.stop)
     atexit.register(controller.stop)
 
-    log.info('Waiting for iRacing')
-
     try:
         while True:
             latest = data_stream.latest()
 
             if not data_stream.is_active or not latest['is_on_track']:
-                log.warning('iRacing data lost - retrying')
-                controller.stop()
+                if controller.is_connected:
+                    controller.stop()
+                    log.warning('iRacing data lost - waiting')
+
                 sleep(1)
                 continue
             else:
