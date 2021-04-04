@@ -56,10 +56,10 @@ def main():
 
             if rpm_strip.redline != latest['redline']:
                 rpm_strip.set_redline(latest['redline'])
-                log.debug('Setting redline to new value: ' + latest['redline'])
+                log.debug('Setting redline to new value: ' + str(latest['redline']))
             if rpm_strip.idle_rpm != latest['idle_rpm']:
                 rpm_strip.set_idle_rpm(latest['idle_rpm'])
-                log.debug('Setting idle RPM to new value: ' + latest['idle_rpm'])
+                log.debug('Setting idle RPM to new value: ' + str(latest['idle_rpm']))
                 
             rpm_strip.set_rpm(latest['rpm'])
             controller.update(rpm_strip.to_color_list())
