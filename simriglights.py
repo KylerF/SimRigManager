@@ -86,6 +86,8 @@ def main():
     except KeyboardInterrupt:
         log.info('Keyboard interrupt received - exiting')
         exit()
+    except Exception:
+        log.exception('Unhandled exit condition')
 
 if __name__ == '__main__':
     main()
