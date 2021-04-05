@@ -25,7 +25,7 @@ def main():
     log_level = config.get('logging', 'level', fallback='INFO')
 
     # Set up logging    
-    file_handler = RotatingFileHandler('simriglights.log', maxBytes=2000, backupCount=5)
+    file_handler = RotatingFileHandler('simriglights.log', maxBytes=20000000)
     stdout_handler = logging.StreamHandler(sys.stdout)
 
     logging.basicConfig(
@@ -62,7 +62,7 @@ def main():
             if not data_stream.is_active or not latest['is_on_track']:
                 if controller.is_connected:
                     controller.stop()
-                    log.warning('iRacing data lost - waiting')
+                    log.info('iRacing data lost - waiting')
 
                 data_stream.restart()
                 sleep(1)
@@ -88,6 +88,7 @@ def main():
         exit()
     except Exception:
         log.exception('Unhandled exit condition')
+        exit(1)
 
 if __name__ == '__main__':
     main()
