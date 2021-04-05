@@ -64,6 +64,7 @@ def main():
                     controller.stop()
                     log.warning('iRacing data lost - waiting')
 
+                data_stream.restart()
                 sleep(1)
                 continue
             else:
