@@ -2,29 +2,46 @@ from raceparse.iracingstream import IracingStream
 from display.rpmgauge import RpmGauge
 from e131.wled import Wled
 
+from logging.handlers import RotatingFileHandler
 from colour import Color
 from time import sleep
 from sys import exit
 import configparser
 import logging
 import atexit
+import sys
 
 def main():
     # Get config options from file
     config = configparser.ConfigParser()
     config.read('config.ini')
 
-    ip = config['wled']['rpm_gauge_ip'] or '127.0.0.1'
-    universe = int(config['wled']['rpm_gauge_universe']) or 1
-    led_count = int(config['wled']['rpm_gauge_led_count']) or 120
-    start_color = Color(config['colors']['rpm_gauge_start_color']) or Color('green')
-    end_color = Color(config['colors']['rpm_gauge_end_color']) or Color('red')
-    framerate = int(config['data']['framerate']) or 25
-    log_level = config['logging']['level'] or 'INFO'
+    ip = config.get('wled', 'rpm_gauge_ip', fallback='127.0.0.1')
+    universe = int(config.get('wled', 'rpm_gauge_universe', fallback=1))
+    led_count = int(config.get('wled', 'rpm_gauge_led_count', fallback=120))
+    start_color = Color(config.get('colors', 'rpm_gauge_start_color', fallback='green'))
+    end_color = Color(config.get('colors', 'rpm_gauge_end_color', fallback='red'))
+    framerate = int(config.get('data', 'framerate', fallback=25))
+    log_level = config.get('logging', 'level', fallback='INFO')
 
-    # Set up logging
-    logging.basicConfig(level=log_level)
+    # Set up logging    
+    file_handler = RotatingFileHandler('simriglights.log', maxBytes=2000, backupCount=5)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+
+    logging.basicConfig(
+        level=log_level, 
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        handlers=[file_handler, stdout_handler]
+    )
+
     log = logging.getLogger(__name__)
+
+    # Check whether config was loaded
+    try:
+        _ = config['wled']['rpm_gauge_ip']
+    except KeyError:
+        log.error('Unable to load config file - reverting to default settings')
 
     # Set up WLED controller and iRacing data stream
     log.info('Connecting to WLED')
