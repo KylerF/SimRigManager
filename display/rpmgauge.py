@@ -1,10 +1,12 @@
+from display.colortheme import ColorTheme
+
 from colour import Color
 
 class RpmGauge:
-    def __init__(self, led_count, start_color, end_color, rpm=0, idle_rpm=0, redline=20000):
+    def __init__(self, led_count, color_theme, rpm=0, idle_rpm=0, redline=20000):
         self.led_count = led_count
-        self.start_color = start_color
-        self.end_color = end_color
+        self.start_color = color_theme.primary_color
+        self.end_color = color_theme.secondary_color
         self.rpm = rpm
         self.idle_rpm = idle_rpm
         self.redline = redline
