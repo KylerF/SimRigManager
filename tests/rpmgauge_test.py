@@ -1,10 +1,12 @@
-import unittest
-from colour import Color
+from display.colortheme import ColorTheme
 from display.rpmgauge import RpmGauge
+from colour import Color
+import unittest
 
 class TestRpmGauge(unittest.TestCase):
     def setUp(self):
-        self.rpm_strip = RpmGauge(50, Color('green'), Color('red'), 20000)
+        color_theme = ColorTheme(Color('green'), Color('red'))
+        self.rpm_strip = RpmGauge(50, color_theme, 20000)
 
     def test_empty_rpm(self):
         self.assertRaises(TypeError, lambda: self.rpm_strip.set_rpm(None),
