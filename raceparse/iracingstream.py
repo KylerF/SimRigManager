@@ -2,6 +2,7 @@ import irsdk
 import math
 
 class IracingStream:
+    driver_index = 0
     is_active = False
     state = {}
 
@@ -9,6 +10,7 @@ class IracingStream:
     def get_stream(test_file=None):
         stream = IracingStream()
         stream.start(test_file)
+        stream.get_startup_info()
         stream.update()
 
         return stream
@@ -36,6 +38,29 @@ class IracingStream:
         self.stop()
         self.start()
 
+    def get_startup_info(self):
+        if self.ir:
+            if not (self.ir.is_initialized and self.ir.is_connected):
+                self.active = False
+                return
+        
+        try:
+            self.driver_index = self.ir['DriverInfo']['DriverCarIdx']
+
+            self.state.update({
+                'driver_index': self.driver_index, 
+                'idle_rpm': math.floor(self.ir['DriverInfo']['DriverCarIdleRPM']), 
+                'redline': math.floor(self.ir['DriverInfo']['DriverCarRedLine']), 
+                'event_type': self.ir['WeekendInfo']['EventType'], 
+                'car_name': self.ir['DriverInfo']['Drivers'][self.driver_index]['CarScreenName'], 
+                'track_name': self.ir['WeekendInfo']['TrackDisplayName'], 
+                'track_config': self.ir['WeekendInfo']['TrackConfigName'] 
+            })
+        except (KeyError, AttributeError, TypeError):
+            self.active = False
+            self.state = {}
+            return
+
     def update(self):
         if self.ir:
             if not (self.ir.is_initialized and self.ir.is_connected):
@@ -44,15 +69,15 @@ class IracingStream:
             
             try:
                 # TODO: Check whether driverinfo vars are updated
-                self.state = {
+                self.state.update ({
                     'speed': math.floor(self.ir['Speed']*2.236936), 
                     'rpm': math.floor(self.ir['RPM']), 
-                    'idle_rpm': math.floor(self.ir['DriverInfo']['DriverCarIdleRPM']), 
-                    'redline': math.floor(self.ir['DriverInfo']['DriverCarRedLine']), 
                     'gear': self.ir['Gear'], 
                     'is_on_track': self.ir['IsOnTrack'], 
-                }
-            except (AttributeError, TypeError):
+                    'incident_count': self.ir['PlayerCarMyIncidentCount'], 
+                    'best_lap_time': self.ir['LapBestLapTime']
+                })
+            except (KeyError, AttributeError, TypeError):
                 self.active = False
                 self.state = {}
                 return
