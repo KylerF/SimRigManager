@@ -27,6 +27,7 @@ setup(
     install_requires=[
         'pyirsdk', 
 	    'colour', 
+        'flask', 
         'sacn',
     ],
 )
