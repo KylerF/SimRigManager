@@ -1,3 +1,19 @@
 <div class="container-fluid pt-3">
-  <controller-list></controller-list>
+  <div class="jumbotron text-center">
+    <h1>Sim Rig Manager</h1>
+  </div>
+  
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="scoreboard" routerLinkActive="active">Scoreboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="controllers" routerLinkActive="active">Light Controllers</a>
+    </li>
+  </ul>
+
+  <router-outlet></router-outlet>
 </div>
