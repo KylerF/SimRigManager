@@ -1,44 +1,48 @@
-<div class="container-fluid pt-3">
-    <h1>Controllers</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">
-                    Name
-                </th>
-                <th scope="col">
-                    IP Address
-                </th>
-                <th scope="col">
-                    Universe
-                </th>
-                <th scope="col">
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let controller of controllers">
-                <td>
-                    <input *ngIf="controller.isBeingEdited" type="text" [(ngModel)]="controller.name" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">{{ controller.name }}</div>
-                </td>
-                <td>
-                    <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.ipAddress" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">{{ controller.ipAddress }}</div>
-                </td>
-                <td>
-                    <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.universe" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">{{ controller.universe }}</div>
-                </td>
-                <td>
-                    <button *ngIf="!controller.isBeingEdited" class="btn btn-primary mr-1" (click)="controller.startEditing()">Edit</button>
-                    <button *ngIf="controller.isBeingEdited" class="btn btn-success mr-1" (click)="controller.stopEditing();finishEdit()">Update</button>
-                    <a href="http://{{controller.ipAddress}}" target="_blank">
-                        <button class="btn btn-primary">Test Connection</button>
+<h1>Controllers</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">
+                Name
+            </th>
+            <th scope="col">
+                IP Address
+            </th>
+            <th scope="col">
+                Universe
+            </th>
+            <th scope="col">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let controller of controllers">
+            <td>
+                <input *ngIf="controller.isBeingEdited" type="text" [(ngModel)]="controller.name" class="form-control" />
+                <div *ngIf="!controller.isBeingEdited">{{ controller.name }}</div>
+            </td>
+            <td>
+                <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.ipAddress" class="form-control" />
+                <div *ngIf="!controller.isBeingEdited">{{ controller.ipAddress }}</div>
+            </td>
+            <td>
+                <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.universe" class="form-control" />
+                <div *ngIf="!controller.isBeingEdited">{{ controller.universe }}</div>
+            </td>
+            <td>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button *ngIf="!controller.isBeingEdited" class="btn btn-primary mr-1 " (click)="editController(controller)">
+                        Edit
+                    </button>
+                    <button *ngIf="controller.isBeingEdited" class="btn btn-success mr-1" (click)="updateControllers()">
+                        Update
+                    </button>
+                    <a class="btn btn-primary" href="http://{{controller.ipAddress}}" target="_blank">
+                        Test Connection
                     </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

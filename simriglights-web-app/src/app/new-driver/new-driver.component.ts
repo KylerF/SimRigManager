@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Driver } from '../driver';
+import { DriverService } from '../driver.service';
 
 @Component({
   selector: 'app-new-driver',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-driver.component.css']
 })
 export class NewDriverComponent implements OnInit {
+  newDriver: Driver;
+  error: string;
 
-  constructor() { }
+  constructor(private driverService: DriverService) { }
 
   ngOnInit(): void {
+
   }
 
+  addDriver() {
+    this.driverService.addDriver(this.newDriver);
+  }
 }

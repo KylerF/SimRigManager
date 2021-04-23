@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
+import { ControllerService } from '../controller.service';
 import { Controller } from '../controller';
 
 
@@ -14,8 +14,10 @@ import { Controller } from '../controller';
  */
 export class ControllerListComponent implements OnInit {
   controllers: Controller[];
+  loading: boolean;
+  error: string;
 
-  constructor(private configService: ConfigService) { }
+  constructor(private controllerService: ControllerService) { }
 
   ngOnInit(): void {
     this.getControllers();
@@ -32,13 +34,36 @@ export class ControllerListComponent implements OnInit {
    * Retrieve configured WLED controllers
    */
   getControllers() {
-    this.controllers = this.configService.getControllers();
+    this.loading = true;
+
+    this.controllerService.getControllers().subscribe(
+      response => {
+        // Success! 
+        this.controllers = response;
+        this.loading = false;
+      },
+      error => {
+        // Failed. Save the response.
+        this.error = error;
+        this.loading = false;
+      }
+    );
   }
 
   /**
-   * Update controller configuration
+   * Switch a controller to edit mode
    */
+   editController(controller: Controller) {
+    var controllerToEdit = this.controllers.filter(function (thisController) {
+      return thisController.id === controller.id;
+    });
+
+    controllerToEdit[0].isBeingEdited = true;
+  }
+
   updateControllers() {
-    this.configService.updateControllers(this.controllers);
+    for(let controller of this.controllers) {
+      controller.isBeingEdited = false;
+    }
   }
 }

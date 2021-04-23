@@ -25,9 +25,13 @@ setup(
         'console_scripts': ['simriglights = simriglights:main'],
     },
     install_requires=[
+        'sqlalchemy_utils',
+        'sqlalchemy',
+        'pydantic',
         'pyirsdk', 
+        'fastapi', 
+        'uvicorn',
 	    'colour', 
-        'flask', 
         'sacn',
     ],
 )

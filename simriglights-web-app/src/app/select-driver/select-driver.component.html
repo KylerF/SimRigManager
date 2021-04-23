@@ -1,1 +1,50 @@
-<p>select-driver works!</p>
+<h1>Drivers</h1>
+<table class="table table-hover table-clickable">
+    <thead>
+        <tr>
+            <th>
+                
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Nickname
+            </th>
+            <th>
+                Track Time
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
+            <td>
+                <span *ngIf="selectedDriver && driver.id === selectedDriver.id" class="bi bi-check2-circle" style="color: green"></span>
+            </td>
+            <td>
+                {{ driver.name }}
+            </td>
+            <td>
+                {{ driver.nickname }}
+            </td>
+            <td>
+                {{ driver.trackTime * 100 | date:'H:mm:ss':'UTC'}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="py-2">
+    <button class="btn btn-primary">
+        <span class="bi bi-plus-circle-fill"></span> New driver
+    </button>
+</div>
+
+
+<div *ngIf="selectedDriver" class="alert alert-success">
+    Welcome, {{ selectedDriver.nickname }}! Your lap times are being recorded.
+</div>
+
+<div *ngIf="!selectedDriver" class="alert alert-danger">
+    No driver selected! Click your name to start recording your lap times.
+</div>

@@ -1,1 +1,60 @@
-<p>scoreboard works!</p>
+<h1>High Scores</h1>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Driver
+            </th>
+            <th>
+                Car
+            </th>
+            <th>
+                Track
+            </th>
+            <th>
+                Config
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Set
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let lapTime of lapTimes">
+            <td>
+                {{ lapTime.driver.name }}
+            </td>
+            <td>
+                {{ lapTime.car }}
+            </td>
+            <td>
+                {{ lapTime.trackName }}
+            </td>
+            <td>
+                {{ lapTime.trackConfig }}
+            </td>
+            <td>
+                {{ lapTime.time * 1000 | date:'mm:ss.SS':'UTC' }}
+            </td>
+            <td>
+                {{ lapTime.setAt | dateAgo }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h4 *ngIf="!lapTimes && !error && !loading" class="text-center text-muted">
+    No lap times yet. Go burn some rubber!
+</h4>
+
+<figure class="text-center position-absolute bottom-0 start-50 translate-middle-x">
+    <blockquote class="blockquote">
+        <p>If you ain't first, you're last.</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">
+        Ricky Bobby
+    </figcaption>
+</figure>
