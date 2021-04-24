@@ -17,9 +17,9 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
+        <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.driver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
             <td>
-                <span *ngIf="selectedDriver && driver.id === selectedDriver.id" class="bi bi-check2-circle" style="color: green"></span>
+                <span *ngIf="selectedDriver && driver.id === selectedDriver.driver.id" class="bi bi-check2-circle" style="color: green"></span>
             </td>
             <td>
                 {{ driver.name }}
@@ -35,14 +35,14 @@
 </table>
 
 <div class="py-2">
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="showAddDriverDialog()">
         <span class="bi bi-plus-circle-fill"></span> New driver
     </button>
 </div>
 
 
 <div *ngIf="selectedDriver" class="alert alert-success">
-    Welcome, {{ selectedDriver.nickname }}! Your lap times are being recorded.
+    Welcome, {{ selectedDriver.driver.nickname }}! Your lap times are being recorded.
 </div>
 
 <div *ngIf="!selectedDriver" class="alert alert-danger">

@@ -21,22 +21,20 @@
     </div>
 
     <div *ngIf="selectedDriver" class="alert alert-success">
-        <span class="bi bi-circle-fill" style="color:green"></span><b> Lap Times: </b>Lap times are being recorded for <b>{{ selectedDriver.nickname }}</b>
+        <span class="bi bi-circle-fill" style="color:green"></span><b> Lap Times: </b>Lap times are being recorded for <b>{{ selectedDriver.driver.nickname }}</b>
     </div>
 
     <div *ngIf="!selectedDriver" class="alert alert-danger">
         <span class="bi bi-x-circle-fill" style="color:red"></span><b> Lap Times: </b> No driver selected. Click the drivers tab to start recording your lap times.
     </div>
 
-    <div class="alert alert-success">
-        <span class="bi bi-circle-fill" style="color:green"></span><b> WLED: </b> All light controllers are active
-    </div>
-
-    <div class="alert alert-danger">
-        <span class="bi bi-x-circle-fill" style="color:red"></span><b> WLED: </b> Light controllers are offline
-        <ul>
-            <li>RPM Gauge</li>
-            <li>Matrix</li>
-          </ul>
+    <div *ngFor="let status of controllerStatus">
+        <div *ngIf="status.online" class="alert alert-success">
+            <span class="bi bi-circle-fill" style="color:green"></span><b> WLED: </b> {{ status.name }} is online
+        </div>
+    
+        <div *ngIf="!status.online" class="alert alert-danger">
+            <span class="bi bi-x-circle-fill" style="color:red"></span><b> WLED: </b> {{ status.name }} is offline
+        </div>
     </div>
 </div>

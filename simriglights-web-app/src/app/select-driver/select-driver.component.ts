@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Driver } from '../driver';
-import { DriverService } from '../driver.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActiveDriver } from '../models/active-driver';
+import { Driver } from '../models/driver';
+import { DriverService } from '../services/driver.service';
+import { NewDriverComponent } from '../new-driver/new-driver.component';
 
 @Component({
   selector: 'app-select-driver',
@@ -9,10 +12,14 @@ import { DriverService } from '../driver.service';
 })
 export class SelectDriverComponent implements OnInit {
   drivers: Driver[];
-  selectedDriver: Driver;
+  selectedDriver: ActiveDriver;
   error: string;
   
-  constructor(private driverService: DriverService) { }
+  constructor(
+    private driverService: DriverService, // Used to query drivers and active driver
+    private modalService: NgbModal // Service to display and interface with modal dialogs
+  ) 
+  { }
 
   ngOnInit(): void {
     this.getDrivers();
@@ -46,6 +53,20 @@ export class SelectDriverComponent implements OnInit {
   }
 
   selectDriver(driver: Driver) {
-    this.selectedDriver = driver;
+    this.driverService.selectDriver(driver).subscribe(
+      response => {
+        this.selectedDriver = response;
+      }, 
+      error => {
+        this.error = error;
+      }
+    )
+  }
+
+  /**
+   * Show the modal cart dialog
+   */
+   showAddDriverDialog() {
+    this.modalService.open(NewDriverComponent, { centered: true });
   }
 }

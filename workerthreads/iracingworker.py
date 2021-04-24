@@ -2,12 +2,13 @@ from time import sleep
 import threading
 
 class IracingWorker(threading.Thread):
-    def __init__(self, logger, data_stream, controller, rpm_strip, framerate):
+    def __init__(self, data_queue, logger, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
         self.name = 'iRacing Worker Thread'
         self.active = True
 
+        self.data_queue = data_queue
         self.log = logger
         self.data_stream = data_stream
         self.controller = controller

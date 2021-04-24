@@ -10,9 +10,10 @@ import { HomeComponent } from './home/home.component';
 import { NewDriverComponent } from './new-driver/new-driver.component';
 import { ScoreboardComponent } from './scoreboard/scoreboard.component';
 import { SelectDriverComponent } from './select-driver/select-driver.component';
-import { DateAgoPipe } from './date-ago.pipe';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from './error-message/error-message.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -39,7 +40,8 @@ const routes: Routes = [
     BrowserModule, 
     RouterModule.forRoot(routes), 
     FormsModule, 
-    HttpClientModule
+    HttpClientModule, 
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

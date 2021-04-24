@@ -1,12 +1,9 @@
 from sqlalchemy.orm import Session
+
 from . import models, schemas
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
-
-def get_driver(db: Session, driver_id: int):
-    return db.query(models.Driver).filter(models.Driver.id == driver_id).first()
-
 
 def get_driver_by_name(db: Session, name: str):
     return db.query(models.Driver).filter(models.Driver.name == name).first()
@@ -52,6 +49,26 @@ def delete_driver(db: Session, driver: schemas.DriverDelete):
 
     return stored_driver
 
+
+def get_active_driver(db: Session):
+    return db.query(models.ActiveDriver).first()
+
+
+def set_active_driver(db: Session, driver: schemas.ActiveDriverCreate):
+    db_driver = models.ActiveDriver(**driver.dict())
+    db.add(db_driver)
+    db.commit()
+    db.refresh(db_driver)
+
+    return db_driver
+
+def delete_active_driver(db: Session):
+    stored_driver = db.query(models.ActiveDriver).one_or_none()
+    db.query(models.ActiveDriver).delete()
+    db.commit()
+
+    return stored_driver
+
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   # 
 
 def get_laptimes(db: Session, skip: int = 0, limit: int = 100):
@@ -60,11 +77,34 @@ def get_laptimes(db: Session, skip: int = 0, limit: int = 100):
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
     db_laptime = models.LapTime(**laptime.dict())
-    db.add(db_laptime)
-    db.commit()
-    db.refresh(db_laptime)
 
-    return db_laptime
+    # Check for times with same car, track and config
+    better_time = db.query(models.LapTime).filter(
+        models.LapTime.car == laptime.car, 
+        models.LapTime.trackName == laptime.trackName, 
+        models.LapTime.trackConfig == laptime.trackConfig, 
+        models.LapTime.time < laptime.time
+    ).one_or_none()
+
+    worse_time = db.query(models.LapTime).filter(
+        models.LapTime.car == laptime.car, 
+        models.LapTime.trackName == laptime.trackName, 
+        models.LapTime.trackConfig == laptime.trackConfig, 
+        models.LapTime.time >= laptime.time
+    ).one_or_none()
+
+    if not better_time:
+        # Replace the old with the new
+        if worse_time:
+            db.delete(worse_time)
+        
+        db.add(db_laptime)
+        db.commit()
+        db.refresh(db_laptime)
+
+        return db_laptime
+
+    return better_time
 
 #   #   #   #   #   #   #   #   Light Controllers  #   #   #   #   #   #   #   # 
 

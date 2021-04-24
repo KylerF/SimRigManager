@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Driver } from './driver';
-import { APIHelper } from './_helpers/api-helper';
+import { Driver } from '../models/driver';
+import { APIHelper } from '../_helpers/api-helper';
+import { ActiveDriver } from '../models/active-driver';
+import { NewDriver } from '../models/new-driver';
 
 @Injectable({
   providedIn: 'root'
@@ -21,20 +23,20 @@ export class DriverService {
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
-  getSelectedDriver(): Observable<Driver> {
-    return this.http.get<Driver>(APIHelper.baseUrl + this.activeDriverEndpoint)
+  getSelectedDriver(): Observable<ActiveDriver> {
+    return this.http.get<ActiveDriver>(APIHelper.baseUrl + this.activeDriverEndpoint)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
   selectDriver(driver: Driver) {
-    return this.http.post<Driver>(
+    return this.http.post<ActiveDriver>(
         APIHelper.baseUrl + this.activeDriverEndpoint, 
-        driver
+        { 'driverId': driver.id }
       )
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
-  addDriver(driver: Driver) {
+  addDriver(driver: NewDriver): Observable<Driver> {
     return this.http.post<Driver>(
       APIHelper.baseUrl + this.driversEndpoint, 
       driver

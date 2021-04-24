@@ -32,6 +32,21 @@ class Driver(DriverBase):
     class Config:
         orm_mode = True
 
+class ActiveDriverBase(BaseModel):
+    driverId: int
+
+
+class ActiveDriverCreate(ActiveDriverBase):
+    pass
+
+
+class ActiveDriver(ActiveDriverBase):
+    id: int
+    driver: Driver
+
+    class Config:
+        orm_mode = True
+
 
 class LapTimeBase(BaseModel):
     car: str

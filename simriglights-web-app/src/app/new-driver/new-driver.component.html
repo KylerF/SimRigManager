@@ -1,1 +1,26 @@
-<p>new-driver works!</p>
+<div class="modal-header">
+    <h4 class="modal-title">New driver</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="form-group">
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Name">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Nickname">
+            </div>
+            <div class="mb-3">
+                <div class="custom-file">
+                    <label class="custom-file-label" for="profilePicInput">Profile picture</label>
+                    <input type="file" accept="image/png, image/jpeg" class="form-control custom-file-input" id="profilePicInput">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="addDriver()">Add</button>
+    <button type="button" class="btn btn-cancel" (click)="dismiss()">Cancel</button>
+</div>

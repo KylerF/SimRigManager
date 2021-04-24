@@ -8,7 +8,9 @@ from database.database import SessionLocal, engine, generate_database
 from database import crud, models, schemas
 
 class SimRigAPI:
-    def __init__(self):
+    def __init__(self, data_queue):
+        self.data_queue = data_queue
+        
         # Set up the database
         generate_database()
         models.Base.metadata.create_all(bind=engine)
@@ -33,7 +35,8 @@ class SimRigAPI:
         self.api.post("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.create_driver)
         self.api.patch("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.update_driver)
         self.api.delete("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.delete_driver)
-        self.api.get("/activedriver", tags=["drivers"])(self.get_active_driver)
+        self.api.get("/activedriver", tags=["drivers"], response_model=schemas.ActiveDriver)(self.get_active_driver)
+        self.api.post("/activedriver", tags=["drivers"], response_model=schemas.ActiveDriver)(self.set_active_driver)
         self.api.get("/scores", tags=["scores"], response_model=List[schemas.LapTime])(self.get_scores)
         self.api.post("/scores", tags=["scores"], response_model=schemas.LapTime)(self.create_score)
         self.api.get("/controllers", tags=["controllers"], response_model=List[schemas.LightController])(self.get_controllers)
@@ -120,7 +123,20 @@ class SimRigAPI:
         '''
         Get the active driver
         '''
-        return { 'id': 3, 'name': 'Roger', 'nickname': 'Slayer', 'trackTime': 120000, 'profilePic': '' }
+        db = next(self.get_db())
+        active_driver = crud.get_active_driver(db)
+
+        return active_driver
+
+    async def set_active_driver(self, driver: schemas.ActiveDriverCreate):
+        '''
+        Select the active driver
+        '''
+        db = next(self.get_db())
+        crud.delete_active_driver(db)
+        new_active_driver = crud.set_active_driver(db, driver)
+
+        return new_active_driver
 
     async def create_driver(self, driver: schemas.DriverCreate):
         '''

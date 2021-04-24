@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LapTime } from '../lap-time';
-import { LapTimeService } from '../lap-time.service';
+import { LapTime } from '../models/lap-time';
+import { LapTimeService } from '../services/lap-time.service';
 
 @Component({
   selector: 'app-scoreboard',

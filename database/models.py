@@ -21,6 +21,21 @@ class Driver(Base):
         cascade = "all, delete, delete-orphan" 
     )
 
+    active = relationship(
+        "ActiveDriver", 
+        back_populates="driver", 
+        cascade = "all, delete, delete-orphan" 
+    )
+
+
+class ActiveDriver(Base):
+    __tablename__ = "activedriver"
+
+    id = Column(Integer, primary_key=True, index=True)
+    driverId = Column(Integer, ForeignKey("drivers.id"))
+
+    driver = relationship("Driver", back_populates="active")
+
 
 class LapTime(Base):
     __tablename__ = "laptimes"

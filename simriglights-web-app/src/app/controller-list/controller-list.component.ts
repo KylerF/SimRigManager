@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ControllerService } from '../controller.service';
-import { Controller } from '../controller';
+import { ControllerService } from '../services/controller.service';
+import { Controller } from '../models/controller';
 
 
 @Component({

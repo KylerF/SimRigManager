@@ -7,12 +7,12 @@ from e131.wled import Wled
 
 from logging.handlers import RotatingFileHandler
 from colour import Color
+from queue import Queue
 from time import sleep
 from sys import exit
 import configparser
 import logging
 import atexit
-import queue
 import sys
 
 def main():
@@ -59,11 +59,14 @@ def main():
 
     rpm_strip = RpmGauge(led_count, color_theme)
 
+    # Set up a queue to pass data to and from the iRacing worker thread
+    data_queue = Queue()
+
     # Set up the API
-    api = APIServer()
+    api = APIServer(data_queue)
 
     # Kick off the iRacing worker thread
-    iracing_worker = IracingWorker(log, data_stream, controller, rpm_strip, framerate)
+    iracing_worker = IracingWorker(data_queue, log, data_stream, controller, rpm_strip, framerate)
     iracing_worker.start()
 
     # Clean up resources upon exit

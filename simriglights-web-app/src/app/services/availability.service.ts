@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, retry } from 'rxjs/operators';
-import { AvailabilityCheck } from './availability-check';
-import { APIHelper } from './_helpers/api-helper';
+import { AvailabilityCheck } from '../models/availability-check';
+import { APIHelper } from '../_helpers/api-helper';
 
 @Injectable({
   providedIn: 'root'
