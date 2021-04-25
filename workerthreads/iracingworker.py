@@ -70,7 +70,7 @@ class IracingWorker(threading.Thread):
 
                     continue
                 else:
-                    # Reestablish connection
+                    # Re-establish connection
                     if not self.controller.is_connected:
                         self.log.info('Reconnecting')
                         self.controller.reconnect()
