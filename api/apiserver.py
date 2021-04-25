@@ -11,6 +11,3 @@ class APIServer:
 
     def start_server_process(self, app):
         uvicorn.run(app.api)
-
-    def stop(self):
-        pass

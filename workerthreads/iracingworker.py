@@ -1,7 +1,15 @@
 from time import sleep
 import threading
 
+from database.schemas import ActiveDriver, DriverUpdate, LapTimeCreate
+from database.database import get_db
+from database import crud
+
 class IracingWorker(threading.Thread):
+    '''
+    Background worker to collect and log iRacing data, and send updates
+    to WLED light controllers in response to changes
+    '''
     def __init__(self, data_queue, logger, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
@@ -16,29 +24,58 @@ class IracingWorker(threading.Thread):
         self.framerate = framerate
 
     def run(self):
-        self.work()
+        # Get the active driver and their track time from the database
+        db = next(get_db())
+        active_driver_object = crud.get_active_driver(db)
+        active_driver = None
+        best_lap_time = 0
+        track_time = 0
 
-    def stop(self):
-        self.active = False
+        if active_driver_object:
+            active_driver = active_driver_object.driver
+            track_time = active_driver.trackTime
+            self.log.info('Logging data for ' + active_driver.name)
+        else:
+            self.log.info('No driver selected. Lap times will not be recorded.')
 
-    def work(self):
+        # Continue parsing data until ordered to stop
         while self.active:
             try:
+                # Check for updates from the API
+                updated_driver = self.get_active_driver_from_queue()
+                if updated_driver:
+                    active_driver = updated_driver
+                    track_time = updated_driver.trackTime
+
+                    self.log.info('Setting active driver to ' + active_driver.name)
+
                 latest = self.data_stream.latest()
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
+                    # Update the driver's track time
+                    if active_driver and active_driver.trackTime < track_time:
+                        self.log.info('Updating track time for ' + active_driver.name)
+                        active_driver = crud.update_driver(db, DriverUpdate(
+                            id=active_driver.id, 
+                            trackTime=track_time
+                        ))
+
+                    # Stop the stream and wait
                     if self.controller.is_connected:
                         self.controller.stop()
                         self.log.info('iRacing data lost - waiting')
 
                     self.data_stream.restart()
                     sleep(1)
+
                     continue
                 else:
+                    # Reestablish connection
                     if not self.controller.is_connected:
                         self.log.info('Reconnecting')
                         self.controller.reconnect()
 
+                # Check for car swaps
                 if self.rpm_strip.redline != latest['redline']:
                     self.rpm_strip.set_redline(latest['redline'])
                     self.log.debug('Setting redline to new value: ' + str(latest['redline']))
@@ -46,9 +83,28 @@ class IracingWorker(threading.Thread):
                     self.rpm_strip.set_idle_rpm(latest['idle_rpm'])
                     self.log.debug('Setting idle RPM to new value: ' + str(latest['idle_rpm']))
                     
+                # Get the RPM and update the light controller
                 self.rpm_strip.set_rpm(latest['rpm'])
                 self.controller.update(self.rpm_strip.to_color_list())
+
+                # Log the best lap time
+                if latest['best_lap_time'] > 0 and (best_lap_time == 0 or latest['best_lap_time'] < best_lap_time):
+                    best_lap_time = latest['best_lap_time']
+
+                    if active_driver:
+                        self.log.info('Setting new best lap time for ' + active_driver.name)
+                        crud.create_laptime(db, LapTimeCreate(
+                            car=latest['car_name'], 
+                            trackName=latest['track_name'], 
+                            trackConfig=latest['track_config'], 
+                            time=latest['best_lap_time'], 
+                            driverId=active_driver.id
+                        ))
                 
+                track_time += 1/self.framerate
+                
+                self.log.debug(latest)
+
                 sleep(1/self.framerate)
             except KeyboardInterrupt:
                 self.log.info('Keyboard interrupt received - exiting')
@@ -59,3 +115,16 @@ class IracingWorker(threading.Thread):
             except Exception:
                 self.log.exception('Unhandled exit condition')
                 self.stop()
+
+    def get_active_driver_from_queue(self):
+        '''
+        Check for a new active driver, set via the API. Returns None
+        if no data was received.
+        '''
+        if self.data_queue.empty():
+            return None
+
+        return self.data_queue.get()
+
+    def stop(self):
+        self.active = False

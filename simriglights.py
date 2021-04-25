@@ -1,8 +1,10 @@
+from database.database import generate_database, engine
 from workerthreads.iracingworker import IracingWorker
 from raceparse.iracingstream import IracingStream
 from display.colortheme import ColorTheme
 from display.rpmgauge import RpmGauge
 from api.apiserver import APIServer
+from database import models
 from e131.wled import Wled
 
 from logging.handlers import RotatingFileHandler
@@ -16,6 +18,10 @@ import atexit
 import sys
 
 def main():
+    # Set up the database
+    generate_database()
+    models.Base.metadata.create_all(bind=engine)
+
     # Get config options from file
     config = configparser.ConfigParser()
     config.read('config.ini')
@@ -62,9 +68,6 @@ def main():
     # Set up a queue to pass data to and from the iRacing worker thread
     data_queue = Queue()
 
-    # Set up the API
-    api = APIServer(data_queue)
-
     # Kick off the iRacing worker thread
     iracing_worker = IracingWorker(data_queue, log, data_stream, controller, rpm_strip, framerate)
     iracing_worker.start()
@@ -75,6 +78,7 @@ def main():
     atexit.register(controller.stop)
 
     # Start the API on the main thread
+    api = APIServer(data_queue)
     api.start()
 
     # If we're here, exit everything

@@ -1,19 +1,15 @@
 from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
+from fastapi import FastAPI
 from typing import List
 
-from database.database import SessionLocal, engine, generate_database
+from database.database import SessionLocal, engine, generate_database, get_db
 from database import crud, models, schemas
 
 class SimRigAPI:
     def __init__(self, data_queue):
         self.data_queue = data_queue
-        
-        # Set up the database
-        generate_database()
-        models.Base.metadata.create_all(bind=engine)
 
         # Set up the API
         self.api = FastAPI(
@@ -54,7 +50,7 @@ class SimRigAPI:
         '''
         Get all WLED light controllers
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         controllers = crud.get_light_controllers(db, skip=skip, limit=limit)
 
         return controllers
@@ -63,7 +59,7 @@ class SimRigAPI:
         '''
         Create a new WLED light controller
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         new_controller = crud.create_light_controller(db, controller)
 
         return new_controller
@@ -72,7 +68,7 @@ class SimRigAPI:
         '''
         Update controller information
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         updated_controller = crud.update_light_controller(db, controller)
 
         return updated_controller
@@ -81,7 +77,7 @@ class SimRigAPI:
         '''
         Delete a light controller
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         result = crud.delete_light_controller(db, controller)
 
         return result
@@ -96,7 +92,7 @@ class SimRigAPI:
         '''
         Get all drivers
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         drivers = crud.get_drivers(db, skip=skip, limit=limit)
 
         return drivers
@@ -105,7 +101,7 @@ class SimRigAPI:
         '''
         Update driver information
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         updated_driver = crud.update_driver(db, driver)
 
         return updated_driver
@@ -114,7 +110,7 @@ class SimRigAPI:
         '''
         Delete a driver
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         result = crud.delete_driver(db, driver)
 
         return result
@@ -123,7 +119,7 @@ class SimRigAPI:
         '''
         Get the active driver
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         active_driver = crud.get_active_driver(db)
 
         return active_driver
@@ -132,9 +128,12 @@ class SimRigAPI:
         '''
         Select the active driver
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         crud.delete_active_driver(db)
         new_active_driver = crud.set_active_driver(db, driver)
+
+        # Update worker threads
+        self.data_queue.put(new_active_driver.driver)
 
         return new_active_driver
 
@@ -142,7 +141,7 @@ class SimRigAPI:
         '''
         Create a new driver
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         new_driver = crud.create_driver(db, driver)
 
         return new_driver
@@ -151,27 +150,16 @@ class SimRigAPI:
         '''
         Get the current best lap times
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         laptimes = crud.get_laptimes(db, skip=skip, limit=limit)
 
         return laptimes
 
     async def create_score(self, laptime: schemas.LapTimeCreate):
         '''
-        Log a new lap time
+        Log a new lap time. Only gets commited if it's a high score.
         '''
-        db = next(self.get_db())
+        db = next(get_db())
         new_laptime = crud.create_laptime(db, laptime)
 
         return new_laptime
-
-    def get_db(self):
-        '''
-        Dependency - get a database connection
-        '''
-        db = SessionLocal()
-
-        try:
-            yield db
-        finally:
-            db.close()

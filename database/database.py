@@ -18,6 +18,17 @@ SessionLocal = sessionmaker(
 
 Base = declarative_base()
 
+def get_db():
+    '''
+    Dependency - get a database connection
+    '''
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
+
 def generate_database():
     if not database_exists(engine.url):
         create_database(engine.url)
