@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ControllerService } from '../services/controller.service';
 import { Controller } from '../models/controller';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NewControllerComponent } from '../new-controller/new-controller.component';
 
 
 @Component({
@@ -13,11 +15,15 @@ import { Controller } from '../models/controller';
  * Component to list and configure WLED controllers
  */
 export class ControllerListComponent implements OnInit {
-  controllers: Controller[];
+  controllers: Controller[] = [];
   loading: boolean;
   error: string;
 
-  constructor(private controllerService: ControllerService) { }
+  constructor(
+    private controllerService: ControllerService, // Used to query WLED light controllers
+    private modalService: NgbModal // Service to display and interface with modal dialogs
+  ) 
+  { }
 
   ngOnInit(): void {
     this.getControllers();
@@ -65,5 +71,17 @@ export class ControllerListComponent implements OnInit {
     for(let controller of this.controllers) {
       controller.isBeingEdited = false;
     }
+  }
+
+  /**
+   * Show the modal cart dialog
+   */
+   showAddControllerDialog() {
+    const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
+
+    // Add the new driver after successful creation
+    modalRef.result.then((newController) => {
+      this.controllers.push(newController);
+    }); 
   }
 }

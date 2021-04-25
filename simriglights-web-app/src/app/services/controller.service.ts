@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
+import { retry, catchError, timeout } from 'rxjs/operators';
 import { Controller } from '../models/controller';
+import { NewController } from '../models/new-controller';
 import { APIHelper } from '../_helpers/api-helper';
 
 @Injectable({
@@ -10,7 +11,7 @@ import { APIHelper } from '../_helpers/api-helper';
 })
 
 /**
- * Service to retrieve and update config options
+ * Service to retrieve, add and check the status of WLED light controllers
  */
 export class ControllerService {
   endpoint = 'controllers';
@@ -36,6 +37,16 @@ export class ControllerService {
    */
   getControllerStatus(controller: Controller): Observable<any> {
     return this.http.get<any>('http://' + controller.ipAddress + '/api')
+      .pipe(timeout(2000), catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Add a new controller
+   * 
+   * @param controller the controller to add
+   */
+   addController(controller: NewController): Observable<Controller> {
+    return this.http.post<Controller>(APIHelper.baseUrl + this.endpoint, controller)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 }

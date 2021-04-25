@@ -1,36 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NewController } from '../models/new-controller';
 
-import { DriverService } from '../services/driver.service';
-import { NewDriver } from '../models/new-driver';
+import { ControllerService } from '../services/controller.service';
 
 @Component({
-  selector: 'app-new-driver',
-  templateUrl: './new-driver.component.html',
-  styleUrls: ['./new-driver.component.css']
+  selector: 'app-new-controller',
+  templateUrl: './new-controller.component.html',
+  styleUrls: ['./new-controller.component.css']
 })
-
-export class NewDriverComponent implements OnInit {
-  newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
+export class NewControllerComponent implements OnInit {
+  newController: NewController = { 'name': '', 'ipAddress': '', 'universe': null };
   submitted = false;
   error: string;
 
   // Create the reactive driver form with validation
-  newDriverForm = this.formBuilder.group({
+  newControllerForm = this.formBuilder.group({
     name: ['', Validators.required],
-    nickname: ['', Validators.required],
+    ipAddress: ['', Validators.required],
+    universe: ['', Validators.required]
   });
 
   constructor(
-    private driverService: DriverService, // Used to add a new driver
+    private controllerService: ControllerService, // Used to add a new controller
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
     private formBuilder: FormBuilder // Used to build the new driver form
   ) 
   { }
 
   ngOnInit(): void {
-
   }
 
   /**
@@ -40,15 +39,15 @@ export class NewDriverComponent implements OnInit {
    onSubmit() {
     this.submitted = true;
 
-    if(this.newDriverForm.valid) {
-      this.addDriver();
+    if(this.newControllerForm.valid) {
+      this.addController();
     }
   }
 
-  addDriver() {
-    this.driverService.addDriver(this.newDriver).subscribe(
+  addController() {
+    this.controllerService.addController(this.newController).subscribe(
       response => {
-        // Close and return the new driver to parent
+        // Close and return the new controller to parent
         this.activeModal.close(response);
       }, 
       error => {
@@ -65,6 +64,7 @@ export class NewDriverComponent implements OnInit {
    * Helper function to get the list of form controls
    */
    get formControls() {
-    return this.newDriverForm.controls;
+    return this.newControllerForm.controls;
   }
+
 }

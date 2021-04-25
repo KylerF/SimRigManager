@@ -3,30 +3,28 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
 </div>
 <div class="modal-body">
-    <form [formGroup]="newDriverForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="newControllerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <div class="mb-3">
-                <input type="text" class="form-control" id="nameInput" formControlName="name" [(ngModel)]="newDriver.name" placeholder="Name">
+                <input type="text" class="form-control" id="nameInput" formControlName="name" [(ngModel)]="newController.name" placeholder="Name">
                 <span class="text-danger" *ngIf="submitted && formControls.name.errors?.required">
                     This field is required
                 </span>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="nicknameInput" formControlName="nickname" [(ngModel)]="newDriver.nickname" placeholder="Nickname">
-                <span class="text-danger" *ngIf="submitted && formControls.nickname.errors?.required">
+                <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" [(ngModel)]="newController.ipAddress" placeholder="IP Address">
+                <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
                     This field is required
                 </span>
             </div>
-            <!--
             <div class="mb-3">
-                <div class="custom-file">
-                    <label class="custom-file-label" for="profilePicInput">Profile picture</label>
-                    <input type="file" accept="image/png, image/jpeg" class="form-control custom-file-input" id="profilePicInput">
-                </div>
+                <input type="text" class="form-control" id="universeInput" formControlName="universe" [(ngModel)]="newController.universe" placeholder="Universe">
+                <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
+                    This field is required
+                </span>
             </div>
-            -->
             <span class="text-danger" *ngIf="error">
-                Name and nickname must be unique
+                IP address must be unique
             </span>
             <div class="modal-footer">
                 <input type="submit" class="btn btn-success" value="Add">

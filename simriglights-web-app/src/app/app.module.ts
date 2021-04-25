@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -14,6 +14,7 @@ import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NewControllerComponent } from './new-controller/new-controller.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -34,12 +35,14 @@ const routes: Routes = [
     SelectDriverComponent,
     DateAgoPipe,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    NewControllerComponent
   ],
   imports: [
     BrowserModule, 
     RouterModule.forRoot(routes), 
     FormsModule, 
+    ReactiveFormsModule,
     HttpClientModule, 
     NgbModule
   ],

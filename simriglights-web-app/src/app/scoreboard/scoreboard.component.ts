@@ -8,7 +8,7 @@ import { LapTimeService } from '../services/lap-time.service';
   styleUrls: ['./scoreboard.component.css']
 })
 export class ScoreboardComponent implements OnInit {
-  lapTimes: LapTime[];
+  lapTimes: LapTime[] = [];
   loading: boolean;
   error: string;
   
