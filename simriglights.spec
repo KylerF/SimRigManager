@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['simriglights.py'],
-             pathex=[],
+             pathex=['/Users/Kyler/Documents/Projects/SimRigLights'],
              binaries=[],
-             datas=[('config.ini', '.')],
+             datas=[],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
