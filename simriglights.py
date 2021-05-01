@@ -18,8 +18,10 @@ import atexit
 import sys
 
 def main():
-    # Set up the database
+    # Create the database (if it does not already exist)
     generate_database()
+    
+    # Create all tables from models
     models.Base.metadata.create_all(bind=engine)
 
     # Get config options from file

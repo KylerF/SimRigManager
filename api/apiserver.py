@@ -10,4 +10,4 @@ class APIServer:
         self.start_server_process(self.app)
 
     def start_server_process(self, app):
-        uvicorn.run(app.api)
+        uvicorn.run(app.api, host='0.0.0.0')

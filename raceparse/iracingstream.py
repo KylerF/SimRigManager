@@ -3,6 +3,7 @@ import math
 
 class IracingStream:
     driver_index = 0
+    last_session_time = 0
     is_active = False
     state = {}
 
@@ -24,6 +25,7 @@ class IracingStream:
             self.ir.startup()
 
         if self.ir.is_initialized and self.ir.is_connected:
+            self.get_startup_info()
             self.is_active = True
 
     def stop(self):
@@ -41,7 +43,7 @@ class IracingStream:
     def get_startup_info(self):
         if self.ir:
             if not (self.ir.is_initialized and self.ir.is_connected):
-                self.active = False
+                self.stop()
                 return
         
         try:
@@ -57,29 +59,27 @@ class IracingStream:
                 'track_config': self.ir['WeekendInfo']['TrackConfigName'] 
             })
         except (KeyError, AttributeError, TypeError):
-            self.active = False
-            self.state = {}
+            self.stop()
             return
 
     def update(self):
         if self.ir:
             if not (self.ir.is_initialized and self.ir.is_connected):
-                self.active = False
+                self.stop()
                 return
             
             try:
-                # TODO: Check whether driverinfo vars are updated
                 self.state.update ({
                     'speed': math.floor(self.ir['Speed']*2.236936), 
                     'rpm': math.floor(self.ir['RPM']), 
                     'gear': self.ir['Gear'], 
                     'is_on_track': self.ir['IsOnTrack'], 
                     'incident_count': self.ir['PlayerCarMyIncidentCount'], 
-                    'best_lap_time': self.ir['LapBestLapTime']
+                    'best_lap_time': self.ir['LapBestLapTime'], 
+                    'session_time': self.ir['SessionTime']
                 })
             except (KeyError, AttributeError, TypeError):
-                self.active = False
-                self.state = {}
+                self.stop()
                 return
                 
             self.is_active = True
