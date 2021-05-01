@@ -1,5 +1,6 @@
 from time import sleep
 import threading
+import math
 
 from database.schemas import ActiveDriver, DriverUpdate, LapTimeCreate
 from database.database import get_db
@@ -52,8 +53,10 @@ class IracingWorker(threading.Thread):
                 latest = self.data_stream.latest()
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
+                    best_lap_time = 0
+                    
                     # Update the driver's track time
-                    if active_driver and active_driver.trackTime < track_time:
+                    if active_driver and active_driver.trackTime < math.floor(track_time):
                         self.log.info('Updating track time for ' + active_driver.name)
                         active_driver = crud.update_driver(db, DriverUpdate(
                             id=active_driver.id, 
@@ -93,17 +96,18 @@ class IracingWorker(threading.Thread):
 
                     if active_driver:
                         self.log.info('Setting new best lap time for ' + active_driver.name)
+                        
                         crud.create_laptime(db, LapTimeCreate(
                             car=latest['car_name'], 
                             trackName=latest['track_name'], 
-                            trackConfig=latest['track_config'], 
+                            trackConfig=latest['track_config'] or '', 
                             time=latest['best_lap_time'], 
                             driverId=active_driver.id
                         ))
+                        
+                self.log.debug(latest)
                 
                 track_time += 1/self.framerate
-                
-                self.log.debug(latest)
 
                 sleep(1/self.framerate)
             except KeyboardInterrupt:
@@ -112,9 +116,12 @@ class IracingWorker(threading.Thread):
             except KeyError:
                 self.log.error('Required data not found - stopping iRacing stream')
                 self.data_stream.stop()
+            except ConnectionResetError:
+                self.log.error('iRacing refused connection')
+                self.data_stream.stop()
             except Exception:
-                self.log.exception('Unhandled exit condition')
-                self.stop()
+                self.log.exception('Unhandled condition')
+                self.data_stream.stop()
 
     def get_active_driver_from_queue(self):
         '''

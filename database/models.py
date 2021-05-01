@@ -18,13 +18,15 @@ class Driver(Base):
     laptimes = relationship(
         "LapTime", 
         back_populates="driver", 
-        cascade = "all, delete, delete-orphan" 
+        cascade="all, delete, delete-orphan", 
+        lazy="subquery"
     )
 
     active = relationship(
         "ActiveDriver", 
         back_populates="driver", 
-        cascade = "all, delete, delete-orphan" 
+        cascade="all, delete, delete-orphan", 
+        lazy="subquery" 
     )
 
 
@@ -34,7 +36,11 @@ class ActiveDriver(Base):
     id = Column(Integer, primary_key=True, index=True)
     driverId = Column(Integer, ForeignKey("drivers.id"))
 
-    driver = relationship("Driver", back_populates="active")
+    driver = relationship(
+        "Driver", 
+        back_populates="active", 
+        lazy="subquery"
+    )
 
 
 class LapTime(Base):
@@ -48,7 +54,11 @@ class LapTime(Base):
     time = Column(String)
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
-    driver = relationship("Driver", back_populates="laptimes")
+    driver = relationship(
+        "Driver", 
+        back_populates="laptimes", 
+        lazy="subquery"
+    )
 
 
 class LightController(Base):
