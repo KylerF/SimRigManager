@@ -23,8 +23,11 @@ export class ScoreboardComponent implements OnInit {
 
     this.lapTimeService.getLapTimes().subscribe(
       response => {
-        // Success! 
-        this.lapTimes = response;
+        // Success! Sort by set date by default.
+        this.lapTimes = response.sort((laptime1, laptime2) => {
+          return +new Date(laptime2.setAt) - +new Date(laptime1.setAt);
+        });
+
         this.loading = false;
       },
       error => {
