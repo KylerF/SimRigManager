@@ -1,3 +1,4 @@
+import { environment } from '../../environments/environment';
 import { HttpErrorResponse } from "@angular/common/http";
 import { throwError } from "rxjs";
 
@@ -6,7 +7,7 @@ import { throwError } from "rxjs";
  * to to services
  */
 export class APIHelper {
-    static baseUrl: string = 'http://192.168.1.200:8000/';
+    static baseUrl: string = (environment.production ? 'http://192.168.1.200:8000/' : 'http://127.0.0.1:8000/');
 
     /**
      * Catch any error response and return it to the caller

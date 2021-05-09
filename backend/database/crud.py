@@ -83,14 +83,14 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
-        models.LapTime.time < laptime.time
+        models.LapTime.time <= laptime.time
     ).one_or_none()
 
     worse_time = db.query(models.LapTime).filter(
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
-        models.LapTime.time >= laptime.time
+        models.LapTime.time > laptime.time
     ).one_or_none()
 
     if not better_time:

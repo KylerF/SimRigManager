@@ -59,12 +59,28 @@ export class ControllerListComponent implements OnInit {
   /**
    * Switch a controller to edit mode
    */
-   editController(controller: Controller) {
+  editController(controller: Controller) {
     var controllerToEdit = this.controllers.filter(function (thisController) {
       return thisController.id === controller.id;
     });
 
     controllerToEdit[0].isBeingEdited = true;
+  }
+
+  /**
+   * Delete a controller
+   */
+  deleteController(controller: Controller) {
+    this.controllerService.deleteController(controller).subscribe(
+      response => {
+        // Success! Update the controller list.
+        this.getControllers();
+      },
+      error => {
+        // Failed. Save the response.
+        this.error = error;
+      }
+    );
   }
 
   updateControllers() {
@@ -74,9 +90,9 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Show the modal cart dialog
+   * Show the modal add controller dialog
    */
-   showAddControllerDialog() {
+  showAddControllerDialog() {
     const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
 
     // Add the new driver after successful creation
