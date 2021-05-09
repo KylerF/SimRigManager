@@ -40,3 +40,7 @@ All unit tests are run using [nose](https://nose.readthedocs.io/en/latest/testin
 - [pyirsdk](https://github.com/kutu/pyirsdk)
 - [sacn](https://github.com/Hundemeier/sacn)
 - [Colour](https://github.com/vaab/colour)
+- [FastAPI](https://github.com/tiangolo/fastapi)
+- [Uvicorn](https://github.com/encode/uvicorn)
+- [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy)
+- [Pydantic](https://github.com/samuelcolvin/pydantic)
