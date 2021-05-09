@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { retry, catchError, timeout } from 'rxjs/operators';
@@ -45,8 +45,25 @@ export class ControllerService {
    * 
    * @param controller the controller to add
    */
-   addController(controller: NewController): Observable<Controller> {
+  addController(controller: NewController): Observable<Controller> {
     return this.http.post<Controller>(APIHelper.baseUrl + this.endpoint, controller)
+      .pipe(retry(3), catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Delete an existing controller
+   * 
+   * @param controller the controller to delete
+   */
+  deleteController(controller: Controller): Observable<Controller | ArrayBuffer> {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: controller
+    };
+    
+    return this.http.delete<Controller>(APIHelper.baseUrl + this.endpoint, options)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 }

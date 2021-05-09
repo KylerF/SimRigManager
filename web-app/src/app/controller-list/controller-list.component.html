@@ -41,6 +41,9 @@
                     <a class="btn btn-primary" href="http://{{controller.ipAddress}}" target="_blank">
                         <span class="bi bi-link"></span>
                     </a>
+                    <button class="btn btn-danger" (click)="deleteController(controller)">
+                        <span class="bi bi-trash-fill"></span>
+                    </button>
                 </div>
             </td>
         </tr>

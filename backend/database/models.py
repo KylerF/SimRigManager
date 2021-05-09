@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, ForeignKey, Column, Integer, Numeric, DateTime, String
+from sqlalchemy import Boolean, ForeignKey, Column, Integer, Float, DateTime, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from datetime import datetime
@@ -51,7 +51,7 @@ class LapTime(Base):
     car = Column(String)
     trackName = Column(String)
     trackConfig = Column(String)
-    time = Column(String)
+    time = Column(Float)
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
     driver = relationship(

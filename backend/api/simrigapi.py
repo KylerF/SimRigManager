@@ -88,6 +88,15 @@ class SimRigAPI:
         '''
         return {"is_on_track": False}
 
+    async def create_driver(self, driver: schemas.DriverCreate):
+        '''
+        Create a new driver
+        '''
+        db = next(get_db())
+        new_driver = crud.create_driver(db, driver)
+
+        return new_driver
+
     async def get_drivers(self, skip: int = 0, limit: int = 100):
         '''
         Get all drivers
@@ -136,15 +145,6 @@ class SimRigAPI:
         self.data_queue.put(new_active_driver.driver)
 
         return new_active_driver
-
-    async def create_driver(self, driver: schemas.DriverCreate):
-        '''
-        Create a new driver
-        '''
-        db = next(get_db())
-        new_driver = crud.create_driver(db, driver)
-
-        return new_driver
 
     async def get_scores(self, skip: int = 0, limit: int = 100):
         '''
