@@ -4,7 +4,7 @@ import { throwError } from "rxjs";
 
 /**
  * A simple helper class to provide the API base URL
- * to to services
+ * to services and handle errors
  */
 export class APIHelper {
     static baseUrl: string = (environment.production ? 'http://192.168.1.200:8000/' : 'http://127.0.0.1:8000/');
