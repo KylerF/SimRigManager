@@ -1,3 +1,7 @@
+'''
+Database table schemas (SQLAlchemy models)
+'''
+
 from sqlalchemy import Boolean, ForeignKey, Column, Integer, Float, DateTime, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -7,6 +11,9 @@ from .database import Base
 
 
 class Driver(Base):
+    '''
+    A driver profile linked to track/lap times
+    '''
     __tablename__ = "drivers"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -31,6 +38,11 @@ class Driver(Base):
 
 
 class ActiveDriver(Base):
+    '''
+    The currently selected driver - saved as a single record in a
+    seperate table to efficiently switch drivers. When a new driver
+    is selected, the current ActiveDriver is replaced with the new one.
+    '''
     __tablename__ = "activedriver"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -44,6 +56,11 @@ class ActiveDriver(Base):
 
 
 class LapTime(Base):
+    '''
+    A lap time entry. This is populated by the best_time feature from
+    the iRacing data stream. When a better time with the same track, 
+    config and car is entered, it replaces the previous best.
+    '''
     __tablename__ = "laptimes"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -62,9 +79,23 @@ class LapTime(Base):
 
 
 class LightController(Base):
+    '''
+    A WLED light controller fixture of a given type
+    '''
     __tablename__ = "controllers"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
     ipAddress = Column(String, unique=True)
     universe = Column(Integer, default=1)
+
+
+class Quote(Base):
+    '''
+    A racing quote, randomly selected and placed on the scoreboard
+    '''
+    __tablename__ = "quotes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    text = Column(String)
+    by = Column(String)

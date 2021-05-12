@@ -1,3 +1,10 @@
+'''
+Pydantic wrappers to transform and validate data models
+for the API
+
+Schemas are provided for CRUD operations on all models
+'''
+
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
@@ -87,11 +94,38 @@ class LightControllerUpdate(LightControllerBase):
     universe: Optional[int] = None
 
 
-class LightControllerDelete(LightControllerBase):
-    id: int
+class LightControllerDelete(LightControllerUpdate):
+    pass
 
 
 class LightController(LightControllerBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class QuoteBase(BaseModel):
+    text: str
+    by: str
+
+
+class QuoteCreate(QuoteBase):
+    text: str
+    by: str
+
+
+class QuoteUpdate(QuoteBase):
+    id: int
+    text: Optional[str] = None
+    by: Optional[str] = None
+
+
+class QuoteDelete(QuoteUpdate):
+    pass
+
+
+class Quote(QuoteBase):
     id: int
 
     class Config:

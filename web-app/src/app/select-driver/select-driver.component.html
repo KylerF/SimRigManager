@@ -41,10 +41,15 @@
 </div>
 
 
-<div *ngIf="selectedDriver" class="alert alert-success">
-    Welcome, {{ selectedDriver.driver.nickname }}! Your lap times are being recorded.
+<div *ngIf="selectedDriver">
+    <div class="alert alert-success">
+        Welcome, {{ selectedDriver.driver.nickname }}! Your lap times are being recorded.
+    </div>
+    <a href="https://members.iracing.com/" target="_blank">
+        Go to iRacing
+    </a>
 </div>
 
 <div *ngIf="!selectedDriver" class="alert alert-danger">
-    No driver selected! Click your name to start recording your lap times.
+    No driver selected! Select your name to start recording your lap times.
 </div>

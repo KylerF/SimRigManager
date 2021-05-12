@@ -32,16 +32,16 @@
             </td>
             <td>
                 <div class="btn-group" role="group">
-                    <button *ngIf="!controller.isBeingEdited" class="btn btn-primary mr-1" (click)="editController(controller)">
+                    <button *ngIf="!controller.isBeingEdited" class="btn btn-primary mr-1" (click)="editController(controller)" title="Edit">
                         <span class="bi bi-pencil-square"></span>
                     </button>
-                    <button *ngIf="controller.isBeingEdited" class="btn btn-success mr-1" (click)="updateControllers()">
+                    <button *ngIf="controller.isBeingEdited" class="btn btn-success mr-1" (click)="updateControllers()" title="Save changes">
                         <span class="bi bi-check"></span>
                     </button>
-                    <a class="btn btn-primary" href="http://{{controller.ipAddress}}" target="_blank">
+                    <a class="btn btn-primary" href="http://{{controller.ipAddress}}" target="_blank" title="WLED controls">
                         <span class="bi bi-link"></span>
                     </a>
-                    <button class="btn btn-danger" (click)="deleteController(controller)">
+                    <button class="btn btn-danger" (click)="deleteController(controller)" title="Delete">
                         <span class="bi bi-trash-fill"></span>
                     </button>
                 </div>

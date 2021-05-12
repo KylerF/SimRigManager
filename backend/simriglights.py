@@ -1,6 +1,7 @@
 from database.database import generate_database, engine
 from workerthreads.iracingworker import IracingWorker
 from raceparse.iracingstream import IracingStream
+from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
 from display.rpmgauge import RpmGauge
 from api.apiserver import APIServer
@@ -23,6 +24,9 @@ def main():
     
     # Create all tables from models
     models.Base.metadata.create_all(bind=engine)
+
+    # Populate the quotes table with samples
+    init_quotes()
 
     # Get config options from file
     config = configparser.ConfigParser()
