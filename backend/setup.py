@@ -31,7 +31,7 @@ setup(
         'pyirsdk', 
         'fastapi', 
         'uvicorn',
-	    'colour', 
+        'colour', 
         'sacn',
     ],
 )
