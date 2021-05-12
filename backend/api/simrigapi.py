@@ -36,7 +36,7 @@ class SimRigAPI:
 
 
         # Register endpoints
-        self.api.get("/", tags=["availability"])(self.get_root)
+        self.api.get("/", response_model=schemas.Availability, tags=["availability"])(self.get_root)
 
         self.api.get("/latest", tags=["iracing data"])(self.get_latest)
 

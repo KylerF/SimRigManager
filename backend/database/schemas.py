@@ -10,6 +10,10 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
+class Availability(BaseModel):
+    active: bool
+
+
 class DriverBase(BaseModel):
     name: str
     nickname: str
