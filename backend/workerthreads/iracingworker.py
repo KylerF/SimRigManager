@@ -134,4 +134,7 @@ class IracingWorker(threading.Thread):
         return self.data_queue.get()
 
     def stop(self):
+        '''
+        Disconnect from iRacing and stop this thread
+        '''
         self.active = False

@@ -10,6 +10,9 @@ from database.database import SessionLocal, engine, generate_database, get_db
 from database import crud, models, schemas
 
 class SimRigAPI:
+    '''
+    Provides the API routes and methods to interact with the entire application
+    '''
     def __init__(self, data_queue):
         self.data_queue = data_queue
 
