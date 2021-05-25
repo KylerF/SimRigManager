@@ -1,5 +1,3 @@
-from display.colortheme import ColorTheme
-
 from colour import Color
 
 class RpmGauge:

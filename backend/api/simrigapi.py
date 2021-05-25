@@ -1,13 +1,11 @@
 from starlette.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from datetime import datetime
 from fastapi import FastAPI
 from typing import List
 from json import load
 from os import path
 
-from database.database import SessionLocal, engine, generate_database, get_db
-from database import crud, models, schemas
+from database.database import get_db
+from database import crud, schemas
 
 class SimRigAPI:
     '''
@@ -165,7 +163,7 @@ class SimRigAPI:
         new_active_driver = crud.set_active_driver(db, driver)
 
         # Update worker threads
-        self.data_queue.put(new_active_driver.driver)
+        self.data_queue.put(("active_driver", new_active_driver.driver))
 
         return new_active_driver
 

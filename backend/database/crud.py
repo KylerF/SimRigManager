@@ -3,10 +3,7 @@ Functions to perform CRUD operations on the database
 '''
 
 from sqlalchemy.orm import Session
-
-from sqlalchemy.orm import load_only
 from sqlalchemy import func
-from typing import List
 
 from . import models, schemas
 

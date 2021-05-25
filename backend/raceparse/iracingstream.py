@@ -34,8 +34,8 @@ class IracingStream:
             self.ir.startup()
 
         if self.ir.is_initialized and self.ir.is_connected:
-            self.get_startup_info()
             self.is_active = True
+            self.get_startup_info()
 
     def stop(self):
         '''
@@ -46,7 +46,7 @@ class IracingStream:
 
         self.is_active = False
         self.ir = None
-        self.state = {}
+        #self.state = {}
         
     def restart(self):
         '''

@@ -7,7 +7,23 @@ import { throwError } from "rxjs";
  * to services and handle errors
  */
 export class APIHelper {
-    static baseUrl: string = (environment.production ? 'http://192.168.1.200:8000/' : 'http://127.0.0.1:8000/');
+    /**
+     * We can use localhost in development, but in production
+     * the server's IP address must be determined.
+     * 
+     * @returns URL to the API
+     */
+    static getBaseUrl(): string {
+        let url = 'http://127.0.0.1:8000/';
+
+        if(environment.production) {
+            url = `http://${window.location.hostname}:8000/`;
+        }
+
+        console.log(url);
+
+        return url
+    }
 
     /**
      * Catch any error response and return it to the caller

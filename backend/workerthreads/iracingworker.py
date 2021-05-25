@@ -2,7 +2,7 @@ from time import sleep
 import threading
 import math
 
-from database.schemas import ActiveDriver, DriverUpdate, LapTimeCreate
+from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
 from database import crud
 
@@ -130,8 +130,11 @@ class IracingWorker(threading.Thread):
         '''
         if self.data_queue.empty():
             return None
+        
+        if self.data_queue[0][0] != "active_driver":
+            return None
 
-        return self.data_queue.get()
+        return self.data_queue.get()[1]
 
     def stop(self):
         '''

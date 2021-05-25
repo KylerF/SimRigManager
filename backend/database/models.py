@@ -2,10 +2,9 @@
 Database table schemas (SQLAlchemy models)
 '''
 
-from sqlalchemy import Boolean, ForeignKey, Column, Integer, Float, DateTime, String
+from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from datetime import datetime
 
 from .database import Base
 
@@ -88,6 +87,22 @@ class LightController(Base):
     name = Column(String, unique=True)
     ipAddress = Column(String, unique=True)
     universe = Column(Integer, default=1)
+
+
+class ColorTheme(Base):
+    '''
+    A color theme applied to all light controllers
+    '''
+    __tablename__ = "colorthemes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    gradientType = Column(String)
+    primaryColorR = Column(Integer)
+    primaryColorG = Column(Integer)
+    primaryColorB = Column(Integer)
+    secondaryColorR = Column(Integer)
+    secondaryColorG = Column(Integer)
+    secondaryColorB = Column(Integer)
 
 
 class Quote(Base):

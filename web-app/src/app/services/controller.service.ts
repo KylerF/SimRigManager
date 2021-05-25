@@ -24,7 +24,7 @@ export class ControllerService {
    * @returns observable wrapping returned controller objects
    */
   getControllers(): Observable<Controller[]> {    
-    return this.http.get<Controller[]>(APIHelper.baseUrl + this.endpoint)
+    return this.http.get<Controller[]>(APIHelper.getBaseUrl() + this.endpoint)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
@@ -46,7 +46,7 @@ export class ControllerService {
    * @param controller the controller to add
    */
   addController(controller: NewController): Observable<Controller> {
-    return this.http.post<Controller>(APIHelper.baseUrl + this.endpoint, controller)
+    return this.http.post<Controller>(APIHelper.getBaseUrl() + this.endpoint, controller)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
@@ -63,7 +63,7 @@ export class ControllerService {
       body: controller
     };
     
-    return this.http.delete<Controller>(APIHelper.baseUrl + this.endpoint, options)
+    return this.http.delete<Controller>(APIHelper.getBaseUrl() + this.endpoint, options)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 }

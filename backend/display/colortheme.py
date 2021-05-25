@@ -1,5 +1,3 @@
-from colour import Color
-
 class ColorTheme:
     '''
     A theme applied to an LED display

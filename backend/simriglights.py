@@ -4,6 +4,7 @@ from raceparse.iracingstream import IracingStream
 from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
 from display.rpmgauge import RpmGauge
+from database.database import get_db
 from api.apiserver import APIServer
 from database import models
 from e131.wled import Wled
@@ -11,8 +12,6 @@ from e131.wled import Wled
 from logging.handlers import RotatingFileHandler
 from colour import Color
 from queue import Queue
-from time import sleep
-from sys import exit
 import configparser
 import logging
 import atexit

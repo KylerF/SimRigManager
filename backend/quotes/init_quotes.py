@@ -1,4 +1,3 @@
-from sqlalchemy import func
 import json
 import os
 

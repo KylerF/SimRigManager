@@ -15,7 +15,7 @@ export class LapTimeService {
   constructor(private http: HttpClient) { }
 
   getLapTimes(): Observable<LapTime[]> {
-    return this.http.get<LapTime[]>(APIHelper.baseUrl + this.endpoint)
+    return this.http.get<LapTime[]>(APIHelper.getBaseUrl() + this.endpoint)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 }
