@@ -4,15 +4,15 @@ from typing import List
 from json import load
 from os import path
 
-from database.database import get_db
-from database import crud, schemas
+from backend.database.database import get_db
+from backend.database import crud, schemas
 
 class SimRigAPI:
     '''
     Provides the API routes and methods to interact with the entire application
     '''
-    def __init__(self, data_queue):
-        self.data_queue = data_queue
+    def __init__(self, queue_manager):
+        self.queue_manager = queue_manager
 
         # Load the metadata for documentation tags
         meta_path = path.dirname(path.realpath(__file__))
@@ -163,7 +163,7 @@ class SimRigAPI:
         new_active_driver = crud.set_active_driver(db, driver)
 
         # Update worker threads
-        self.data_queue.put(("active_driver", new_active_driver.driver))
+        self.queue_manager.put('active_driver', new_active_driver.driver)
 
         return new_active_driver
 

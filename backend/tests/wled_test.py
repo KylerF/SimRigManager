@@ -1,5 +1,6 @@
 import unittest
-from e131.wled import Wled
+
+from backend.e131.wled import Wled
 
 class TestWled(unittest.TestCase):
     def test_missing_params(self):

@@ -1,7 +1,8 @@
-from display.colortheme import ColorTheme
-from display.rpmgauge import RpmGauge
 from colour import Color
 import unittest
+
+from backend.display.colortheme import ColorTheme
+from backend.display.rpmgauge import RpmGauge
 
 class TestRpmGauge(unittest.TestCase):
     def setUp(self):

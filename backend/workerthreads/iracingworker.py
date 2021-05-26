@@ -2,22 +2,22 @@ from time import sleep
 import threading
 import math
 
-from database.schemas import DriverUpdate, LapTimeCreate
-from database.database import get_db
-from database import crud
+from backend.database.schemas import DriverUpdate, LapTimeCreate
+from backend.database.database import get_db
+from backend.database import crud
 
 class IracingWorker(threading.Thread):
     '''
     Background worker to collect and log iRacing data, and send updates
     to WLED light controllers in response to changes
     '''
-    def __init__(self, data_queue, logger, data_stream, controller, rpm_strip, framerate):
+    def __init__(self, queue_manager, logger, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
         self.name = 'iRacing Worker Thread'
         self.active = True
 
-        self.data_queue = data_queue
+        self.queue_manager = queue_manager
         self.log = logger
         self.data_stream = data_stream
         self.controller = controller
@@ -43,7 +43,8 @@ class IracingWorker(threading.Thread):
         while self.active:
             try:
                 # Check for updates from the API
-                updated_driver = self.get_active_driver_from_queue()
+                updated_driver = self.queue_manager.get('active_driver')
+                
                 if updated_driver:
                     active_driver = updated_driver
                     track_time = updated_driver.trackTime
@@ -122,19 +123,6 @@ class IracingWorker(threading.Thread):
             except Exception:
                 self.log.exception('Unhandled condition')
                 self.data_stream.stop()
-
-    def get_active_driver_from_queue(self):
-        '''
-        Check for a new active driver, set via the API. Returns None
-        if no data was received.
-        '''
-        if self.data_queue.empty():
-            return None
-        
-        if self.data_queue[0][0] != "active_driver":
-            return None
-
-        return self.data_queue.get()[1]
 
     def stop(self):
         '''
