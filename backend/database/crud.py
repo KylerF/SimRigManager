@@ -7,7 +7,6 @@ from sqlalchemy import func
 
 from database import models, schemas
 
-
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
 
 def get_driver_by_name(db: Session, name: str):

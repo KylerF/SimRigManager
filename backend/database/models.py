@@ -8,7 +8,6 @@ from sqlalchemy.sql import func
 
 from database.database import Base
 
-
 class Driver(Base):
     '''
     A driver profile linked to track/lap times
