@@ -17,10 +17,14 @@
     }, 
     {
         "name": "quotes",
-        "description": "Manage the inspirational racing quotes displayed with the high scores"
+        "description": "Manage the inspirational racing quotes displayed on the home page"
     }, 
     {
-        "name": "latest", 
-        "description": "Get the latest data collected from iRacing"
+        "name": "iracing data", 
+        "description": "Get the latest data collected from iRacing", 
+        "externalDocs": {
+            "description": "List of raw attributes",
+            "url": "https://github.com/kutu/pyirsdk/blob/master/vars.txt"
+        }
     }
 ]
