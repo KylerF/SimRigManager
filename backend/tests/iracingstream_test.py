@@ -6,7 +6,7 @@ Additional files can be generated using the irsdk script
 """
 import unittest
 
-from backend.raceparse.iracingstream import IracingStream
+from raceparse.iracingstream import IracingStream
 
 class TestIracingStream(unittest.TestCase):
     def test_empty_stream(self):

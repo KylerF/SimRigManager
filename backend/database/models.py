@@ -6,8 +6,7 @@ from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from backend.database.database import Base
-
+from database.database import Base
 
 class Driver(Base):
     '''

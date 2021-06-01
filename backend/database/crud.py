@@ -5,8 +5,7 @@ Functions to perform CRUD operations on the database
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
-from backend.database import models, schemas
-
+from database import models, schemas
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
 

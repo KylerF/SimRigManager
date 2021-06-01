@@ -5,16 +5,16 @@ import logging
 import atexit
 import sys
 
-from backend.database.database import generate_database, engine
-from backend.workerthreads.iracingworker import IracingWorker
-from backend.messagequeue.queuemanager import QueueManager
-from backend.raceparse.iracingstream import IracingStream
-from backend.quotes.init_quotes import init_quotes
-from backend.display.colortheme import ColorTheme
-from backend.display.rpmgauge import RpmGauge
-from backend.api.apiserver import APIServer
-from backend.database import models
-from backend.e131.wled import Wled
+from database.database import generate_database, engine
+from workerthreads.iracingworker import IracingWorker
+from messagequeue.queuemanager import QueueManager
+from raceparse.iracingstream import IracingStream
+from quotes.init_quotes import init_quotes
+from display.colortheme import ColorTheme
+from display.rpmgauge import RpmGauge
+from api.apiserver import APIServer
+from database import models
+from e131.wled import Wled
 
 def main():
     # Create the database (if it does not already exist)
