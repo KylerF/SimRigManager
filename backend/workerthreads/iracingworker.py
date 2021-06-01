@@ -42,8 +42,12 @@ class IracingWorker(threading.Thread):
         # Continue parsing data until ordered to stop
         while self.active:
             try:
+                # Get data from the stream
+                latest = self.data_stream.latest()
+
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
+                pending_task = self.queue_manager.get('tasks')
                 
                 if updated_driver:
                     active_driver = updated_driver
@@ -51,7 +55,8 @@ class IracingWorker(threading.Thread):
 
                     self.log.info('Setting active driver to ' + active_driver.name)
 
-                latest = self.data_stream.latest()
+                if pending_task == 'latest':
+                    self.queue_manager.put('iracing_data', latest)
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0

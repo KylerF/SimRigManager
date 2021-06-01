@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from typing import List
 from json import load
 from os import path
+import asyncio
 
 from database.database import get_db
 from database import crud, schemas
@@ -24,12 +25,13 @@ class SimRigAPI:
             openapi_tags=tags_metadata
         )
 
+        # Configure CORS
         self.api.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"], # Allows all origins
+            allow_origins=["*"],
             allow_credentials=True,
-            allow_methods=["*"], # Allows all methods
-            allow_headers=["*"], # Allows all headers
+            allow_methods=["*"],
+            allow_headers=["*"],
         )
 
 
@@ -107,7 +109,26 @@ class SimRigAPI:
         '''
         Get a snapshot of the latest iRacing data
         '''
-        return {"is_on_track": False}
+        # Request data from the worker thread
+        self.queue_manager.put('tasks', 'latest')
+
+        # Wait for data to be available in the queue, or timeout
+        timeout = 5
+        count = 0
+
+        iracing_data = self.queue_manager.get('iracing_data')
+
+        while iracing_data is None and count < timeout:
+            await asyncio.sleep(0.2)
+
+            iracing_data = self.queue_manager.get('iracing_data')
+            count += 0.2
+
+        # Return empty on timeout
+        if not iracing_data:
+            return {}
+        
+        return iracing_data
 
     async def create_driver(self, driver: schemas.DriverCreate):
         '''
