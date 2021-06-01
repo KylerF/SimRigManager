@@ -105,12 +105,16 @@ class SimRigAPI:
 
         return result
 
-    async def get_latest(self):
+    async def get_latest(self, raw = False):
         '''
         Get a snapshot of the latest iRacing data
         '''
         # Request data from the worker thread
-        self.queue_manager.put('tasks', 'latest')
+        task = 'latest'
+        if raw == 'true':
+            task = 'latest_raw'
+
+        self.queue_manager.put('tasks', task)
 
         # Wait for data to be available in the queue, or timeout
         timeout = 5
