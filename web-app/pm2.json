@@ -1,9 +1,0 @@
-{
-	"apps": [
-		{
-			"name": "simriglights-web-app", 
-			"script": "npm", 
-			"args": "start"
-		}
-	]
-}

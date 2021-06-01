@@ -3,10 +3,10 @@ Unit tests for the IracingStream module
 Test data is stored in .bin files located in the /data directory
 Additional files can be generated using the irsdk script
 (https://github.com/kutu/pyirsdk/blob/master/tutorials/02%20Using%20irsdk%20script.md)
-TODO: Close the files that irsdk is leaving open even after stopping the stream
 """
 import unittest
-from raceparse.iracingstream import IracingStream
+
+from backend.raceparse.iracingstream import IracingStream
 
 class TestIracingStream(unittest.TestCase):
     def test_empty_stream(self):

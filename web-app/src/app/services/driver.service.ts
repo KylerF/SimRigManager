@@ -27,7 +27,7 @@ export class DriverService {
    * @returns array of drivers
    */
   getDrivers(): Observable<Driver[]> {
-    return this.http.get<Driver[]>(APIHelper.baseUrl + this.driversEndpoint)
+    return this.http.get<Driver[]>(APIHelper.getBaseUrl() + this.driversEndpoint)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
@@ -37,7 +37,7 @@ export class DriverService {
    * @returns the active driver
    */
   getSelectedDriver(): Observable<ActiveDriver> {
-    return this.http.get<ActiveDriver>(APIHelper.baseUrl + this.activeDriverEndpoint)
+    return this.http.get<ActiveDriver>(APIHelper.getBaseUrl() + this.activeDriverEndpoint)
       .pipe(retry(3), catchError(APIHelper.handleError));
   }
 
@@ -49,7 +49,7 @@ export class DriverService {
    */
   selectDriver(driver: Driver) {
     return this.http.post<ActiveDriver>(
-        APIHelper.baseUrl + this.activeDriverEndpoint, 
+        APIHelper.getBaseUrl() + this.activeDriverEndpoint, 
         { 'driverId': driver.id }
       )
       .pipe(retry(3), catchError(APIHelper.handleError));
@@ -63,7 +63,7 @@ export class DriverService {
    */
   addDriver(driver: NewDriver): Observable<Driver> {
     return this.http.post<Driver>(
-      APIHelper.baseUrl + this.driversEndpoint, 
+      APIHelper.getBaseUrl() + this.driversEndpoint, 
       driver
     )
     .pipe(retry(3), catchError(APIHelper.handleError));

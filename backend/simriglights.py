@@ -1,21 +1,20 @@
-from database.database import generate_database, engine
-from workerthreads.iracingworker import IracingWorker
-from raceparse.iracingstream import IracingStream
-from display.colortheme import ColorTheme
-from display.rpmgauge import RpmGauge
-from api.apiserver import APIServer
-from database import models
-from e131.wled import Wled
-
 from logging.handlers import RotatingFileHandler
 from colour import Color
-from queue import Queue
-from time import sleep
-from sys import exit
 import configparser
 import logging
 import atexit
 import sys
+
+from backend.database.database import generate_database, engine
+from backend.workerthreads.iracingworker import IracingWorker
+from backend.messagequeue.queuemanager import QueueManager
+from backend.raceparse.iracingstream import IracingStream
+from backend.quotes.init_quotes import init_quotes
+from backend.display.colortheme import ColorTheme
+from backend.display.rpmgauge import RpmGauge
+from backend.api.apiserver import APIServer
+from backend.database import models
+from backend.e131.wled import Wled
 
 def main():
     # Create the database (if it does not already exist)
@@ -23,6 +22,9 @@ def main():
     
     # Create all tables from models
     models.Base.metadata.create_all(bind=engine)
+
+    # Populate the quotes table with samples
+    init_quotes()
 
     # Get config options from file
     config = configparser.ConfigParser()
@@ -67,20 +69,24 @@ def main():
 
     rpm_strip = RpmGauge(led_count, color_theme)
 
-    # Set up a queue to pass data to and from the iRacing worker thread
-    data_queue = Queue()
+    # Initialize communication queues between the API and worker threads
+    queue_manager = QueueManager()
+    queue_manager.open_channel('active_driver') # API sends updates to worker threads that need it
+    queue_manager.open_channel('iracing_data') # Streams data from worker thread to API
+    queue_manager.open_channel('tasks') # Used to trigger worker threads to start a specific task
 
     # Kick off the iRacing worker thread
-    iracing_worker = IracingWorker(data_queue, log, data_stream, controller, rpm_strip, framerate)
+    iracing_worker = IracingWorker(queue_manager, log, data_stream, controller, rpm_strip, framerate)
     iracing_worker.start()
 
     # Clean up resources upon exit
     atexit.register(iracing_worker.stop)
     atexit.register(data_stream.stop)
     atexit.register(controller.stop)
+    atexit.register(queue_manager.close_all)
 
     # Start the API on the main thread
-    api = APIServer(data_queue)
+    api = APIServer(queue_manager)
     api.start()
 
     # If we're here, exit everything

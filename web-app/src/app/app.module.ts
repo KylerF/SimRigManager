@@ -15,6 +15,8 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NewControllerComponent } from './new-controller/new-controller.component';
+import { QuoteComponent } from './quote/quote.component';
+import { DataTablesModule } from "angular-datatables";
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -36,7 +38,8 @@ const routes: Routes = [
     DateAgoPipe,
     LoadingSpinnerComponent,
     ErrorMessageComponent,
-    NewControllerComponent
+    NewControllerComponent,
+    QuoteComponent
   ],
   imports: [
     BrowserModule, 
@@ -44,9 +47,11 @@ const routes: Routes = [
     FormsModule, 
     ReactiveFormsModule,
     HttpClientModule, 
+    DataTablesModule, 
     NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

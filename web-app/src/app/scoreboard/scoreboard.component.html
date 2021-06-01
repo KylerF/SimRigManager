@@ -1,5 +1,5 @@
 <h1>High Scores</h1>
-<table datatable class="table table-bordered reactive-font">
+<table *ngIf="!error" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table reactive-font">
 	<thead>
 		<tr>
 			<th>
@@ -50,11 +50,4 @@
 	No lap times yet. Go burn some rubber!
 </h4>
 
-<figure class="text-center bottom-0 start-50">
-	<blockquote class="blockquote">
-		<p>If you ain't first, you're last.</p>
-	</blockquote>
-	<figcaption class="blockquote-footer">
-		Ricky Bobby
-	</figcaption>
-</figure>
+<app-error-message *ngIf="error" title="Error" message="Unable to access lap times"></app-error-message>

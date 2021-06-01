@@ -1,6 +1,11 @@
-from sqlalchemy.orm import Session
+'''
+Functions to perform CRUD operations on the database
+'''
 
-from . import models, schemas
+from sqlalchemy.orm import Session
+from sqlalchemy import func
+
+from backend.database import models, schemas
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
@@ -97,6 +102,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
         # Replace the old with the new
         if worse_time:
             db.delete(worse_time)
+            db.expire(worse_time)
         
         db.add(db_laptime)
         db.commit()
@@ -143,3 +149,70 @@ def delete_light_controller(db: Session, controller: schemas.LightControllerDele
     db.commit()
 
     return stored_controller
+
+#   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   # 
+
+def get_quotes(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Quote).offset(skip).limit(limit).all()
+
+
+def get_random_quote(db: Session):
+    return db.query(models.Quote).order_by(func.random()).limit(1).all()[0]
+
+
+def create_quote(db: Session, quote: schemas.QuoteCreate):
+    db_quote = models.Quote(**quote.dict())
+    db.add(db_quote)
+    db.commit()
+    db.refresh(db_quote)
+
+    return db_quote
+
+
+def batch_create_quote(db: Session, quotes):
+    for quote in quotes:
+        db_quote = models.Quote(
+            text=quote["text"], 
+            by=quote["by"]
+        )
+        db.add(db_quote)
+    
+    db.commit()
+
+    return quotes
+
+
+def update_quote(db: Session, quote: schemas.QuoteUpdate):
+    stored_quote = db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+    if stored_quote is None:
+        return None
+
+    # Update model from provided fields 
+    for var, value in vars(quote).items():
+        setattr(stored_quote, var, value) if value else None
+
+    db.add(stored_quote)
+    db.commit()
+    db.refresh(stored_quote)
+
+    return stored_quote
+
+
+def delete_quote(db: Session, quote: schemas.QuoteDelete):
+    stored_quote = db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+
+    if stored_quote:
+        db.delete(stored_quote)
+        db.commit()
+
+    return stored_quote
+
+
+def get_count(query):
+    '''
+    Helper function to count the rows returned by a given query
+    '''
+    count_query = query.statement.with_only_columns([func.count()]).order_by(None)
+    count = query.session.execute(count_query).scalar()
+
+    return count

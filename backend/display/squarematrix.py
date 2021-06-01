@@ -2,6 +2,9 @@ from matrixtextmap import numbers16
 from colour import Color
 
 class SquareMatrix:
+    '''
+    A square LED matrix
+    '''
     def __init__(self, width, color):
         self.width = width
         self.led_count = width*width

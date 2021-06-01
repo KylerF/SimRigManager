@@ -1,0 +1,26 @@
+[
+    {
+        "name": "availability",
+        "description": "Check whether the API is up and running"
+    },
+    {
+        "name": "drivers",
+        "description": "Manage and select drivers"
+    }, 
+    {
+        "name": "scores",
+        "description": "Fetch and set fastest lap times"
+    }, 
+    {
+        "name": "controllers",
+        "description": "Manage WLED controllers"
+    }, 
+    {
+        "name": "quotes",
+        "description": "Manage the inspirational racing quotes displayed with the high scores"
+    }, 
+    {
+        "name": "latest", 
+        "description": "Get the latest data collected from iRacing"
+    }
+]
