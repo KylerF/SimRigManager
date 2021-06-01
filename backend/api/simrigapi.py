@@ -4,8 +4,8 @@ from typing import List
 from json import load
 from os import path
 
-from backend.database.database import get_db
-from backend.database import crud, schemas
+from database.database import get_db
+from database import crud, schemas
 
 class SimRigAPI:
     '''

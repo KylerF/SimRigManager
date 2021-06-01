@@ -2,9 +2,9 @@ from time import sleep
 import threading
 import math
 
-from backend.database.schemas import DriverUpdate, LapTimeCreate
-from backend.database.database import get_db
-from backend.database import crud
+from database.schemas import DriverUpdate, LapTimeCreate
+from database.database import get_db
+from database import crud
 
 class IracingWorker(threading.Thread):
     '''
