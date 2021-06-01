@@ -102,6 +102,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
         # Replace the old with the new
         if worse_time:
             db.delete(worse_time)
+            db.expire(worse_time)
         
         db.add(db_laptime)
         db.commit()

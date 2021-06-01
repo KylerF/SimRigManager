@@ -73,6 +73,7 @@ def main():
     queue_manager = QueueManager()
     queue_manager.open_channel('active_driver') # API sends updates to worker threads that need it
     queue_manager.open_channel('iracing_data') # Streams data from worker thread to API
+    queue_manager.open_channel('tasks') # Used to trigger worker threads to start a specific task
 
     # Kick off the iRacing worker thread
     iracing_worker = IracingWorker(queue_manager, log, data_stream, controller, rpm_strip, framerate)

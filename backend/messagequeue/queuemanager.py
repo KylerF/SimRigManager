@@ -7,6 +7,7 @@ class QueueManager:
     '''
     def __init__(self):
         self.channels = {}
+        self.subscribers = {}
 
     def open_channel(self, name):
         '''
@@ -62,4 +63,5 @@ class QueueManager:
         for channel in self.channels:
             self.channels[channel].queue.clear()
         
+        self.subscribers.clear()
         self.channels.clear()
