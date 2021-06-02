@@ -46,7 +46,7 @@ class IracingStream:
 
         self.is_active = False
         self.ir = None
-        #self.state = {}
+        self.state = {}
         
     def restart(self):
         '''
