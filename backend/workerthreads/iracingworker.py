@@ -58,7 +58,7 @@ class IracingWorker(threading.Thread):
                 if pending_task == 'latest':
                     self.queue_manager.put('iracing_data', latest)
                 if pending_task == 'latest_raw':
-                    raw_data = self.data_stream.get_latest_raw()
+                    raw_data = self.data_stream.latest(raw=True)
                     self.queue_manager.put('iracing_data', raw_data or {})
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
