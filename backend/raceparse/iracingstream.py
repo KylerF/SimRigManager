@@ -1,4 +1,5 @@
 import irsdk
+import yaml
 import math
 
 class IracingStream:
@@ -9,6 +10,8 @@ class IracingStream:
     last_session_time = 0
     is_active = False
     state = {}
+
+    snapshot_file = 'latest.yaml'
 
     @staticmethod
     def get_stream(test_file=None):
@@ -111,3 +114,22 @@ class IracingStream:
         '''
         self.update()
         return self.state
+
+    def get_latest_raw(self):
+        '''
+        Get the raw iRacing data snapshot (all attributes, unfiltered)
+        '''
+        if self.save_latest_to_yaml():
+            with open(self.snapshot_file) as file:
+                return yaml.full_load(file)
+
+    def save_latest_to_yaml(self):
+        '''
+        Save the latest raw iRacing data to a YAML file
+        '''
+        if not self.ir:
+            return False
+
+        self.ir.parse_to(self.snapshot_file)
+
+        return True
