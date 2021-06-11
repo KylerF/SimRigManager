@@ -1,4 +1,5 @@
 import irsdk
+import yaml
 import math
 
 class IracingStream:
