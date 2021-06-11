@@ -59,7 +59,7 @@ class IracingWorker(threading.Thread):
                     self.queue_manager.put('iracing_data', latest)
                 if pending_task == 'latest_raw':
                     raw_data = self.data_stream.latest(raw=True)
-                    self.queue_manager.put('iracing_data', raw_data or {})
+                    self.queue_manager.put('iracing_data', raw_data)
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0

@@ -28,7 +28,7 @@
                 {{ driver.nickname }}
             </td>
             <td>
-                {{ driver.trackTime * 1000 | date:'H:mm:ss':'UTC'}}
+                {{ driver.trackTime | hoursMinutesSeconds}}
             </td>
         </tr>
     </tbody>
