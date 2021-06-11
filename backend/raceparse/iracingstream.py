@@ -95,7 +95,7 @@ class IracingStream:
             try:
                 self.state.update ({
                     'speed': math.floor(self.ir['Speed']*2.236936), 
-                    'rpm': math.floor(self.ir['RPM']), 
+                    'rpm': math.floor(self.ir['RPM'] if self.ir['RPM'] != 300.0 else 0), 
                     'gear': self.ir['Gear'], 
                     'is_on_track': self.ir['IsOnTrack'], 
                     'incident_count': self.ir['PlayerCarMyIncidentCount'], 
@@ -108,20 +108,31 @@ class IracingStream:
                 
             self.is_active = True
 
-    def latest(self):
+    def latest(self, raw=False):
         '''
         Get and return all the latest iRacing data
         '''
+        if raw:
+            return self._get_latest_raw()
+
         self.update()
         return self.state
 
-    def get_latest_raw(self):
+    def _get_latest_raw(self):
         '''
-        Get the raw iRacing data snapshot (all attributes, unfiltered)
+        Get a raw iRacing data snapshot (all attributes, unfiltered)
         '''
-        if self.save_latest_to_yaml():
-            with open(self.snapshot_file) as file:
-                return yaml.full_load(file)
+        raw_data = {}
+
+        if not self.ir:
+            return raw_data
+        
+        vars = self.ir._var_headers_dict
+
+        for var in vars:
+            raw_data[var] = self.ir[var]
+
+        return raw_data
 
     def save_latest_to_yaml(self):
         '''

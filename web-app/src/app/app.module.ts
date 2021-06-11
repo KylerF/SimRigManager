@@ -17,6 +17,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NewControllerComponent } from './new-controller/new-controller.component';
 import { QuoteComponent } from './quote/quote.component';
 import { DataTablesModule } from "angular-datatables";
+import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -39,7 +40,8 @@ const routes: Routes = [
     LoadingSpinnerComponent,
     ErrorMessageComponent,
     NewControllerComponent,
-    QuoteComponent
+    QuoteComponent,
+    HoursMinutesSecondsPipe
   ],
   imports: [
     BrowserModule, 
