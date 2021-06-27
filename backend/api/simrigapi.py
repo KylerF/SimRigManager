@@ -34,7 +34,6 @@ class SimRigAPI:
             allow_headers=["*"],
         )
 
-
         # Register endpoints
         self.api.get("/", response_model=schemas.Availability, tags=["availability"])(self.get_root)
 

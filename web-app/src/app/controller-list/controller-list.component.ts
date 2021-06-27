@@ -3,7 +3,7 @@ import { ControllerService } from '../services/controller.service';
 import { Controller } from '../models/controller';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewControllerComponent } from '../new-controller/new-controller.component';
-
+import { WledState } from '../models/wled/wled-state';
 
 @Component({
   selector: 'controller-list',
@@ -16,14 +16,16 @@ import { NewControllerComponent } from '../new-controller/new-controller.compone
  */
 export class ControllerListComponent implements OnInit {
   controllers: Controller[] = [];
-  loading: boolean;
+  controllerStatus: Map<string, boolean> = new Map();
+  controllerState: Map<string, WledState> = new Map();
+  loading: boolean = true;
   error: string;
 
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
     private modalService: NgbModal // Service to display and interface with modal dialogs
   ) 
-  { }
+  {}
 
   ngOnInit(): void {
     this.getControllers();
@@ -37,23 +39,81 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Retrieve configured WLED controllers
+   * Retrieve configured WLED controllers, along with the connection 
+   * status of each
    */
   getControllers() {
-    this.loading = true;
-
     this.controllerService.getControllers().subscribe(
-      response => {
+      controllers => {
         // Success! 
-        this.controllers = response;
+        this.controllers = controllers;
         this.loading = false;
-      },
+
+        // Try to connect to each controller and get the state
+        controllers.forEach(controller => {
+          this.getControllerStatus(controller);
+          this.getControllerState(controller);
+        });
+      }, 
       error => {
         // Failed. Save the response.
         this.error = error;
         this.loading = false;
       }
     );
+  }
+
+  /**
+   * Check whether a controller is online
+   * 
+   * @param controller controller to check
+   */
+  getControllerStatus(controller: Controller) {
+    this.controllerService.getControllerStatus(controller).subscribe(
+      response => {
+        // Connection succeeded
+        this.controllerStatus.set(controller.name, true);
+      }, 
+      error => {
+        // Connection failed
+        this.controllerStatus.set(controller.name, false);
+      }
+    );
+  }
+
+  /**
+   * Get the state of a controller
+   * 
+   * @param controller controller from which to retrieve data
+   */
+  getControllerState(controller: Controller) {
+    this.controllerService.getControllerState(controller).subscribe(
+      response => {
+        // Save the state
+        this.controllerState.set(controller.name, response);
+      }, 
+      error => {
+        // Connection failed
+        this.controllerState.set(controller.name, null);
+      }
+    )
+  }
+
+  /**
+   * Toggle the power of a controller
+   * 
+   * @param controller controller to toggle
+   */
+  togglePowerController(controller: Controller) {
+    this.controllerService.togglePowerController(controller).subscribe(
+      response => {
+        // Success? Update the button color.
+
+      }, 
+      error => {
+
+      }
+    )
   }
 
   /**
