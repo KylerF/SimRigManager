@@ -1,5 +1,4 @@
 import irsdk
-import yaml
 import math
 
 class IracingStream:
@@ -144,3 +143,4 @@ class IracingStream:
         self.ir.parse_to(self.snapshot_file)
 
         return True
+    

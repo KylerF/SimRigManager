@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { LapTime } from '../models/lap-time';
+
 import { LapTimeService } from '../services/lap-time.service';
+import { LapTime } from '../models/lap-time';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.css']
 })
+
+/**
+ * Component to render the scoreboard table
+ */
 export class ScoreboardComponent implements OnInit {
   lapTimes: LapTime[] = [];
-  loading: boolean;
+  loading: boolean = true;
   error: string;
 
   // Datatables configuration
@@ -31,14 +36,10 @@ export class ScoreboardComponent implements OnInit {
   }
 
   getLapTimes() {
-    this.loading = true;
-
     this.lapTimeService.getLapTimes().subscribe(
       response => {
-        // Success! Sort by set date by default.
-        this.lapTimes = response.sort((laptime1, laptime2) => {
-          return +new Date(laptime2.setAt) - +new Date(laptime1.setAt);
-        });
+        // Success!
+        this.lapTimes = response;
 
         // Render the datatable
         this.dtTrigger.next();

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewController } from '../models/new-controller';
 
@@ -10,7 +10,10 @@ import { ControllerService } from '../services/controller.service';
   templateUrl: './new-controller.component.html',
   styleUrls: ['./new-controller.component.css']
 })
+
 export class NewControllerComponent implements OnInit {
+  @ViewChild('closebutton') closebutton;
+  
   newController: NewController = { 'name': '', 'ipAddress': '', 'universe': null };
   submitted = false;
   error: string;
@@ -44,6 +47,9 @@ export class NewControllerComponent implements OnInit {
     }
   }
 
+  /**
+   * Add the controller to the database
+   */
   addController() {
     this.controllerService.addController(this.newController).subscribe(
       response => {
@@ -56,6 +62,9 @@ export class NewControllerComponent implements OnInit {
     )
   }
 
+  /**
+   * Called when the X button is selected
+   */
   dismiss() {
     this.activeModal.dismiss();
   }

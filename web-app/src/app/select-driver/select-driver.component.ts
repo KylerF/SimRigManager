@@ -13,6 +13,7 @@ import { NewDriverComponent } from '../new-driver/new-driver.component';
 export class SelectDriverComponent implements OnInit {
   drivers: Driver[] = [];
   selectedDriver: ActiveDriver;
+  loading: boolean = true;
   error: string;
   
   constructor(
@@ -30,6 +31,7 @@ export class SelectDriverComponent implements OnInit {
     this.driverService.getDrivers().subscribe(
       response => {
         // Success! 
+        this.loading = false;
         this.drivers = response;
       },
       error => {
