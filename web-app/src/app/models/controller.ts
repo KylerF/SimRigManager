@@ -1,3 +1,5 @@
+import { WledState } from "./wled/wled-state";
+
 /**
  * Model class for a WLED controller
  */
@@ -7,4 +9,6 @@ export interface Controller {
     ipAddress: string;
     universe: number;
     isBeingEdited: boolean;
+    isAvailable: boolean;
+    state: WledState;
 }
