@@ -11,6 +11,10 @@ import { DriverService } from '../services/driver.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
+/**
+ * Component to show the home page with service availability status
+ */
 export class HomeComponent implements OnInit {
   apiActive: boolean;
   selectedDriver: ActiveDriver;

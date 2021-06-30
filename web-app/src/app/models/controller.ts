@@ -1,7 +1,7 @@
 import { WledState } from "./wled/wled-state";
 
 /**
- * Model class for a WLED controller
+ * Model interface for a WLED controller
  */
 export interface Controller {
     id: number;

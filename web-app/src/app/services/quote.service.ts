@@ -10,6 +10,9 @@ import { Quote } from '../models/quote';
   providedIn: 'root'
 })
 
+/**
+ * Service to retrieve a random quote from the API
+ */
 export class QuoteService {
   endpoint = 'randomquote';
   constructor(private http: HttpClient) { }
