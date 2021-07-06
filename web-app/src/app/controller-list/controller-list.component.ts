@@ -2,8 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { ControllerService } from '../services/controller.service';
 import { Controller } from '../models/controller';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { NewControllerComponent } from '../new-controller/new-controller.component';
-import { WledState } from '../models/wled/wled-state';
 
 @Component({
   selector: 'controller-list',
@@ -117,12 +117,12 @@ export class ControllerListComponent implements OnInit {
     this.controllerService.togglePowerController(controller).subscribe(
       response => {
         // Success! Update the state.
-        controller.state = response;
+        this.getControllerState(controller);
       }, 
       error => {
-
+        
       }
-    )
+    );
   }
 
   /**
