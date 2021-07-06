@@ -1,5 +1,5 @@
 /**
- * Model class for a new WLED controller
+ * Model interface for a new WLED controller
  */
  export interface NewController {
     name: string;

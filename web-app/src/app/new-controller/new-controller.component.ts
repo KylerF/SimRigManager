@@ -11,6 +11,9 @@ import { ControllerService } from '../services/controller.service';
   styleUrls: ['./new-controller.component.css']
 })
 
+/**
+ * Modal component to show the light controller creation form
+ */
 export class NewControllerComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
   

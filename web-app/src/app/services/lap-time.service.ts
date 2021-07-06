@@ -10,6 +10,9 @@ import { APIHelper } from '../_helpers/api-helper';
   providedIn: 'root'
 })
 
+/**
+ * Service to retrieve best lap times from the API
+ */
 export class LapTimeService {
   endpoint = 'scores';
   constructor(private http: HttpClient) { }

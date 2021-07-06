@@ -101,6 +101,11 @@ class IracingStream:
                     'best_lap_time': self.ir['LapBestLapTime'], 
                     'session_time': self.ir['SessionTime']
                 })
+
+                # Fix redline RPM if needed
+                if self.state['redline'] < self.state['rpm']:
+                    self.state['redline'] = self.state['rpm']
+                
             except (KeyError, AttributeError, TypeError):
                 self.stop()
                 return

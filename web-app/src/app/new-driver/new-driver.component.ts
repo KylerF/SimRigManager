@@ -11,6 +11,9 @@ import { NewDriver } from '../models/new-driver';
   styleUrls: ['./new-driver.component.css']
 })
 
+/**
+ * Modal component to show the driver creation form
+ */
 export class NewDriverComponent implements OnInit {
   newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
   submitted = false;

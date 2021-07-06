@@ -10,6 +10,10 @@ import { NewDriverComponent } from '../new-driver/new-driver.component';
   templateUrl: './select-driver.component.html',
   styleUrls: ['./select-driver.component.css']
 })
+
+/**
+ * Component to show the driver selection table
+ */
 export class SelectDriverComponent implements OnInit {
   drivers: Driver[] = [];
   selectedDriver: ActiveDriver;

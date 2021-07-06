@@ -1,5 +1,8 @@
 import { Driver } from "./driver";
 
+/**
+ * Model interface for a single lap time record
+ */
 export interface LapTime {
     driver: Driver;
     car: String;

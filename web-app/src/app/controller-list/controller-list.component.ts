@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ControllerService } from '../services/controller.service';
 import { Controller } from '../models/controller';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { NewControllerComponent } from '../new-controller/new-controller.component';
-import { WledState } from '../models/wled/wled-state';
 
 @Component({
   selector: 'controller-list',
@@ -16,19 +16,28 @@ import { WledState } from '../models/wled/wled-state';
  */
 export class ControllerListComponent implements OnInit {
   controllers: Controller[] = [];
-  controllerStatus: Map<string, boolean> = new Map();
-  controllerState: Map<string, WledState> = new Map();
   loading: boolean = true;
   error: string;
 
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
     private modalService: NgbModal // Service to display and interface with modal dialogs
-  ) 
-  {}
+  ) { }
 
   ngOnInit(): void {
     this.getControllers();
+  }
+
+  /**
+   * Cancel controller update when window is clicked
+   * 
+   * @param event click event
+   */
+  @HostListener('document:mousedown', ['$event'])
+  onGlobalClick(event): void {
+    if (event.target.nodeName != 'INPUT') {
+      this.cancelEdit();
+    }
   }
 
   /**
@@ -72,11 +81,11 @@ export class ControllerListComponent implements OnInit {
     this.controllerService.getControllerStatus(controller).subscribe(
       response => {
         // Connection succeeded
-        this.controllerStatus.set(controller.name, true);
+        controller.isAvailable = true;
       }, 
       error => {
         // Connection failed
-        this.controllerStatus.set(controller.name, false);
+        controller.isAvailable = false;
       }
     );
   }
@@ -90,11 +99,11 @@ export class ControllerListComponent implements OnInit {
     this.controllerService.getControllerState(controller).subscribe(
       response => {
         // Save the state
-        this.controllerState.set(controller.name, response);
+        controller.state = response;
       }, 
       error => {
         // Connection failed
-        this.controllerState.set(controller.name, null);
+        controller.state = null;
       }
     )
   }
@@ -107,13 +116,13 @@ export class ControllerListComponent implements OnInit {
   togglePowerController(controller: Controller) {
     this.controllerService.togglePowerController(controller).subscribe(
       response => {
-        // Success? Update the button color.
-
+        // Success! Update the state.
+        this.getControllerState(controller);
       }, 
       error => {
-
+        
       }
-    )
+    );
   }
 
   /**
@@ -143,7 +152,19 @@ export class ControllerListComponent implements OnInit {
     );
   }
 
+  /**
+   * Save changes to all controllers
+   */
   updateControllers() {
+    for(let controller of this.controllers) {
+      controller.isBeingEdited = false;
+    }
+  }
+
+  /**
+   * Stop editing controllers
+   */
+  cancelEdit() {
     for(let controller of this.controllers) {
       controller.isBeingEdited = false;
     }

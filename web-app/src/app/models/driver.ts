@@ -1,3 +1,6 @@
+/**
+ * Model interface for a driver profile
+ */
 export interface Driver {
     id: number;
     name: string;
