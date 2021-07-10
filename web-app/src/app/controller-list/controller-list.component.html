@@ -1,6 +1,6 @@
-<h1>Controllers</h1>
+<h1>Light Controllers</h1>
 <div *ngIf="!error && !loading">
-    <table class="table">
+    <table class="table reactive-font">
         <thead>
             <tr>
                 <th scope="col">
@@ -20,32 +20,24 @@
         <tbody>
             <tr *ngFor="let controller of controllers">
                 <td>
-                    <input *ngIf="controller.isBeingEdited" type="text" [(ngModel)]="controller.name" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">{{ controller.name }}</div>
+                    {{ controller.name }}
                 </td>
                 <td>
-                    <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.ipAddress" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">
-                        <span *ngIf="controller.isAvailable === false" class="bi bi-exclamation-circle-fill" style="color:red" title="Connection failed"></span>
-                        <a href="http://{{controller.ipAddress}}" target="_blank" title="WLED controls">
-                            {{ controller.ipAddress }}
-                        </a>
-                    </div>
+                    <span *ngIf="controller.isAvailable === false" class="bi bi-exclamation-circle-fill" style="color:red" title="Connection failed"></span>
+                    <a href="http://{{controller.ipAddress}}" target="_blank" title="WLED controls">
+                        {{ controller.ipAddress }}
+                    </a>
                 </td>
                 <td>
-                    <input *ngIf="controller.isBeingEdited" [(ngModel)]="controller.universe" class="form-control" />
-                    <div *ngIf="!controller.isBeingEdited">{{ controller.universe }}</div>
+                    {{ controller.universe }}
                 </td>
                 <td>
                     <div class="btn-group" role="group">
                         <button class="btn btn-success mr-1" [disabled]="!controller.isAvailable" (click)="togglePowerController(controller)" title="Power">
-                            <span class="bi bi-power"></span>
+                            <span class="bi bi-power" [ngStyle]="{'color': (controller.state && controller.state.on) ? 'white' : 'red'}"></span>
                         </button>
-                        <button *ngIf="!controller.isBeingEdited" class="btn btn-primary mr-1" (click)="editController(controller)" title="Edit">
-                            <span class="bi bi-pencil-square"></span>
-                        </button>
-                        <button *ngIf="controller.isBeingEdited" class="btn btn-success mr-1" (click)="updateControllers()" title="Save changes">
-                            <span class="bi bi-check"></span>
+                        <button class="btn btn-primary mr-1" (click)="editController(controller)" title="Settings">
+                            <span class="bi bi-gear-fill"></span>
                         </button>
                         <button class="btn btn-danger" (click)="deleteController(controller)" title="Delete">
                             <span class="bi bi-trash-fill"></span>

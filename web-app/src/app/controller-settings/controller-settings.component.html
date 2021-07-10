@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h4 class="modal-title">Controller Settings</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="controllerSettingsForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="nameInput" formControlName="name" placeholder="Name">
+                <span class="text-danger" *ngIf="submitted && formControls.name.errors?.required">
+                    This field is required
+                </span>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address">
+                <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
+                    This field is required
+                </span>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe">
+                <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
+                    This field is required
+                </span>
+            </div>
+            <span class="text-danger" *ngIf="error">
+                IP address must be unique
+            </span>
+            <div class="form-group">
+                <label for="colorSelect">Colors</label>
+                <select class="form-control" id="colorSelect">
+                    <option>Porsche Gradient</option>
+                    <option>Ferrari Red</option>
+                    <option>F1 Style</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="effectSelect">Idle Effect</label>
+                <select class="form-control" id="effectSelect">
+                    <option>Solid</option>
+                    <option>Blink</option>
+                    <option>Breathe</option>
+                    <option>Wipe</option>
+                    <option>Fire</option>
+                </select>
+            </div>
+            <br>
+            <div class="form-check form-switch">
+                <input class="form-control form-check-input" type="checkbox" id="autoOnSwitch">
+                <label class="form-check-label" for="autoOnSwitch">Turn on when iRacing starts</label>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success" value="Save">
+                <button type="button" class="btn btn-cancel" (click)="dismiss()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

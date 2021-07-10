@@ -21,7 +21,7 @@ export class NewControllerComponent implements OnInit {
   submitted = false;
   error: string;
 
-  // Create the reactive driver form with validation
+  // Create the reactive controller form with validation
   newControllerForm = this.formBuilder.group({
     name: ['', Validators.required],
     ipAddress: ['', Validators.required],
@@ -78,5 +78,4 @@ export class NewControllerComponent implements OnInit {
    get formControls() {
     return this.newControllerForm.controls;
   }
-
 }

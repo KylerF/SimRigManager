@@ -18,6 +18,7 @@ import { NewControllerComponent } from './new-controller/new-controller.componen
 import { QuoteComponent } from './quote/quote.component';
 import { DataTablesModule } from "angular-datatables";
 import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
+import { ControllerSettingsComponent } from './controller-settings/controller-settings.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -41,7 +42,8 @@ const routes: Routes = [
     ErrorMessageComponent,
     NewControllerComponent,
     QuoteComponent,
-    HoursMinutesSecondsPipe
+    HoursMinutesSecondsPipe,
+    ControllerSettingsComponent
   ],
   imports: [
     BrowserModule, 

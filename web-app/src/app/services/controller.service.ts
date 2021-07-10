@@ -22,6 +22,10 @@ export class ControllerService {
   // Flag to enable power on/off (allowed only once per second to avoid 
   // spamming the controller)
   powerEnabled = true;
+
+  wledRequestOptions: Object = {
+    responseType: 'text'
+  }
   
   constructor(private http: HttpClient) { }
 
@@ -81,7 +85,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=1`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=1`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -101,7 +105,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=0`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=0`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -121,7 +125,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)

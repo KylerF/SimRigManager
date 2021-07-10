@@ -1,9 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { ControllerService } from '../services/controller.service';
-import { Controller } from '../models/controller';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { NewControllerComponent } from '../new-controller/new-controller.component';
+import { ControllerService } from '../services/controller.service';
+import { Controller } from '../models/controller';
+import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
 
 @Component({
   selector: 'controller-list',
@@ -26,25 +27,6 @@ export class ControllerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getControllers();
-  }
-
-  /**
-   * Cancel controller update when window is clicked
-   * 
-   * @param event click event
-   */
-  @HostListener('document:mousedown', ['$event'])
-  onGlobalClick(event): void {
-    if (event.target.nodeName != 'INPUT') {
-      this.cancelEdit();
-    }
-  }
-
-  /**
-   * Update config and stop editing
-   */
-  finishEdit() {
-    this.updateControllers();
   }
 
   /**
@@ -126,17 +108,6 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Switch a controller to edit mode
-   */
-  editController(controller: Controller) {
-    var controllerToEdit = this.controllers.filter(function (thisController) {
-      return thisController.id === controller.id;
-    });
-
-    controllerToEdit[0].isBeingEdited = true;
-  }
-
-  /**
    * Delete a controller
    */
   deleteController(controller: Controller) {
@@ -153,21 +124,10 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Save changes to all controllers
+   * Show the modal add controller dialog
    */
-  updateControllers() {
-    for(let controller of this.controllers) {
-      controller.isBeingEdited = false;
-    }
-  }
-
-  /**
-   * Stop editing controllers
-   */
-  cancelEdit() {
-    for(let controller of this.controllers) {
-      controller.isBeingEdited = false;
-    }
+  editController(controller: Controller) {
+    const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
   }
 
   /**
