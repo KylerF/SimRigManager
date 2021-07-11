@@ -7,6 +7,7 @@ import { NewController } from '../models/new-controller';
 import { APIHelper } from '../_helpers/api-helper';
 import { Controller } from '../models/controller';
 import { WledState } from '../models/wled/wled-state';
+import { WledInfo } from '../models/wled/wled-info';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ControllerService {
   powerEnabled = true;
 
   wledRequestOptions: Object = {
-    responseType: 'text'
+    responseType: 'xml'
   }
   
   constructor(private http: HttpClient) { }
@@ -66,6 +67,28 @@ export class ControllerService {
    */
   getControllerState(controller: Controller): Observable<WledState> {
     return this.http.get<WledState>(`http://${controller.ipAddress}/json/state`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      )
+  }
+
+  /**
+   * Get all available WLED effects
+   * 
+   * @param controller controller to query effects from
+   * @returns promise expected to resolve as an array of strings (effect names)
+   */
+  getControllerEffects(controller: Controller): Observable<[string]> {
+    return this.http.get<[string]>(`http://${controller.ipAddress}/json/effects`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      )
+  }
+
+  getControllerInfo(controller: Controller): Observable<WledInfo> {
+    return this.http.get<WledInfo>(`http://${controller.ipAddress}/json/info`)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
