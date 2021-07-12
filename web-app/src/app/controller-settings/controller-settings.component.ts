@@ -1,5 +1,5 @@
 import { FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ControllerService } from '../services/controller.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,9 +15,11 @@ import { Controller } from '../models/controller';
  * Modal component used to edit a controller's settings
  */
 export class ControllerSettingsComponent implements OnInit {
-  controller: Controller;
+  @Input() public controller: Controller;
+  availableEffects: [string];
+
   submitted = false;
-  error: string;
+  error: any;
 
   // Create the reactive controller form with validation
   controllerSettingsForm = this.formBuilder.group({
@@ -37,6 +39,21 @@ export class ControllerSettingsComponent implements OnInit {
   { }
 
   ngOnInit(): void {
+    this.getAvailableEffects();
+  }
+
+  /**
+   * Query available effects from provided controller
+   */
+  getAvailableEffects() {
+    this.controllerService.getControllerEffects(this.controller).subscribe(
+      effects => {
+        this.availableEffects = effects;
+      }, 
+      error => {
+        this.error = error;
+      }
+    )
   }
   
   onSubmit() {

@@ -124,10 +124,11 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Show the modal add controller dialog
+   * Show the modal controller settings dialog
    */
   editController(controller: Controller) {
     const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
+    modalRef.componentInstance.controller = controller;
   }
 
   /**

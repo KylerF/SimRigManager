@@ -6,24 +6,24 @@
     <form [formGroup]="controllerSettingsForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <div class="mb-3">
-                <input type="text" class="form-control" id="nameInput" formControlName="name" placeholder="Name">
+                <input type="text" class="form-control" id="nameInput" formControlName="name" placeholder="Name" [(ngModel)]="controller.name">
                 <span class="text-danger" *ngIf="submitted && formControls.name.errors?.required">
                     This field is required
                 </span>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address">
+                <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address" [(ngModel)]="controller.ipAddress">
                 <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
                     This field is required
                 </span>
             </div>
             <div class="mb-3">
-                <input type="text" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe">
+                <input type="text" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe" [(ngModel)]="controller.universe">
                 <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
                     This field is required
                 </span>
             </div>
-            <span class="text-danger" *ngIf="error">
+            <span class="text-danger" *ngIf="submitted && error">
                 IP address must be unique
             </span>
             <div class="form-group">
@@ -37,11 +37,9 @@
             <div class="form-group">
                 <label for="effectSelect">Idle Effect</label>
                 <select class="form-control" id="effectSelect">
-                    <option>Solid</option>
-                    <option>Blink</option>
-                    <option>Breathe</option>
-                    <option>Wipe</option>
-                    <option>Fire</option>
+                    <option *ngFor="let effect of availableEffects">
+                        {{ effect }}
+                    </option>
                 </select>
             </div>
             <br>

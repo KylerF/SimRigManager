@@ -75,7 +75,7 @@ export class NewControllerComponent implements OnInit {
   /**
    * Helper function to get the list of form controls
    */
-   get formControls() {
+  get formControls() {
     return this.newControllerForm.controls;
   }
 }
