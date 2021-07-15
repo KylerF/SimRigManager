@@ -30,7 +30,7 @@ setup(
         'pydantic',
         'pyirsdk', 
         'fastapi', 
-        'uvicorn',
+        'uvicorn[standard]',
         'colour', 
         'sacn',
     ],

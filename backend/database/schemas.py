@@ -109,6 +109,52 @@ class LightController(LightControllerBase):
         orm_mode = True
 
 
+class LightControllerSettingsBase(BaseModel):
+    driverId: int
+    controllerId: int
+    colorThemeId: int
+    autoPower: bool
+    idleEffectId: int
+
+
+class LightControllerSettingsGet(BaseModel):
+    driverId: int
+    controllerId: int
+
+
+class LightControllerSettingsCreate(LightControllerSettingsBase):
+    driverId: int
+    controllerId: int
+    colorThemeId: int
+    autoPower: bool
+    idleEffectId: int
+
+
+class LightControllerSettingsUpdate(LightControllerSettingsBase):
+    id: int
+    driverId: int
+    controllerId: int
+    colorThemeId: Optional[int] = None
+    autoPower: Optional[bool] = None
+    idleEffectId: Optional[int] = None
+
+
+class LightControllerSettingsDelete(LightControllerSettingsUpdate):
+    id: int
+    driverId: Optional[int] = None
+    controllerId: Optional[int] = None
+    colorThemeId: Optional[int] = None
+    autoPower: Optional[bool] = None
+    idleEffectId: Optional[int] = None
+
+
+class LightControllerSettings(LightControllerSettingsBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
 class QuoteBase(BaseModel):
     text: str
     by: str

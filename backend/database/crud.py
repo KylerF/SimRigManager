@@ -150,6 +150,22 @@ def delete_light_controller(db: Session, controller: schemas.LightControllerDele
 
     return stored_controller
 
+
+def get_controller_settings(db: Session, controller_id: int, driver_id: int):
+    return db.query(models.LightControllerSettings).filter(
+        models.LightControllerSettings.id == controller_id, 
+        models.LightControllerSettings.driverId == driver_id
+    ).one_or_none()
+
+
+def create_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsCreate):
+    db_controller_settings = models.LightControllerSettings(**controller_settings.dict())
+    db.add(db_controller_settings)
+    db.commit()
+    db.refresh(db_controller_settings)
+
+    return db_controller_settings
+
 #   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   # 
 
 def get_quotes(db: Session, skip: int = 0, limit: int = 100):

@@ -5,6 +5,7 @@ Database table schemas (SQLAlchemy models)
 from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from sqlalchemy.sql.sqltypes import Boolean
 
 from database.database import Base
 
@@ -33,6 +34,13 @@ class Driver(Base):
         back_populates="driver", 
         cascade="all, delete, delete-orphan", 
         lazy="subquery" 
+    )
+
+    lightControllerSettings = relationship(
+        "LightControllerSettings", 
+        back_populates="driver", 
+        cascade="all, delete, delete-orphan", 
+        lazy="subquery"
     )
 
 
@@ -87,6 +95,39 @@ class LightController(Base):
     name = Column(String, unique=True)
     ipAddress = Column(String, unique=True)
     universe = Column(Integer, default=1)
+
+    lightControllerSettings = relationship(
+        "LightControllerSettings", 
+        back_populates="lightController", 
+        cascade="all, delete, delete-orphan", 
+        lazy="subquery"
+    )
+
+
+class LightControllerSettings(Base):
+    '''
+    Light controller settings tied to a driver profile
+    '''
+    __tablename__ = "controllersettings"
+
+    id = Column(Integer, primary_key=True, index=True)
+    driverId = Column(Integer, ForeignKey("drivers.id"))
+    controllerId = Column(Integer, ForeignKey("controllers.id"))
+    colorThemeId = Column(Integer, ForeignKey("colorthemes.id"))
+    autoPower = Column(Boolean)
+    idleEffectId = Column(Integer)
+
+    driver = relationship(
+        "Driver", 
+        back_populates="lightControllerSettings", 
+        lazy="subquery"
+    )
+
+    lightController = relationship(
+        "LightController", 
+        back_populates="lightControllerSettings", 
+        lazy="subquery"
+    )
 
 
 class ColorTheme(Base):

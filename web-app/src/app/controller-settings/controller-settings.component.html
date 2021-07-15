@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h4 class="modal-title">Controller Settings</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="controllerSettingsForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <div class="mb-3">
+                <label for="nameInput">Name</label>
+                <input type="text" class="form-control" id="nameInput" formControlName="name" placeholder="Name">
+                <span class="text-danger" *ngIf="submitted && formControls.name.errors?.required">
+                    This field is required
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <span class="spinner-border spinner-border-sm text-secondary" role="status" *ngIf="connecting === true"></span>
+                <span class="bi bi-check-circle-fill" style="color:green" *ngIf="ipValid === true"></span>
+                <span class="bi bi-x-circle-fill" style="color:red" *ngIf="ipValid === false"></span>  
+                &nbsp;<label for="ipInput">IP Address</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address">
+                    <button class="btn btn-success" (click)="testIp()"><span class="bi bi-wifi"></span> Test</button>
+                </div>
+                <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
+                    This field is required
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label for="universeInput">Universe</label>
+                <input type="text" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe">
+                <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
+                    This field is required
+                </span>
+            </div>
+
+            <hr>
+            
+            <div class="mb-3">
+                <label for="colorSelect">Color Theme</label>
+                <select class="form-select" id="colorSelect">
+                    <option>Porsche Gradient</option>
+                    <option>Ferrari Red</option>
+                    <option>F1 Style</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="effectSelect">Idle Effect</label>
+                <select class="form-select" id="effectSelect" [disabled]="!controller.isAvailable">
+                    <option *ngFor="let effect of availableEffects">
+                        {{ effect }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-primary"><span class="bi bi-play-fill"></span> Preview</button>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+                <div class="form-check form-switch">
+                    <input class="form-control form-check-input" type="checkbox" id="autoOnSwitch">
+                    <label class="form-check-label" for="autoOnSwitch">Power on when an iRacing session starts</label>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-success" value="Save">
+                <button type="button" class="btn btn-cancel" (click)="dismiss()">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>

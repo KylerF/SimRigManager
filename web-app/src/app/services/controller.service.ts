@@ -7,6 +7,7 @@ import { NewController } from '../models/new-controller';
 import { APIHelper } from '../_helpers/api-helper';
 import { Controller } from '../models/controller';
 import { WledState } from '../models/wled/wled-state';
+import { WledInfo } from '../models/wled/wled-info';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,10 @@ export class ControllerService {
   // Flag to enable power on/off (allowed only once per second to avoid 
   // spamming the controller)
   powerEnabled = true;
+
+  wledRequestOptions: Object = {
+    responseType: 'text'
+  }
   
   constructor(private http: HttpClient) { }
 
@@ -55,6 +60,21 @@ export class ControllerService {
   }
 
   /**
+   * Check whether a given IP address is a valid and connected WLED
+   * controller
+   * 
+   * @param ipAddress the IP address of the controller to test
+   * @returns promise expected to resolve as an empty object
+   */
+   testIp(ipAddress: string): Observable<any> {
+    return this.http.get<any>(`http://${ipAddress}/api`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      );
+  }
+
+  /**
    * Get the current state of a controller
    * 
    * @param controller the controller from which to retrieve state
@@ -62,6 +82,28 @@ export class ControllerService {
    */
   getControllerState(controller: Controller): Observable<WledState> {
     return this.http.get<WledState>(`http://${controller.ipAddress}/json/state`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      )
+  }
+
+  /**
+   * Get all available WLED effects
+   * 
+   * @param controller controller to query effects from
+   * @returns promise expected to resolve as an array of strings (effect names)
+   */
+  getControllerEffects(controller: Controller): Observable<[string]> {
+    return this.http.get<[string]>(`http://${controller.ipAddress}/json/effects`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      )
+  }
+
+  getControllerInfo(controller: Controller): Observable<WledInfo> {
+    return this.http.get<WledInfo>(`http://${controller.ipAddress}/json/info`)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -81,7 +123,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=1`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=1`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -101,7 +143,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=0`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=0`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -121,7 +163,7 @@ export class ControllerService {
 
     this.disablePowerFor(1);
 
-    return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`)
+    return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`, this.wledRequestOptions)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
