@@ -1,5 +1,6 @@
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from websockets.exceptions import ConnectionClosedError
 from starlette.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
 from typing import List
 from json import load
 from os import path
@@ -38,6 +39,7 @@ class SimRigAPI:
         self.api.get("/", response_model=schemas.Availability, tags=["availability"])(self.get_root)
 
         self.api.get("/latest", tags=["iracing data"])(self.get_latest)
+        self.api.websocket("/stream")(self.data_stream)
 
         self.api.get("/drivers", response_model=List[schemas.Driver], tags=["drivers"])(self.get_drivers)
         self.api.post("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.create_driver)
@@ -54,6 +56,9 @@ class SimRigAPI:
         self.api.post("/controllers", tags=["controllers"], response_model=schemas.LightController)(self.create_controller)
         self.api.patch("/controllers", tags=["controllers"], response_model=schemas.LightController)(self.update_controller)
         self.api.delete("/controllers", tags=["controllers"], response_model=schemas.LightController)(self.delete_controller)
+
+        self.api.get("/controllersettings", tags=["controllersettings"], response_model=schemas.LightControllerSettings)(self.get_controller_settings)
+        self.api.post("/controllersettings", tags=["controllersettings"], response_model=schemas.LightControllerSettings)(self.create_controller_settings)
 
         self.api.get("/randomquote", tags=["quotes"], response_model=schemas.Quote)(self.get_random_quote)
         self.api.get("/quotes", tags=["quotes"], response_model=List[schemas.Quote])(self.get_quotes)
@@ -76,6 +81,24 @@ class SimRigAPI:
         controllers = crud.get_light_controllers(db, skip=skip, limit=limit)
 
         return controllers
+
+    async def get_controller_settings(self, controller_settings: schemas.LightControllerSettingsGet):
+        '''
+        Get controller settings linked to a driver profile
+        '''
+        db = next(get_db())
+        controller_settings = crud.get_controller_settings(db, controller_settings.controllerId, controller_settings.driverId)
+
+        return controller_settings
+
+    async def create_controller_settings(db, controller_settings: schemas.LightControllerSettingsCreate):
+        '''
+        Create a settings profile for a light controller
+        '''
+        db = next(get_db())
+        new_controller_settings = crud.create_controller_settings(db, controller_settings)
+
+        return new_controller_settings
 
     async def create_controller(self, controller: schemas.LightControllerCreate):
         '''
@@ -104,34 +127,27 @@ class SimRigAPI:
 
         return result
 
-    async def get_latest(self, raw = False):
+    async def get_latest(self, raw=False):
         '''
         Get a snapshot of the latest iRacing data
         '''
-        # Request data from the worker thread
-        task = 'latest'
-        if raw == 'true':
-            task = 'latest_raw'
+        return self._get_iracing_data(raw)
 
-        self.queue_manager.put('tasks', task)
+    async def data_stream(self, websocket: WebSocket, raw=False):
+        '''
+        Stream current iRacing data continuously
+        '''
+        await websocket.accept()
+        try:
+            while True:
+                data = await self._get_iracing_data(raw)
 
-        # Wait for data to be available in the queue, or timeout
-        timeout = 5
-        count = 0
+                if data:
+                    await websocket.send_json(data)
 
-        iracing_data = self.queue_manager.get('iracing_data')
-
-        while iracing_data is None and count < timeout:
-            await asyncio.sleep(0.2)
-
-            iracing_data = self.queue_manager.get('iracing_data')
-            count += 0.2
-
-        # Return empty on timeout
-        if not iracing_data:
-            return {}
-        
-        return iracing_data
+                await asyncio.sleep(0.03)
+        except (WebSocketDisconnect, ConnectionClosedError):
+            return
 
     async def create_driver(self, driver: schemas.DriverCreate):
         '''
@@ -253,3 +269,33 @@ class SimRigAPI:
         result = crud.delete_quote(db, quote)
 
         return result
+
+
+    async def _get_iracing_data(self, raw=False):
+        '''
+        Helper function to retrieve iRacing data from the queue
+        '''
+        # Request data from the worker thread
+        task = 'latest'
+        if raw or raw == 'true':
+            task = 'latest_raw'
+
+        self.queue_manager.put('tasks', task)
+
+        # Wait for data to be available in the queue, or timeout
+        timeout = 5
+        count = 0
+
+        iracing_data = self.queue_manager.get('iracing_data')
+
+        while iracing_data is None and count < timeout:
+            await asyncio.sleep(0.2)
+
+            iracing_data = self.queue_manager.get('iracing_data')
+            count += 0.2
+
+        # Return empty on timeout
+        if not iracing_data:
+            return {}
+        
+        return iracing_data

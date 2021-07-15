@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: 'scoreboard', component: ScoreboardComponent }, 
   { path: 'controllers', component: ControllerListComponent }, 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', component: HomeComponent }
 ]
 
 @NgModule({

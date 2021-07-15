@@ -1,5 +1,5 @@
-import { FormBuilder, Validators } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { ControllerService } from '../services/controller.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +17,9 @@ import { Controller } from '../models/controller';
 export class ControllerSettingsComponent implements OnInit {
   @Input() public controller: Controller;
   availableEffects: [string];
+
+  connecting: boolean;
+  ipValid: boolean;
 
   submitted = false;
   error: any;
@@ -38,7 +41,13 @@ export class ControllerSettingsComponent implements OnInit {
   )
   { }
 
+  /**
+   * Populate the settings form with controller details
+   */
   ngOnInit(): void {
+    this.controllerSettingsForm.get('name').setValue(this.controller.name);
+    this.controllerSettingsForm.get('ipAddress').setValue(this.controller.ipAddress);
+    this.controllerSettingsForm.get('universe').setValue(this.controller.universe);
     this.getAvailableEffects();
   }
 
@@ -55,13 +64,44 @@ export class ControllerSettingsComponent implements OnInit {
       }
     )
   }
+
+  /**
+   * Test the controller connection with given IP address
+   * 
+   * @param controller controller to check
+   */
+  testIp() {
+    this.connecting = true;
+    this.ipValid = null;
+
+    this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe(
+      response => {
+        // Connection succeeded
+        this.connecting = false;
+        this.ipValid = true;
+      }, 
+      error => {
+        // Connection failed
+        this.connecting = false;
+        this.ipValid = false;
+      }
+    );
+  }
   
+  /**
+   * If valid, update the controller settings
+   */
   onSubmit() {
+    this.submitted = true;
+
     if (this.controllerSettingsForm.valid) {
-      this.submitted = true;
+      this.updateController();
     }
   }
 
+  /**
+   * Update the controller settings via the API
+   */
   updateController() {
     
   }

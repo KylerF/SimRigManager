@@ -25,7 +25,7 @@ export class ControllerService {
   powerEnabled = true;
 
   wledRequestOptions: Object = {
-    responseType: 'xml'
+    responseType: 'text'
   }
   
   constructor(private http: HttpClient) { }
@@ -53,6 +53,21 @@ export class ControllerService {
    */
   getControllerStatus(controller: Controller): Observable<any> {
     return this.http.get<any>(`http://${controller.ipAddress}/api`)
+      .pipe(
+        timeout(2000), 
+        catchError(APIHelper.handleError)
+      );
+  }
+
+  /**
+   * Check whether a given IP address is a valid and connected WLED
+   * controller
+   * 
+   * @param ipAddress the IP address of the controller to test
+   * @returns promise expected to resolve as an empty object
+   */
+   testIp(ipAddress: string): Observable<any> {
+    return this.http.get<any>(`http://${ipAddress}/api`)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
