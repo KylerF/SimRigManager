@@ -28,23 +28,33 @@ export class ScoreboardComponent implements OnInit {
     // Set datatables options
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 10
+      order: [[ 5, "desc" ]], 
+      pageLength: 10, 
+      columnDefs:[
+        {
+          orderData: 6, 
+          targets: 5
+        },
+      ], 
+      dom: 'Qlfrtip'
     };
 
     // Get laptimes from server
     this.getLapTimes();
   }
 
+  /**
+   * Fetch the top lap times from the API
+   */
   getLapTimes() {
     this.lapTimeService.getLapTimes().subscribe(
       response => {
         // Success!
         this.lapTimes = response;
+        this.loading = false;
 
         // Render the datatable
         this.dtTrigger.next();
-
-        this.loading = false;
       },
       error => {
         // Failed. Save the response.
@@ -54,6 +64,9 @@ export class ScoreboardComponent implements OnInit {
     );
   }
 
+  /**
+   * Clean up resources
+   */
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }

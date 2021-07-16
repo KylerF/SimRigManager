@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
+import { ipAddressValidatorFunction } from '../directives/validators/ip-address-validator-function';
 import { ControllerService } from '../services/controller.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Controller } from '../models/controller';
@@ -27,7 +28,7 @@ export class ControllerSettingsComponent implements OnInit {
   // Create the reactive controller form with validation
   controllerSettingsForm = this.formBuilder.group({
     name: ['', Validators.required],
-    ipAddress: ['', Validators.required],
+    ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
     universe: ['', Validators.required],
     colorTheme: [''],
     idleEffect: [''],
@@ -49,6 +50,10 @@ export class ControllerSettingsComponent implements OnInit {
     this.controllerSettingsForm.get('ipAddress').setValue(this.controller.ipAddress);
     this.controllerSettingsForm.get('universe').setValue(this.controller.universe);
     this.getAvailableEffects();
+    
+    if (this.controller.isAvailable) {
+      this.ipValid = true;
+    }
   }
 
   /**
@@ -87,6 +92,13 @@ export class ControllerSettingsComponent implements OnInit {
       }
     );
   }
+
+  /**
+   * Called when new text is entered in the IP address field
+   */
+  ipChanged() {
+    this.ipValid = null;
+  }
   
   /**
    * If valid, update the controller settings
@@ -96,6 +108,7 @@ export class ControllerSettingsComponent implements OnInit {
 
     if (this.controllerSettingsForm.valid) {
       this.updateController();
+      this.activeModal.close();
     }
   }
 

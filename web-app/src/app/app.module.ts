@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { ControllerListComponent } from './controller-list/controller-list.component';
@@ -19,6 +20,8 @@ import { QuoteComponent } from './quote/quote.component';
 import { DataTablesModule } from "angular-datatables";
 import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
 import { ControllerSettingsComponent } from './controller-settings/controller-settings.component';
+import { IpAddressValidator } from './directives/validators/ip-address-validator.directive';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -27,7 +30,7 @@ const routes: Routes = [
   { path: 'scoreboard', component: ScoreboardComponent }, 
   { path: 'controllers', component: ControllerListComponent }, 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', component: HomeComponent }
+  { path: '**', component: NotFoundComponent }
 ]
 
 @NgModule({
@@ -44,10 +47,13 @@ const routes: Routes = [
     NewControllerComponent,
     QuoteComponent,
     HoursMinutesSecondsPipe,
-    ControllerSettingsComponent
+    ControllerSettingsComponent,
+    IpAddressValidator, 
+    NotFoundComponent
   ],
   imports: [
     BrowserModule, 
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes), 
     FormsModule, 
     ReactiveFormsModule,
