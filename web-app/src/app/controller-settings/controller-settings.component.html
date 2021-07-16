@@ -19,8 +19,8 @@
                 <span class="bi bi-x-circle-fill" style="color:red" *ngIf="ipValid === false"></span>  
                 &nbsp;<label for="ipInput">IP Address</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address">
-                    <button class="btn btn-success" (click)="testIp()"><span class="bi bi-wifi"></span> Test</button>
+                    <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address" (input)="ipChanged()">
+                    <button type="button" class="btn btn-success" (click)="testIp()" [disabled]="formControls.ipAddress.errors?.ipAddress"><span class="bi bi-wifi"></span> Test</button>
                 </div>
                 <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
                     This field is required
@@ -56,7 +56,7 @@
             </div>
 
             <div class="mb-3">
-                <button class="btn btn-primary"><span class="bi bi-play-fill"></span> Preview</button>
+                <button type="button" class="btn btn-primary"><span class="bi bi-play-fill"></span> Preview</button>
             </div>
 
             <hr>

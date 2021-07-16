@@ -1,5 +1,5 @@
 <h1>High Scores</h1>
-<table *ngIf="!error" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table reactive-font">
+<table *ngIf="!error" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border reactive-font">
 	<thead>
 		<tr>
 			<th>
@@ -19,6 +19,9 @@
 			</th>
 			<th>
 				Set
+			</th>
+			<th hidden>
+				Set At
 			</th>
 		</tr>
 	</thead>
@@ -41,6 +44,9 @@
 			</td>
 			<td>
 				{{ lapTime.setAt | dateAgo }}
+			</td>
+			<td hidden>
+				{{ lapTime.setAt }}
 			</td>
 		</tr>
 	</tbody>
