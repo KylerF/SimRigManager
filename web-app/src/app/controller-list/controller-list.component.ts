@@ -132,6 +132,15 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
+   * Stop editing controllers
+   */
+  cancelEdit() {
+    for(let controller of this.controllers) {
+      controller.isBeingEdited = false;
+    }
+  }
+
+  /**
    * Show the modal add controller dialog
    */
   showAddControllerDialog() {
