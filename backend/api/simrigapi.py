@@ -1,3 +1,4 @@
+from api.wsconnectionmanager import WebsocketConnectionManager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from websockets.exceptions import ConnectionClosedError
 from starlette.middleware.cors import CORSMiddleware
@@ -5,6 +6,7 @@ from typing import List
 from json import load
 from os import path
 import asyncio
+import redis
 
 from database.database import get_db
 from database import crud, schemas
@@ -20,11 +22,17 @@ class SimRigAPI:
         meta_path = path.dirname(path.realpath(__file__))
         tags_metadata = load(open(path.join(meta_path, 'tags_metadata.json')))
 
+        # Create a manager for websocket connections
+        self.ws_connection_manager = WebsocketConnectionManager()
+
         # Set up the API
         self.api = FastAPI(
             title="SimRig Manager API", 
             openapi_tags=tags_metadata
         )
+
+        # Connect to Redis
+        self.redis_store = redis.Redis()
 
         # Configure CORS
         self.api.add_middleware(
@@ -131,22 +139,47 @@ class SimRigAPI:
         '''
         Get a snapshot of the latest iRacing data
         '''
-        return self._get_iracing_data(raw)
+        # Request data from the worker thread
+        task = 'latest'
+        if raw == True or raw == 'true':
+            task = 'latest_raw'
 
-    async def data_stream(self, websocket: WebSocket, raw=False):
+        self.queue_manager.put('tasks', task)
+
+        # Wait for data to be available in the queue, or timeout
+        timeout = 5
+        count = 0
+
+        iracing_data = self.queue_manager.get('iracing_data_stream')
+
+        while iracing_data is None and count < timeout:
+            await asyncio.sleep(0.2)
+
+            iracing_data = self.queue_manager.get('iracing_data_latest')
+            count += 0.2
+
+        # Return empty on timeout
+        if not iracing_data:
+            return {}
+        
+        return iracing_data
+
+    async def data_stream(self, websocket: WebSocket):
         '''
         Stream current iRacing data continuously
         '''
-        await websocket.accept()
+        await self.ws_connection_manager.connect(websocket)
+
         try:
             while True:
-                data = await self._get_iracing_data(raw)
+                data = await self._get_iracing_data(raw=True)
 
                 if data:
-                    await websocket.send_json(data)
+                    await self.ws_connection_manager.send_json(data, websocket)
 
                 await asyncio.sleep(0.03)
         except (WebSocketDisconnect, ConnectionClosedError):
+            self.ws_connection_manager.disconnect(websocket)
             return
 
     async def create_driver(self, driver: schemas.DriverCreate):
@@ -273,29 +306,14 @@ class SimRigAPI:
 
     async def _get_iracing_data(self, raw=False):
         '''
-        Helper function to retrieve iRacing data from the queue
+        Helper function to retrieve iRacing data from Redis
         '''
-        # Request data from the worker thread
-        task = 'latest'
-        if raw or raw == 'true':
-            task = 'latest_raw'
+        try:
+            if raw:
+                data = self.redis_store.hgetall('session_data_raw')
+            else:
+                data = self.redis_store.hgetall('session_data_raw')
 
-        self.queue_manager.put('tasks', task)
-
-        # Wait for data to be available in the queue, or timeout
-        timeout = 5
-        count = 0
-
-        iracing_data = self.queue_manager.get('iracing_data')
-
-        while iracing_data is None and count < timeout:
-            await asyncio.sleep(0.2)
-
-            iracing_data = self.queue_manager.get('iracing_data')
-            count += 0.2
-
-        # Return empty on timeout
-        if not iracing_data:
+            return data
+        except redis.exceptions.ConnectionError:
             return {}
-        
-        return iracing_data
