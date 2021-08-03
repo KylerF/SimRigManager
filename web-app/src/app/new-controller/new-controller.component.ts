@@ -61,6 +61,7 @@ export class NewControllerComponent implements OnInit {
       }, 
       error => {
         this.error = error;
+        alert(error.message);
       }
     )
   }

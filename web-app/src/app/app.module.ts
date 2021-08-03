@@ -22,11 +22,16 @@ import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
 import { ControllerSettingsComponent } from './controller-settings/controller-settings.component';
 import { IpAddressValidator } from './directives/validators/ip-address-validator.directive';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { RealTimeInputDisplayComponent } from './real-time-input-display/real-time-input-display.component';
+import { DriverProfileComponent } from './driver-profile/driver-profile.component';
+import { DriverStatsComponent } from './driver-stats/driver-stats.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'newdriver', component: NewDriverComponent }, 
   { path: 'selectdriver', component: SelectDriverComponent }, 
+  { path: 'driverprofile', component: DriverProfileComponent }, 
+  { path: 'driverstats', component: DriverStatsComponent }, 
   { path: 'scoreboard', component: ScoreboardComponent }, 
   { path: 'controllers', component: ControllerListComponent }, 
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -49,7 +54,7 @@ const routes: Routes = [
     HoursMinutesSecondsPipe,
     ControllerSettingsComponent,
     IpAddressValidator, 
-    NotFoundComponent
+    NotFoundComponent, RealTimeInputDisplayComponent, DriverProfileComponent, DriverStatsComponent
   ],
   imports: [
     BrowserModule, 
