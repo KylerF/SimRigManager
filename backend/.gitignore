@@ -127,3 +127,6 @@ config.ini
 
 # Database
 *.db
+
+# Redis persistent storage
+*.rdb
