@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     private controllerService: ControllerService, // used to check connection to WLED controllers
     private driverService: DriverService // used to check whether a driver has been selected
   ) 
-  {}
+  { }
 
   ngOnInit(): void {
     this.getAPIAvailable();
@@ -66,6 +66,9 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  /**
+   * Query the status of all WLED controllers
+   */
   getControllerStatus() {
     this.controllerService.getControllers().subscribe(
       controllers => {

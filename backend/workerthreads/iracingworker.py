@@ -1,5 +1,7 @@
+from redis.exceptions import ConnectionError
 from time import sleep
 import threading
+import redis
 import math
 
 from database.schemas import DriverUpdate, LapTimeCreate
@@ -24,6 +26,9 @@ class IracingWorker(threading.Thread):
         self.rpm_strip = rpm_strip
         self.framerate = framerate
 
+        # Set up Redis storage
+        self.redis_store = redis.Redis()
+
     def run(self):
         # Get the active driver and their track time from the database
         db = next(get_db())
@@ -44,6 +49,12 @@ class IracingWorker(threading.Thread):
             try:
                 # Get data from the stream
                 latest = self.data_stream.latest()
+                latest_raw = self.data_stream.latest(raw=True)
+
+                if latest:
+                    self.redis_store.hset('session_data', mapping=latest)
+                if latest_raw:
+                    self.redis_store.hset('session_data_raw', mapping=latest_raw)
 
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
@@ -56,10 +67,13 @@ class IracingWorker(threading.Thread):
                     self.log.info('Setting active driver to ' + active_driver.name)
 
                 if pending_task == 'latest':
-                    self.queue_manager.put('iracing_data', latest)
+                    self.queue_manager.put('iracing_data_latest', latest)
                 if pending_task == 'latest_raw':
-                    raw_data = self.data_stream.latest(raw=True)
-                    self.queue_manager.put('iracing_data', raw_data)
+                    self.queue_manager.put('iracing_data_latest', latest_raw)
+                if pending_task == 'stream':
+                    self.queue_manager.put('iracing_data_stream', latest)
+                if pending_task == 'stream_raw':
+                    self.queue_manager.put('iracing_data_stream', latest_raw)
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0
@@ -128,6 +142,8 @@ class IracingWorker(threading.Thread):
             except ConnectionResetError:
                 self.log.error('iRacing refused connection')
                 self.data_stream.stop()
+            except ConnectionError:
+                self.log.error('Redis server refused connection')
             except Exception:
                 self.log.exception('Unhandled condition')
                 self.data_stream.stop()

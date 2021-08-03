@@ -114,8 +114,8 @@ class LightControllerSettings(Base):
     driverId = Column(Integer, ForeignKey("drivers.id"))
     controllerId = Column(Integer, ForeignKey("controllers.id"))
     colorThemeId = Column(Integer, ForeignKey("colorthemes.id"))
-    autoPower = Column(Boolean)
-    idleEffectId = Column(Integer)
+    autoPower = Column(Boolean, default=False)
+    idleEffectId = Column(Integer, default=1)
 
     driver = relationship(
         "Driver", 

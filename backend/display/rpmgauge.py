@@ -51,7 +51,7 @@ class RpmGauge:
         length = self.translate(self.rpm, 0, self.redline, 0, self.led_count//2)
         colors = self.full_gradient[0:length]
 
-        return colors + [Color("black")]*(self.led_count//2 - len(colors))*2 + colors[::-1]
+        return colors + [Color("black")] * (self.led_count//2 - len(colors))*2 + colors[::-1]
 
     def translate(self, value, leftMin, leftMax, rightMin, rightMax):
         '''

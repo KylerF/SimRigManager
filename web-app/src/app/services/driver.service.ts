@@ -1,6 +1,6 @@
 import { catchError, retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 import { Driver } from '../models/driver';
@@ -16,10 +16,23 @@ import { NewDriver } from '../models/new-driver';
  * Service to retrieve, add and update drivers
  */
 export class DriverService {
+  private _selectedDriver = new BehaviorSubject<ActiveDriver>(null);
+  selectedDriver$ = this._selectedDriver.asObservable();
+
+  isLocalStorageSupported: boolean;
+  localStorage: Storage;
+  
   driversEndpoint = 'drivers';
   activeDriverEndpoint = 'activedriver';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.checkLocalStorageSupported();
+
+    if(this.isLocalStorageSupported) {
+      this.localStorage = window.localStorage;
+      this._selectedDriver.next(this.getFromLocalStorage() || null);
+    }
+  }
 
   /**
    * Fetch all drivers
@@ -58,6 +71,9 @@ export class DriverService {
    * @returns the activated driver, if successful
    */
   selectDriver(driver: Driver) {
+    this._selectedDriver.next({driver: driver});
+    this.saveToLocalStorage();
+
     return this.http.post<ActiveDriver>(
       APIHelper.getBaseUrl() + this.activeDriverEndpoint, 
       { 'driverId': driver.id }
@@ -83,5 +99,38 @@ export class DriverService {
       retry(3), 
       catchError(APIHelper.handleError)
     );
+  }
+
+  /**
+   * Check whether HTML5 local storage is supported. If it is not, 
+   * cart items will be stored in the session.
+   */
+  private checkLocalStorageSupported() {
+    this.isLocalStorageSupported = (typeof(Storage) !== void(0));
+  }
+
+  /**
+   * Retrieve the cart from local storage
+   * 
+   * @returns 
+   */
+  private getFromLocalStorage() {
+    if (this.isLocalStorageSupported) {
+      return JSON.parse(this.localStorage.getItem('activeDriver'));
+    }
+
+    return null;
+  }
+  
+  /**
+   * Save the cart in local storage
+   */
+  private saveToLocalStorage(): boolean {
+    if (this.isLocalStorageSupported) {
+      this.localStorage.setItem('activeDriver', JSON.stringify(this._selectedDriver.getValue()));
+      return true;
+    }
+
+    return false;
   }
 }

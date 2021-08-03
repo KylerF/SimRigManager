@@ -16,9 +16,20 @@
             <span class="bi bi-lightbulb"></span> Light Controllers
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="selectdriver">
-            <span class="bi bi-person-circle"></span> Drivers
+        <li *ngIf="activeDriver" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="bi bi-person-circle"></span>  {{ activeDriver.driver.name }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" routerLink="driverstats"><span class="bi bi-graph-up"></span>  My Stats</a></li>
+            <li><a class="dropdown-item" routerLink="driverprofile"><span class="bi bi-person-circle"></span>  Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" routerLink="selectdriver"><span class="bi bi-box-arrow-right"></span>  Switch Driver</a></li>
+          </ul>
+        </li>
+        <li *ngIf="!activeDriver">
+          <a class="nav-link" routerLink="scoreboard">
+            <span class="bi bi-person-circle"></span> Select Driver
           </a>
         </li>
       </ul>

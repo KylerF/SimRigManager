@@ -27,7 +27,7 @@ export class ScoreboardComponent implements OnInit {
   ngOnInit(): void {
     // Set datatables options
     this.dtOptions = {
-      pagingType: 'full_numbers',
+      paging: false,
       order: [[ 5, "desc" ]], 
       pageLength: 10, 
       columnDefs:[
@@ -53,7 +53,7 @@ export class ScoreboardComponent implements OnInit {
         this.lapTimes = response;
         this.loading = false;
 
-        // Render the datatable
+        // Update the datatable
         this.dtTrigger.next();
       },
       error => {
