@@ -6,7 +6,7 @@ import { DriverService } from './services/driver.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 
 export class AppComponent {
@@ -22,8 +22,7 @@ export class AppComponent {
   ) { }
 
   /**
-   * Check for an existing signed-in user and cart items.
-   * If no user is signed in, redirect to default page.
+   * Get the active driver and subscribe to changes
    */
   ngOnInit() {
     this.getSelectedDriver();
@@ -33,7 +32,7 @@ export class AppComponent {
   }
 
   /**
-   * Get the last selected driver
+   * Get the active driver
    */
   getSelectedDriver() {
     this.driverService.getSelectedDriver().subscribe(
@@ -43,7 +42,7 @@ export class AppComponent {
       },
       error => {
         // Failed. Save the response.
-        this.error = error;
+        this.error = error.message;
       }
     );
   }

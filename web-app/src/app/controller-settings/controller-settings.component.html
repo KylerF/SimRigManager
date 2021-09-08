@@ -25,13 +25,19 @@
                 <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
                     This field is required
                 </span>
+                <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.ipAddress">
+                    Invalid IP address
+                </span>
             </div>
 
             <div class="mb-3">
                 <label for="universeInput">Universe</label>
-                <input type="text" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe">
+                <input type="number" class="form-control" id="universeInput" formControlName="universe" placeholder="Universe">
                 <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
                     This field is required
+                </span>
+                <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.pattern">
+                    Invalid universe
                 </span>
             </div>
 

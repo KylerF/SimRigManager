@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectDriverComponent } from './select-driver.component';
@@ -8,7 +9,8 @@ describe('SelectDriverComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectDriverComponent ]
+      declarations: [ SelectDriverComponent ], 
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });

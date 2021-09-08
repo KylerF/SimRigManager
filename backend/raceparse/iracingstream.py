@@ -117,24 +117,28 @@ class IracingStream:
         Get and return all the latest iRacing data
         '''
         if raw:
-            return self._get_latest_raw()
+            return self.__get_latest_raw()
 
         self.update()
         return self.state
 
-    def _get_latest_raw(self):
+    def __get_latest_raw(self):
         '''
         Get a raw iRacing data snapshot (all attributes, unfiltered)
         '''
         raw_data = {}
 
-        if not self.ir:
+        if not self.is_active:
             return raw_data
         
         vars = self.ir._var_headers_dict
 
         for var in vars:
             raw_data[var] = self.ir[var]
+
+        # Add missing headers
+        raw_data['WeekendInfo'] = self.ir['WeekendInfo']
+        raw_data['DriverInfo'] = self.ir['DriverInfo']
 
         return raw_data
 

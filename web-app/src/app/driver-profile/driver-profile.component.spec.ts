@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DriverProfileComponent } from './driver-profile.component';
@@ -8,7 +9,8 @@ describe('DriverProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DriverProfileComponent ]
+      declarations: [ DriverProfileComponent ], 
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });

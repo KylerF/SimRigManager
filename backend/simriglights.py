@@ -39,7 +39,7 @@ def main():
     log_level = config.get('logging', 'level', fallback='INFO')
 
     # Set up logging    
-    file_handler = RotatingFileHandler('simriglights.log', maxBytes=20000000)
+    file_handler = RotatingFileHandler('simriglights.log', maxBytes=20000, backupCount=5)
     stdout_handler = logging.StreamHandler(sys.stdout)
 
     logging.basicConfig(

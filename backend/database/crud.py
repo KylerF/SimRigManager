@@ -18,7 +18,7 @@ def get_driver_by_id(db: Session, id: int):
     return db.query(models.Driver).filter(models.Driver.id == id).first()
 
 
-def get_drivers(db: Session, skip: int = 0, limit: int = 100):
+def get_drivers(db: Session, skip: int = 0, limit: int = -1):
     return db.query(models.Driver).offset(skip).limit(limit).all()
 
 
@@ -76,15 +76,16 @@ def delete_active_driver(db: Session):
 
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   # 
 
-def get_laptimes(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.LapTime).offset(skip).limit(limit).all()
+def get_laptimes(db: Session, skip: int = 0, limit: int = -1):
+    return db.query(models.LapTime).order_by(models.LapTime.setAt.desc()).offset(skip).limit(limit).all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
     db_laptime = models.LapTime(**laptime.dict())
 
-    # Check for times with same car, track and config
+    # Check for times with same driver, car, track and config
     better_time = db.query(models.LapTime).filter(
+        models.LapTime.driverId == laptime.driverId,
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
@@ -92,6 +93,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
     ).one_or_none()
 
     worse_time = db.query(models.LapTime).filter(
+        models.LapTime.driverId == laptime.driverId,
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
@@ -114,7 +116,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
 
 #   #   #   #   #   #   #   #   Light Controllers  #   #   #   #   #   #   #   # 
 
-def get_light_controllers(db: Session, skip: int = 0, limit: int = 100):
+def get_light_controllers(db: Session, skip: int = 0, limit: int = -1):
     return db.query(models.LightController).offset(skip).limit(limit).all()
 
 
@@ -166,9 +168,24 @@ def create_controller_settings(db: Session, controller_settings: schemas.LightCo
 
     return db_controller_settings
 
+def update_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsUpdate):
+    stored_settings = db.query(models.LightControllerSettings).filter(models.LightControllerSettings.id == controller_settings.id).one_or_none()
+    if stored_settings is None:
+        return None
+
+    # Update model from provided fields 
+    for var, value in vars(controller_settings).items():
+        setattr(stored_settings, var, value) if value else None
+
+    db.add(stored_settings)
+    db.commit()
+    db.refresh(stored_settings)
+
+    return stored_settings
+
 #   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   # 
 
-def get_quotes(db: Session, skip: int = 0, limit: int = 100):
+def get_quotes(db: Session, skip: int = 0, limit: int = -1):
     return db.query(models.Quote).offset(skip).limit(limit).all()
 
 

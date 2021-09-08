@@ -25,6 +25,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RealTimeInputDisplayComponent } from './real-time-input-display/real-time-input-display.component';
 import { DriverProfileComponent } from './driver-profile/driver-profile.component';
 import { DriverStatsComponent } from './driver-stats/driver-stats.component';
+import { HourglassIconComponent } from './hourglass-icon/hourglass-icon.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -54,7 +55,11 @@ const routes: Routes = [
     HoursMinutesSecondsPipe,
     ControllerSettingsComponent,
     IpAddressValidator, 
-    NotFoundComponent, RealTimeInputDisplayComponent, DriverProfileComponent, DriverStatsComponent
+    NotFoundComponent, 
+    RealTimeInputDisplayComponent, 
+    DriverProfileComponent, 
+    DriverStatsComponent, 
+    HourglassIconComponent
   ],
   imports: [
     BrowserModule, 

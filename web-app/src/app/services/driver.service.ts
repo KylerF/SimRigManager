@@ -19,16 +19,14 @@ export class DriverService {
   private _selectedDriver = new BehaviorSubject<ActiveDriver>(null);
   selectedDriver$ = this._selectedDriver.asObservable();
 
-  isLocalStorageSupported: boolean;
   localStorage: Storage;
   
   driversEndpoint = 'drivers';
   activeDriverEndpoint = 'activedriver';
+  profilePicEndpoint = 'uploadprofilepic';
 
   constructor(private http: HttpClient) { 
-    this.checkLocalStorageSupported();
-
-    if(this.isLocalStorageSupported) {
+    if(this.checkLocalStorageSupported()) {
       this.localStorage = window.localStorage;
       this._selectedDriver.next(this.getFromLocalStorage() || null);
     }
@@ -41,7 +39,7 @@ export class DriverService {
    */
   getDrivers(): Observable<Driver[]> {
     return this.http.get<Driver[]>(
-      APIHelper.getBaseUrl() + this.driversEndpoint
+     `${APIHelper.getBaseUrl()}${this.driversEndpoint}`
     )
     .pipe(
       retry(3), 
@@ -56,12 +54,17 @@ export class DriverService {
    */
   getSelectedDriver(): Observable<ActiveDriver> {
     return this.http.get<ActiveDriver>(
-      APIHelper.getBaseUrl() + this.activeDriverEndpoint
+      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`
     )
     .pipe(
       retry(3), 
       catchError(APIHelper.handleError)
     );
+  }
+
+  setCachedDriver(driver: Driver) {
+    this._selectedDriver.next({driver: driver});
+    this.saveToLocalStorage();
   }
 
   /**
@@ -71,11 +74,10 @@ export class DriverService {
    * @returns the activated driver, if successful
    */
   selectDriver(driver: Driver) {
-    this._selectedDriver.next({driver: driver});
-    this.saveToLocalStorage();
+    this.setCachedDriver(driver);
 
     return this.http.post<ActiveDriver>(
-      APIHelper.getBaseUrl() + this.activeDriverEndpoint, 
+      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`, 
       { 'driverId': driver.id }
     )
     .pipe(
@@ -92,7 +94,7 @@ export class DriverService {
    */
   addDriver(driver: NewDriver): Observable<Driver> {
     return this.http.post<Driver>(
-      APIHelper.getBaseUrl() + this.driversEndpoint, 
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`, 
       driver
     )
     .pipe(
@@ -102,20 +104,54 @@ export class DriverService {
   }
 
   /**
-   * Check whether HTML5 local storage is supported. If it is not, 
-   * cart items will be stored in the session.
+   * Update driver details
+   * 
+   * @param driver driver to update
+   * @returns the updated driver
    */
-  private checkLocalStorageSupported() {
-    this.isLocalStorageSupported = (typeof(Storage) !== void(0));
+  updateDriver(driver: Driver): Observable<Driver> {
+    return this.http.patch<Driver>(
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`, 
+      driver
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    )
   }
 
   /**
-   * Retrieve the cart from local storage
+   * Upload a new profile pic for a driver
    * 
-   * @returns 
+   * @param profilePic the new profile pic
+   * @returns status of the upload
+   */
+  uploadProfilePic(profilePic: File): Observable<any> {
+    var formData: any = new FormData();
+    formData.append("profilePic", profilePic);
+
+    return this.http.post<any>(
+      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}`, 
+      formData
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    )
+  }
+
+  /**
+   * Check whether HTML5 local storage is supported
+   */
+  private checkLocalStorageSupported() {
+    return (typeof(Storage) !== void(0));
+  }
+
+  /**
+   * Retrieve the active driver from local storage
+   * 
+   * @returns active driver or null
    */
   private getFromLocalStorage() {
-    if (this.isLocalStorageSupported) {
+    if (this.checkLocalStorageSupported()) {
       return JSON.parse(this.localStorage.getItem('activeDriver'));
     }
 
@@ -126,7 +162,7 @@ export class DriverService {
    * Save the cart in local storage
    */
   private saveToLocalStorage(): boolean {
-    if (this.isLocalStorageSupported) {
+    if (this.checkLocalStorageSupported()) {
       this.localStorage.setItem('activeDriver', JSON.stringify(this._selectedDriver.getValue()));
       return true;
     }

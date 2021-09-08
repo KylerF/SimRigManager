@@ -1,6 +1,6 @@
 <h1>Light Controllers</h1>
 <div *ngIf="!error && !loading">
-    <table class="table reactive-font">
+    <table *ngIf="controllers.length" class="table reactive-font">
         <thead>
             <tr>
                 <th scope="col">

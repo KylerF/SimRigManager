@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { QuoteComponent } from './quote.component';
@@ -8,7 +9,8 @@ describe('QuoteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuoteComponent ]
+      declarations: [ QuoteComponent ], 
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });

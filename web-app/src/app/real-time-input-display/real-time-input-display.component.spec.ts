@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RealTimeInputDisplayComponent } from './real-time-input-display.component';
@@ -8,7 +9,8 @@ describe('RealTimeInputDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RealTimeInputDisplayComponent ]
+      declarations: [ RealTimeInputDisplayComponent ] ,
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });

@@ -1,32 +1,123 @@
-<h1>High Scores</h1>
-<table *ngIf="!error" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border reactive-font">
+<div class="mb-1">
+	<h1>High Scores</h1>
+</div>
+
+<div class="d-flex justify-content-between flex-wrap">
+	<div class="mb-2">
+		<div id="searchBar" class="input-group">
+			<input type="search" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" (ngModelChange)="filterScores()">
+			<div class="input-group-append">
+				<div *ngIf="!searchText.length" class="input-group-text">by</div>
+				<div *ngIf="searchText.length" class="input-group-text">
+					<span class="bi bi-arrow-left"></span>
+				</div>
+			</div>
+			<div class="input-group-append">
+				<select class="form-select" id="searchSelect" [(ngModel)]="searchColumn" (ngModelChange)="filterScores()">
+					<option value="driver">
+						Driver
+					</option>
+					<option value="car">
+						Car
+					</option>
+					<option value="trackName">
+						Track
+					</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="mb-2">
+		<div id="filterOptions" class="input-group">
+			<span class="input-group-text">Showing</span>
+			<div class="input-group-append">
+				<select class="form-select" id="showOptionSelect" [(ngModel)]="showFilter" (ngModelChange)="filterScores()">
+					<option value="overall">
+						Overall best times
+					</option>
+					<option value="my">
+						My best times
+					</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+
+<table *ngIf="!error" class="table table-bordered row-border reactive-font">
 	<thead>
 		<tr>
-			<th>
-				Driver
+			<th (click)="sortScores('driver', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Driver
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'driver' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn == 'driver' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+					</div>
+				</div>
 			</th>
-			<th>
-				Car
+			<th (click)="sortScores('car', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Car
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'car' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn == 'car' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+					</div>
+				</div>
 			</th>
-			<th>
-				Track
+			<th (click)="sortScores('trackName', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Track
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'trackName' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn == 'trackName' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+					</div>
+				</div>
 			</th>
-			<th>
-				Config
+			<th (click)="sortScores('trackConfig', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Config
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'trackConfig' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn == 'trackConfig' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+					</div>
+				</div>
 			</th>
-			<th>
-				Time
+			<th (click)="sortScores('time', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Time
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'time' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn == 'time' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+					</div>
+				</div>
 			</th>
-			<th>
-				Set
-			</th>
-			<th hidden>
-				Set At
+			<th (click)="sortScores('setAt', 'toggle')">
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						Set
+					</div>
+					<div class="ms-auto m-1">
+						<span *ngIf="sortColumn == 'setAt' && sortOrder == 'asc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn == 'setAt' && sortOrder == 'desc'" class="bi bi-sort-down-alt"></span>
+					</div>
+				</div>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let lapTime of lapTimes">
+		<tr *ngFor="let lapTime of filteredLapTimes">
 			<td>
 				{{ lapTime.driver.name }}
 			</td>
@@ -54,6 +145,10 @@
 
 <h4 *ngIf="!lapTimes.length && !error && !loading" class="text-center text-muted">
 	No lap times yet. Go burn some rubber!
+</h4>
+
+<h4 *ngIf="lapTimes.length && !filteredLapTimes.length" class="text-center text-muted">
+	No lap times matching filter criteria
 </h4>
 
 <app-error-message *ngIf="error" title="Error" message="Unable to access lap times"></app-error-message>

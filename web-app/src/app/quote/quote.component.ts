@@ -5,7 +5,7 @@ import { QuoteService } from '../services/quote.service';
 @Component({
   selector: 'app-quote',
   templateUrl: './quote.component.html',
-  styleUrls: ['./quote.component.css']
+  styleUrls: ['./quote.component.scss']
 })
 
 /**

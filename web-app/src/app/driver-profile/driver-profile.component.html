@@ -1,1 +1,47 @@
-<p>driver-profile works!</p>
+<div class="d-flex flex-row flex-wrap">
+    <div id="profile-card" *ngIf="driver" class="card p-2">
+        <div class="card-header rounded-circle">
+            <div (click)="fileInput.click()">
+                <div class="profile-pic">
+                    <img class="img-fluid rounded-circle" src="/assets/images/default_profile.png">
+                    <div class="upload-button">
+                        <button *ngIf="!driver.profilePic" class="btn btn-secondary"><span class="bi bi-upload"></span>  Upload</button>
+                        <button *ngIf="driver.profilePic" class="btn btn-secondary"><span class="bi bi-pencil-fill"></span>  Change Avatar</button>
+                    </div>
+                </div>
+            </div>
+
+            <input type="file" accept="image/*" class="file-input" (change)="setProfilePic($event)" #fileInput>
+        </div>
+
+        <hr class="mb-1">
+    
+        <div class="card-body">
+            <form *ngIf="editingProfile">
+                <div class="form-group">
+                    <label for="nameInput">Name</label>
+                    <input type="text" class="form-control" id="nameInput" name="nameInput" [(ngModel)]="driver.name">
+                </div>
+                <div class="form-group">
+                    <label for="nickNameInput">Nickname</label>
+                    <input type="text" class="form-control" id="nickNameInput" name="nickNameInput" [(ngModel)]="driver.nickname">
+                </div>
+                <div class="py-2">
+                    <input type="submit" class="btn btn-success" value="Save" (click)="saveProfile()"/>
+                    <button class="btn btn-cancel" (click)="cancelEdit()">Cancel</button>
+                </div>
+            </form>
+            <div *ngIf="!editingProfile">
+                <h4 class="display-4">{{ driver.name }}</h4>
+                <h5>"{{ driver.nickname }}"</h5>
+                <div class="d-grid">
+                    <button type="button" class="btn btn-primary btn-block" (click)="editProfile()">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-2">
+        more stuff here
+    </div>
+</div>

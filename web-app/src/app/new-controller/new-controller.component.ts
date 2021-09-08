@@ -4,11 +4,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewController } from '../models/new-controller';
 
 import { ControllerService } from '../services/controller.service';
+import { ipAddressValidatorFunction } from '../directives/validators/ip-address-validator-function';
 
 @Component({
   selector: 'app-new-controller',
   templateUrl: './new-controller.component.html',
-  styleUrls: ['./new-controller.component.css']
+  styleUrls: ['./new-controller.component.scss']
 })
 
 /**
@@ -24,8 +25,8 @@ export class NewControllerComponent implements OnInit {
   // Create the reactive controller form with validation
   newControllerForm = this.formBuilder.group({
     name: ['', Validators.required],
-    ipAddress: ['', Validators.required],
-    universe: ['', Validators.required]
+    ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
+    universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]]
   });
 
   constructor(
@@ -61,7 +62,6 @@ export class NewControllerComponent implements OnInit {
       }, 
       error => {
         this.error = error;
-        alert(error.message);
       }
     )
   }

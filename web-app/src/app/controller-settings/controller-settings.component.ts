@@ -5,11 +5,12 @@ import { ipAddressValidatorFunction } from '../directives/validators/ip-address-
 import { ControllerService } from '../services/controller.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Controller } from '../models/controller';
+import { Driver } from '../models/driver';
 
 @Component({
   selector: 'app-controller-settings',
   templateUrl: './controller-settings.component.html',
-  styleUrls: ['./controller-settings.component.css']
+  styleUrls: ['./controller-settings.component.scss']
 })
 
 /**
@@ -17,6 +18,8 @@ import { Controller } from '../models/controller';
  */
 export class ControllerSettingsComponent implements OnInit {
   @Input() public controller: Controller;
+  @Input() public activeDriver: Driver;
+
   availableEffects: [string];
 
   connecting: boolean;
@@ -29,7 +32,7 @@ export class ControllerSettingsComponent implements OnInit {
   controllerSettingsForm = this.formBuilder.group({
     name: ['', Validators.required],
     ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
-    universe: ['', Validators.required],
+    universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]],
     colorTheme: [''],
     idleEffect: [''],
     autoOn: [false]
@@ -50,10 +53,25 @@ export class ControllerSettingsComponent implements OnInit {
     this.controllerSettingsForm.get('ipAddress').setValue(this.controller.ipAddress);
     this.controllerSettingsForm.get('universe').setValue(this.controller.universe);
     this.getAvailableEffects();
+    this.getControllerSettings();
     
     if (this.controller.isAvailable) {
       this.ipValid = true;
     }
+  }
+
+  /**
+   * Query current user settings for the controller
+   */
+  getControllerSettings() {
+    this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe(
+      settings => {
+        
+      }, 
+      error => {
+        this.error = error.message;
+      }
+    )
   }
 
   /**
@@ -116,7 +134,21 @@ export class ControllerSettingsComponent implements OnInit {
    * Update the controller settings via the API
    */
   updateController() {
-    
+    let updatedController = {
+      id: this.controller.id, 
+      name: this.controllerSettingsForm.get('name').value,
+      ipAddress: this.controllerSettingsForm.get('ipAddress').value,
+      universe: this.controllerSettingsForm.get('universe').value
+    };
+
+    this.controllerService.updateController(updatedController).subscribe(
+      response => {
+        this.activeModal.close(response);
+      }, 
+      error => {
+        this.error = error;
+      }
+    );
   }
 
   /**

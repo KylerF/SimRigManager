@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { interval } from "rxjs/internal/observable/interval";
+import { startWith } from "rxjs/operators";
 
 import { NewControllerComponent } from '../new-controller/new-controller.component';
 import { ControllerService } from '../services/controller.service';
 import { Controller } from '../models/controller';
 import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
+import { DriverService } from '../services/driver.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'controller-list',
   templateUrl: './controller-list.component.html',
-  styleUrls: ['./controller-list.component.css']
+  styleUrls: ['./controller-list.component.scss']
 })
 
 /**
@@ -20,13 +24,23 @@ export class ControllerListComponent implements OnInit {
   loading: boolean = true;
   error: string;
 
+  wledPoller: Subscription;
+
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
-    private modalService: NgbModal // Service to display and interface with modal dialogs
+    private modalService: NgbModal, // Service to display and interface with modal dialogs
+    private driverService: DriverService
   ) { }
 
+  // Poll controllers to update their status
   ngOnInit(): void {
-    this.getControllers();
+    this.getControllers()
+
+    this.wledPoller = interval(5000)
+      .pipe(
+        startWith(0)
+      )
+      .subscribe(_ => this.pollControllerStatus())
   }
 
   /**
@@ -42,7 +56,6 @@ export class ControllerListComponent implements OnInit {
 
         // Try to connect to each controller and get the state
         controllers.forEach(controller => {
-          this.getControllerStatus(controller);
           this.getControllerState(controller);
         });
       }, 
@@ -55,21 +68,12 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Check whether a controller is online
-   * 
-   * @param controller controller to check
+   * Poll all available controllers for status
    */
-  getControllerStatus(controller: Controller) {
-    this.controllerService.getControllerStatus(controller).subscribe(
-      response => {
-        // Connection succeeded
-        controller.isAvailable = true;
-      }, 
-      error => {
-        // Connection failed
-        controller.isAvailable = false;
-      }
-    );
+  pollControllerStatus() {
+    for(let controller of this.controllers) {
+      this.getControllerState(controller);
+    }
   }
 
   /**
@@ -82,10 +86,12 @@ export class ControllerListComponent implements OnInit {
       response => {
         // Save the state
         controller.state = response;
+        controller.isAvailable = true;
       }, 
       error => {
         // Connection failed
         controller.state = null;
+        controller.isAvailable = false;
       }
     )
   }
@@ -102,7 +108,7 @@ export class ControllerListComponent implements OnInit {
         this.getControllerState(controller);
       }, 
       error => {
-        
+        this.error = error.message;
       }
     );
   }
@@ -127,17 +133,25 @@ export class ControllerListComponent implements OnInit {
    * Show the modal controller settings dialog
    */
   editController(controller: Controller) {
-    const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
-    modalRef.componentInstance.controller = controller;
-  }
+    this.driverService.getSelectedDriver().subscribe(
+      response => {
+        const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
+        modalRef.componentInstance.controller = controller;
+        modalRef.componentInstance.activeDriver = response.driver;
 
-  /**
-   * Stop editing controllers
-   */
-  cancelEdit() {
-    for(let controller of this.controllers) {
-      controller.isBeingEdited = false;
-    }
+        // Update controller in table after changes are made
+        modalRef.result.then((updatedController) => {
+          this.getControllers();
+        })
+        .catch(_ => {
+          // Cancelled
+          {}
+        });
+      },
+      error => {
+        this.error = error.message;
+      }
+    )
   }
 
   /**
@@ -146,9 +160,18 @@ export class ControllerListComponent implements OnInit {
   showAddControllerDialog() {
     const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
 
-    // Add the new driver after successful creation
+    // Add the new controller after successful creation
     modalRef.result.then((newController) => {
       this.controllers.push(newController);
-    }); 
+      this.getControllerState(newController)
+    })
+    .catch(_ => {
+      // Cancelled
+      {}
+    });
+  }
+
+  ngOnDestroy() {
+    this.wledPoller.unsubscribe();
   }
 }

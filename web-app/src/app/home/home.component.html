@@ -12,17 +12,15 @@
 
     <app-error-message *ngIf="!apiActive" title="SimRig API" message="SimRig API is offline"></app-error-message>
 
-    <div *ngIf="apiActive" class="alert alert-success">
-        <span class="bi bi-circle-fill" style="color:green"></span><b> iRacing: </b>iRacing data is being recorded
+    <div *ngIf="apiActive && iracingDataAvailable" class="alert alert-success">
+        <span class="bi bi-circle-fill" style="color:green"></span><b> iRacing: </b>Connected to iRacing
     </div>
 
-    <app-error-message *ngIf="!apiActive" title="iRacing" message="iRacing data is not being recorded"></app-error-message>
-
-    <div *ngIf="selectedDriver" class="alert alert-success">
-        <span class="bi bi-circle-fill" style="color:green"></span><b> Lap Times: </b>Lap times are being recorded for <b>{{ selectedDriver.driver.nickname }}</b>
+    <div *ngIf="apiActive && !iracingDataAvailable" class="alert alert-warning">
+        <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for iRacing data
     </div>
 
-    <app-error-message *ngIf="!selectedDriver" title="Lap Times" message="No driver selected. Go to the drivers tab to start recording your lap times."></app-error-message>
+    <app-error-message *ngIf="!selectedDriver" title="Lap Times" message="No driver selected. Go to the drivers tab to sign in."></app-error-message>
 
     <div *ngFor="let status of controllerStatus">
         <div *ngIf="status.online" class="alert alert-success">
@@ -31,3 +29,4 @@
 
         <app-error-message *ngIf="!status.online" title="WLED" message="{{ status.name }} is offline"></app-error-message>
     </div>
+</div>

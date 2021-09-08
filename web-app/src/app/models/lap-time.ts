@@ -5,9 +5,9 @@ import { Driver } from "./driver";
  */
 export interface LapTime {
     driver: Driver;
-    car: String;
-    trackName: String;
-    trackConfig: String;
-    time: Number;
+    car: string;
+    trackName: string;
+    trackConfig: string;
+    time: number;
     setAt: Date;
 }

@@ -11,21 +11,31 @@
                     This field is required
                 </span>
             </div>
+
             <div class="mb-3">
                 <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" [(ngModel)]="newController.ipAddress" placeholder="IP Address">
                 <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.required">
                     This field is required
                 </span>
+                <span class="text-danger" *ngIf="submitted && formControls.ipAddress.errors?.ipAddress">
+                    Please enter a valid IP address
+                </span>
             </div>
+
             <div class="mb-3">
-                <input type="text" class="form-control" id="universeInput" formControlName="universe" [(ngModel)]="newController.universe" placeholder="Universe">
+                <input type="number" class="form-control" id="universeInput" formControlName="universe" [(ngModel)]="newController.universe" placeholder="Universe">
                 <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.required">
                     This field is required
                 </span>
+                <span class="text-danger" *ngIf="submitted && formControls.universe.errors?.pattern">
+                    Invalid universe
+                </span>
             </div>
+
             <span class="text-danger" *ngIf="error">
                 IP address must be unique
             </span>
+            
             <div class="modal-footer">
                 <input type="submit" class="btn btn-success" value="Add">
                 <button type="button" class="btn btn-cancel" (click)="dismiss()">Cancel</button>

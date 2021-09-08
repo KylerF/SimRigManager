@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 import { LapTimeService } from '../services/lap-time.service';
 import { LapTime } from '../models/lap-time';
-import { Subject } from 'rxjs';
+import { DriverService } from '../services/driver.service';
 
 @Component({
   selector: 'app-scoreboard',
   templateUrl: './scoreboard.component.html',
-  styleUrls: ['./scoreboard.component.css']
+  styleUrls: ['./scoreboard.component.scss']
 })
 
 /**
@@ -15,46 +15,41 @@ import { Subject } from 'rxjs';
  */
 export class ScoreboardComponent implements OnInit {
   lapTimes: LapTime[] = [];
+  filteredLapTimes: LapTime[] = [];
+
+  showFilter = 'overall';
+
+  searchColumn = 'driver';
+  searchText: string = '';
+  sortColumn: string;
+  sortOrder: string;
+
   loading: boolean = true;
   error: string;
-
-  // Datatables configuration
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject<any>();
   
-  constructor(private lapTimeService: LapTimeService) { }
+  constructor(
+    private lapTimeService: LapTimeService, 
+    private driverService: DriverService
+  ) 
+  { }
 
   ngOnInit(): void {
-    // Set datatables options
-    this.dtOptions = {
-      paging: false,
-      order: [[ 5, "desc" ]], 
-      pageLength: 10, 
-      columnDefs:[
-        {
-          orderData: 6, 
-          targets: 5
-        },
-      ], 
-      dom: 'Qlfrtip'
-    };
-
     // Get laptimes from server
     this.getLapTimes();
   }
 
   /**
-   * Fetch the top lap times from the API
+   * Fetch all lap times from the API
    */
   getLapTimes() {
     this.lapTimeService.getLapTimes().subscribe(
       response => {
         // Success!
         this.lapTimes = response;
+        this.filteredLapTimes = this.lapTimes;
+        this.showOverallBestTimes();
+        this.sortScores('setAt', 'desc');
         this.loading = false;
-
-        // Update the datatable
-        this.dtTrigger.next();
       },
       error => {
         // Failed. Save the response.
@@ -65,9 +60,79 @@ export class ScoreboardComponent implements OnInit {
   }
 
   /**
-   * Clean up resources
+   * Show best overall lap times
    */
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
+  showOverallBestTimes() {
+    this.filteredLapTimes = this.lapTimes.filter(lapTime => 
+      lapTime.time == Math.min(...this.lapTimes.filter(cLapTime => 
+        cLapTime.car == lapTime.car
+        && cLapTime.trackName == lapTime.trackName
+        && cLapTime.trackConfig == lapTime.trackConfig
+      ).map(fLapTime => fLapTime.time))
+    );
+  }
+
+  /**
+   * Show best lap times for the active driver
+   */
+  showDriverBestTimes() {
+    this.driverService.selectedDriver$.subscribe(activeDriver => {
+      this.filteredLapTimes = this.lapTimes.filter(lapTime => 
+        lapTime.driver.id == activeDriver.driver.id
+      );
+    })
+  }
+
+  /**
+   * Filter scores with a given condition
+   */
+  filterScores() {
+    if (this.showFilter == 'overall') {
+      this.showOverallBestTimes();
+    } else {
+      this.showDriverBestTimes();
+    }
+    
+    if (this.searchText.length > 0) {
+      if (this.searchColumn == 'driver') {
+        this.filteredLapTimes = this.filteredLapTimes.filter(lapTime =>
+          lapTime.driver.name.toLocaleLowerCase().includes(
+            this.searchText.trim().toLocaleLowerCase()
+          )
+        );
+      } else {
+        this.filteredLapTimes = this.filteredLapTimes.filter(lapTime =>
+          lapTime[this.searchColumn].toLocaleLowerCase().includes(
+            this.searchText.trim().toLocaleLowerCase()
+          )
+        );
+      }
+    }
+
+    this.sortScores(this.sortColumn, this.sortOrder);
+  }
+
+  /**
+   * Sort scores by the given column
+   */
+  sortScores(column: string, order: string = 'asc') {
+    if (order == 'toggle') {
+      order = (column == this.sortColumn ? (this.sortOrder == 'desc' ? 'asc' : 'desc') : column == 'setAt' ? 'desc': 'asc')
+    }
+
+    this.sortColumn = column;
+    this.sortOrder = order;
+
+    this.filteredLapTimes.sort((lapTime1, lapTime2) => {
+      if (column == 'driver') {
+        return order == 'desc' ? 
+          (lapTime2.driver.name > lapTime1.driver.name ? 1 : lapTime2.driver.name < lapTime1.driver.name ? -1 : 0) : 
+          (lapTime1.driver.name > lapTime2.driver.name ? 1 : lapTime1.driver.name < lapTime2.driver.name ? -1 : 0);
+      } else {
+        return order == 'desc' ? 
+          (lapTime2[column] > lapTime1[column] ? 1 : lapTime2[column] < lapTime1[column] ? -1 : 0) : 
+          (lapTime1[column] > lapTime2[column] ? 1 : lapTime1[column] < lapTime2[column] ? -1 : 0);
+      }
+    });
   }
 }

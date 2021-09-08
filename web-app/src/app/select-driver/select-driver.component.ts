@@ -8,7 +8,7 @@ import { NewDriverComponent } from '../new-driver/new-driver.component';
 @Component({
   selector: 'app-select-driver',
   templateUrl: './select-driver.component.html',
-  styleUrls: ['./select-driver.component.css']
+  styleUrls: ['./select-driver.component.scss']
 })
 
 /**
@@ -17,6 +17,8 @@ import { NewDriverComponent } from '../new-driver/new-driver.component';
 export class SelectDriverComponent implements OnInit {
   drivers: Driver[] = [];
   selectedDriver: ActiveDriver;
+  driverChanged: boolean;
+
   loading: boolean = true;
   error: string;
   
@@ -66,6 +68,7 @@ export class SelectDriverComponent implements OnInit {
     this.driverService.selectDriver(driver).subscribe(
       response => {
         this.selectedDriver = response;
+        this.driverChanged = true;
       }, 
       error => {
         this.error = error;
@@ -76,12 +79,16 @@ export class SelectDriverComponent implements OnInit {
   /**
    * Show the modal cart dialog
    */
-   showAddDriverDialog() {
+  showAddDriverDialog() {
     const modalRef = this.modalService.open(NewDriverComponent, { centered: true });
 
     // Add the new driver after successful creation
     modalRef.result.then((newDriver) => {
       this.drivers.push(newDriver);
-    }); 
+    })
+    .catch(_ => {
+      // Cancelled
+      {}
+    });
   }
 }

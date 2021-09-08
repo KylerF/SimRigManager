@@ -3,6 +3,7 @@ from time import sleep
 import threading
 import redis
 import math
+import json
 
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
@@ -27,7 +28,7 @@ class IracingWorker(threading.Thread):
         self.framerate = framerate
 
         # Set up Redis storage
-        self.redis_store = redis.Redis()
+        self.redis_store = redis.Redis(charset='utf-8', decode_responses=True)
 
     def run(self):
         # Get the active driver and their track time from the database
@@ -50,11 +51,6 @@ class IracingWorker(threading.Thread):
                 # Get data from the stream
                 latest = self.data_stream.latest()
                 latest_raw = self.data_stream.latest(raw=True)
-
-                if latest:
-                    self.redis_store.hset('session_data', mapping=latest)
-                if latest_raw:
-                    self.redis_store.hset('session_data_raw', mapping=latest_raw)
 
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
@@ -127,6 +123,10 @@ class IracingWorker(threading.Thread):
                             time=latest['best_lap_time'], 
                             driverId=active_driver.id
                         ))
+
+                # Update Redis keys
+                self.redis_store.set('session_data', json.dumps(latest))
+                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
                         
                 self.log.debug(latest)
                 

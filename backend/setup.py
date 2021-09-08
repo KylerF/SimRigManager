@@ -26,6 +26,7 @@ setup(
     },
     install_requires=[
         'uvicorn[standard]',
+        'python-multipart',
         'sqlalchemy_utils',
         'sqlalchemy',
         'pydantic',

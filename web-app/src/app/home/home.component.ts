@@ -5,11 +5,12 @@ import { AvailabilityService } from '../services/availability.service';
 import { ControllerStatus } from '../models/controller-status';
 import { ControllerService } from '../services/controller.service';
 import { DriverService } from '../services/driver.service';
+import { IracingDataService } from '../services/iracing-data.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.scss']
 })
 
 /**
@@ -17,12 +18,15 @@ import { DriverService } from '../services/driver.service';
  */
 export class HomeComponent implements OnInit {
   apiActive: boolean;
+  iracingDataAvailable: boolean;
   selectedDriver: ActiveDriver;
   controllerStatus: ControllerStatus[] = [];
-  error: string;
+
+  errors: string[] = [];
 
   constructor(
     private availabilityService: AvailabilityService, // used to check whether the backend API is running
+    private iracingDataService: IracingDataService,
     private controllerService: ControllerService, // used to check connection to WLED controllers
     private driverService: DriverService // used to check whether a driver has been selected
   ) 
@@ -30,6 +34,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAPIAvailable();
+    this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();
   }
@@ -45,9 +50,28 @@ export class HomeComponent implements OnInit {
       },
       error => {
         // Failed. Save the response.
-        this.error = error;
+        this.errors.push(error.message);
       }
     );
+  }
+
+  /**
+   * Check whether data is being streamed from iRacing
+   */
+  getIracingStatus() {
+    this.iracingDataService.getLatest().subscribe(
+      response => {
+        if (JSON.stringify(response) == '{}') {
+          this.iracingDataAvailable = false;
+        } else {
+          this.iracingDataAvailable = true;
+        }
+      }, 
+      error => {
+        this.errors.push(error.message);
+        this.iracingDataAvailable = false;
+      }
+    )
   }
 
   /**
@@ -61,7 +85,7 @@ export class HomeComponent implements OnInit {
       },
       error => {
         // Failed. Save the response.
-        this.error = error;
+        this.errors.push(error.message);
       }
     );
   }
@@ -74,7 +98,7 @@ export class HomeComponent implements OnInit {
       controllers => {
         // Try to connect to each controller
         controllers.forEach(controller => {
-          this.controllerService.getControllerStatus(controller).subscribe(
+          this.controllerService.getControllerState(controller).subscribe(
             response => {
               // Connection succeeded
               this.controllerStatus.push({ 'name': controller.name, 'online': true});
@@ -88,7 +112,7 @@ export class HomeComponent implements OnInit {
       }, 
       error => {
         // Failed. Save the response.
-        this.error = error;
+        this.errors.push(error.message);
       }
     )
   }

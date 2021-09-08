@@ -129,6 +129,12 @@ class LightControllerSettings(Base):
         lazy="subquery"
     )
 
+    colorTheme = relationship(
+        "ColorTheme", 
+        back_populates="lightControllerSettings", 
+        lazy="subquery"
+    )
+
 
 class ColorTheme(Base):
     '''
@@ -144,6 +150,12 @@ class ColorTheme(Base):
     secondaryColorR = Column(Integer)
     secondaryColorG = Column(Integer)
     secondaryColorB = Column(Integer)
+
+    lightControllerSettings = relationship(
+        "LightControllerSettings", 
+        back_populates="colorTheme", 
+        lazy="subquery"
+    )
 
 
 class Quote(Base):

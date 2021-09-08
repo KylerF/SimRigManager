@@ -42,7 +42,7 @@
         </button>
     </div>
 
-    <div *ngIf="selectedDriver">
+    <div *ngIf="selectedDriver && driverChanged">
         <div class="alert alert-success">
             Welcome, <b>{{ selectedDriver.driver.nickname }}</b>! Your lap times are being recorded.
         </div>

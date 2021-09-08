@@ -1,12 +1,13 @@
 from api.wsconnectionmanager import WebsocketConnectionManager
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from websockets.exceptions import ConnectionClosedError
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, File, UploadFile
+from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from starlette.middleware.cors import CORSMiddleware
 from typing import List
-from json import load
 from os import path
 import asyncio
+import shutil
 import redis
+import json
 
 from database.database import get_db
 from database import crud, schemas
@@ -20,7 +21,7 @@ class SimRigAPI:
 
         # Load the metadata for documentation tags
         meta_path = path.dirname(path.realpath(__file__))
-        tags_metadata = load(open(path.join(meta_path, 'tags_metadata.json')))
+        tags_metadata = json.load(open(path.join(meta_path, 'tags_metadata.json')))
 
         # Create a manager for websocket connections
         self.ws_connection_manager = WebsocketConnectionManager()
@@ -32,7 +33,7 @@ class SimRigAPI:
         )
 
         # Connect to Redis
-        self.redis_store = redis.Redis()
+        self.redis_store = redis.Redis(charset='utf-8', decode_responses=True)
 
         # Configure CORS
         self.api.add_middleware(
@@ -67,12 +68,15 @@ class SimRigAPI:
 
         self.api.get("/controllersettings", tags=["controllersettings"], response_model=schemas.LightControllerSettings)(self.get_controller_settings)
         self.api.post("/controllersettings", tags=["controllersettings"], response_model=schemas.LightControllerSettings)(self.create_controller_settings)
+        self.api.patch("/controllersettings", tags=["controllersettings"], response_model=schemas.LightControllerSettings)(self.update_controller_settings)
 
         self.api.get("/randomquote", tags=["quotes"], response_model=schemas.Quote)(self.get_random_quote)
         self.api.get("/quotes", tags=["quotes"], response_model=List[schemas.Quote])(self.get_quotes)
         self.api.post("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.create_quote)
         self.api.patch("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.update_quote)
         self.api.delete("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.delete_quote)
+
+        self.api.post("/uploadprofilepic", tags=["drivers"])(self.upload_profile_pic)
 
 
     async def get_root(self):
@@ -81,7 +85,7 @@ class SimRigAPI:
         '''
         return {"active": True}
 
-    async def get_controllers(self, skip: int = 0, limit: int = 100):
+    async def get_controllers(self, skip: int = 0, limit: int = -1):
         '''
         Get all WLED light controllers
         '''
@@ -90,12 +94,12 @@ class SimRigAPI:
 
         return controllers
 
-    async def get_controller_settings(self, controller_settings: schemas.LightControllerSettingsGet):
+    async def get_controller_settings(self, controllerId: int, driverId: int):
         '''
         Get controller settings linked to a driver profile
         '''
         db = next(get_db())
-        controller_settings = crud.get_controller_settings(db, controller_settings.controllerId, controller_settings.driverId)
+        controller_settings = crud.get_controller_settings(db, controllerId, driverId)
 
         return controller_settings
 
@@ -105,6 +109,15 @@ class SimRigAPI:
         '''
         db = next(get_db())
         new_controller_settings = crud.create_controller_settings(db, controller_settings)
+
+        return new_controller_settings
+
+    async def update_controller_settings(db, controller_settings: schemas.LightControllerSettingsUpdate):
+        '''
+        Update settings profile for a light controller
+        '''
+        db = next(get_db())
+        new_controller_settings = crud.update_controller_settings(db, controller_settings)
 
         return new_controller_settings
 
@@ -172,13 +185,16 @@ class SimRigAPI:
 
         try:
             while True:
-                data = await self._get_iracing_data(raw=True)
-
+                try:
+                    data = json.loads(self.redis_store.get('session_data_raw'))
+                except redis.exceptions.ConnectionError:
+                    data = {}
+                
                 if data:
                     await self.ws_connection_manager.send_json(data, websocket)
 
                 await asyncio.sleep(0.03)
-        except (WebSocketDisconnect, ConnectionClosedError):
+        except (WebSocketDisconnect, ConnectionClosedError, ConnectionClosedOK):
             self.ws_connection_manager.disconnect(websocket)
             return
 
@@ -191,7 +207,7 @@ class SimRigAPI:
 
         return new_driver
 
-    async def get_drivers(self, skip: int = 0, limit: int = 100):
+    async def get_drivers(self, skip: int = 0, limit: int = -1):
         '''
         Get all drivers
         '''
@@ -240,7 +256,7 @@ class SimRigAPI:
 
         return new_active_driver
 
-    async def get_scores(self, skip: int = 0, limit: int = 100):
+    async def get_scores(self, skip: int = 0, limit: int = -1):
         '''
         Get the current best lap times
         '''
@@ -251,14 +267,14 @@ class SimRigAPI:
 
     async def create_score(self, laptime: schemas.LapTimeCreate):
         '''
-        Log a new lap time. Only gets commited if it's a high score.
+        Log a new lap time. Only gets commited if it's a personal best.
         '''
         db = next(get_db())
         new_laptime = crud.create_laptime(db, laptime)
 
         return new_laptime
 
-    async def get_quotes(self, skip: int = 0, limit: int = 100):
+    async def get_quotes(self, skip: int = 0, limit: int = -1):
         '''
         Get all racing quotes
         '''
@@ -304,6 +320,15 @@ class SimRigAPI:
         return result
 
 
+    async def upload_profile_pic(self, profilePic: UploadFile=File(...)):
+        file_location = f"userdata/images/{profilePic.filename}"
+
+        with open(file_location, "wb+") as file_object:
+            shutil.copyfileobj(profilePic.file, file_object)  
+
+        return {"success": "image upload completed"}
+
+
     async def _get_iracing_data(self, raw=False):
         '''
         Helper function to retrieve iRacing data from Redis
@@ -313,6 +338,8 @@ class SimRigAPI:
                 data = self.redis_store.hgetall('session_data_raw')
             else:
                 data = self.redis_store.hgetall('session_data_raw')
+            
+            print(data)
 
             return data
         except redis.exceptions.ConnectionError:

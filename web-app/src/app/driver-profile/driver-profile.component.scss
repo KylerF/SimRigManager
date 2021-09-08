@@ -1,0 +1,27 @@
+.profile-pic {
+    font-size: 15rem;
+    position: relative;
+    cursor: pointer;
+
+    &:hover {
+        .upload-button {
+            display: block;
+        }
+    }
+}
+
+#profile-card {
+    max-width: 400px;
+    min-width: 350px
+}
+
+.upload-button {
+    top: 35%;
+    left: 5%;
+    position: absolute;
+    display: none;
+}
+
+.file-input {
+    display: none;
+}

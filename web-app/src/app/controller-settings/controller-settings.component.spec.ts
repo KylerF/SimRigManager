@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ControllerSettingsComponent } from './controller-settings.component';
 
@@ -8,7 +11,9 @@ describe('ControllerSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerSettingsComponent ]
+      declarations: [ ControllerSettingsComponent ], 
+      imports: [ HttpClientModule ], 
+      providers: [ NgbActiveModal, FormBuilder ]
     })
     .compileComponents();
   });
@@ -16,6 +21,22 @@ describe('ControllerSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ControllerSettingsComponent);
     component = fixture.componentInstance;
+    component.controller = {
+      id: 1, 
+      name: 'TestController', 
+      ipAddress: '127.0.0.1', 
+      universe: 1, 
+      isBeingEdited: false, 
+      isAvailable: false, 
+      state: null
+    };
+    component.activeDriver = {
+      id: 1, 
+      name: 'TestDriver', 
+      nickname: 'test', 
+      trackTime: 60, 
+      profilePic: ''
+    };
     fixture.detectChanges();
   });
 
