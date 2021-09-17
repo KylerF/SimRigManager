@@ -6,6 +6,7 @@ import { ControllerStatus } from '../models/controller-status';
 import { ControllerService } from '../services/controller.service';
 import { DriverService } from '../services/driver.service';
 import { IracingDataService } from '../services/iracing-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,7 @@ import { IracingDataService } from '../services/iracing-data.service';
 export class HomeComponent implements OnInit {
   apiActive: boolean;
   iracingDataAvailable: boolean;
+  iracingDataSubscription: Subscription;
   selectedDriver: ActiveDriver;
   controllerStatus: ControllerStatus[] = [];
 
@@ -37,6 +39,10 @@ export class HomeComponent implements OnInit {
     this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();
+  }
+
+  ngOnDestroy(): void {
+    this.iracingDataSubscription.unsubscribe();
   }
 
   /**
@@ -59,19 +65,20 @@ export class HomeComponent implements OnInit {
    * Check whether data is being streamed from iRacing
    */
   getIracingStatus() {
-    this.iracingDataService.getLatest().subscribe(
-      response => {
-        if (JSON.stringify(response) == '{}') {
-          this.iracingDataAvailable = false;
-        } else {
-          this.iracingDataAvailable = true;
-        }
-      }, 
-      error => {
-        this.errors.push(error.message);
-        this.iracingDataAvailable = false;
-      }
-    )
+    this.iracingDataSubscription = this.iracingDataService.getStream()
+       .subscribe(
+          response => {
+            if (JSON.stringify(response) == '{}') {
+              this.iracingDataAvailable = false;
+            } else {
+              this.iracingDataAvailable = true;
+            }
+          }, 
+          error => {
+            this.errors.push(error.message);
+            this.iracingDataAvailable = false;
+          }    
+      );
   }
 
   /**
