@@ -44,7 +44,7 @@ export class IracingDataService {
 
         this.ws.onerror = (event) => observer.error(event);
 
-        this.ws.onclose = (event) => observer.complete();
+        this.ws.onclose = (_) => observer.complete();
 
         return () =>
           this.ws.close(1000, "The user disconnected");

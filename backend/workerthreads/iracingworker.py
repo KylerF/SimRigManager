@@ -7,7 +7,7 @@ import json
 
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
-from database import crud
+from database import crud, schemas
 
 class IracingWorker(threading.Thread):
     '''
@@ -116,13 +116,18 @@ class IracingWorker(threading.Thread):
                     if active_driver:
                         self.log.info('Setting new best lap time for ' + active_driver.name)
                         
-                        crud.create_laptime(db, LapTimeCreate(
+                        new_record = LapTimeCreate(
                             car=latest['car_name'], 
                             trackName=latest['track_name'], 
                             trackConfig=latest['track_config'] or '', 
                             time=latest['best_lap_time'], 
                             driverId=active_driver.id
-                        ))
+                        )
+
+                        new_laptime = crud.create_laptime(db, new_record)
+
+                        # Update Redis key for streaming
+                        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
 
                 # Update Redis keys
                 self.redis_store.set('session_data', json.dumps(latest))

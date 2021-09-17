@@ -2,7 +2,8 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IracingDataService } from '../services/iracing-data.service';
 import { Constants } from '../_helpers/constants';
-import { IracingDataFrame } from '../models/iracing/data-frame'
+import { IracingDataFrame } from '../models/iracing/data-frame';
+import * as d3 from 'd3';
 
 @Component({
   selector: 'app-real-time-input-display',

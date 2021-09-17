@@ -17,7 +17,6 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NewControllerComponent } from './new-controller/new-controller.component';
 import { QuoteComponent } from './quote/quote.component';
-import { DataTablesModule } from "angular-datatables";
 import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
 import { ControllerSettingsComponent } from './controller-settings/controller-settings.component';
 import { IpAddressValidator } from './directives/validators/ip-address-validator.directive';
@@ -68,7 +67,6 @@ const routes: Routes = [
     FormsModule, 
     ReactiveFormsModule,
     HttpClientModule, 
-    DataTablesModule, 
     NgbModule
   ],
   providers: [],

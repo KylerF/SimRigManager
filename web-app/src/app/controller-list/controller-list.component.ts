@@ -25,6 +25,7 @@ export class ControllerListComponent implements OnInit {
   error: string;
 
   wledPoller: Subscription;
+  pollingInterval = 10000; // ms
 
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
@@ -36,7 +37,7 @@ export class ControllerListComponent implements OnInit {
   ngOnInit(): void {
     this.getControllers()
 
-    this.wledPoller = interval(5000)
+    this.wledPoller = interval(this.pollingInterval)
       .pipe(
         startWith(0)
       )
