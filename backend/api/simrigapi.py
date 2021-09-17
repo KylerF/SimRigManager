@@ -1,7 +1,8 @@
 from api.wsconnectionmanager import WebsocketConnectionManager
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, File, UploadFile
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, File, UploadFile
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from starlette.middleware.cors import CORSMiddleware
+from sse_starlette.sse import EventSourceResponse
 from typing import List
 from os import path
 import asyncio
@@ -11,6 +12,7 @@ import json
 
 from database.database import get_db
 from database import crud, schemas
+from api.ssegenerators import SSEGenerators
 
 class SimRigAPI:
     '''
@@ -33,7 +35,7 @@ class SimRigAPI:
         )
 
         # Connect to Redis
-        self.redis_store = redis.Redis(charset='utf-8', decode_responses=True)
+        self.redis_store = redis.Redis(host='redis', charset='utf-8', decode_responses=True)
 
         # Configure CORS
         self.api.add_middleware(
@@ -77,6 +79,9 @@ class SimRigAPI:
         self.api.delete("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.delete_quote)
 
         self.api.post("/uploadprofilepic", tags=["drivers"])(self.upload_profile_pic)
+
+        self.api.get("/streamlaptimes", tags=["scores"])(self.stream_lap_times)
+        self.api.get("/streamactivedriver", tags=["drivers"])(self.stream_lap_times)
 
 
     async def get_root(self):
@@ -152,30 +157,7 @@ class SimRigAPI:
         '''
         Get a snapshot of the latest iRacing data
         '''
-        # Request data from the worker thread
-        task = 'latest'
-        if raw == True or raw == 'true':
-            task = 'latest_raw'
-
-        self.queue_manager.put('tasks', task)
-
-        # Wait for data to be available in the queue, or timeout
-        timeout = 5
-        count = 0
-
-        iracing_data = self.queue_manager.get('iracing_data_stream')
-
-        while iracing_data is None and count < timeout:
-            await asyncio.sleep(0.2)
-
-            iracing_data = self.queue_manager.get('iracing_data_latest')
-            count += 0.2
-
-        # Return empty on timeout
-        if not iracing_data:
-            return {}
-        
-        return iracing_data
+        return self.__get_iracing_data(raw=raw)
 
     async def data_stream(self, websocket: WebSocket):
         '''
@@ -185,17 +167,16 @@ class SimRigAPI:
 
         try:
             while True:
-                try:
-                    data = json.loads(self.redis_store.get('session_data_raw'))
-                except redis.exceptions.ConnectionError:
-                    data = {}
+                await websocket.receive_text()
+                
+                data = self.__get_iracing_data(raw=True)
                 
                 if data:
                     await self.ws_connection_manager.send_json(data, websocket)
 
                 await asyncio.sleep(0.03)
         except (WebSocketDisconnect, ConnectionClosedError, ConnectionClosedOK):
-            self.ws_connection_manager.disconnect(websocket)
+            await self.ws_connection_manager.disconnect(websocket)
             return
 
     async def create_driver(self, driver: schemas.DriverCreate):
@@ -272,6 +253,9 @@ class SimRigAPI:
         db = next(get_db())
         new_laptime = crud.create_laptime(db, laptime)
 
+        # Update redis key for streaming
+        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
+
         return new_laptime
 
     async def get_quotes(self, skip: int = 0, limit: int = -1):
@@ -321,6 +305,9 @@ class SimRigAPI:
 
 
     async def upload_profile_pic(self, profilePic: UploadFile=File(...)):
+        '''
+        Upload a new driver profile picture
+        '''
         file_location = f"userdata/images/{profilePic.filename}"
 
         with open(file_location, "wb+") as file_object:
@@ -329,18 +316,26 @@ class SimRigAPI:
         return {"success": "image upload completed"}
 
 
-    async def _get_iracing_data(self, raw=False):
+    async def stream_lap_times(self, request: Request):
+        '''
+        Stream new lap times via server sent events
+        '''
+        event_generator = SSEGenerators.get_generator(request, 'laptimes')
+        return EventSourceResponse(event_generator)
+
+
+    def __get_iracing_data(self, raw=False):
         '''
         Helper function to retrieve iRacing data from Redis
         '''
-        try:
-            if raw:
-                data = self.redis_store.hgetall('session_data_raw')
-            else:
-                data = self.redis_store.hgetall('session_data_raw')
-            
-            print(data)
+        data = {}
 
-            return data
-        except redis.exceptions.ConnectionError:
-            return {}
+        try:
+            if raw or raw == 'true':
+                data = json.loads(self.redis_store.get('session_data_raw'))
+            else:
+                data = json.loads(self.redis_store.get('session_data_raw'))
+        except (redis.exceptions.ConnectionError, TypeError):
+            data = {}
+
+        return data
