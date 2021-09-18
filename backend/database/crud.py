@@ -1,6 +1,6 @@
-'''
+"""
 Functions to perform CRUD operations on the database
-'''
+"""
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
@@ -242,9 +242,9 @@ def delete_quote(db: Session, quote: schemas.QuoteDelete):
 
 
 def get_count(query):
-    '''
+    """
     Helper function to count the rows returned by a given query
-    '''
+    """
     count_query = query.statement.with_only_columns([func.count()]).order_by(None)
     count = query.session.execute(count_query).scalar()
 

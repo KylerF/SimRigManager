@@ -110,5 +110,6 @@ class TestIracingStream(unittest.TestCase):
         self.assertEqual(snapshot["best_lap_time"], 107.3927001953125, 
         msg="Best lap time should be 1:47.39")
 
+
 if __name__ == "__main__":
     unittest.main()
