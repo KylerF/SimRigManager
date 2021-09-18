@@ -1,10 +1,11 @@
+import logging
 from api.wsconnectionmanager import WebsocketConnectionManager
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, File, UploadFile
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from starlette.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
+from os import path, getenv
 from typing import List
-from os import path
 import asyncio
 import shutil
 import redis
@@ -18,8 +19,9 @@ class SimRigAPI:
     '''
     Provides the API routes and methods to interact with the entire application
     '''
-    def __init__(self, queue_manager):
+    def __init__(self, queue_manager, logger):
         self.queue_manager = queue_manager
+        self.log = logger
 
         # Load the metadata for documentation tags
         meta_path = path.dirname(path.realpath(__file__))
@@ -35,7 +37,7 @@ class SimRigAPI:
         )
 
         # Connect to Redis
-        self.redis_store = redis.Redis(host='redis', charset='utf-8', decode_responses=True)
+        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
 
         # Configure CORS
         self.api.add_middleware(
@@ -254,7 +256,10 @@ class SimRigAPI:
         new_laptime = crud.create_laptime(db, laptime)
 
         # Update redis key for streaming
-        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
+        try:
+            self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
+        except redis.exceptions.ConnectionError:
+            self.log.error("Could not connect to Redis server")
 
         return new_laptime
 

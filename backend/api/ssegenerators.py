@@ -1,4 +1,5 @@
 from asyncio import sleep
+from os import getenv
 import redis
 import json
 
@@ -8,7 +9,7 @@ class GeneratorFunctions:
     '''
     def __init__(self, request):
         self.request = request
-        self.redis_store = redis.Redis(host='redis', charset='utf-8', decode_responses=True)
+        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
 
         # How often to update subscribers (seconds)
         self.update_period = 1

@@ -1,5 +1,6 @@
 from redis.exceptions import ConnectionError
 from time import sleep
+from os import getenv
 import threading
 import redis
 import math
@@ -28,7 +29,7 @@ class IracingWorker(threading.Thread):
         self.framerate = framerate
 
         # Set up Redis storage
-        self.redis_store = redis.Redis(charset='utf-8', decode_responses=True)
+        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
 
     def run(self):
         # Get the active driver and their track time from the database

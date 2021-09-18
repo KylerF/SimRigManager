@@ -17,6 +17,8 @@ services:
             - ./backend:/usr/src/backend
         ports:
             - "8000:8000"
+        environment:
+            - REDIS_HOST=redis
     
     # Configure the web app
     web-app:
