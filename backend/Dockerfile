@@ -9,23 +9,30 @@
 FROM ubuntu:latest
 
 # Update and install Python
-RUN apt-get update -y && apt-get install -y python3-pip python-dev
+RUN apt-get update -y && apt-get install -y python3-pip python-dev python3-venv
 
-# Create the directory inside the container
+# Create the source directory inside the container
 RUN mkdir -p /usr/src/backend
 WORKDIR /usr/src/backend
 
-# Copy the setup script and use it to install dependencies
-COPY setup.py .
-RUN pip3 install sqlalchemy
-RUN python3 setup.py install
+# Set up a virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
-# Copy all files into the container
+# Install dependencies:
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy source files into the container
 COPY . .
+
+# Run tests
+RUN pip3 install pytest
+RUN pytest
 
 # The API runs on 8000 within the container, so need to expose it
 EXPOSE 8000
 
-# Run the API with Python
-ENTRYPOINT [ "python3" ]
-CMD [ "simriglights.py" ]
+# Run the application:
+CMD ["python", "simriglights.py"]
