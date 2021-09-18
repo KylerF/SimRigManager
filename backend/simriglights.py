@@ -87,7 +87,7 @@ def main():
     atexit.register(queue_manager.close_all)
 
     # Start the API on the main thread
-    api = APIServer(queue_manager)
+    api = APIServer(queue_manager, log)
     api.start()
 
     # If we're here, exit everything
