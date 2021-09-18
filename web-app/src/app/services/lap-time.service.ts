@@ -33,7 +33,6 @@ export class LapTimeService {
       APIHelper.getBaseUrl() + this.endpoint
     )
     .pipe(
-      retry(3), 
       catchError(APIHelper.handleError)
     );
   }
@@ -46,6 +45,9 @@ export class LapTimeService {
   streamNewLapTimes(): Observable<LapTime> {
     return this.sseClient.get(
       `${APIHelper.getBaseUrl()}${this.streamEndpoint}`
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
     );
   }
 }

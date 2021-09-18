@@ -20,7 +20,7 @@ export class SelectDriverComponent implements OnInit {
   driverChanged: boolean;
 
   loading: boolean = true;
-  error: string;
+  error: any;
   
   constructor(
     private driverService: DriverService, // Used to query drivers and active driver

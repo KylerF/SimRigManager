@@ -20,7 +20,7 @@
         <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for iRacing data
     </div>
 
-    <app-error-message *ngIf="!selectedDriver" title="Lap Times" message="No driver selected. Go to the drivers tab to sign in."></app-error-message>
+    <app-error-message *ngIf="!apiActive && !iracingDataAvailable" title="iRacing" message="Unable to access iRacing data"></app-error-message>
 
     <div *ngFor="let status of controllerStatus">
         <div *ngIf="status.online" class="alert alert-success">
@@ -29,4 +29,6 @@
 
         <app-error-message *ngIf="!status.online" title="WLED" message="{{ status.name }} is offline"></app-error-message>
     </div>
+
+    <app-error-message *ngIf="!apiActive" title="WLED" message="Unable to get WLED controllers"></app-error-message>
 </div>

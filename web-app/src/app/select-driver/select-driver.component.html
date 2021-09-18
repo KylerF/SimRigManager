@@ -1,6 +1,6 @@
 <h1>Drivers</h1>
     
-<div *ngIf="!loading && !error">
+<div *ngIf="!loading && !error && drivers.length">
     <table class="table table-hover table-clickable">
         <thead>
             <tr>
@@ -36,12 +36,6 @@
         </tbody>
     </table>    
 
-    <div class="py-2">
-        <button class="btn btn-primary" (click)="showAddDriverDialog()">
-            <span class="bi bi-plus-circle-fill"></span> New driver
-        </button>
-    </div>
-
     <div *ngIf="selectedDriver && driverChanged">
         <div class="alert alert-success">
             Welcome, <b>{{ selectedDriver.driver.nickname }}</b>! Your lap times are being recorded.
@@ -50,10 +44,12 @@
             Go to iRacing
         </a>
     </div>
+</div>
 
-    <div *ngIf="!selectedDriver" class="alert alert-danger">
-        No driver selected! Select your name to start recording your lap times.
-    </div>
+<div *ngIf="!error" class="py-2">
+    <button class="btn btn-primary" (click)="showAddDriverDialog()">
+        <span class="bi bi-plus-circle-fill"></span> New driver
+    </button>
 </div>
 
 <app-error-message *ngIf="error" title="Error" message="Unable to access drivers"></app-error-message>

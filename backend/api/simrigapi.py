@@ -1,7 +1,6 @@
-import logging
-from api.wsconnectionmanager import WebsocketConnectionManager
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, File, UploadFile
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
+from api.wsconnectionmanager import WebsocketConnectionManager
 from starlette.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 from os import path, getenv
@@ -11,9 +10,9 @@ import shutil
 import redis
 import json
 
+from api.ssegenerators import SSEGenerators
 from database.database import get_db
 from database import crud, schemas
-from api.ssegenerators import SSEGenerators
 
 class SimRigAPI:
     '''

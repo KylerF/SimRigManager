@@ -28,7 +28,7 @@ export class ScoreboardComponent implements OnInit {
   sortOrder: string;
 
   loading: boolean = true;
-  error: string;
+  error: any;
   
   constructor(
     private lapTimeService: LapTimeService, 
@@ -48,7 +48,9 @@ export class ScoreboardComponent implements OnInit {
             this.filterScores();
           }
       }, 
-      _ => {}
+      error => {
+        this.error = error;
+      }
     )
   }
 
@@ -71,7 +73,7 @@ export class ScoreboardComponent implements OnInit {
       },
       error => {
         // Failed. Save the response.
-        this.error = error;
+        this.error = error.message;
         this.loading = false;
       }
     );

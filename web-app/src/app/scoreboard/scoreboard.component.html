@@ -2,7 +2,7 @@
 	<h1>High Scores</h1>
 </div>
 
-<div class="d-flex justify-content-between flex-wrap">
+<div *ngIf="!error" class="d-flex justify-content-between flex-wrap">
 	<div class="mb-2">
 		<div id="searchBar" class="input-group">
 			<input type="search" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" (ngModelChange)="filterScores()">
