@@ -30,9 +30,10 @@ class GeneratorFunctions:
             except (redis.exceptions.ConnectionError, TypeError):
                 lap_time = {}
 
-            if not last_time or lap_time["id"] != last_time["id"]:
-                yield json.dumps(lap_time)
-                last_time = lap_time
+            if lap_time:
+                if not last_time or lap_time["id"] != last_time["id"]:
+                    yield json.dumps(lap_time)
+                    last_time = lap_time
 
             await sleep(self.update_period)
 
@@ -40,7 +41,23 @@ class GeneratorFunctions:
         """
         Send updates when the active driver changes
         """
-        pass
+        last_driver = {}
+
+        while True:
+            if await self.request.is_disconnected():
+                break
+
+            try:
+                active_driver = json.loads(self.redis_store.get("active_driver")) or {}
+            except (redis.exceptions.ConnectionError, TypeError):
+                active_driver = {}
+
+            if active_driver:
+                if not last_driver or active_driver["id"] != last_driver["id"]:
+                    yield json.dumps(active_driver)
+                    last_driver = active_driver
+
+            await sleep(self.update_period)
 
 class SSEGenerators:
     """
