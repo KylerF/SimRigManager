@@ -33,7 +33,7 @@ export class DriverProfileComponent implements OnInit {
   getActiveDriver() {
     this.driverService.getSelectedDriver().subscribe (
       response => {
-        this.driver = response.driver;
+        this.driver = response;
       }, 
       error => {
         this.error = error.message;

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ActiveDriver } from '../models/active-driver';
 import { Driver } from '../models/driver';
 import { DriverService } from '../services/driver.service';
 import { NewDriverComponent } from '../new-driver/new-driver.component';
@@ -16,7 +15,7 @@ import { NewDriverComponent } from '../new-driver/new-driver.component';
  */
 export class SelectDriverComponent implements OnInit {
   drivers: Driver[] = [];
-  selectedDriver: ActiveDriver;
+  selectedDriver: Driver;
   driverChanged: boolean;
 
   loading: boolean = true;
@@ -61,7 +60,7 @@ export class SelectDriverComponent implements OnInit {
   }
 
   selectDriver(driver: Driver) {
-    if(this.selectedDriver && driver.id === this.selectedDriver.driver.id) { 
+    if(this.selectedDriver && driver.id === this.selectedDriver.id) { 
       return; 
     }
     

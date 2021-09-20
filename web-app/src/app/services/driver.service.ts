@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 
 import { Driver } from '../models/driver';
 import { APIHelper } from '../_helpers/api-helper';
-import { ActiveDriver } from '../models/active-driver';
 import { NewDriver } from '../models/new-driver';
 
 @Injectable({
@@ -16,7 +15,7 @@ import { NewDriver } from '../models/new-driver';
  * Service to retrieve, add and update drivers
  */
 export class DriverService {
-  private _selectedDriver = new BehaviorSubject<ActiveDriver>(null);
+  private _selectedDriver = new BehaviorSubject<Driver>(null);
   selectedDriver$ = this._selectedDriver.asObservable();
 
   localStorage: Storage;
@@ -52,8 +51,8 @@ export class DriverService {
    * 
    * @returns the active driver
    */
-  getSelectedDriver(): Observable<ActiveDriver> {
-    return this.http.get<ActiveDriver>(
+  getSelectedDriver(): Observable<Driver> {
+    return this.http.get<Driver>(
       `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`
     )
     .pipe(
@@ -63,7 +62,7 @@ export class DriverService {
   }
 
   setCachedDriver(driver: Driver) {
-    this._selectedDriver.next({driver: driver});
+    this._selectedDriver.next(driver);
     this.saveToLocalStorage();
   }
 
@@ -76,7 +75,7 @@ export class DriverService {
   selectDriver(driver: Driver) {
     this.setCachedDriver(driver);
 
-    return this.http.post<ActiveDriver>(
+    return this.http.post<Driver>(
       `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`, 
       { 'driverId': driver.id }
     )

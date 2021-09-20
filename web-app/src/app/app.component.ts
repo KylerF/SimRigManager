@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ActiveDriver } from './models/active-driver';
+import { Driver } from './models/driver';
 import { DriverService } from './services/driver.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent {
 
   driverChangeSubscription: Subscription;
 
-  activeDriver: ActiveDriver;
+  activeDriver: Driver;
   error: string;
 
   constructor(

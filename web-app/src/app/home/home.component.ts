@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ActiveDriver } from '../models/active-driver';
 import { AvailabilityService } from '../services/availability.service';
 import { ControllerStatus } from '../models/controller-status';
 import { ControllerService } from '../services/controller.service';
 import { DriverService } from '../services/driver.service';
 import { IracingDataService } from '../services/iracing-data.service';
 import { Subscription } from 'rxjs';
+import { Driver } from '../models/driver';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   apiActive: boolean;
   iracingDataAvailable: boolean;
   iracingDataSubscription: Subscription;
-  selectedDriver: ActiveDriver;
+  selectedDriver: Driver;
   controllerStatus: ControllerStatus[] = [];
 
   errors: string[] = [];

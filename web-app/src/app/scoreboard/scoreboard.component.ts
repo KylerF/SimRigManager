@@ -97,8 +97,8 @@ export class ScoreboardComponent implements OnInit {
    */
   showDriverBestTimes() {
     this.driverService.selectedDriver$.subscribe(activeDriver => {
-      this.filteredLapTimes = this.lapTimes.filter(lapTime => 
-        lapTime.driver.id == activeDriver.driver.id
+      this.filteredLapTimes = this.lapTimes.filter(lapTime =>
+        lapTime.driver.id == activeDriver.id
       );
     })
   }

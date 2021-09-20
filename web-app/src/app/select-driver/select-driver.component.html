@@ -19,9 +19,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.driver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
+            <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
                 <td>
-                    <span *ngIf="selectedDriver && driver.id === selectedDriver.driver.id" class="bi bi-check2-circle" style="color: green"></span>
+                    <span *ngIf="selectedDriver && driver.id === selectedDriver.id" class="bi bi-check2-circle" style="color: green"></span>
                 </td>
                 <td>
                     {{ driver.name }}
@@ -38,7 +38,7 @@
 
     <div *ngIf="selectedDriver && driverChanged">
         <div class="alert alert-success">
-            Welcome, <b>{{ selectedDriver.driver.nickname }}</b>! Your lap times are being recorded.
+            Welcome, <b>{{ selectedDriver.nickname }}</b>! Your lap times are being recorded.
         </div>
         <a href="https://members.iracing.com/" target="_blank">
             Go to iRacing

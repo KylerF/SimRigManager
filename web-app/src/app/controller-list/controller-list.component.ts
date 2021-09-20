@@ -138,7 +138,7 @@ export class ControllerListComponent implements OnInit {
       response => {
         const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
         modalRef.componentInstance.controller = controller;
-        modalRef.componentInstance.activeDriver = response.driver;
+        modalRef.componentInstance.activeDriver = response;
 
         // Update controller in table after changes are made
         modalRef.result.then((updatedController) => {
