@@ -58,8 +58,8 @@ class SimRigAPI:
         self.api.patch("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.update_driver)
         self.api.delete("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.delete_driver)
 
-        self.api.get("/activedriver", tags=["drivers"], response_model=schemas.ActiveDriver)(self.get_active_driver)
-        self.api.post("/activedriver", tags=["drivers"], response_model=schemas.ActiveDriver)(self.set_active_driver)
+        self.api.get("/activedriver", tags=["drivers"], response_model=schemas.Driver)(self.get_active_driver)
+        self.api.post("/activedriver", tags=["drivers"], response_model=schemas.Driver)(self.set_active_driver)
 
         self.api.get("/scores", tags=["scores"], response_model=List[schemas.LapTime])(self.get_scores)
         self.api.post("/scores", tags=["scores"], response_model=schemas.LapTime)(self.create_score)
@@ -82,8 +82,7 @@ class SimRigAPI:
         self.api.post("/uploadprofilepic", tags=["drivers"])(self.upload_profile_pic)
 
         self.api.get("/streamlaptimes", tags=["scores"])(self.stream_lap_times)
-        self.api.get("/streamactivedriver", tags=["drivers"])(self.stream_lap_times)
-
+        self.api.get("/streamactivedriver", tags=["drivers"])(self.stream_active_driver)
 
     async def get_root(self):
         """
@@ -220,8 +219,10 @@ class SimRigAPI:
         """
         Get the active driver
         """
-        db = next(get_db())
-        active_driver = crud.get_active_driver(db)
+        try:
+            active_driver = json.loads(self.redis_store.get("active_driver"))
+        except (redis.exceptions.ConnectionError, TypeError):
+            active_driver = {}
 
         return active_driver
 
@@ -232,11 +233,15 @@ class SimRigAPI:
         db = next(get_db())
         crud.delete_active_driver(db)
         new_active_driver = crud.set_active_driver(db, driver)
-
-        # Update worker threads
         self.queue_manager.put("active_driver", new_active_driver.driver)
 
-        return new_active_driver
+        # Update cache for worker threads
+        try:
+            self.redis_store.set("active_driver", schemas.Driver(**new_active_driver.driver.__dict__).json())
+        except redis.exceptions.ConnectionError:
+            self.log.error("Could not connect to Redis server")
+
+        return new_active_driver.driver
 
     async def get_scores(self, skip: int = 0, limit: int = -1):
         """
@@ -307,8 +312,7 @@ class SimRigAPI:
 
         return result
 
-
-    async def upload_profile_pic(self, profilePic: UploadFile=File(...)):
+    async def upload_profile_pic(self, driverId: int, profilePic: UploadFile=File(...)):
         """
         Upload a new driver profile picture
         """
@@ -319,7 +323,6 @@ class SimRigAPI:
 
         return {"success": "image upload completed"}
 
-
     async def stream_lap_times(self, request: Request):
         """
         Stream new lap times via server sent events
@@ -327,6 +330,12 @@ class SimRigAPI:
         event_generator = SSEGenerators.get_generator(request, "laptimes")
         return EventSourceResponse(event_generator)
 
+    async def stream_active_driver(self, request: Request):
+        """
+        Stream active driver changes via server sent events
+        """
+        event_generator = SSEGenerators.get_generator(request, "active_driver")
+        return EventSourceResponse(event_generator)
 
     def __get_iracing_data(self, raw=False):
         """
