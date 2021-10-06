@@ -3,12 +3,16 @@ from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from api.wsconnectionmanager import WebsocketConnectionManager
 from starlette.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
+from fastapi.responses import FileResponse
+from starlette.responses import Response
+from starlette.status import HTTP_200_OK
 from os import path, getenv
 from typing import List
 import asyncio
 import shutil
 import redis
 import json
+import os
 
 from api.ssegenerators import SSEGenerators
 from database.database import get_db
@@ -79,7 +83,8 @@ class SimRigAPI:
         self.api.patch("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.update_quote)
         self.api.delete("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.delete_quote)
 
-        self.api.post("/uploadprofilepic", tags=["drivers"])(self.upload_profile_pic)
+        self.api.post("/avatars/{driver_id}", tags=["drivers"])(self.upload_avatar)
+        self.api.get("/avatars/{driver_id}", tags=["drivers"])(self.get_avatar)
 
         self.api.get("/streamlaptimes", tags=["scores"])(self.stream_lap_times)
         self.api.get("/streamactivedriver", tags=["drivers"])(self.stream_active_driver)
@@ -204,6 +209,8 @@ class SimRigAPI:
         db = next(get_db())
         updated_driver = crud.update_driver(db, driver)
 
+        self.__update_driver_cache(updated_driver)
+
         return updated_driver
 
     async def delete_driver(self, driver: schemas.DriverDelete):
@@ -217,12 +224,20 @@ class SimRigAPI:
 
     async def get_active_driver(self):
         """
-        Get the active driver
+        Get the active driver, checking for a cached driver in the Redis
+        store first. If there is no driver cached, try the database.
         """
         try:
             active_driver = json.loads(self.redis_store.get("active_driver"))
         except (redis.exceptions.ConnectionError, TypeError):
-            active_driver = {}
+            db = next(get_db())
+            active_driver_object = crud.get_active_driver(db)
+
+            if active_driver_object:
+                active_driver = active_driver_object.driver
+            else:
+                # No active driver, empty response
+                return Response(status_code=HTTP_200_OK)
 
         return active_driver
 
@@ -236,10 +251,7 @@ class SimRigAPI:
         self.queue_manager.put("active_driver", new_active_driver.driver)
 
         # Update cache for worker threads
-        try:
-            self.redis_store.set("active_driver", schemas.Driver(**new_active_driver.driver.__dict__).json())
-        except redis.exceptions.ConnectionError:
-            self.log.error("Could not connect to Redis server")
+        self.__update_driver_cache(new_active_driver.driver)
 
         return new_active_driver.driver
 
@@ -312,16 +324,35 @@ class SimRigAPI:
 
         return result
 
-    async def upload_profile_pic(self, driverId: int, profilePic: UploadFile=File(...)):
+    async def upload_avatar(self, driver_id: int, profile_pic: UploadFile=File(...)):
         """
         Upload a new driver profile picture
         """
-        file_location = f"userdata/images/{profilePic.filename}"
+        file_location = f"userdata/images/{driver_id}-avatar.png"
+        
+        # Update driver profile with link to new avatar image
+        data = {
+            "id": driver_id, 
+            "profilePic": f"http://127.0.0.1:8000/avatars/{driver_id}"
+        }
+        driver = schemas.DriverDelete(**data)
+        
+        db = next(get_db())
+        updated_driver = crud.update_driver(db, driver)
 
+        self.__update_driver_cache(updated_driver)
+
+        # Save the image file
         with open(file_location, "wb+") as file_object:
-            shutil.copyfileobj(profilePic.file, file_object)  
+            shutil.copyfileobj(profile_pic.file, file_object)
 
         return {"success": "image upload completed"}
+
+    async def get_avatar(self, driver_id: int):
+        """
+        Get a driver's profile picture
+        """
+        return FileResponse(f"userdata/images/{driver_id}-avatar.png")
 
     async def stream_lap_times(self, request: Request):
         """
@@ -352,3 +383,14 @@ class SimRigAPI:
             data = {}
 
         return data
+
+    def __update_driver_cache(self, driver):
+        """
+        Helper function to update the active driver in the Redis cache
+        """
+        try:
+            self.redis_store.set("active_driver", schemas.Driver(**driver.__dict__).json())
+            return True
+        except redis.exceptions.ConnectionError:
+            self.log.error("Could not connect to Redis server")
+            return False

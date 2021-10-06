@@ -1,11 +1,11 @@
+import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { Driver } from '../models/driver';
 import { APIHelper } from '../_helpers/api-helper';
 import { NewDriver } from '../models/new-driver';
+import { Driver } from '../models/driver';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class DriverService {
   
   driversEndpoint = 'drivers';
   activeDriverEndpoint = 'activedriver';
-  profilePicEndpoint = 'uploadprofilepic';
+  profilePicEndpoint = 'avatars';
 
   constructor(private http: HttpClient) { 
     if(this.checkLocalStorageSupported()) {
@@ -121,15 +121,16 @@ export class DriverService {
   /**
    * Upload a new profile pic for a driver
    * 
+   * @param driverId unique ID for the driver being updated
    * @param profilePic the new profile pic
    * @returns status of the upload
    */
-  uploadProfilePic(profilePic: File): Observable<any> {
+  uploadProfilePic(driverId: number, profilePic: File): Observable<any> {
     var formData: any = new FormData();
-    formData.append("profilePic", profilePic);
+    formData.append("profile_pic", profilePic);
 
     return this.http.post<any>(
-      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}`, 
+      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driverId}`, 
       formData
     )
     .pipe(

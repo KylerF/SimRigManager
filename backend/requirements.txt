@@ -5,6 +5,7 @@ sqlalchemy_utils
 sse-starlette 
 sqlalchemy
 pydantic
+aiofiles
 pyirsdk 
 fastapi 
 colour 

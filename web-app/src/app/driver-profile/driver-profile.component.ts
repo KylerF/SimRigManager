@@ -1,6 +1,7 @@
+import { DriverService } from '../services/driver.service';
+import { APIHelper } from '../_helpers/api-helper';
 import { Component, OnInit } from '@angular/core';
 import { Driver } from '../models/driver';
-import { DriverService } from '../services/driver.service';
 
 @Component({
   selector: 'app-driver-profile',
@@ -17,6 +18,9 @@ export class DriverProfileComponent implements OnInit {
   editingProfile: boolean;
   profileUpdated: boolean;
   error: string;
+
+  // Updated when avtar is changed to trigger a redraw
+  timestamp: string;
 
   constructor(
     private driverService: DriverService
@@ -56,9 +60,14 @@ export class DriverProfileComponent implements OnInit {
   setProfilePic(event) {
     const file: File = event.target.files[0];
 
-    this.driverService.uploadProfilePic(file).subscribe (
+    if (!file) {
+      // Cancelled
+      return;
+    }
+
+    this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
       response => {
-        alert(response);
+        this.timestamp = Date.now().toString();
       }, 
       error => {
         this.error = error.message;
