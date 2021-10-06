@@ -133,3 +133,7 @@ config.ini
 
 # Backup log files
 *.log.*
+
+# Saved user files
+userdata/
+
