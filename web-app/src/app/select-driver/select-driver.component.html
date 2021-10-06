@@ -38,11 +38,16 @@
 
     <div *ngIf="selectedDriver && driverChanged">
         <div class="alert alert-success">
-            Welcome, <b>{{ selectedDriver.nickname }}</b>! Your lap times are being recorded.
+            <div class="column">
+                Welcome, <b>{{ selectedDriver.nickname }}</b>! Your lap times are being recorded.
+            </div>
+            <div class="column">
+                <span class="bi bi-arrow-right"></span> 
+                <a href="https://members.iracing.com/" target="_blank">
+                    Go to iRacing
+                </a>
+            </div>
         </div>
-        <a href="https://members.iracing.com/" target="_blank">
-            Go to iRacing
-        </a>
     </div>
 </div>
 

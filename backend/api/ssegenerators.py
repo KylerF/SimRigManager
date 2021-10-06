@@ -3,9 +3,21 @@ from os import getenv
 import redis
 import json
 
+class SSEGenerators:
+    """
+    Factory method to get a new SSE generator function for a 
+    specific event
+    """
+    def get_generator(request, event_type):
+        if event_type == "laptimes":
+            return GeneratorFunctions(request=request).newLapTimeGenerator()
+        if event_type == "active_driver":
+            return GeneratorFunctions(request=request).activeDriverGenerator()
+
+
 class GeneratorFunctions:
     """"
-    Server Sent Event generators
+    Server Sent Event generator functions
     """
     def __init__(self, request):
         self.request = request
@@ -58,15 +70,4 @@ class GeneratorFunctions:
                     last_driver = active_driver
 
             await sleep(self.update_period)
-
-class SSEGenerators:
-    """
-    Factory method to get a new SSE generator function for a 
-    specific event
-    """
-    def get_generator(request, event_type):
-        if event_type == "laptimes":
-            return GeneratorFunctions(request=request).newLapTimeGenerator()
-        if event_type == "active_driver":
-            return GeneratorFunctions(request=request).activeDriverGenerator()
         

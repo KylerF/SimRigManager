@@ -45,6 +45,14 @@ export class ControllerService {
       );
   }
 
+  /**
+   * Retrieve controller settings set by a driver
+   * 
+   * @param controller controller to query settings
+   * @param driver driver which set said settings
+   * 
+   * @returns promise expected to resolve as controller settings
+   */
   getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
     return this.http.get<ControllerSettings>(
       `${APIHelper.getBaseUrl()}${this.endpoint}?controllerId=${controller.id}&driverId=${driver.id}`)
@@ -58,9 +66,10 @@ export class ControllerService {
    * controller
    * 
    * @param ipAddress the IP address of the controller to test
-   * @returns promise expected to resolve as an empty object
+   * 
+   * @returns promise expected to resolve as a WledState object
    */
-  testIp(ipAddress: string): Observable<any> {
+  testIp(ipAddress: string): Observable<WledState> {
     return this.http.get<any>(`http://${ipAddress}/json/state`)
       .pipe(
         timeout(2000), 
@@ -86,6 +95,7 @@ export class ControllerService {
    * Get all available WLED effects
    * 
    * @param controller controller to query effects from
+   * 
    * @returns promise expected to resolve as an array of strings (effect names)
    */
   getControllerEffects(controller: Controller): Observable<[string]> {
@@ -108,6 +118,7 @@ export class ControllerService {
    * Power on a controller via a request to the WLED API
    * 
    * @param controller the controller to power on
+   * 
    * @returns promise expected to resolve as the result
    */
   powerOnController(controller: Controller): Observable<any> {
@@ -128,6 +139,7 @@ export class ControllerService {
    * Power off a controller via a request to the WLED API
    * 
    * @param controller the controller to power on
+   * 
    * @returns promise expected to resolve as the result
    */
   powerOffController(controller: Controller): Observable<any> {

@@ -1,3 +1,10 @@
+"""
+Entrypoint for the SimRig Manager backend application, responsible for:
+  - Collecting iRacing data
+  - Storing driver profile information
+  - Controlling WLED fixtures
+  - Hosting the SimRig API for web applications
+"""
 from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser
