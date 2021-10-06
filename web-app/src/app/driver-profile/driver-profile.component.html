@@ -4,8 +4,8 @@
             <div (click)="fileInput.click()">
                 <div class="profile-pic">
                     <svg *ngIf="!driver.profilePic" class="img-fluid rounded-circle"
-                    width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000">
-                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                    width="512pt" height="512pt" viewBox="0 0 512 512">
+                        <g transform="translate(0,512) scale(0.1,-0.1)"
                         fill="#000000" stroke="none">
                             <path d="M2200 4901 c-277 -60 -471 -158 -611 -310 -158 -171 -263 -384 -312
                             -635 -19 -99 -22 -144 -22 -401 0 -329 5 -365 80 -620 102 -344 338 -701 628
@@ -36,7 +36,7 @@
                             -1 -50 -39 -98 -85z"/>
                         </g>
                     </svg>
-                    <img *ngIf="driver.profilePic" class="img-fluid rounded-circle" src="{{ driver.profilePic }}">
+                    <img *ngIf="driver.profilePic" class="img-fluid rounded-circle" src="{{ driver.profilePic }}?{{ timestamp }}" width="350px" height="350px">
                     <div class="upload-button">
                         <button *ngIf="!driver.profilePic" class="btn btn-secondary">
                             <span class="bi bi-upload"></span>  Upload
