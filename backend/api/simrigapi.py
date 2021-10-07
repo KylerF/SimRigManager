@@ -1,4 +1,12 @@
-from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect, File, UploadFile
+from fastapi import (
+    WebSocketDisconnect, 
+    HTTPException,
+    UploadFile,
+    WebSocket, 
+    FastAPI, 
+    Request, 
+    File,  
+)
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from api.wsconnectionmanager import WebsocketConnectionManager
 from starlette.middleware.cors import CORSMiddleware
@@ -12,7 +20,6 @@ import asyncio
 import shutil
 import redis
 import json
-import os
 
 from api.ssegenerators import SSEGenerators
 from database.database import get_db
@@ -352,6 +359,10 @@ class SimRigAPI:
         """
         Get a driver's profile picture
         """
+        avatar_path = f"userdata/images/{driver_id}-avatar.png"
+        if not path.exists(avatar_path):
+            raise HTTPException(status_code=400, detail=f"No avatar found for driver with id {driver_id}")
+
         return FileResponse(f"userdata/images/{driver_id}-avatar.png")
 
     async def stream_lap_times(self, request: Request):

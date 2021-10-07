@@ -1,5 +1,4 @@
 import { DriverService } from '../services/driver.service';
-import { APIHelper } from '../_helpers/api-helper';
 import { Component, OnInit } from '@angular/core';
 import { Driver } from '../models/driver';
 
