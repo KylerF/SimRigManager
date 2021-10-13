@@ -47,7 +47,11 @@ class SimRigAPI:
         )
 
         # Connect to Redis
-        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset="utf-8", decode_responses=True)
+        self.redis_store = redis.Redis(
+            host=getenv("REDIS_HOST", "127.0.0.1"), 
+            charset="utf-8", 
+            decode_responses=True
+        )
 
         # Configure CORS
         self.api.add_middleware(
@@ -125,7 +129,10 @@ class SimRigAPI:
         Create a settings profile for a light controller
         """
         db = next(get_db())
-        new_controller_settings = crud.create_controller_settings(db, controller_settings)
+        new_controller_settings = crud.create_controller_settings(
+            db, 
+            controller_settings
+        )
 
         return new_controller_settings
 
@@ -134,7 +141,10 @@ class SimRigAPI:
         Update settings profile for a light controller
         """
         db = next(get_db())
-        new_controller_settings = crud.update_controller_settings(db, controller_settings)
+        new_controller_settings = crud.update_controller_settings(
+            db, 
+            controller_settings
+        )
 
         return new_controller_settings
 
@@ -187,7 +197,12 @@ class SimRigAPI:
                     await self.ws_connection_manager.send_json(data, websocket)
 
                 await asyncio.sleep(0.03)
-        except (WebSocketDisconnect, ConnectionClosedError, ConnectionClosedOK, RuntimeError):
+        except (
+            WebSocketDisconnect, 
+            ConnectionClosedError, 
+            ConnectionClosedOK, 
+            RuntimeError
+        ):
             await self.ws_connection_manager.disconnect(websocket)
             return
 
@@ -273,14 +288,17 @@ class SimRigAPI:
 
     async def create_score(self, laptime: schemas.LapTimeCreate):
         """
-        Log a new lap time. Only gets commited if it"s a personal best.
+        Log a new lap time. Only gets commited if it's a personal best.
         """
         db = next(get_db())
         new_laptime = crud.create_laptime(db, laptime)
 
         # Update redis key for streaming
         try:
-            self.redis_store.set("session_best_lap", schemas.LapTime(**new_laptime.__dict__).json())
+            self.redis_store.set(
+                "session_best_lap", 
+                schemas.LapTime(**new_laptime.__dict__).json()
+            )
         except redis.exceptions.ConnectionError:
             self.log.error("Could not connect to Redis server")
 
@@ -361,7 +379,10 @@ class SimRigAPI:
         """
         avatar_path = f"userdata/images/{driver_id}-avatar.png"
         if not path.exists(avatar_path):
-            raise HTTPException(status_code=400, detail=f"No avatar found for driver with id {driver_id}")
+            raise HTTPException(
+                status_code=400, 
+                detail=f"No avatar found for driver with id {driver_id}"
+            )
 
         return FileResponse(f"userdata/images/{driver_id}-avatar.png")
 
@@ -400,7 +421,10 @@ class SimRigAPI:
         Helper function to update the active driver in the Redis cache
         """
         try:
-            self.redis_store.set("active_driver", schemas.Driver(**driver.__dict__).json())
+            self.redis_store.set(
+                "active_driver", 
+                schemas.Driver(**driver.__dict__).json()
+            )
             return True
         except redis.exceptions.ConnectionError:
             self.log.error("Could not connect to Redis server")
