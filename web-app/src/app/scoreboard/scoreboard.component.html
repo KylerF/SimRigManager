@@ -44,6 +44,30 @@
 					</option>
 				</select>
 			</div>
+			<span class="input-group-text">for</span>
+			<select class="form-select" id="timeOptionSelect" [(ngModel)]="timeFilter" (ngModelChange)="filterScores()">
+				<option value="forever">
+					All time
+				</option>
+				<option value="today">
+					Today
+				</option>
+				<option value="week">
+					This week
+				</option>
+				<option value="month">
+					This month
+				</option>
+				<option value="threemonths">
+					Last 3 months
+				</option>
+				<option value="sixmonths">
+					Last 6 months
+				</option>
+				<option value="year">
+					This year
+				</option>
+			</select>
 		</div>
 	</div>
 </div>
@@ -119,10 +143,18 @@
 			</th>
 		</tr>
 	</thead>
+
 	<tbody>
 		<tr *ngFor="let lapTime of filteredLapTimes">
 			<td>
-				{{ lapTime.driver.name }}
+				<div class="d-flex flex-nowrap">
+					<div class="m-1">
+						<app-driver-avatar [driver]="lapTime.driver"></app-driver-avatar>
+					</div>
+					<div class="m-1">
+						{{ lapTime.driver.name }}
+					</div>
+				</div>
 			</td>
 			<td>
 				{{ lapTime.car }}

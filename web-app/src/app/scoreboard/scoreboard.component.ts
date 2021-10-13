@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 
 import { LapTimeService } from '../services/lap-time.service';
 import { LapTime } from '../models/lap-time';
@@ -21,6 +22,7 @@ export class ScoreboardComponent implements OnInit {
   newLapTimeStream: Subscription;
 
   showFilter = 'overall';
+  timeFilter = 'forever';
 
   searchColumn = 'driver';
   searchText: string = '';
@@ -107,11 +109,30 @@ export class ScoreboardComponent implements OnInit {
    * Filter scores with a given condition
    */
   filterScores() {
+    // Switch view based on overall/personal best selection
     if (this.showFilter == 'overall') {
       this.showOverallBestTimes();
     } else {
       this.showDriverBestTimes();
     }
+
+    // Get the selected time range
+    let startDate = moment(0);
+    let endDate = moment.now();
+
+    if (this.timeFilter == 'today') {
+      startDate = moment().startOf('day');
+    } else if (this.timeFilter == 'week') {
+      startDate = moment().startOf('week');
+    } else if (this.timeFilter == 'month') {
+      startDate = moment().startOf('month');
+    } else if (this.timeFilter == 'threemonths') {
+      startDate = moment().subtract(3, 'months');
+    } else if (this.timeFilter == 'sixmonths') {
+      startDate = moment().subtract(6, 'months');
+    } else if (this.timeFilter == 'year') {
+      startDate = moment().startOf('year');
+    } 
     
     if (this.searchText.length > 0) {
       if (this.searchColumn == 'driver') {
@@ -128,6 +149,10 @@ export class ScoreboardComponent implements OnInit {
         );
       }
     }
+
+    this.filteredLapTimes = this.filteredLapTimes.filter(lapTime => 
+      moment(lapTime.setAt).isBetween(startDate, endDate)
+    );
 
     this.sortScores(this.sortColumn, this.sortOrder);
   }
