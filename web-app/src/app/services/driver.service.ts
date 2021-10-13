@@ -159,7 +159,7 @@ export class DriverService {
   }
   
   /**
-   * Save the cart in local storage
+   * Save the active driver in local storage
    */
   private saveToLocalStorage(): boolean {
     if (this.checkLocalStorageSupported()) {

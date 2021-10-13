@@ -10,8 +10,6 @@ import { DriverService } from './services/driver.service';
 })
 
 export class AppComponent {
-  title = 'simriglights-web-app';
-
   driverChangeSubscription: Subscription;
 
   activeDriver: Driver;
