@@ -25,6 +25,7 @@ import { RealTimeInputDisplayComponent } from './real-time-input-display/real-ti
 import { DriverProfileComponent } from './driver-profile/driver-profile.component';
 import { DriverStatsComponent } from './driver-stats/driver-stats.component';
 import { HourglassIconComponent } from './hourglass-icon/hourglass-icon.component';
+import { DriverAvatarComponent } from './driver-avatar/driver-avatar.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -58,7 +59,8 @@ const routes: Routes = [
     RealTimeInputDisplayComponent, 
     DriverProfileComponent, 
     DriverStatsComponent, 
-    HourglassIconComponent
+    HourglassIconComponent, 
+    DriverAvatarComponent
   ],
   imports: [
     BrowserModule, 

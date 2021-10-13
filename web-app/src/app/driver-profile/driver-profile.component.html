@@ -1,4 +1,4 @@
-<div class="d-flex flex-row flex-wrap">
+<div *ngIf="!error" class="d-flex flex-row flex-wrap">
     <div id="profile-card" *ngIf="driver" class="card p-2">
         <div class="card-header rounded-circle">
             <div (click)="fileInput.click()">
@@ -36,7 +36,7 @@
                             -1 -50 -39 -98 -85z"/>
                         </g>
                     </svg>
-                    <img *ngIf="driver.profilePic" class="img-fluid rounded-circle" src="{{ driver.profilePic }}?{{ timestamp }}" width="350px" height="350px">
+                    <img *ngIf="driver.profilePic" class="rounded-circle" src="{{ driver.profilePic }}?{{ timestamp }}" width="350px" height="350px">
                     <div class="upload-button">
                         <button *ngIf="!driver.profilePic" class="btn btn-secondary">
                             <span class="bi bi-upload"></span>  Upload
@@ -90,3 +90,5 @@
         </div>
     </div>
 </div>
+
+<app-error-message *ngIf="error" title="Error" message="Unable to access your driver profile"></app-error-message>

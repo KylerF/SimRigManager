@@ -1,0 +1,10 @@
+<img id="avatar" 
+    *ngIf="driver.profilePic" 
+    class="img-fluid rounded-circle" 
+    src="{{ driver.profilePic }}"
+>
+
+<span id="default" 
+    *ngIf="!driver.profilePic" 
+    class="bi bi-person-circle">
+</span>
