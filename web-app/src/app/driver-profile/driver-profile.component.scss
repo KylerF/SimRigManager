@@ -1,7 +1,8 @@
 .profile-pic {
-    font-size: 15rem;
-    position: relative;
     cursor: pointer;
+    position:relative;
+    overflow:hidden;
+    padding-bottom:100%;
 
     &:hover {
         .upload-button {
@@ -10,9 +11,16 @@
     }
 }
 
+.profile-pic img, svg{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 #profile-card {
+    min-width: 350px;
     max-width: 400px;
-    min-width: 350px
 }
 
 #stats {
@@ -21,8 +29,8 @@
 }
 
 .upload-button {
-    top: 35%;
-    left: 5%;
+    top: 80%;
+    left: 0%;
     position: absolute;
     display: none;
 }
