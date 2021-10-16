@@ -8,6 +8,10 @@
         "description": "Manage and select drivers"
     }, 
     {
+        "name": "driverstats",
+        "description": "Get overall statistics for a driver"
+    }, 
+    {
         "name": "scores",
         "description": "Fetch and set fastest lap times"
     }, 

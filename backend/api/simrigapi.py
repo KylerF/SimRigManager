@@ -14,6 +14,7 @@ from sse_starlette.sse import EventSourceResponse
 from fastapi.responses import FileResponse
 from starlette.responses import Response
 from starlette.status import HTTP_200_OK
+from collections import Counter
 from os import path, getenv
 from typing import List
 import asyncio
@@ -72,6 +73,11 @@ class SimRigAPI:
         self.api.post("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.create_driver)
         self.api.patch("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.update_driver)
         self.api.delete("/drivers", response_model=schemas.Driver, tags=["drivers"])(self.delete_driver)
+
+        self.api.get(
+            "/driverstats/{driver_id}", 
+            response_model=schemas.DriverStats, 
+            tags=["driverstats"])(self.get_driver_stats)
 
         self.api.get("/activedriver", tags=["drivers"], response_model=schemas.Driver)(self.get_active_driver)
         self.api.post("/activedriver", tags=["drivers"], response_model=schemas.Driver)(self.set_active_driver)
@@ -183,7 +189,8 @@ class SimRigAPI:
 
     async def data_stream(self, websocket: WebSocket):
         """
-        Stream current iRacing data continuously
+        Stream current iRacing data over a websocket connection. 
+        TODO Get framerate from user config.
         """
         await self.ws_connection_manager.connect(websocket)
 
@@ -277,6 +284,30 @@ class SimRigAPI:
 
         return new_active_driver.driver
 
+    async def get_driver_stats(self, driver_id: int):
+        """
+        Get overall stats for a driver:
+            - Track time
+            - Records held
+            - Track with most records
+            - TODO laps turned, max speed, favorite tracks
+        """
+        db = next(get_db())
+        track_time = crud.get_driver_by_id(db, driver_id).trackTime
+        laptimes = [
+            time for time in crud.get_laptimes(db) 
+            if time.driverId == driver_id
+        ]
+        records_held = len(laptimes)
+        track_map = Counter(getattr(time, 'trackName') for time in laptimes)
+        favorite_track = max(track_map, key=track_map.get)
+
+        return schemas.DriverStats(**{
+            "trackTime": track_time, 
+            "recordsHeld": records_held, 
+            "favoriteTrack": favorite_track
+        })
+
     async def get_scores(self, skip: int = 0, limit: int = -1):
         """
         Get the current best lap times
@@ -360,7 +391,7 @@ class SimRigAPI:
             "id": driver_id, 
             "profilePic": f"http://127.0.0.1:8000/avatars/{driver_id}"
         }
-        driver = schemas.DriverDelete(**data)
+        driver = schemas.DriverUpdate(**data)
         
         db = next(get_db())
         updated_driver = crud.update_driver(db, driver)

@@ -43,6 +43,12 @@ class Driver(DriverBase):
     class Config:
         orm_mode = True
 
+
+class DriverStats(BaseModel):
+    trackTime: int
+    recordsHeld: int
+    favoriteTrack: str
+
 class ActiveDriverBase(BaseModel):
     driverId: int
 
