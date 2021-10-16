@@ -36,7 +36,7 @@
                             -1 -50 -39 -98 -85z"/>
                         </g>
                     </svg>
-                    <img *ngIf="driver.profilePic" class="img-responsive full-width rounded-circle" src="{{ driver.profilePic }}?{{ timestamp }}" width="350px" height="350px">
+                    <img *ngIf="driver.profilePic" class="img-responsive full-width rounded-circle" src="{{ driver.profilePic }}{{ timestampParam }}" width="350px" height="350px">
                     <div class="upload-button">
                         <button *ngIf="!driver.profilePic" class="btn btn-secondary">
                             <span class="bi bi-upload"></span>  Upload

@@ -18,8 +18,8 @@ export class DriverProfileComponent implements OnInit {
   profileUpdated: boolean;
   error: string;
 
-  // Updated when avtar is changed to trigger a redraw
-  timestamp: string;
+  // Updated when avatar is changed to trigger a redraw
+  params: string;
 
   constructor(
     private driverService: DriverService
@@ -66,7 +66,8 @@ export class DriverProfileComponent implements OnInit {
 
     this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
       response => {
-        this.timestamp = Date.now().toString();
+        // Add timestamp to src to force an immediate update
+        this.params = `?${Date.now().toString()}`;
       }, 
       error => {
         this.error = error.message;
