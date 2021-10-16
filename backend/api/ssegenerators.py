@@ -10,9 +10,11 @@ class SSEGenerators:
     """
     def get_generator(request, event_type):
         if event_type == "laptimes":
-            return GeneratorFunctions(request=request).newLapTimeGenerator()
+            return GeneratorFunctions(request=request).new_lap_time_generator()
         if event_type == "active_driver":
-            return GeneratorFunctions(request=request).activeDriverGenerator()
+            return GeneratorFunctions(request=request).active_driver_generator()
+        if event_type == "iracing":
+            return GeneratorFunctions(request=request).iracing_generator()
 
 
 class GeneratorFunctions:
@@ -21,12 +23,16 @@ class GeneratorFunctions:
     """
     def __init__(self, request):
         self.request = request
-        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset="utf-8", decode_responses=True)
+        self.redis_store = redis.Redis(
+            host=getenv("REDIS_HOST", "127.0.0.1"), 
+            charset="utf-8", 
+            decode_responses=True
+        )
 
         # How often to update subscribers (seconds)
         self.update_period = 1
 
-    async def newLapTimeGenerator(self):
+    async def new_lap_time_generator(self):
         """
         Send new lap times as they are set - used for a
         dynamic scoreboard
@@ -49,7 +55,7 @@ class GeneratorFunctions:
 
             await sleep(self.update_period)
 
-    async def activeDriverGenerator(self):
+    async def active_driver_generator(self):
         """
         Send updates when the active driver changes
         """
@@ -70,4 +76,22 @@ class GeneratorFunctions:
                     last_driver = active_driver
 
             await sleep(self.update_period)
-        
+
+    async def iracing_generator(self):
+        """
+        Stream iRacing session data. This is also available via a websocket
+        connection to /stream.
+        """
+        while True:
+            if await self.request.is_disconnected():
+                break
+
+            try:
+                session_data = json.loads(self.redis_store.get("session_data")) or {}
+            except (redis.exceptions.ConnectionError, TypeError):
+                session_data = {}
+
+            if session_data:
+                yield json.dumps(session_data)
+
+            await sleep(self.update_period)
