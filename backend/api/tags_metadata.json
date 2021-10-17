@@ -4,6 +4,10 @@
         "description": "Check whether the API is up and running"
     },
     {
+        "name": "avatars", 
+        "description": "Get and set driver avatar images"
+    },
+    {
         "name": "drivers",
         "description": "Manage and select drivers"
     }, 

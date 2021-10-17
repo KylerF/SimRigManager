@@ -100,8 +100,8 @@ class SimRigAPI:
         self.api.patch("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.update_quote)
         self.api.delete("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.delete_quote)
 
-        self.api.post("/avatars/{driver_id}", tags=["drivers"])(self.upload_avatar)
-        self.api.get("/avatars/{driver_id}", tags=["drivers"])(self.get_avatar)
+        self.api.post("/avatars/{driver_id}", tags=["avatars"])(self.upload_avatar)
+        self.api.get("/avatars/{driver_id}", tags=["avatars"])(self.get_avatar)
 
         self.api.get("/streamlaptimes", tags=["scores"])(self.stream_lap_times)
         self.api.get("/streamactivedriver", tags=["drivers"])(self.stream_active_driver)
