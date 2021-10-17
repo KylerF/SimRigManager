@@ -1,7 +1,7 @@
 <img id="avatar" 
     *ngIf="driver && driver.profilePic" 
     class="img-fluid rounded-circle" 
-    src="{{ driver.profilePic }}"
+    src="{{ driver.profilePic }}{{ params }}"
 >
 
 <span id="default" 

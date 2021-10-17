@@ -68,6 +68,7 @@ export class DriverProfileComponent implements OnInit {
       response => {
         // Add timestamp to src to force an immediate update
         this.params = `?${Date.now().toString()}`;
+        this.saveProfile();
       }, 
       error => {
         this.error = error.message;

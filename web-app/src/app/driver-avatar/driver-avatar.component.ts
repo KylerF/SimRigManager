@@ -12,10 +12,10 @@ import { Component, Input, OnInit } from '@angular/core';
 export class DriverAvatarComponent implements OnInit {
   @Input() driver;
   @Input() maxWidth;
+  @Input() params: string = "";
 
   constructor() { }
 
   ngOnInit(): void {
   }
-
 }

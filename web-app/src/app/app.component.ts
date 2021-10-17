@@ -15,6 +15,8 @@ export class AppComponent {
   activeDriver: Driver;
   error: string;
 
+  params: string = "";
+
   constructor(
     private driverService: DriverService
   ) { }
@@ -26,7 +28,15 @@ export class AppComponent {
     this.getSelectedDriver();
     
     this.driverChangeSubscription = this.driverService.selectedDriver$
-       .subscribe(driver => this.activeDriver = driver);
+       .subscribe(driver => this.updateDriverDisplay(driver));
+  }
+
+  /**
+   * Update the active driver display in the toolbar when it is changed
+   */
+  updateDriverDisplay(driver) {
+    this.activeDriver = driver;
+    this.params = `?${Date.now().toString()}`;
   }
 
   /**
