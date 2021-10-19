@@ -21,7 +21,7 @@ export class DriverService {
   localStorage: Storage;
   
   driversEndpoint = 'drivers';
-  activeDriverEndpoint = 'activedriver';
+  activeDriverEndpoint = 'drivers/active';
   profilePicEndpoint = 'avatars';
 
   constructor(private http: HttpClient) { 
