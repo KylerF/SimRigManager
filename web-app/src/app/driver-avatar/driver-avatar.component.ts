@@ -16,6 +16,5 @@ export class DriverAvatarComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 }
