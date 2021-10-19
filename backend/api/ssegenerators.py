@@ -82,6 +82,8 @@ class GeneratorFunctions:
         Stream iRacing session data. This is also available via a websocket
         connection to /stream.
         """
+        started = False
+
         while True:
             if await self.request.is_disconnected():
                 break
@@ -91,7 +93,8 @@ class GeneratorFunctions:
             except (redis.exceptions.ConnectionError, TypeError):
                 session_data = {}
 
-            if session_data:
+            if session_data or not started:
                 yield json.dumps(session_data)
+                started = True
 
             await sleep(self.update_period)

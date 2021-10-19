@@ -89,7 +89,8 @@ export class DriverProfileComponent implements OnInit {
   saveProfile() {
     this.driverService.updateDriver(this.driver).subscribe (
       response => {
-        this.driverService.setCachedDriver(this.driver);
+        this.driverService.setCachedDriver(response);
+        this.driver = response;
         this.profileUpdated = true;
       }, 
       error => {

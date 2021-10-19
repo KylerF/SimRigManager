@@ -249,7 +249,7 @@ def get_controller_settings(db: Session, controller_id: int, driver_id: int):
     return db.query(
         models.LightControllerSettings
     ).filter(
-        models.LightControllerSettings.id == controller_id, 
+        models.LightControllerSettings.controllerId == controller_id, 
         models.LightControllerSettings.driverId == driver_id
     ).one_or_none()
 
@@ -288,6 +288,23 @@ def update_controller_settings(db: Session, controller_settings: schemas.LightCo
     db.add(stored_settings)
     db.commit()
     db.refresh(stored_settings)
+
+    return stored_settings
+
+def delete_controller_settings(db: Session, settings: schemas.LightControllerSettingsDelete):
+    """
+    Delete a settings for a light controller, effectively resetting to default
+    All fields except ID are optional
+    """
+    stored_settings = db.query(
+        models.LightControllerSettings
+    ).filter(
+        models.LightControllerSettings.id == settings.id
+        and models.LightControllerSettings.driverId == settings.driverId
+    ).one_or_none()
+
+    db.delete(stored_settings)
+    db.commit()
 
     return stored_settings
 
