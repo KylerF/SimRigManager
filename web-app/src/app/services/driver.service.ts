@@ -3,6 +3,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { DriverStats } from '../models/driver-stats';
 import { APIHelper } from '../_helpers/api-helper';
 import { NewDriver } from '../models/new-driver';
 import { Driver } from '../models/driver';
@@ -12,7 +13,8 @@ import { Driver } from '../models/driver';
 })
 
 /**
- * Service to retrieve, add and update drivers
+ * Service to connect to the Drivers API, providing CRUD operations
+ * and caching functionality for driver profiles
  */
 export class DriverService {
   private _selectedDriver = new BehaviorSubject<Driver>(null);
@@ -23,6 +25,7 @@ export class DriverService {
   driversEndpoint = 'drivers';
   activeDriverEndpoint = 'drivers/active';
   profilePicEndpoint = 'avatars';
+  statsEndpoint = 'stats';
 
   constructor(private http: HttpClient) { 
     if(this.checkLocalStorageSupported()) {
@@ -61,6 +64,27 @@ export class DriverService {
     );
   }
 
+  /**
+   * Get the currently selected driver
+   * 
+   * @param driverId ID of the driver for which to query stats
+   * @returns the active driver
+   */
+  getDriverStats(driverId: number): Observable<DriverStats> {
+    return this.http.get<DriverStats>(
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}/${driverId}/${this.statsEndpoint}`
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    );
+  }
+
+  /**
+   * Notify subscribers of a driver change, and save the driver to 
+   * local storage
+   * 
+   * @param driver the driver to cache
+   */
   setCachedDriver(driver: Driver) {
     this._selectedDriver.next(driver);
     this.saveToLocalStorage();
@@ -119,6 +143,24 @@ export class DriverService {
   }
 
   /**
+   * Delete a driver profile and its data.
+   * 
+   * WARNING: This will cascade to all settings and lap times set by the 
+   * driver, so use it wisely.
+   * 
+   * @param driver the driver to delete
+   * @returns the driver's data, for the last time ever
+   */
+  deleteDriver(driver: Driver): Observable<Driver> {
+    return this.http.delete<Driver>(
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}/${driver.id}`
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    );
+  }
+
+  /**
    * Upload a new profile pic for a driver
    * 
    * @param driverId unique ID for the driver being updated
@@ -163,7 +205,11 @@ export class DriverService {
    */
   private saveToLocalStorage(): boolean {
     if (this.checkLocalStorageSupported()) {
-      this.localStorage.setItem('activeDriver', JSON.stringify(this._selectedDriver.getValue()));
+      this.localStorage.setItem(
+        'activeDriver', 
+        JSON.stringify(this._selectedDriver.getValue())
+      );
+
       return true;
     }
 

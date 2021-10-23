@@ -26,6 +26,7 @@ import { DriverProfileComponent } from './driver-profile/driver-profile.componen
 import { DriverStatsComponent } from './driver-stats/driver-stats.component';
 import { HourglassIconComponent } from './hourglass-icon/hourglass-icon.component';
 import { DriverAvatarComponent } from './driver-avatar/driver-avatar.component';
+import { DeleteDriverComponent } from './delete-driver/delete-driver.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -60,7 +61,8 @@ const routes: Routes = [
     DriverProfileComponent, 
     DriverStatsComponent, 
     HourglassIconComponent, 
-    DriverAvatarComponent
+    DriverAvatarComponent, 
+    DeleteDriverComponent
   ],
   imports: [
     BrowserModule, 

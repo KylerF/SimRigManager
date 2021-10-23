@@ -1,5 +1,10 @@
-import { DriverService } from '../services/driver.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { DeleteDriverComponent } from '../delete-driver/delete-driver.component';
+import { DriverService } from '../services/driver.service';
+import { DriverStats } from '../models/driver-stats';
 import { Driver } from '../models/driver';
 
 @Component({
@@ -14,6 +19,7 @@ import { Driver } from '../models/driver';
  */
 export class DriverProfileComponent implements OnInit {
   driver: Driver;
+  driverStats: DriverStats
   editingProfile: boolean;
   profileUpdated: boolean;
   error: string;
@@ -22,7 +28,9 @@ export class DriverProfileComponent implements OnInit {
   params: string;
 
   constructor(
-    private driverService: DriverService
+    private driverService: DriverService, 
+    private modalService: NgbModal,
+    private router: Router
   ) 
   { }
 
@@ -37,6 +45,21 @@ export class DriverProfileComponent implements OnInit {
     this.driverService.getSelectedDriver().subscribe (
       response => {
         this.driver = response;
+        this.getDriverStats(this.driver.id);
+      }, 
+      error => {
+        this.error = error.message;
+      }
+    )
+  }
+
+  /**
+   * Get stats for a driver (records held, favorite track etc..)
+   */
+  getDriverStats(driverId) {
+    this.driverService.getDriverStats(driverId).subscribe(
+      response => {
+        this.driverStats = response;
       }, 
       error => {
         this.error = error.message;
@@ -99,5 +122,23 @@ export class DriverProfileComponent implements OnInit {
     )
 
     this.editingProfile = false;
+  }
+
+  /**
+   * Show the modal driver deletion confirmation
+   */
+  showDeleteProfileDialog() {
+    const modalRef = this.modalService.open(DeleteDriverComponent, { centered: true });
+    modalRef.componentInstance.driver = this.driver;
+
+    // Add the new driver after successful creation
+    modalRef.result.then(_ => {
+      // Redirect to sign in
+      this.router.navigate(["selectdriver"]);
+    })
+    .catch(_ => {
+      // Cancelled
+      {}
+    });
   }
 }

@@ -96,6 +96,22 @@ def delete_driver(db: Session, driver: schemas.DriverDelete):
     return stored_driver
 
 
+def delete_driver_by_id(db: Session, driver_id: int):
+    """
+    Delete a driver by their ID
+    """
+    stored_driver = db.query(
+        models.Driver
+    ).filter(
+        models.Driver.id == driver_id
+    ).one_or_none()
+
+    db.delete(stored_driver)
+    db.commit()
+
+    return stored_driver
+
+
 def get_active_driver(db: Session):
     """
     Get the active driver

@@ -32,6 +32,9 @@ export class SelectDriverComponent implements OnInit {
     this.getSelectedDriver();
   }
 
+  /**
+   * Get all available drivers
+   */
   getDrivers() {
     this.driverService.getDrivers().subscribe(
       response => {
@@ -46,6 +49,9 @@ export class SelectDriverComponent implements OnInit {
     );
   }
 
+  /**
+   * Get the currently selected driver
+   */
   getSelectedDriver() {
     this.driverService.getSelectedDriver().subscribe(
       response => {
@@ -59,6 +65,11 @@ export class SelectDriverComponent implements OnInit {
     );
   }
 
+  /**
+   * Sign in with the selected driver profile
+   * 
+   * @param driver the selected driver profile
+   */
   selectDriver(driver: Driver) {
     if(this.selectedDriver && driver.id === this.selectedDriver.id) { 
       return; 
@@ -76,7 +87,7 @@ export class SelectDriverComponent implements OnInit {
   }
 
   /**
-   * Show the modal cart dialog
+   * Show the modal new driver form
    */
   showAddDriverDialog() {
     const modalRef = this.modalService.open(NewDriverComponent, { centered: true });

@@ -53,16 +53,16 @@ class RpmGauge:
 
         return colors + [Color("black")] * (self.led_count//2 - len(colors))*2 + colors[::-1]
 
-    def translate(self, value, leftMin, leftMax, rightMin, rightMax):
+    def translate(self, value, left_min, left_max, right_min, right_max):
         """
         Map an RPM value to a count within the range of the LED strip
         """
         # Figure out how "wide" each range is
-        leftSpan = leftMax - leftMin
-        rightSpan = rightMax - rightMin
+        leftSpan = left_max - left_min
+        rightSpan = right_max - right_min
 
         # Convert the left range into a 0-1 range (float)
-        valueScaled = float(value - leftMin) / float(leftSpan)
+        valueScaled = float(value - left_min) / float(leftSpan)
 
         # Convert the 0-1 range into a value in the right range.
-        return int(rightMin + (valueScaled * rightSpan))
+        return int(right_min + (valueScaled * rightSpan))

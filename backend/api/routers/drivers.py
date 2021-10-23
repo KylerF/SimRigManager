@@ -51,13 +51,13 @@ async def update_driver(driver: schemas.DriverUpdate):
 
     return updated_driver
 
-@router.delete("", response_model=schemas.Driver)
-async def delete_driver(driver: schemas.DriverDelete):
+@router.delete("/{driver_id}", response_model=schemas.Driver)
+async def delete_driver(driver_id: int):
     """
     Delete a driver
     """
     db = next(get_db())
-    result = crud.delete_driver(db, driver)
+    result = crud.delete_driver_by_id(db, driver_id)
 
     return result
 
@@ -100,11 +100,13 @@ async def get_driver_stats(driver_id: int):
     ]
     records_held = len(laptimes)
     track_map = Counter(getattr(time, 'trackName') for time in laptimes)
-    favorite_track = max(track_map, key=track_map.get)
+    favorite_track = ""
+    
+    if track_map:
+        favorite_track = max(track_map, key=track_map.get)
 
     return schemas.DriverStats(**{
         "trackTime": track_time, 
         "recordsHeld": records_held, 
         "favoriteTrack": favorite_track
     })
-
