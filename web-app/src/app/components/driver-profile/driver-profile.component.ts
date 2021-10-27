@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DeleteDriverComponent } from '../delete-driver/delete-driver.component';
-import { DriverService } from '../services/driver.service';
-import { DriverStats } from '../models/driver-stats';
-import { Driver } from '../models/driver';
+import { DriverService } from '../../services/driver.service';
+import { DriverStats } from '../../models/driver-stats';
+import { Driver } from '../../models/driver';
 
 @Component({
   selector: 'app-driver-profile',

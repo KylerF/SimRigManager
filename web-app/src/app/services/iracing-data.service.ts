@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { IracingDataFrame } from '../models/iracing/data-frame';
 import { APIHelper } from '../_helpers/api-helper';
 
 @Injectable({

@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-
-import { ipAddressValidatorFunction } from '../directives/validators/ip-address-validator-function';
-import { ControllerService } from '../services/controller.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Controller } from '../models/controller';
-import { Driver } from '../models/driver';
+
+import { ipAddressValidatorFunction } from '../../directives/validators/ip-address-validator-function';
+import { ControllerService } from '../../services/controller.service';
+import { Controller } from '../../models/controller';
+import { Driver } from '../../models/driver';
 
 @Component({
   selector: 'app-controller-settings',

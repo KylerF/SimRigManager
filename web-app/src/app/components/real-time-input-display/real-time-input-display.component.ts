@@ -1,8 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IracingDataService } from '../services/iracing-data.service';
-import { Constants } from '../_helpers/constants';
-import { IracingDataFrame } from '../models/iracing/data-frame';
+import { IracingDataService } from '../../services/iracing-data.service';
+import { Constants } from '../../_helpers/constants';
+import { IracingDataFrame } from '../../models/iracing/data-frame';
 import * as d3 from 'd3';
 
 @Component({
@@ -70,8 +70,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
       this.iracingDataService.getStream()
        .subscribe(
         data => {
-          let jsonData = JSON.parse(data);
-          this.update(jsonData);
+          this.update(data);
         },
         err => {
           this.error = err.message;

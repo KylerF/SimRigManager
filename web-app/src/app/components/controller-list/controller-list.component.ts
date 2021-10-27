@@ -4,10 +4,10 @@ import { interval } from "rxjs/internal/observable/interval";
 import { startWith } from "rxjs/operators";
 
 import { NewControllerComponent } from '../new-controller/new-controller.component';
-import { ControllerService } from '../services/controller.service';
-import { Controller } from '../models/controller';
+import { ControllerService } from '../../services/controller.service';
+import { Controller } from '../../models/controller';
 import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
-import { DriverService } from '../services/driver.service';
+import { DriverService } from '../../services/driver.service';
 import { Subscription } from 'rxjs';
 
 @Component({

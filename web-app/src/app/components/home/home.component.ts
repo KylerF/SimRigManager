@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AvailabilityService } from '../services/availability.service';
-import { ControllerStatus } from '../models/controller-status';
-import { ControllerService } from '../services/controller.service';
-import { DriverService } from '../services/driver.service';
-import { IracingDataService } from '../services/iracing-data.service';
+import { AvailabilityService } from '../../services/availability.service';
+import { ControllerStatus } from '../../models/controller-status';
+import { ControllerService } from '../../services/controller.service';
+import { DriverService } from '../../services/driver.service';
+import { IracingDataService } from '../../services/iracing-data.service';
 import { Subscription } from 'rxjs';
-import { Driver } from '../models/driver';
+import { Driver } from '../../models/driver';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +19,7 @@ import { Driver } from '../models/driver';
  */
 export class HomeComponent implements OnInit {
   apiActive: boolean;
-  iracingDataAvailable: boolean;
+  iracingData: string;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
   controllerStatus: ControllerStatus[] = [];
@@ -68,15 +68,15 @@ export class HomeComponent implements OnInit {
     this.iracingDataSubscription = this.iracingDataService.getStream()
        .subscribe(
           response => {
-            if (JSON.stringify(response) == '{}') {
-              this.iracingDataAvailable = false;
+            if (response) {
+              this.iracingData = JSON.parse(response);
             } else {
-              this.iracingDataAvailable = true;
+              this.iracingData = null;
             }
           }, 
           error => {
             this.errors.push(error.message);
-            this.iracingDataAvailable = false;
+            this.iracingData = null;
           }    
       );
   }

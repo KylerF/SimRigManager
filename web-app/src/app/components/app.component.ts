@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Driver } from './models/driver';
-import { DriverService } from './services/driver.service';
+import { Driver } from '../models/driver';
+import { DriverService } from '../services/driver.service';
 
 @Component({
   selector: 'app-root',

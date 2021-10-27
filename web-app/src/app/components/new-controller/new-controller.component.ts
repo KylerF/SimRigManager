@@ -1,10 +1,10 @@
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NewController } from '../models/new-controller';
+import { NewController } from '../../models/new-controller';
 
-import { ControllerService } from '../services/controller.service';
-import { ipAddressValidatorFunction } from '../directives/validators/ip-address-validator-function';
+import { ControllerService } from '../../services/controller.service';
+import { ipAddressValidatorFunction } from '../../directives/validators/ip-address-validator-function';
 
 @Component({
   selector: 'app-new-controller',

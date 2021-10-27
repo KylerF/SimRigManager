@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Driver } from '../models/driver';
-import { DriverService } from '../services/driver.service';
+import { Driver } from '../../models/driver';
+import { DriverService } from '../../services/driver.service';
 import { NewDriverComponent } from '../new-driver/new-driver.component';
 
 @Component({

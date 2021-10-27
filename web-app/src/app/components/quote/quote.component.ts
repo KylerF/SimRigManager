@@ -1,6 +1,6 @@
-import { Quote } from '../models/quote';
+import { Quote } from '../../models/quote';
 import { Component, OnInit } from '@angular/core';
-import { QuoteService } from '../services/quote.service';
+import { QuoteService } from '../../services/quote.service';
 
 @Component({
   selector: 'app-quote',
