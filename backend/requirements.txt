@@ -1,9 +1,9 @@
 uvicorn[standard]
 python-multipart
 sqlalchemy_utils
-sse-starlette 
+sse-starlette
 sqlalchemy
-starlette
+starlette==0.16.0
 pydantic
 aiofiles
 pyirsdk 
