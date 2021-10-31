@@ -24,14 +24,16 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css",
+              "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/bootstrap-icons/font/bootstrap-icons.css", 
-              "node_modules/datatables.net-dt/css/jquery.dataTables.min.css"],
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css"
+            ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js", 
-              "node_modules/datatables.net/js/jquery.dataTables.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ], 
+            "allowedCommonJsDependencies": [
+              "rxjs/internal/observable/interval"
             ]
           },
           "configurations": {
@@ -93,7 +95,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
             "scripts": []
           }
@@ -128,6 +130,11 @@
   },
   "cli": {
     "analytics": false
-  }, 
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  },
   "defaultProject": "simriglights-web-app"
 }

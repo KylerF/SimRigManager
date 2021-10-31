@@ -1,0 +1,83 @@
+from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
+from os import path, remove
+import shutil
+
+from sqlalchemy.sql.expression import update
+
+from api.utils import update_driver_cache
+from database.database import get_db
+from database import crud, schemas
+
+"""
+Router for paths related to managing driver avatar images
+"""
+router = APIRouter(
+    prefix="/avatars",
+    tags=["avatars"]
+)
+
+@router.get("/{driver_id}")
+async def get_avatar(driver_id: int):
+    """
+    Get a driver's profile picture
+    """
+    avatar_path = f"userdata/images/{driver_id}-avatar.png"
+    if not path.exists(avatar_path):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"No avatar found for driver with id {driver_id}"
+        )
+
+    return FileResponse(f"userdata/images/{driver_id}-avatar.png")
+
+@router.post("/{driver_id}")
+async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
+    """
+    Upload a new driver profile picture
+    """
+    file_location = f"userdata/images/{driver_id}-avatar.png"
+
+    # Update driver profile with link to new avatar image
+    data = {
+        "id": driver_id, 
+        "profilePic": f"http://127.0.0.1:8000/avatars/{driver_id}"
+    }
+    driver = schemas.DriverUpdate(**data)
+
+    db = next(get_db())
+    updated_driver = crud.update_driver(db, driver)
+
+    # Update active driver cache
+    update_driver_cache(updated_driver)
+
+    # Save the image file
+    with open(file_location, "wb+") as file_object:
+        shutil.copyfileobj(profile_pic.file, file_object)
+
+    return {"success": "image upload completed"}
+
+@router.delete("/{driver_id}")
+async def delete_avatar(driver_id: int):
+    """
+    Delete a driver's profile picture
+    """
+    file_location = f"userdata/images/{driver_id}-avatar.png"
+
+    # Update driver profile to clear image URL
+    data = {
+        "id": driver_id, 
+        "profilePic": ""
+    }
+    driver = schemas.DriverUpdate(**data)
+
+    db = next(get_db())
+    updated_driver = crud.update_driver(db, driver)
+
+    # Update active driver cache
+    update_driver_cache(updated_driver)
+
+    # Delete the image file
+    remove(file_location)
+
+    return {"success": "image removed"}

@@ -14,7 +14,7 @@ import { Quote } from '../models/quote';
  * Service to retrieve a random quote from the API
  */
 export class QuoteService {
-  endpoint = 'randomquote';
+  endpoint = 'quotes/random';
   constructor(private http: HttpClient) { }
 
   getRandomQuote(): Observable<Quote> {

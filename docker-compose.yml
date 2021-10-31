@@ -1,0 +1,40 @@
+#
+# ~ Docker Compose Configuration ~
+# 
+# Creates and runs both the backend API and web app, 
+# as well as a Redis server.
+#
+# To run the server: docker-compose up
+#
+
+version: "3.8"
+services:
+    # Configure the backend API
+    backend:
+        build:
+            context: ./backend
+        volumes:
+            - ./backend:/usr/src/backend
+        ports:
+            - "8000:8000"
+        environment:
+            - REDIS_HOST=redis
+    
+    # Configure the web app
+    web-app:
+        build:
+            context: ./web-app
+        volumes:
+            - ./web-app:/usr/src/web-app
+            - /usr/src/web-app/node_modules
+        ports:
+            - "4200:4200"
+
+    # Configure the Redis server
+    redis:
+        image: "redis:alpine"
+        command: redis-server
+        ports:
+            - "6379:6379"
+        environment:
+            - REDIS_REPLICATION_MODE=master

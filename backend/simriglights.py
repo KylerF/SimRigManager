@@ -1,3 +1,10 @@
+"""
+Entrypoint for the SimRig Manager backend application, responsible for:
+  - Collecting iRacing data
+  - Storing driver profile information
+  - Controlling WLED fixtures
+  - Hosting the SimRig API for web applications
+"""
 from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser
@@ -39,7 +46,7 @@ def main():
     log_level = config.get('logging', 'level', fallback='INFO')
 
     # Set up logging    
-    file_handler = RotatingFileHandler('simriglights.log', maxBytes=20000000)
+    file_handler = RotatingFileHandler('simriglights.log', maxBytes=200000, backupCount=5)
     stdout_handler = logging.StreamHandler(sys.stdout)
 
     logging.basicConfig(
@@ -87,7 +94,7 @@ def main():
     atexit.register(queue_manager.close_all)
 
     # Start the API on the main thread
-    api = APIServer(queue_manager)
+    api = APIServer(queue_manager, log)
     api.start()
 
     # If we're here, exit everything

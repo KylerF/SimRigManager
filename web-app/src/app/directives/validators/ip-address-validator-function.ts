@@ -15,6 +15,6 @@ export function ipAddressValidatorFunction(): ValidatorFn {
 
         const ipAddress = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(value);
 
-        return !ipAddress ? { ipAddress: true }: null;
+        return ipAddress ? null: { ipAddress: true };
     }
 }

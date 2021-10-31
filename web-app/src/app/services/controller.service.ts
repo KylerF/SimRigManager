@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { retry, catchError, timeout } from 'rxjs/operators';
+import { catchError, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -8,6 +8,8 @@ import { APIHelper } from '../_helpers/api-helper';
 import { Controller } from '../models/controller';
 import { WledState } from '../models/wled/wled-state';
 import { WledInfo } from '../models/wled/wled-info';
+import { ControllerSettings } from '../models/controller-settings';
+import { Driver } from '../models/driver';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,7 @@ import { WledInfo } from '../models/wled/wled-info';
  */
 export class ControllerService {
   endpoint = 'controllers';
+  settingsEndpoint = 'controllersettings';
 
   // Flag to enable power on/off (allowed only once per second to avoid 
   // spamming the controller)
@@ -38,25 +41,24 @@ export class ControllerService {
   getControllers(): Observable<Controller[]> {    
     return this.http.get<Controller[]>(`${APIHelper.getBaseUrl()}${this.endpoint}`)
       .pipe(
-        retry(3), 
         catchError(APIHelper.handleError)
       );
   }
 
   /**
-   * Check whether a connection can be established to a controller. This
-   * endpoint just returns an empty object, but will error if the controller
-   * is offline.
+   * Retrieve controller settings set by a driver
    * 
-   * @param controller the controller to test
-   * @returns promise expected to resolve as an empty object
+   * @param controller controller to query settings
+   * @param driver driver which set said settings
+   * 
+   * @returns promise expected to resolve as controller settings
    */
-  getControllerStatus(controller: Controller): Observable<any> {
-    return this.http.get<any>(`http://${controller.ipAddress}/api`)
-      .pipe(
-        timeout(2000), 
-        catchError(APIHelper.handleError)
-      );
+  getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
+    return this.http.get<ControllerSettings>(
+      `${APIHelper.getBaseUrl()}${this.endpoint}?controllerId=${controller.id}&driverId=${driver.id}`)
+        .pipe(
+          catchError(APIHelper.handleError)
+        )
   }
 
   /**
@@ -64,10 +66,11 @@ export class ControllerService {
    * controller
    * 
    * @param ipAddress the IP address of the controller to test
-   * @returns promise expected to resolve as an empty object
+   * 
+   * @returns promise expected to resolve as a WledState object
    */
-   testIp(ipAddress: string): Observable<any> {
-    return this.http.get<any>(`http://${ipAddress}/api`)
+  testIp(ipAddress: string): Observable<WledState> {
+    return this.http.get<any>(`http://${ipAddress}/json/state`)
       .pipe(
         timeout(2000), 
         catchError(APIHelper.handleError)
@@ -92,6 +95,7 @@ export class ControllerService {
    * Get all available WLED effects
    * 
    * @param controller controller to query effects from
+   * 
    * @returns promise expected to resolve as an array of strings (effect names)
    */
   getControllerEffects(controller: Controller): Observable<[string]> {
@@ -114,6 +118,7 @@ export class ControllerService {
    * Power on a controller via a request to the WLED API
    * 
    * @param controller the controller to power on
+   * 
    * @returns promise expected to resolve as the result
    */
   powerOnController(controller: Controller): Observable<any> {
@@ -134,6 +139,7 @@ export class ControllerService {
    * Power off a controller via a request to the WLED API
    * 
    * @param controller the controller to power on
+   * 
    * @returns promise expected to resolve as the result
    */
   powerOffController(controller: Controller): Observable<any> {
@@ -178,9 +184,35 @@ export class ControllerService {
   addController(controller: NewController): Observable<Controller> {
     return this.http.post<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, controller)
       .pipe(
-        retry(3), 
         catchError(APIHelper.handleError)
       );
+  }
+
+  /**
+   * Update an existing controller with new details
+   * 
+   * @param controller the controller to update
+   */
+  updateController(controller: any): Observable<Controller> {
+    return this.http.patch<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, controller)
+      .pipe(
+        catchError(APIHelper.handleError)
+      );
+  }
+
+  /**
+   * Update a controller settings profile with new details
+   * 
+   * @param controller the settings to update
+   */
+  updateControllerSettings(controllerSettings: any): Observable<ControllerSettings> {
+    return this.http.patch<ControllerSettings>(
+      `${APIHelper.getBaseUrl()}${this.settingsEndpoint}`, 
+      controllerSettings
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    );
   }
 
   /**
@@ -198,7 +230,6 @@ export class ControllerService {
     
     return this.http.delete<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, options)
       .pipe(
-        retry(3), 
         catchError(APIHelper.handleError)
       );
   }

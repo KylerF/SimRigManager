@@ -1,0 +1,13 @@
+uvicorn[standard]
+python-multipart
+sqlalchemy_utils
+sse-starlette 
+sqlalchemy
+starlette
+pydantic
+aiofiles
+pyirsdk 
+fastapi 
+colour 
+redis
+sacn

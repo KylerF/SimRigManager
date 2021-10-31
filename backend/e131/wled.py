@@ -7,10 +7,8 @@ class Wled:
     the color of the connected LEDs
     """
     is_connected = False
-    
-    """
-    Used to connect to the WLED controller
-    """
+
+
     @staticmethod
     def connect(ip, universe):
         """

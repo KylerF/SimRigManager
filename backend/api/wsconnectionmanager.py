@@ -3,9 +3,9 @@ from typing import List
 
 
 class WebsocketConnectionManager:
-    '''
+    """
     Object to manage multiple websocket connections
-    '''
+    """
     def __init__(self):
         self.active_connections: List[WebSocket] = []
 
@@ -13,7 +13,8 @@ class WebsocketConnectionManager:
         await websocket.accept()
         self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
+    async def disconnect(self, websocket: WebSocket):
+        await websocket.close()
         self.active_connections.remove(websocket)
 
     async def send_text(self, message: str, websocket: WebSocket):

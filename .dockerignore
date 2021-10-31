@@ -1,0 +1,7 @@
+# These files are not copied into containers
+.git
+node_modules
+npm-debug.log
+*.db
+*.rdb
+*.log

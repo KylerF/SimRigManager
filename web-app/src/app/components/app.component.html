@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="home" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">SimRig Manager</a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+          <a class="nav-link" routerLink="scoreboard">
+            <span class="bi bi-table"></span> Scoreboard
+          </a>
+        </li>
+
+        <li data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+          <a class="nav-link" routerLink="controllers">
+            <span class="bi bi-lightbulb"></span> Light Controllers
+          </a>
+        </li>
+
+        <li *ngIf="activeDriver" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <app-driver-avatar [driver]="activeDriver" [size]="19" [params]="params"></app-driver-avatar>
+              {{ activeDriver.name }}
+          </a>
+          
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+              <a class="dropdown-item" routerLink="driverprofile">
+                <span class="bi bi-person-circle"></span>  Profile
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show">
+              <a class="dropdown-item" routerLink="selectdriver">
+                <span class="bi bi-box-arrow-right"></span>  Switch Driver
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li *ngIf="!activeDriver">
+          <a class="nav-link" routerLink="selectdriver">
+            <span class="bi bi-person-circle"></span> Sign in
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid py-2">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h4 class="modal-title">Delete profile</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="dismiss()"></button>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger">
+        <p>
+            <span class="bi bi-exclamation-circle-fill"></span>  
+            <b>  Are you sure you want to do this?</b>
+        </p>
+        <p>
+            This will delete your profile, along with <b>all</b> of your data.
+        </p>
+        <b>This cannot be undone!</b>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="deleteDriver()">Delete</button>
+        <button type="button" class="btn btn-cancel" (click)="dismiss()">Cancel</button>
+    </div>
+</div>

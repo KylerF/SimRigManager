@@ -130,3 +130,10 @@ config.ini
 
 # Redis persistent storage
 *.rdb
+
+# Backup log files
+*.log.*
+
+# Saved user files
+userdata/
+

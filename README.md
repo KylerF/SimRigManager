@@ -8,7 +8,7 @@ Manage all of your iRacing accessories and data
 ### Install the backend API
 ```
 cd backend
-python setup.py install
+pip install -r requirements.txt
 ```
 This is a background service that will connect to iRacing, so install it on the system you use to play iRacing.
 
@@ -26,7 +26,6 @@ cd web-app
 ng build --prod
 ```
 The compiled application is generated in the ```dist``` folder. How you host it is up to you.
-
 ## Usage
 ### Start the API
 ```
@@ -35,25 +34,30 @@ python simriglights.py
 To keep this running all the time, you can configure a [NSSM service](https://nssm.cc/download), or use [PM2](https://www.npmjs.com/package/pm2) if you already have NodeJS installed.
 ### Web App
 Browse to http://localhost:4200, add some drivers and light controllers, then start racing!
-
 ## API Documentation
 Check out http://localhost:8000/docs for Swagger UI documentation, or the ReDoc documentation at http://localhost:8000/docs
 
 ## Testing
 ```
-python setup.py nosetests
+pip install pytest
+pytest
 ```
-All unit tests are run using [nose](https://nose.readthedocs.io/en/latest/testing.html)
+All backend unit tests are run using [pytest](https://docs.pytest.org/en/6.2.x/)
+```
+npm test
+```
+All Angular unit tests are run using [karma](http://karma-runner.github.io/6.3/index.html) in a headless Chrom browser
 
-## Dependencies
-### SimRig API
-- [pyirsdk](https://github.com/kutu/pyirsdk)
-- [sacn](https://github.com/Hundemeier/sacn)
-- [Colour](https://github.com/vaab/colour)
-- [FastAPI](https://github.com/tiangolo/fastapi)
-- [Uvicorn](https://github.com/encode/uvicorn)
-- [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy)
-- [Pydantic](https://github.com/samuelcolvin/pydantic)
-### Web App
-- [Angular](https://github.com/angular/angular)
-- [Bootstrap](https://getbootstrap.com/)
+## Docker
+The project is also configured to be run with [Docker Compose](https://docs.docker.com/compose/):
+```
+docker-compose up
+```
+This will bring up the entire application. To bring up a single service (i.e. the backend API):
+```
+docker-compose up backend
+```
+And to force a rebuild:
+```
+docker-compose up --build
+```

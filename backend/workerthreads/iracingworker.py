@@ -1,12 +1,14 @@
 from redis.exceptions import ConnectionError
 from time import sleep
+from os import getenv
 import threading
 import redis
 import math
+import json
 
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
-from database import crud
+from database import crud, schemas
 
 class IracingWorker(threading.Thread):
     '''
@@ -27,10 +29,10 @@ class IracingWorker(threading.Thread):
         self.framerate = framerate
 
         # Set up Redis storage
-        self.redis_store = redis.Redis()
+        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
 
     def run(self):
-        # Get the active driver and their track time from the database
+        # Get the active driver and their track time
         db = next(get_db())
         active_driver_object = crud.get_active_driver(db)
         active_driver = None
@@ -50,11 +52,6 @@ class IracingWorker(threading.Thread):
                 # Get data from the stream
                 latest = self.data_stream.latest()
                 latest_raw = self.data_stream.latest(raw=True)
-
-                if latest:
-                    self.redis_store.hset('session_data', mapping=latest)
-                if latest_raw:
-                    self.redis_store.hset('session_data_raw', mapping=latest_raw)
 
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
@@ -120,13 +117,22 @@ class IracingWorker(threading.Thread):
                     if active_driver:
                         self.log.info('Setting new best lap time for ' + active_driver.name)
                         
-                        crud.create_laptime(db, LapTimeCreate(
+                        new_record = LapTimeCreate(
                             car=latest['car_name'], 
                             trackName=latest['track_name'], 
                             trackConfig=latest['track_config'] or '', 
                             time=latest['best_lap_time'], 
                             driverId=active_driver.id
-                        ))
+                        )
+
+                        new_laptime = crud.create_laptime(db, new_record)
+
+                        # Update Redis key for streaming
+                        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
+
+                # Update Redis keys
+                self.redis_store.set('session_data', json.dumps(latest))
+                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
                         
                 self.log.debug(latest)
                 

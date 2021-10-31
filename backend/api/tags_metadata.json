@@ -4,21 +4,21 @@
         "description": "Check whether the API is up and running"
     },
     {
+        "name": "avatars", 
+        "description": "Get and set driver avatar images"
+    },
+    {
         "name": "drivers",
         "description": "Manage and select drivers"
-    }, 
+    },
     {
-        "name": "scores",
+        "name": "laptimes",
         "description": "Fetch and set fastest lap times"
     }, 
     {
         "name": "controllers",
         "description": "Manage WLED controllers"
-    }, 
-    {
-        "name": "controllersettings",
-        "description": "Manage controller settings (color themes, effects, etc) to be applied when a specific driver is selected"
-    }, 
+    },
     {
         "name": "quotes",
         "description": "Manage the inspirational racing quotes displayed on the home page"

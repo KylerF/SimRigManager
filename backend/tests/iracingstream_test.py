@@ -1,14 +1,14 @@
-"""
-Unit tests for the IracingStream module
-Test data is stored in .bin files located in the /data directory
-Additional files can be generated using the irsdk script
-(https://github.com/kutu/pyirsdk/blob/master/tutorials/02%20Using%20irsdk%20script.md)
-"""
 import unittest
 
 from raceparse.iracingstream import IracingStream
 
 class TestIracingStream(unittest.TestCase):
+    """
+    Unit tests for the IracingStream module
+    Test data is stored in .bin files located in the /data directory
+    Additional files can be generated using the irsdk script
+    (https://github.com/kutu/pyirsdk/blob/master/tutorials/02%20Using%20irsdk%20script.md)
+    """
     def test_empty_stream(self):
         """
         Test creating a stream without a running iRacing instance and no test file
@@ -109,6 +109,7 @@ class TestIracingStream(unittest.TestCase):
 
         self.assertEqual(snapshot["best_lap_time"], 107.3927001953125, 
         msg="Best lap time should be 1:47.39")
+
 
 if __name__ == "__main__":
     unittest.main()
