@@ -3,7 +3,7 @@ python-multipart
 sqlalchemy_utils
 sse-starlette
 sqlalchemy
-starlette==0.16.0
+starlette
 pydantic
 aiofiles
 pyirsdk 
