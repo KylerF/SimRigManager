@@ -31,11 +31,11 @@ export class ScoreboardComponent implements OnInit {
 
   loading: boolean = true;
   error: any;
-  
+
   constructor(
-    private lapTimeService: LapTimeService, 
+    private lapTimeService: LapTimeService,
     private driverService: DriverService
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class ScoreboardComponent implements OnInit {
             this.lapTimes.push(laptime);
             this.filterScores();
           }
-      }, 
+      },
       error => {
         this.error = error;
       }
@@ -85,8 +85,8 @@ export class ScoreboardComponent implements OnInit {
    * Show best overall lap times
    */
   showOverallBestTimes() {
-    this.filteredLapTimes = this.lapTimes.filter(lapTime => 
-      lapTime.time == Math.min(...this.lapTimes.filter(cLapTime => 
+    this.filteredLapTimes = this.lapTimes.filter(lapTime =>
+      lapTime.time == Math.min(...this.lapTimes.filter(cLapTime =>
         cLapTime.car == lapTime.car
         && cLapTime.trackName == lapTime.trackName
         && cLapTime.trackConfig == lapTime.trackConfig
@@ -132,8 +132,8 @@ export class ScoreboardComponent implements OnInit {
       startDate = moment().subtract(6, 'months');
     } else if (this.timeFilter == 'year') {
       startDate = moment().startOf('year');
-    } 
-    
+    }
+
     if (this.searchText.length > 0) {
       if (this.searchColumn == 'driver') {
         this.filteredLapTimes = this.filteredLapTimes.filter(lapTime =>
@@ -150,7 +150,7 @@ export class ScoreboardComponent implements OnInit {
       }
     }
 
-    this.filteredLapTimes = this.filteredLapTimes.filter(lapTime => 
+    this.filteredLapTimes = this.filteredLapTimes.filter(lapTime =>
       moment(lapTime.setAt).isBetween(startDate, endDate)
     );
 
@@ -170,12 +170,12 @@ export class ScoreboardComponent implements OnInit {
 
     this.filteredLapTimes.sort((lapTime1, lapTime2) => {
       if (column == 'driver') {
-        return order == 'desc' ? 
-          (lapTime2.driver.name > lapTime1.driver.name ? 1 : lapTime2.driver.name < lapTime1.driver.name ? -1 : 0) : 
+        return order == 'desc' ?
+          (lapTime2.driver.name > lapTime1.driver.name ? 1 : lapTime2.driver.name < lapTime1.driver.name ? -1 : 0) :
           (lapTime1.driver.name > lapTime2.driver.name ? 1 : lapTime1.driver.name < lapTime2.driver.name ? -1 : 0);
       } else {
-        return order == 'desc' ? 
-          (lapTime2[column] > lapTime1[column] ? 1 : lapTime2[column] < lapTime1[column] ? -1 : 0) : 
+        return order == 'desc' ?
+          (lapTime2[column] > lapTime1[column] ? 1 : lapTime2[column] < lapTime1[column] ? -1 : 0) :
           (lapTime1[column] > lapTime2[column] ? 1 : lapTime1[column] < lapTime2[column] ? -1 : 0);
       }
     });

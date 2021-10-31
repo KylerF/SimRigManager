@@ -45,13 +45,13 @@ export class ControllerListComponent implements OnInit {
   }
 
   /**
-   * Retrieve configured WLED controllers, along with the connection 
+   * Retrieve configured WLED controllers, along with the connection
    * status of each
    */
   getControllers() {
     this.controllerService.getControllers().subscribe(
       controllers => {
-        // Success! 
+        // Success!
         this.controllers = controllers;
         this.loading = false;
 
@@ -59,7 +59,7 @@ export class ControllerListComponent implements OnInit {
         controllers.forEach(controller => {
           this.getControllerState(controller);
         });
-      }, 
+      },
       error => {
         // Failed. Save the response.
         this.error = error;
@@ -79,7 +79,7 @@ export class ControllerListComponent implements OnInit {
 
   /**
    * Get the state of a controller
-   * 
+   *
    * @param controller controller from which to retrieve data
    */
   getControllerState(controller: Controller) {
@@ -88,7 +88,7 @@ export class ControllerListComponent implements OnInit {
         // Save the state
         controller.state = response;
         controller.isAvailable = true;
-      }, 
+      },
       error => {
         // Connection failed
         controller.state = null;
@@ -99,7 +99,7 @@ export class ControllerListComponent implements OnInit {
 
   /**
    * Toggle the power of a controller
-   * 
+   *
    * @param controller controller to toggle
    */
   togglePowerController(controller: Controller) {
@@ -107,7 +107,7 @@ export class ControllerListComponent implements OnInit {
       response => {
         // Success! Update the state.
         this.getControllerState(controller);
-      }, 
+      },
       error => {
         this.error = error.message;
       }

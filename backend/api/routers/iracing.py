@@ -40,9 +40,9 @@ async def ws_stream_iracing_data(websocket: WebSocket, ws_connection_manager=Dep
 
             await asyncio.sleep(0.03)
     except (
-        WebSocketDisconnect, 
-        ConnectionClosedError, 
-        ConnectionClosedOK, 
+        WebSocketDisconnect,
+        ConnectionClosedError,
+        ConnectionClosedOK,
         RuntimeError
     ):
         await ws_connection_manager.disconnect(websocket)
