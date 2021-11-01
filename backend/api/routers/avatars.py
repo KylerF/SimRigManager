@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
-from os import path, remove
+from os import path, remove, getcwd
 import shutil
 
 from sqlalchemy.sql.expression import update
@@ -22,21 +22,22 @@ async def get_avatar(driver_id: int):
     """
     Get a driver's profile picture
     """
-    avatar_path = f"userdata/images/{driver_id}-avatar.png"
+    avatar_path = __get_avatar_path(driver_id)
+
     if not path.exists(avatar_path):
         raise HTTPException(
             status_code=400, 
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
-    return FileResponse(f"userdata/images/{driver_id}-avatar.png")
+    return FileResponse(avatar_path)
 
 @router.post("/{driver_id}")
 async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
     """
     Upload a new driver profile picture
     """
-    file_location = f"userdata/images/{driver_id}-avatar.png"
+    file_location = __get_avatar_path(driver_id)
 
     # Update driver profile with link to new avatar image
     data = {
@@ -62,7 +63,7 @@ async def delete_avatar(driver_id: int):
     """
     Delete a driver's profile picture
     """
-    file_location = f"userdata/images/{driver_id}-avatar.png"
+    file_location = __get_avatar_path(driver_id)
 
     # Update driver profile to clear image URL
     data = {
@@ -81,3 +82,14 @@ async def delete_avatar(driver_id: int):
     remove(file_location)
 
     return {"success": "image removed"}
+
+def __get_avatar_path(driver_id):
+    """
+    Retrieve the file path to a driver's avatar image
+    """
+    current_path = path.abspath(getcwd())
+    return path.join(
+        current_path, 
+        "userdata", "images", 
+        f"{driver_id}-avatar.png"
+    )

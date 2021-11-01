@@ -10,13 +10,13 @@ export class APIHelper {
     /**
      * We can use localhost in development, but in production
      * the server's IP address must be determined.
-     * 
+     *
      * @param protocol either http or ws
-     * 
+     *
      * @returns URL to the API
      */
     static getBaseUrl(protocol: string = 'http'): string {
-        let url = `${protocol}://127.0.0.1:8000/`;
+        let url = `${protocol}://192.168.1.201:8000/`;
 
         if(environment.production) {
             url = `${protocol}://${window.location.hostname}:8000/`;
@@ -27,7 +27,7 @@ export class APIHelper {
 
     /**
      * Catch any error response and return it to the caller
-     * 
+     *
      * @param error the error returned from API
      * @returns the error
      */

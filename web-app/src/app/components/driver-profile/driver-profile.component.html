@@ -50,7 +50,7 @@
 
             <input type="file" accept="image/*" class="file-input" (change)="setProfilePic($event)" #fileInput>
         </div>
-    
+
         <div class="card-body">
             <form *ngIf="editingProfile">
                 <div class="form-group">
@@ -85,7 +85,7 @@
             <div class="card-header text-center">
                 <h3>Driver Stats</h3>
             </div>
-            <div class="card-body">
+            <div *ngIf="driverStats" class="card-body">
                 <h4>
                     Track Time: {{ driverStats.trackTime | hoursMinutesSeconds }}
                 </h4>
@@ -103,8 +103,8 @@
     </div>
 </div>
 
-<app-error-message 
-    *ngIf="error" 
-    title="Error" 
+<app-error-message
+    *ngIf="error"
+    title="Error"
     message="Unable to access your driver profile">
 </app-error-message>
