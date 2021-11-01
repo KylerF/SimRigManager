@@ -118,7 +118,7 @@ export class ScoreboardComponent implements OnInit {
 
     // Get the selected time range
     let startDate = moment(0);
-    let endDate = moment.now();
+    let endDate = moment().add(1, 'days');;
 
     if (this.timeFilter == 'today') {
       startDate = moment().startOf('day');
@@ -153,8 +153,6 @@ export class ScoreboardComponent implements OnInit {
     this.filteredLapTimes = this.filteredLapTimes.filter(lapTime =>
       moment(lapTime.setAt).isBetween(startDate, endDate)
     );
-
-    this.sortScores(this.sortColumn, this.sortOrder);
   }
 
   /**
