@@ -31,7 +31,7 @@ async def ws_stream_iracing_data(websocket: WebSocket, ws_connection_manager=Dep
 
     try:
         while True:
-            await websocket.receive_text()
+            websocket.receive_text()
             
             data = get_iracing_data(raw=True)
             
