@@ -21,9 +21,15 @@
             </div>
             <div id="iracing-info" class="accordion-collapse collapse" aria-labelledby="iracing-status-header" data-bs-parent="#iracing-accordion">
                 <div class="accordion-body">
+                  <div id="sessionInfo">
                     {{ iracingData.WeekendInfo.EventType }}
                     at
                     {{ iracingData.WeekendInfo.TrackDisplayName }}
+                  </div>
+                  <div id="sessionTime">
+                    Session time:
+                    {{ iracingData.SessionTime | hoursMinutesSeconds }}
+                  </div>
                 </div>
             </div>
         </div>

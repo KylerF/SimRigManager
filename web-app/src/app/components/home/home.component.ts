@@ -7,6 +7,7 @@ import { DriverService } from '../../services/driver.service';
 import { IracingDataService } from '../../services/iracing-data.service';
 import { Subscription } from 'rxjs';
 import { Driver } from '../../models/driver';
+import { IracingDataFrame } from 'src/app/models/iracing/data-frame';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ import { Driver } from '../../models/driver';
  */
 export class HomeComponent implements OnInit {
   apiActive: boolean;
-  iracingData: string;
+  iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
   controllerStatus: ControllerStatus[] = [];
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit {
     private iracingDataService: IracingDataService,
     private controllerService: ControllerService, // used to check connection to WLED controllers
     private driverService: DriverService // used to check whether a driver has been selected
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -51,7 +52,7 @@ export class HomeComponent implements OnInit {
   getAPIAvailable() {
     this.availabilityService.getAPIAvailability().subscribe(
       response => {
-        // Success! 
+        // Success!
         this.apiActive = response.active;
       },
       error => {
@@ -69,15 +70,15 @@ export class HomeComponent implements OnInit {
        .subscribe(
           response => {
             if (response) {
-              this.iracingData = JSON.parse(response);
+              this.iracingData = response;
             } else {
               this.iracingData = null;
             }
-          }, 
+          },
           error => {
             this.errors.push(error.message);
             this.iracingData = null;
-          }    
+          }
       );
   }
 
@@ -87,7 +88,7 @@ export class HomeComponent implements OnInit {
   getSelectedDriver() {
     this.driverService.getSelectedDriver().subscribe(
       response => {
-        // Success! 
+        // Success!
         this.selectedDriver = response;
       },
       error => {
@@ -109,14 +110,14 @@ export class HomeComponent implements OnInit {
             response => {
               // Connection succeeded
               this.controllerStatus.push({ 'name': controller.name, 'online': true});
-            }, 
+            },
             error => {
               // Connection failed
               this.controllerStatus.push({ 'name': controller.name, 'online': false});
             }
           )
         });
-      }, 
+      },
       error => {
         // Failed. Save the response.
         this.errors.push(error.message);

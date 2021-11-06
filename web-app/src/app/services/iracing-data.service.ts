@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { IracingDataFrame } from '../models/iracing/data-frame';
+import { catchError, retry } from 'rxjs/operators';
 import { APIHelper } from '../_helpers/api-helper';
+import { webSocket } from 'rxjs/webSocket'
+import { IracingDataFrame } from '../models/iracing/data-frame';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,6 @@ import { APIHelper } from '../_helpers/api-helper';
 export class IracingDataService {
   endpoint = 'latest';
   wsEndpoint = 'stream?raw=true';
-  ws: WebSocket;
 
   constructor(private http: HttpClient) {}
 
@@ -31,25 +31,19 @@ export class IracingDataService {
   }
 
   /**
-   * Connect to the API's websocket for streaming data
-   * 
+   * Connect to the API's websocket for streaming data using the rxjs
+   * websocket implementation. This should automatically reconnect.
+   *
    * @returns an obervable wrapping incoming data
    */
-  getStream(): Observable<any> {
-    this.ws = new WebSocket(`${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`);
+  getStream(): Observable<IracingDataFrame> {
+    let subject = webSocket(
+      `${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`
+    );
 
-    return new Observable(
-      observer => {
-        this.ws.onmessage = (event) =>
-          observer.next(event.data);
-
-        this.ws.onerror = (event) => observer.error(event);
-
-        this.ws.onclose = (_) => observer.complete();
-
-        return () =>
-          this.ws.close(1000, "The user disconnected");
-      }
+    return subject.pipe(
+      retry<IracingDataFrame>(),
+      catchError(APIHelper.handleError)
     );
   }
 }
