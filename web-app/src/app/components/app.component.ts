@@ -26,7 +26,7 @@ export class AppComponent {
    */
   ngOnInit() {
     this.getSelectedDriver();
-    
+
     this.driverChangeSubscription = this.driverService.selectedDriver$
        .subscribe(driver => this.updateDriverDisplay(driver));
   }
@@ -45,7 +45,7 @@ export class AppComponent {
   getSelectedDriver() {
     this.driverService.getSelectedDriver().subscribe(
       response => {
-        // Success! 
+        // Success!
         this.activeDriver = response;
       },
       error => {
