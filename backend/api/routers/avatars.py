@@ -26,7 +26,7 @@ async def get_avatar(driver_id: int):
 
     if not path.exists(avatar_path):
         raise HTTPException(
-            status_code=400, 
+            status_code=404, 
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
@@ -48,6 +48,12 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
 
     db = next(get_db())
     updated_driver = crud.update_driver(db, driver)
+
+    if not updated_driver:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"No driver found with id {driver_id}"
+        )
 
     # Update active driver cache
     update_driver_cache(updated_driver)
@@ -74,6 +80,12 @@ async def delete_avatar(driver_id: int):
 
     db = next(get_db())
     updated_driver = crud.update_driver(db, driver)
+
+    if not updated_driver:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"No driver found with id {driver_id}"
+        )
 
     # Update active driver cache
     update_driver_cache(updated_driver)
