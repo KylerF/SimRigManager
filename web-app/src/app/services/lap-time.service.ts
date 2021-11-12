@@ -19,13 +19,13 @@ export class LapTimeService {
   streamEndpoint = 'laptimes/stream';
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private sseClient: SseClient
   ) { }
 
   /**
    * Fetch all lap times from the database
-   * 
+   *
    * @returns observable expected to return array of LapTimes
    */
   getLapTimes(): Observable<LapTime[]> {
@@ -39,7 +39,7 @@ export class LapTimeService {
 
   /**
    * Stream new lap times in real time
-   * 
+   *
    * @returns observable which streams new lap times
    */
   streamNewLapTimes(): Observable<LapTime> {

@@ -16,29 +16,29 @@ import { Driver } from '../models/driver';
 })
 
 /**
- * Service to retrieve, add, interact with and check the status of 
+ * Service to retrieve, add, interact with and check the status of
  * WLED light controllers
  */
 export class ControllerService {
   endpoint = 'controllers';
   settingsEndpoint = 'controllersettings';
 
-  // Flag to enable power on/off (allowed only once per second to avoid 
+  // Flag to enable power on/off (allowed only once per second to avoid
   // spamming the controller)
   powerEnabled = true;
 
   wledRequestOptions: Object = {
     responseType: 'text'
   }
-  
+
   constructor(private http: HttpClient) { }
 
   /**
    * Get all configured WLED controllers
-   * 
+   *
    * @returns observable wrapping returned controller objects
    */
-  getControllers(): Observable<Controller[]> {    
+  getControllers(): Observable<Controller[]> {
     return this.http.get<Controller[]>(`${APIHelper.getBaseUrl()}${this.endpoint}`)
       .pipe(
         catchError(APIHelper.handleError)
@@ -47,10 +47,10 @@ export class ControllerService {
 
   /**
    * Retrieve controller settings set by a driver
-   * 
+   *
    * @param controller controller to query settings
    * @param driver driver which set said settings
-   * 
+   *
    * @returns promise expected to resolve as controller settings
    */
   getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
@@ -64,44 +64,44 @@ export class ControllerService {
   /**
    * Check whether a given IP address is a valid and connected WLED
    * controller
-   * 
+   *
    * @param ipAddress the IP address of the controller to test
-   * 
+   *
    * @returns promise expected to resolve as a WledState object
    */
   testIp(ipAddress: string): Observable<WledState> {
     return this.http.get<any>(`http://${ipAddress}/json/state`)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       );
   }
 
   /**
    * Get the current state of a controller
-   * 
+   *
    * @param controller the controller from which to retrieve state
    * @returns promise expected to resolve as a WledState object
    */
   getControllerState(controller: Controller): Observable<WledState> {
     return this.http.get<WledState>(`http://${controller.ipAddress}/json/state`)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       )
   }
 
   /**
    * Get all available WLED effects
-   * 
+   *
    * @param controller controller to query effects from
-   * 
+   *
    * @returns promise expected to resolve as an array of strings (effect names)
    */
   getControllerEffects(controller: Controller): Observable<[string]> {
     return this.http.get<[string]>(`http://${controller.ipAddress}/json/effects`)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       )
   }
@@ -109,16 +109,16 @@ export class ControllerService {
   getControllerInfo(controller: Controller): Observable<WledInfo> {
     return this.http.get<WledInfo>(`http://${controller.ipAddress}/json/info`)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       )
   }
 
   /**
    * Power on a controller via a request to the WLED API
-   * 
+   *
    * @param controller the controller to power on
-   * 
+   *
    * @returns promise expected to resolve as the result
    */
   powerOnController(controller: Controller): Observable<any> {
@@ -130,16 +130,16 @@ export class ControllerService {
 
     return this.http.get<any>(`http://${controller.ipAddress}/win&T=1`, this.wledRequestOptions)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       );
   }
 
   /**
    * Power off a controller via a request to the WLED API
-   * 
+   *
    * @param controller the controller to power on
-   * 
+   *
    * @returns promise expected to resolve as the result
    */
   powerOffController(controller: Controller): Observable<any> {
@@ -151,14 +151,14 @@ export class ControllerService {
 
     return this.http.get<any>(`http://${controller.ipAddress}/win&T=0`, this.wledRequestOptions)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       );
   }
 
   /**
    * Toggle the power of a controller via a request to the WLED API
-   * 
+   *
    * @param controller the controller to toggle power
    * @returns promise expected to resolve as the result
    */
@@ -171,14 +171,14 @@ export class ControllerService {
 
     return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`, this.wledRequestOptions)
       .pipe(
-        timeout(2000), 
+        timeout(2000),
         catchError(APIHelper.handleError)
       );
   }
 
   /**
    * Add a new controller
-   * 
+   *
    * @param controller the controller to add
    */
   addController(controller: NewController): Observable<Controller> {
@@ -190,7 +190,7 @@ export class ControllerService {
 
   /**
    * Update an existing controller with new details
-   * 
+   *
    * @param controller the controller to update
    */
   updateController(controller: any): Observable<Controller> {
@@ -202,12 +202,12 @@ export class ControllerService {
 
   /**
    * Update a controller settings profile with new details
-   * 
+   *
    * @param controller the settings to update
    */
   updateControllerSettings(controllerSettings: any): Observable<ControllerSettings> {
     return this.http.patch<ControllerSettings>(
-      `${APIHelper.getBaseUrl()}${this.settingsEndpoint}`, 
+      `${APIHelper.getBaseUrl()}${this.settingsEndpoint}`,
       controllerSettings
     )
     .pipe(
@@ -217,7 +217,7 @@ export class ControllerService {
 
   /**
    * Delete an existing controller
-   * 
+   *
    * @param controller the controller to delete
    */
   deleteController(controller: Controller): Observable<Controller | ArrayBuffer> {
@@ -227,7 +227,7 @@ export class ControllerService {
       }),
       body: controller
     };
-    
+
     return this.http.delete<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, options)
       .pipe(
         catchError(APIHelper.handleError)
@@ -236,7 +236,7 @@ export class ControllerService {
 
   /**
    * Enforce wait period between power commands
-   * 
+   *
    * @param seconds amount of time to wait in seconds
    */
   private disablePowerFor(seconds: number) {

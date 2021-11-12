@@ -21,13 +21,13 @@ export class DriverService {
   selectedDriver$ = this._selectedDriver.asObservable();
 
   localStorage: Storage;
-  
+
   driversEndpoint = 'drivers';
   activeDriverEndpoint = 'drivers/active';
   profilePicEndpoint = 'avatars';
   statsEndpoint = 'stats';
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     if(this.checkLocalStorageSupported()) {
       this.localStorage = window.localStorage;
       this._selectedDriver.next(this.getFromLocalStorage() || null);
@@ -36,7 +36,7 @@ export class DriverService {
 
   /**
    * Fetch all drivers
-   * 
+   *
    * @returns array of drivers
    */
   getDrivers(): Observable<Driver[]> {
@@ -44,14 +44,14 @@ export class DriverService {
      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`
     )
     .pipe(
-      retry(3), 
+      retry(3),
       catchError(APIHelper.handleError)
     );
   }
 
   /**
    * Get the currently selected driver
-   * 
+   *
    * @returns the active driver
    */
   getSelectedDriver(): Observable<Driver> {
@@ -59,14 +59,14 @@ export class DriverService {
       `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`
     )
     .pipe(
-      retry(3), 
+      retry(3),
       catchError(APIHelper.handleError)
     );
   }
 
   /**
    * Get the currently selected driver
-   * 
+   *
    * @param driverId ID of the driver for which to query stats
    * @returns the active driver
    */
@@ -80,9 +80,9 @@ export class DriverService {
   }
 
   /**
-   * Notify subscribers of a driver change, and save the driver to 
+   * Notify subscribers of a driver change, and save the driver to
    * local storage
-   * 
+   *
    * @param driver the driver to cache
    */
   setCachedDriver(driver: Driver) {
@@ -92,7 +92,7 @@ export class DriverService {
 
   /**
    * Set the active driver
-   * 
+   *
    * @param driver the driver to activate
    * @returns the activated driver, if successful
    */
@@ -100,41 +100,41 @@ export class DriverService {
     this.setCachedDriver(driver);
 
     return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`, 
+      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`,
       { 'driverId': driver.id }
     )
     .pipe(
-      retry(3), 
+      retry(3),
       catchError(APIHelper.handleError)
     );
   }
 
   /**
    * Create a new driver
-   * 
+   *
    * @param driver the driver to add
    * @returns the new driver, if added successfully
    */
   addDriver(driver: NewDriver): Observable<Driver> {
     return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`, 
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`,
       driver
     )
     .pipe(
-      retry(3), 
+      retry(3),
       catchError(APIHelper.handleError)
     );
   }
 
   /**
    * Update driver details
-   * 
+   *
    * @param driver driver to update
    * @returns the updated driver
    */
   updateDriver(driver: Driver): Observable<Driver> {
     return this.http.patch<Driver>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`, 
+      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`,
       driver
     )
     .pipe(
@@ -144,10 +144,10 @@ export class DriverService {
 
   /**
    * Delete a driver profile and its data.
-   * 
-   * WARNING: This will cascade to all settings and lap times set by the 
+   *
+   * WARNING: This will cascade to all settings and lap times set by the
    * driver, so use it wisely.
-   * 
+   *
    * @param driver the driver to delete
    * @returns the driver's data, for the last time ever
    */
@@ -162,7 +162,7 @@ export class DriverService {
 
   /**
    * Upload a new profile pic for a driver
-   * 
+   *
    * @param driverId unique ID for the driver being updated
    * @param profilePic the new profile pic
    * @returns status of the upload
@@ -172,7 +172,7 @@ export class DriverService {
     formData.append("profile_pic", profilePic);
 
     return this.http.post<any>(
-      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driverId}`, 
+      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driverId}`,
       formData
     )
     .pipe(
@@ -182,6 +182,7 @@ export class DriverService {
 
   /**
    * Check whether HTML5 local storage is supported
+   * @returns true if supported, false otherwise
    */
   private checkLocalStorageSupported() {
     return (typeof(Storage) !== void(0));
@@ -189,7 +190,6 @@ export class DriverService {
 
   /**
    * Retrieve the active driver from local storage
-   * 
    * @returns active driver or null
    */
   private getFromLocalStorage() {
@@ -199,14 +199,16 @@ export class DriverService {
 
     return null;
   }
-  
+
   /**
    * Save the active driver in local storage
+   * @param driver the driver to save
+   * @returns true if successful, false otherwise
    */
   private saveToLocalStorage(): boolean {
     if (this.checkLocalStorageSupported()) {
       this.localStorage.setItem(
-        'activeDriver', 
+        'activeDriver',
         JSON.stringify(this._selectedDriver.getValue())
       );
 
