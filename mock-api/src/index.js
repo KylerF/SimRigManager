@@ -1,6 +1,5 @@
 const express = require('express');
 const expressWebSocket = require('express-ws');
-const websocketStream = require('websocket-stream/stream');
 const fs = require('fs');
 
 const app = express();
