@@ -1,50 +1,54 @@
-const express = require('express');
+const StreamArray = require('stream-json/streamers/StreamArray');
 const expressWebSocket = require('express-ws');
-const websocketStream = require('websocket-stream/stream');
+const express = require('express');
 const fs = require('fs');
 
+const jsonStream = StreamArray.withParser();
 const app = express();
 
-let sessionData = [{}];
-let currentFrame = 0;
-
-fs.readFile('./src/data/watkins.json', 'utf-8', (err, data) => {
-  if (err) {
-      throw err;
-  }
-
-  sessionData = JSON.parse(data.toString());
-});
+let currentFrame = {};
 
 app.get("/latest", (req, res) => {
-  res.send(sessionData.at(currentFrame));
+  res.send(currentFrame);
 });
 
 // extend express app with app.ws()
 expressWebSocket(app, null, {
-    // ws options here
-    perMessageDeflate: false,
+  // ws options here
+  perMessageDeflate: false,
 });
 
 app.ws('/stream', (ws, req) => {
-  writeSessionData(ws);
+  const stream = fs.createReadStream('./src/data/daytona.json').pipe(jsonStream.input);
+
+  jsonStream.on('data', ({key, value}) => {
+    currentFrame = value;
+    writeSessionData(ws, stream);
+  });
+
+  jsonStream.on('end', ({key, value}) => {
+    console.log('End of file');
+  });
 
   ws.on('message', msg => {
     console.log(msg);
   });
+
+  ws.on('close', () => {
+    stream.pause();
+  });
 });
 
-const server = app.listen(8002);
+app.listen(8002);
 
 /**
  * Function to write session data to console, then sleep for a 30 ms
  */
-async function writeSessionData(ws) {
-  for (let i = 0; i < sessionData.length; i++) {
-    ws.send(JSON.stringify(sessionData.at(i)));
-    currentFrame = i;
-    await sleep(30);
-  }
+async function writeSessionData(ws, stream) {
+  stream.pause();
+  ws.send(JSON.stringify(currentFrame));
+  await sleep(20);
+  stream.resume();
 }
 
 /**
