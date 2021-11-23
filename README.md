@@ -46,7 +46,7 @@ All backend unit tests are run using [pytest](https://docs.pytest.org/en/6.2.x/)
 ```
 npm test
 ```
-All Angular unit tests are run using [karma](http://karma-runner.github.io/6.3/index.html) in a headless Chrom browser
+All Angular unit tests are run using [karma](http://karma-runner.github.io/6.3/index.html) in a headless Chrome browser
 
 ## Docker
 The project is also configured to be run with [Docker Compose](https://docs.docker.com/compose/):
