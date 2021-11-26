@@ -19,20 +19,10 @@ const fs = require('fs');
 
 let currentFrame = {};
 
-const jsonStream = StreamArray.withParser();
+var jsonStream = StreamArray.withParser();
 const app = express();
 
-const stream = fs.createReadStream('./src/data/test.json').pipe(jsonStream.input);
-
-jsonStream.on('data', ({key, value}) => {
-  currentFrame = value;
-  slowDownStream(stream);
-});
-
-jsonStream.on('end', () => {
-  console.log('Stream ended');
-});
-
+var stream = getFileStream();
 
 app.get("/latest", (req, res) => {
   res.send(currentFrame);
@@ -45,20 +35,42 @@ expressWebSocket(app, null, {
 });
 
 app.ws('/stream', (ws, req) => {
-  jsonStream.on('data', () => {
+  jsonStream.on('data', ({key, value}) => {
     ws.send(JSON.stringify(currentFrame));
-  });
-
-  ws.on('message', msg => {
-    console.log(msg);
-  });
-
-  ws.on('close', () => {
-    stream.pause();
   });
 });
 
 app.listen(8002);
+
+function resetStream() {
+  stream.destroy();
+  stream = null;
+  jsonStream.input.destroy();
+  jsonStream = null;
+  stream = getFileStream();
+}
+
+/**
+ * Open the mock data file and return a readstream
+ * 
+ * @returns {stream} readstream of JSON file
+ */
+function getFileStream() {
+  jsonStream = StreamArray.withParser();
+  let newStream = fs.createReadStream('./src/data/mark.json')
+    .pipe(jsonStream.input);
+
+  jsonStream.on('data', ({key, value}) => {
+    currentFrame = value;
+    slowDownStream(newStream);
+  });
+
+  newStream.on('end', () => {
+    resetStream();
+  });
+
+  return newStream;
+}
 
 /**
  * Slows down a JSON file stream to simulate a real-time stream
