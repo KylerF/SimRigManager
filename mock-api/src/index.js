@@ -42,7 +42,7 @@ app.ws('/stream', (ws) => {
   });
 });
 
-app.listen(8002);
+app.listen(8001);
 
 /**
  * Open the mock data file and return a readstream
