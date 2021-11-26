@@ -17,38 +17,32 @@ const expressWebSocket = require('express-ws');
 const express = require('express');
 const fs = require('fs');
 
-let currentFrame = {};
+var wsConnections = [];
+
+var currentFrame = {};
 
 var jsonStream = StreamArray.withParser();
 const app = express();
 
 var stream = getFileStream();
 
-app.get("/latest", (req, res) => {
+app.get("/latest", (_, res) => {
   res.send(currentFrame);
 });
 
-// extend express app with app.ws()
 expressWebSocket(app, null, {
-  // ws options here
   perMessageDeflate: false,
 });
 
-app.ws('/stream', (ws, req) => {
-  jsonStream.on('data', ({key, value}) => {
-    ws.send(JSON.stringify(currentFrame));
+app.ws('/stream', (ws) => {
+  wsConnections.push(ws);
+
+  ws.on('close', () => {
+    wsConnections = wsConnections.filter(conn => conn !== ws);
   });
 });
 
 app.listen(8002);
-
-function resetStream() {
-  stream.destroy();
-  stream = null;
-  jsonStream.input.destroy();
-  jsonStream = null;
-  stream = getFileStream();
-}
 
 /**
  * Open the mock data file and return a readstream
@@ -61,12 +55,16 @@ function getFileStream() {
     .pipe(jsonStream.input);
 
   jsonStream.on('data', ({key, value}) => {
+    wsConnections.forEach(ws => {
+      ws.send(JSON.stringify(value));
+    });
+
     currentFrame = value;
     slowDownStream(newStream);
   });
 
   newStream.on('end', () => {
-    resetStream();
+    stream = getFileStream();
   });
 
   return newStream;
