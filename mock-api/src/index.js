@@ -77,7 +77,7 @@ function getFileStream() {
  */
 async function slowDownStream(stream) {
   stream.pause();
-  await sleep(20);
+  await sleep(30);
   stream.resume();
 }
 
