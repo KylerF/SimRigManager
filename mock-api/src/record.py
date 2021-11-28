@@ -20,7 +20,7 @@ def save_data():
     if not iracing_data:
         return
 
-    print("Saving data to " + output_file)
+    print(f"Saving data to {output_file}")
     with open(output_file,"w") as file:
         json.dump(iracing_data, file, indent = 4)
 
