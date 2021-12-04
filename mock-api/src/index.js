@@ -24,10 +24,25 @@ var currentFrame = {};
 var jsonStream = StreamArray.withParser();
 const app = express();
 
-var stream = getFileStream();
+var stream = getFileStream('./src/data/default.json');
 
 app.get("/latest", (_, res) => {
   res.send(currentFrame);
+});
+
+/**
+ * Lists the available data files
+ */
+app.get("/file", (_, res) => {
+  res.send(fs.readdirSync('./src/data'));
+});
+
+/**
+ * Switches the stream to a file by name
+ */
+app.get("/file/{fileName}", (_, res) => {
+  stream = getFileStream(`./src/data/${_['params']['fileName']}`);
+  res.send("OK");
 });
 
 expressWebSocket(app, null, {
@@ -47,11 +62,12 @@ app.listen(8001);
 /**
  * Open the mock data file and return a readstream
  * 
+ * @param {string} file name of the file to open
  * @returns {stream} readstream of JSON file
  */
-function getFileStream() {
+function getFileStream(file) {
   jsonStream = StreamArray.withParser();
-  let newStream = fs.createReadStream('./src/data/mark.json')
+  let newStream = fs.createReadStream(file)
     .pipe(jsonStream.input);
 
   jsonStream.on('data', ({key, value}) => {
@@ -64,7 +80,7 @@ function getFileStream() {
   });
 
   newStream.on('end', () => {
-    stream = getFileStream();
+    stream = getFileStream(file);
   });
 
   return newStream;
