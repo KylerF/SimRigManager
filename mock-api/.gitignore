@@ -1,2 +1,5 @@
 node_modules
+
+# Ignore recorded data files except for the provided default file
 src/data/*
+!src/data/default.json
