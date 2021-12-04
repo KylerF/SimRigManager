@@ -31,18 +31,46 @@ app.get("/latest", (_, res) => {
 });
 
 /**
- * Lists the available data files
+ * Lists the available JSON data files and returns a list 
+ * of files without the file extensions
+ * 
+ * @returns {array} list of files without file extensions
+ * @example ['default', 'test']
  */
-app.get("/file", (_, res) => {
-  res.send(fs.readdirSync('./src/data'));
+app.get("/files", (_, res) => {
+  fs.readdir('./src/data', (err, files) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      res.send(
+        files.filter(file => 
+          file.endsWith('.json')
+        )
+        .map(file => file.split('.')[0])
+      );
+    }
+  });
 });
 
 /**
- * Switches the stream to a file by name
+ * Express endpoint to select a JSON file to stream.
+ * If the file does not exist in the data directory,
+ * a 404 is returned.
+ * 
+ * @param {string} file name of the file to stream
  */
-app.get("/file/{fileName}", (_, res) => {
-  stream = getFileStream(`./src/data/${_['params']['fileName']}`);
-  res.send("OK");
+app.get("/files/:file", (req, res) => {
+  const file = req.params.file;
+  const filePath = `./src/data/${file}.json`;
+
+  if (fs.existsSync(filePath)) {
+    stream.destroy();
+    stream = getFileStream(filePath);
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 expressWebSocket(app, null, {
