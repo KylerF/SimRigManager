@@ -1,19 +1,19 @@
-import { HttpClientModule } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
-
+/**
+ * Unit tests for the DriverService
+ */
+import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DriverService } from './driver.service';
 
 describe('DriverService', () => {
-  let service: DriverService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule ]
+      imports: [ HttpClientTestingModule ],
+      providers: [ DriverService ]
     });
-    service = TestBed.inject(DriverService);
   });
 
-  it('should be created', () => {
+  it('should be created', inject([DriverService], (service: DriverService) => {
     expect(service).toBeTruthy();
-  });
+  }));
 });
