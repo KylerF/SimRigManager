@@ -1,12 +1,12 @@
 #
 # Docker container configuration for the SimRig Manager Angular app.
 #
-# Pulls the Node.js base image, copies source files into the container, 
+# Pulls the Node.js base image, copies source files into the container,
 # installs dependencies and runs the application.
 #
 
 # Pull the Node.js Docker image
-FROM node:alpine as base
+FROM node:lts-alpine as base
 
 # Install Chrome Headless for testing
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \

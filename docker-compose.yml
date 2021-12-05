@@ -30,6 +30,16 @@ services:
         ports:
             - "4200:4200"
 
+    # Configure the mock api
+    mock-api:
+        build:
+            context: ./mock-api
+        volumes:
+            - ./mock-api:/usr/src/mock-api
+            - /usr/src/mock-api/node_modules
+        ports:
+            - "8001:8001"
+
     # Configure the Redis server
     redis:
         image: "redis:alpine"
