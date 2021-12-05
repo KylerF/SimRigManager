@@ -27,27 +27,11 @@ var stream = getFileStream('./src/data/default.json');
 
 /**
  * Root endpoint for the mock API.
- * Returns all available endpoints.
+ * Returns all available endpoints with their descriptions in a fancy card using bootstrap.
+ * Routes to index.html
  */
-app.get('/', (req, res) => {
-  res.send(`
-      <h1>SimRig Mock API</h1>
-      <h2>Endpoints</h2>
-      <ul>
-        <li>ws://{baseURL}/stream: returns a JSON stream of iRacing data</li>
-        <li><a href="/latest">/latest</a>: returns the latest iRacing data</li>
-        <li><a href="/files">/files</a>: returns a list of available files</li>
-        <li>/files/{fileName}: selects the given file for streaming</li>
-      </ul>
-    `);
-});
-
-/**
- * Root endpoint for the mock API.
- * Returns all available endpoints in OpenAPI format.
- */
-app.get('/openapi.json', (req, res) => {
-    res.sendFile(__dirname + '/openapi.json');
+app.get('/', (_, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 
 /**
