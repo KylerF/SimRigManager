@@ -18,7 +18,6 @@ const express = require('express');
 const fs = require('fs');
 
 var wsConnections = [];
-
 var currentFrame = {};
 
 var jsonStream = StreamArray.withParser();
@@ -26,6 +25,34 @@ const app = express();
 
 var stream = getFileStream('./src/data/default.json');
 
+/**
+ * Root endpoint for the mock API.
+ * Returns all available endpoints.
+ */
+app.get('/', (req, res) => {
+  res.send(`
+      <h1>SimRig Mock API</h1>
+      <h2>Endpoints</h2>
+      <ul>
+        <li>ws://{baseURL}/stream: returns a JSON stream of iRacing data</li>
+        <li><a href="/latest">/latest</a>: returns the latest iRacing data</li>
+        <li><a href="/files">/files</a>: returns a list of available files</li>
+        <li>/files/{fileName}: selects the given file for streaming</li>
+      </ul>
+    `);
+});
+
+/**
+ * Root endpoint for the mock API.
+ * Returns all available endpoints in OpenAPI format.
+ */
+app.get('/openapi.json', (req, res) => {
+    res.sendFile(__dirname + '/openapi.json');
+});
+
+/**
+ * Endpoint for the latest iRacing data.
+ */
 app.get("/latest", (_, res) => {
   res.send(currentFrame);
 });
@@ -77,6 +104,10 @@ expressWebSocket(app, null, {
   perMessageDeflate: false,
 });
 
+/**
+ * Websocket endpoint for the mock API.
+ * Streams JSON data to all connected clients.
+ */
 app.ws('/stream', (ws) => {
   wsConnections.push(ws);
 
