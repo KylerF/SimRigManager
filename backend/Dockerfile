@@ -9,7 +9,7 @@
 FROM ubuntu:latest
 
 # Update and install Python
-RUN apt-get update -y && apt-get install -y python3-pip python-dev python3-venv
+RUN apt update -y && apt install -y python3-pip python-dev python3-venv
 
 # Create the source directory inside the container
 RUN mkdir -p /usr/src/backend

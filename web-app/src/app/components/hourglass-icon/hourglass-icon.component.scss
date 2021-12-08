@@ -1,9 +1,9 @@
 @for $i from 1 through 12 {
     #hourglass {
-      
-      // :nth-child(1-12) 
+
+      // :nth-child(1-12)
       &:nth-child(#{$i}) {
-        
+
         // Delay the animation. Delay increases as items loop.
         animation-delay: $i * (.03s);
       }

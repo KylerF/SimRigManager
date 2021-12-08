@@ -55,17 +55,17 @@ export class RealTimeInputDisplayComponent implements OnInit {
   }
 
   /**
-   * Inject dependencies and set up a websocket connection 
+   * Inject dependencies and set up a websocket connection
    * to the iRacing streams
-   * 
+   *
    * @param iracingDataService service to stream iRacing data
    * @param renderer render graphics in response to changes
    */
   constructor(
     private iracingDataService: IracingDataService,
     private renderer: Renderer2
-  ) 
-  { 
+  )
+  {
     this.wsSubscription =
       this.iracingDataService.getStream()
        .subscribe(
@@ -74,7 +74,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
         },
         err => {
           this.error = err.message;
-        }     
+        }
       );
   }
 
@@ -87,7 +87,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
 
   /**
    * Update dashboard with current data
-   * 
+   *
    * @param jsonData latest frame of data
    */
   update(jsonData: IracingDataFrame) {
@@ -127,7 +127,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
 
   /**
    * Shift the array to fit the window size
-   * 
+   *
    * @param data data to shift
    */
   resize(data: number[]) {
@@ -139,7 +139,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
   /**
    * Rotate the steering wheel graphic by a given number
    * of radians
-   * 
+   *
    * @param radians angle to rotate wheel
    */
   rotateWheel(radians: number) {

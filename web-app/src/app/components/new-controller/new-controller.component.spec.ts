@@ -11,8 +11,8 @@ describe('NewControllerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewControllerComponent ], 
-      imports: [ HttpClientModule ], 
+      declarations: [ NewControllerComponent ],
+      imports: [ HttpClientModule ],
       providers: [ NgbActiveModal, FormBuilder ]
     })
     .compileComponents();

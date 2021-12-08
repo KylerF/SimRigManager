@@ -20,11 +20,11 @@ export class SelectDriverComponent implements OnInit {
 
   loading: boolean = true;
   error: any;
-  
+
   constructor(
     private driverService: DriverService, // Used to query drivers and active driver
     private modalService: NgbModal // Service to display and interface with modal dialogs
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class SelectDriverComponent implements OnInit {
   getDrivers() {
     this.driverService.getDrivers().subscribe(
       response => {
-        // Success! 
+        // Success!
         this.loading = false;
         this.drivers = response;
       },
@@ -55,7 +55,7 @@ export class SelectDriverComponent implements OnInit {
   getSelectedDriver() {
     this.driverService.getSelectedDriver().subscribe(
       response => {
-        // Success! 
+        // Success!
         this.selectedDriver = response;
       },
       error => {
@@ -67,19 +67,19 @@ export class SelectDriverComponent implements OnInit {
 
   /**
    * Sign in with the selected driver profile
-   * 
+   *
    * @param driver the selected driver profile
    */
   selectDriver(driver: Driver) {
-    if(this.selectedDriver && driver.id === this.selectedDriver.id) { 
-      return; 
+    if(this.selectedDriver && driver.id === this.selectedDriver.id) {
+      return;
     }
-    
+
     this.driverService.selectDriver(driver).subscribe(
       response => {
         this.selectedDriver = response;
         this.driverChanged = true;
-      }, 
+      },
       error => {
         this.error = error;
       }

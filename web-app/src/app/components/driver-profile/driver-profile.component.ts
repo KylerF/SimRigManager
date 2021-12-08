@@ -28,10 +28,10 @@ export class DriverProfileComponent implements OnInit {
   params: string;
 
   constructor(
-    private driverService: DriverService, 
+    private driverService: DriverService,
     private modalService: NgbModal,
     private router: Router
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class DriverProfileComponent implements OnInit {
       response => {
         this.driver = response;
         this.getDriverStats(this.driver.id);
-      }, 
+      },
       error => {
         this.error = error.message;
       }
@@ -60,7 +60,7 @@ export class DriverProfileComponent implements OnInit {
     this.driverService.getDriverStats(driverId).subscribe(
       response => {
         this.driverStats = response;
-      }, 
+      },
       error => {
         this.error = error.message;
       }
@@ -76,7 +76,7 @@ export class DriverProfileComponent implements OnInit {
 
   /**
    * Get the uploaded profile pic and save it
-   * 
+   *
    * @param event triggered by file input (contains image)
    */
   setProfilePic(event) {
@@ -92,7 +92,7 @@ export class DriverProfileComponent implements OnInit {
         // Add timestamp to src to force an immediate update
         this.params = `?${Date.now().toString()}`;
         this.saveProfile();
-      }, 
+      },
       error => {
         this.error = error.message;
       }
@@ -115,7 +115,7 @@ export class DriverProfileComponent implements OnInit {
         this.driverService.setCachedDriver(response);
         this.driver = response;
         this.profileUpdated = true;
-      }, 
+      },
       error => {
         this.error = error.message;
       }

@@ -16,7 +16,7 @@
             <div class="mb-3">
                 <span class="spinner-border spinner-border-sm text-secondary" role="status" *ngIf="connecting === true"></span>
                 <span class="bi bi-check-circle-fill" style="color:green" *ngIf="ipValid === true"></span>
-                <span class="bi bi-x-circle-fill" style="color:red" *ngIf="ipValid === false"></span>  
+                <span class="bi bi-x-circle-fill" style="color:red" *ngIf="ipValid === false"></span>
                 &nbsp;<label for="ipInput">IP Address</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="ipInput" formControlName="ipAddress" placeholder="IP Address" (input)="ipChanged()">
@@ -42,7 +42,7 @@
             </div>
 
             <hr>
-            
+
             <div class="mb-3">
                 <label for="colorSelect">Color Theme</label>
                 <select class="form-select" id="colorSelect">

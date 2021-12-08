@@ -9,7 +9,7 @@ describe('ControllerListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerListComponent ], 
+      declarations: [ ControllerListComponent ],
       imports: [ HttpClientModule ]
     })
     .compileComponents();

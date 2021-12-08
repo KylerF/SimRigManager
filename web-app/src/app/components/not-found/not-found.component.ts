@@ -4,9 +4,9 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
-  styleUrls: ['./not-found.component.scss'], 
+  styleUrls: ['./not-found.component.scss'],
   animations: [
-    trigger('longDelayedFade', [      
+    trigger('longDelayedFade', [
       transition('void => *', [
         style({ opacity: 0 }),
         animate('1s 200ms ease-in', style({ opacity: 1 })),

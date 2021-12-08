@@ -1,11 +1,11 @@
 <h1>Drivers</h1>
-    
+
 <div *ngIf="!loading && !error && drivers.length">
     <table class="table table-hover table-clickable">
         <thead>
             <tr>
                 <th>
-                
+
                 </th>
                 <th>
                     Name
@@ -34,7 +34,7 @@
                 </td>
             </tr>
         </tbody>
-    </table>    
+    </table>
 
     <div *ngIf="selectedDriver && driverChanged">
         <div class="alert alert-success">
@@ -42,7 +42,7 @@
                 Welcome, <b>{{ selectedDriver.nickname }}</b>! Your lap times are being recorded.
             </div>
             <div class="column">
-                <span class="bi bi-arrow-right"></span> 
+                <span class="bi bi-arrow-right"></span>
                 <a href="https://members.iracing.com/" target="_blank">
                     Go to iRacing
                 </a>

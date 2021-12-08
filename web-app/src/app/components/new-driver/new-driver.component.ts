@@ -29,7 +29,7 @@ export class NewDriverComponent implements OnInit {
     private driverService: DriverService, // Used to add a new driver
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
     private formBuilder: FormBuilder // Used to build the new driver form
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -53,7 +53,7 @@ export class NewDriverComponent implements OnInit {
       response => {
         // Close and return the new driver to parent
         this.activeModal.close(response);
-      }, 
+      },
       error => {
         this.error = error;
       }

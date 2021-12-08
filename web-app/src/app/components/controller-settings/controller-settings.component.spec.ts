@@ -11,8 +11,8 @@ describe('ControllerSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerSettingsComponent ], 
-      imports: [ HttpClientModule ], 
+      declarations: [ ControllerSettingsComponent ],
+      imports: [ HttpClientModule ],
       providers: [ NgbActiveModal, FormBuilder ]
     })
     .compileComponents();
@@ -22,19 +22,19 @@ describe('ControllerSettingsComponent', () => {
     fixture = TestBed.createComponent(ControllerSettingsComponent);
     component = fixture.componentInstance;
     component.controller = {
-      id: 1, 
-      name: 'TestController', 
-      ipAddress: '127.0.0.1', 
-      universe: 1, 
-      isBeingEdited: false, 
-      isAvailable: false, 
+      id: 1,
+      name: 'TestController',
+      ipAddress: '127.0.0.1',
+      universe: 1,
+      isBeingEdited: false,
+      isAvailable: false,
       state: null
     };
     component.activeDriver = {
-      id: 1, 
-      name: 'TestDriver', 
-      nickname: 'test', 
-      trackTime: 60, 
+      id: 1,
+      name: 'TestDriver',
+      nickname: 'test',
+      trackTime: 60,
       profilePic: ''
     };
     fixture.detectChanges();

@@ -17,7 +17,7 @@ import { ipAddressValidatorFunction } from '../../directives/validators/ip-addre
  */
 export class NewControllerComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
-  
+
   newController: NewController = { 'name': '', 'ipAddress': '', 'universe': null };
   submitted = false;
   error: string;
@@ -33,7 +33,7 @@ export class NewControllerComponent implements OnInit {
     private controllerService: ControllerService, // Used to add a new controller
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
     private formBuilder: FormBuilder // Used to build the new driver form
-  ) 
+  )
   { }
 
   ngOnInit(): void {
@@ -59,7 +59,7 @@ export class NewControllerComponent implements OnInit {
       response => {
         // Close and return the new controller to parent
         this.activeModal.close(response);
-      }, 
+      },
       error => {
         this.error = error;
       }

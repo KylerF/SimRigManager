@@ -37,7 +37,7 @@ export class ControllerSettingsComponent implements OnInit {
     idleEffect: [''],
     autoOn: [false]
   });
-  
+
   constructor(
     private controllerService: ControllerService, // Used to edit controller settings
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
@@ -54,7 +54,7 @@ export class ControllerSettingsComponent implements OnInit {
     this.controllerSettingsForm.get('universe').setValue(this.controller.universe);
     this.getAvailableEffects();
     this.getControllerSettings();
-    
+
     if (this.controller.isAvailable) {
       this.ipValid = true;
     }
@@ -66,8 +66,8 @@ export class ControllerSettingsComponent implements OnInit {
   getControllerSettings() {
     this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe(
       settings => {
-        
-      }, 
+
+      },
       error => {
         this.error = error.message;
       }
@@ -80,8 +80,8 @@ export class ControllerSettingsComponent implements OnInit {
   getAvailableEffects() {
     this.controllerService.getControllerEffects(this.controller).subscribe(
       effects => {
-        this.availableEffects = effects;
-      }, 
+        this.availableEffects = effects.sort();
+      },
       error => {
         this.error = error;
       }
@@ -90,7 +90,7 @@ export class ControllerSettingsComponent implements OnInit {
 
   /**
    * Test the controller connection with given IP address
-   * 
+   *
    * @param controller controller to check
    */
   testIp() {
@@ -102,7 +102,7 @@ export class ControllerSettingsComponent implements OnInit {
         // Connection succeeded
         this.connecting = false;
         this.ipValid = true;
-      }, 
+      },
       error => {
         // Connection failed
         this.connecting = false;
@@ -117,7 +117,7 @@ export class ControllerSettingsComponent implements OnInit {
   ipChanged() {
     this.ipValid = null;
   }
-  
+
   /**
    * If valid, update the controller settings
    */
@@ -135,7 +135,7 @@ export class ControllerSettingsComponent implements OnInit {
    */
   updateController() {
     let updatedController = {
-      id: this.controller.id, 
+      id: this.controller.id,
       name: this.controllerSettingsForm.get('name').value,
       ipAddress: this.controllerSettingsForm.get('ipAddress').value,
       universe: this.controllerSettingsForm.get('universe').value
@@ -144,7 +144,7 @@ export class ControllerSettingsComponent implements OnInit {
     this.controllerService.updateController(updatedController).subscribe(
       response => {
         this.activeModal.close(response);
-      }, 
+      },
       error => {
         this.error = error;
       }

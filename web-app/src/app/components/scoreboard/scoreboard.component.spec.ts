@@ -9,7 +9,7 @@ describe('ScoreboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ScoreboardComponent ], 
+      declarations: [ ScoreboardComponent ],
       imports: [ HttpClientModule ]
     })
     .compileComponents();

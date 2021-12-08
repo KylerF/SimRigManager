@@ -5,11 +5,10 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './driver-stats.component.html',
   styleUrls: ['./driver-stats.component.scss']
 })
+
 export class DriverStatsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void { }
 }
