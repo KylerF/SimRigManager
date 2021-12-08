@@ -30,7 +30,7 @@ services:
         ports:
             - "4200:4200"
 
-    # Configure the mock api
+    # Configure the mock API
     mock-api:
         build:
             context: ./mock-api
