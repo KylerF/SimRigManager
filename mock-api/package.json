@@ -1,0 +1,19 @@
+{
+  "name": "mock-simrig-api",
+  "version": "1.0.0",
+  "description": "Generates random iRacing data and provides JSON via a GET endpoint or websocket stream",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"You should probably write some tests...\""
+  },
+  "author": "KylerF",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2",
+    "stream-json": "^1.7.3",
+    "ws": "^8.2.3"
+  }
+}

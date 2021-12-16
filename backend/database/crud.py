@@ -1,27 +1,52 @@
-'''
+"""
 Functions to perform CRUD operations on the database
-'''
+"""
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from database import models, schemas
 
+from database import models, schemas
+
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
 
 def get_driver_by_name(db: Session, name: str):
-    return db.query(models.Driver).filter(models.Driver.name == name).first()
+    """
+    Get a driver by name
+    Names are unique, so this will always return 1
+    """
+    return db.query(
+        models.Driver
+    ).filter(
+        models.Driver.name == name
+    ).first()
 
 
 def get_driver_by_id(db: Session, id: int):
-    return db.query(models.Driver).filter(models.Driver.id == id).first()
+    """
+    Get a driver by ID
+    """
+    return db.query(
+        models.Driver
+    ).filter(
+        models.Driver.id == id
+    ).first()
 
 
-def get_drivers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Driver).offset(skip).limit(limit).all()
+def get_drivers(db: Session, skip: int = 0, limit: int = -1):
+    """
+    Get all drivers
+    """
+    return db.query(
+        models.Driver
+    ).offset(skip).limit(limit).all()
 
 
 def create_driver(db: Session, driver: schemas.DriverCreate):
+    """
+    Create a new driver
+    """
     db_driver = models.Driver(**driver.dict(), trackTime=0)
     db.add(db_driver)
     db.commit()
@@ -31,7 +56,16 @@ def create_driver(db: Session, driver: schemas.DriverCreate):
 
 
 def update_driver(db: Session, driver: schemas.DriverUpdate):
-    stored_driver = db.query(models.Driver).filter(models.Driver.id == driver.id).one_or_none()
+    """
+    Update a driver
+    All fields except ID are optional
+    """
+    stored_driver = db.query(
+        models.Driver
+    ).filter(
+        models.Driver.id == driver.id
+    ).one_or_none()
+
     if stored_driver is None:
         return None
 
@@ -47,7 +81,32 @@ def update_driver(db: Session, driver: schemas.DriverUpdate):
 
 
 def delete_driver(db: Session, driver: schemas.DriverDelete):
-    stored_driver = db.query(models.Driver).filter(models.Driver.id == driver.id).one_or_none()
+    """
+    Delete a driver
+    All fields except ID are optional
+    """
+    stored_driver = db.query(
+        models.Driver
+    ).filter(
+        models.Driver.id == driver.id
+    ).one_or_none()
+
+    db.delete(stored_driver)
+    db.commit()
+
+    return stored_driver
+
+
+def delete_driver_by_id(db: Session, driver_id: int):
+    """
+    Delete a driver by their ID
+    """
+    stored_driver = db.query(
+        models.Driver
+    ).filter(
+        models.Driver.id == driver_id
+    ).one_or_none()
+
     db.delete(stored_driver)
     db.commit()
 
@@ -55,10 +114,16 @@ def delete_driver(db: Session, driver: schemas.DriverDelete):
 
 
 def get_active_driver(db: Session):
+    """
+    Get the active driver
+    """
     return db.query(models.ActiveDriver).first()
 
 
 def set_active_driver(db: Session, driver: schemas.ActiveDriverCreate):
+    """
+    Set the active driver
+    """
     db_driver = models.ActiveDriver(**driver.dict())
     db.add(db_driver)
     db.commit()
@@ -67,6 +132,9 @@ def set_active_driver(db: Session, driver: schemas.ActiveDriverCreate):
     return db_driver
 
 def delete_active_driver(db: Session):
+    """
+    Deactivate the currently active driver
+    """
     stored_driver = db.query(models.ActiveDriver).one_or_none()
     db.query(models.ActiveDriver).delete()
     db.commit()
@@ -75,15 +143,29 @@ def delete_active_driver(db: Session):
 
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   # 
 
-def get_laptimes(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.LapTime).offset(skip).limit(limit).all()
+def get_laptimes(db: Session, skip: int = 0, limit: int = -1):
+    """
+    Get all lap times
+    """
+    return db.query(
+        models.LapTime
+    ).order_by(
+        models.LapTime.setAt.desc()
+    ).offset(skip).limit(limit).all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
+    """
+    Set a new lap time
+    This only commits if it is a new record for the given driver
+    """
     db_laptime = models.LapTime(**laptime.dict())
 
-    # Check for times with same car, track and config
-    better_time = db.query(models.LapTime).filter(
+    # Check for times with same driver, car, track and config
+    better_time = db.query(
+        models.LapTime
+    ).filter(
+        models.LapTime.driverId == laptime.driverId,
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
@@ -91,6 +173,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
     ).one_or_none()
 
     worse_time = db.query(models.LapTime).filter(
+        models.LapTime.driverId == laptime.driverId,
         models.LapTime.car == laptime.car, 
         models.LapTime.trackName == laptime.trackName, 
         models.LapTime.trackConfig == laptime.trackConfig, 
@@ -113,11 +196,19 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
 
 #   #   #   #   #   #   #   #   Light Controllers  #   #   #   #   #   #   #   # 
 
-def get_light_controllers(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.LightController).offset(skip).limit(limit).all()
+def get_light_controllers(db: Session, skip: int = 0, limit: int = -1):
+    """
+    Get all WLED light controllers
+    """
+    return db.query(
+        models.LightController
+    ).offset(skip).limit(limit).all()
 
 
 def create_light_controller(db: Session, controller: schemas.LightControllerCreate):
+    """
+    Create a new WLED light controller
+    """
     db_controller = models.LightController(**controller.dict())
     db.add(db_controller)
     db.commit()
@@ -127,7 +218,16 @@ def create_light_controller(db: Session, controller: schemas.LightControllerCrea
 
 
 def update_light_controller(db: Session, controller: schemas.LightControllerUpdate):
-    stored_controller = db.query(models.LightController).filter(models.LightController.id == controller.id).one_or_none()
+    """
+    Update a WLED light controller
+    All fields except ID are optional
+    """
+    stored_controller = db.query(
+        models.LightController
+    ).filter(
+        models.LightController.id == controller.id
+    ).one_or_none()
+
     if stored_controller is None:
         return None
 
@@ -143,23 +243,112 @@ def update_light_controller(db: Session, controller: schemas.LightControllerUpda
 
 
 def delete_light_controller(db: Session, controller: schemas.LightControllerDelete):
-    stored_controller = db.query(models.LightController).filter(models.LightController.id == controller.id).one_or_none()
+    """
+    Delete a light controller
+    All fields except ID are optional
+    """
+    stored_controller = db.query(
+        models.LightController
+    ).filter(
+        models.LightController.id == controller.id
+    ).one_or_none()
+
     db.delete(stored_controller)
     db.commit()
 
     return stored_controller
 
+
+def get_controller_settings(db: Session, controller_id: int, driver_id: int):
+    """
+    Get a driver's settings for a light controller
+    """
+    return db.query(
+        models.LightControllerSettings
+    ).filter(
+        models.LightControllerSettings.controllerId == controller_id, 
+        models.LightControllerSettings.driverId == driver_id
+    ).one_or_none()
+
+
+def create_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsCreate):
+    """
+    Save a driver's settings for a light controller
+    """
+    db_controller_settings = models.LightControllerSettings(
+        **controller_settings.dict()
+    )
+
+    db.add(db_controller_settings)
+    db.commit()
+    db.refresh(db_controller_settings)
+
+    return db_controller_settings
+
+def update_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsUpdate):
+    """
+    Update a driver's settings for a light controller
+    """
+    stored_settings = db.query(
+        models.LightControllerSettings
+    ).filter(
+        models.LightControllerSettings.id == controller_settings.id
+    ).one_or_none()
+
+    if stored_settings is None:
+        return None
+
+    # Update model from provided fields 
+    for var, value in vars(controller_settings).items():
+        setattr(stored_settings, var, value) if value else None
+
+    db.add(stored_settings)
+    db.commit()
+    db.refresh(stored_settings)
+
+    return stored_settings
+
+def delete_controller_settings(db: Session, settings: schemas.LightControllerSettingsDelete):
+    """
+    Delete a settings for a light controller, effectively resetting to default
+    All fields except ID are optional
+    """
+    stored_settings = db.query(
+        models.LightControllerSettings
+    ).filter(
+        models.LightControllerSettings.id == settings.id
+        and models.LightControllerSettings.driverId == settings.driverId
+    ).one_or_none()
+
+    db.delete(stored_settings)
+    db.commit()
+
+    return stored_settings
+
 #   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   # 
 
-def get_quotes(db: Session, skip: int = 0, limit: int = 100):
+def get_quotes(db: Session, skip: int = 0, limit: int = -1):
+    """
+    Get all inspirational racing quotes
+    """
     return db.query(models.Quote).offset(skip).limit(limit).all()
 
 
 def get_random_quote(db: Session):
-    return db.query(models.Quote).order_by(func.random()).limit(1).all()[0]
+    """
+    Get a random inspirational racing quote
+    """
+    return db.query(
+        models.Quote
+    ).order_by(
+        func.random()
+    ).limit(1).one()
 
 
 def create_quote(db: Session, quote: schemas.QuoteCreate):
+    """
+    Create a new inspirational racing quote
+    """
     db_quote = models.Quote(**quote.dict())
     db.add(db_quote)
     db.commit()
@@ -169,6 +358,10 @@ def create_quote(db: Session, quote: schemas.QuoteCreate):
 
 
 def batch_create_quote(db: Session, quotes):
+    """
+    Create new inspirational racing quotes from a list
+    This is used upon first run to create the default quotes
+    """
     for quote in quotes:
         db_quote = models.Quote(
             text=quote["text"], 
@@ -182,7 +375,16 @@ def batch_create_quote(db: Session, quotes):
 
 
 def update_quote(db: Session, quote: schemas.QuoteUpdate):
-    stored_quote = db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+    """
+    Update an inspirational racing quote
+    All fields except ID are optional
+    """
+    stored_quote = db.query(
+        models.Quote
+    ).filter(
+        models.Quote.id == quote.id
+    ).one_or_none()
+
     if stored_quote is None:
         return None
 
@@ -198,7 +400,14 @@ def update_quote(db: Session, quote: schemas.QuoteUpdate):
 
 
 def delete_quote(db: Session, quote: schemas.QuoteDelete):
-    stored_quote = db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+    """
+    Delete an inspirational racing quote
+    """
+    stored_quote = db.query(
+        models.Quote
+    ).filter(
+        models.Quote.id == quote.id
+    ).one_or_none()
 
     if stored_quote:
         db.delete(stored_quote)
@@ -208,10 +417,13 @@ def delete_quote(db: Session, quote: schemas.QuoteDelete):
 
 
 def get_count(query):
-    '''
+    """
     Helper function to count the rows returned by a given query
-    '''
-    count_query = query.statement.with_only_columns([func.count()]).order_by(None)
+    """
+    count_query = query.statement.with_only_columns(
+        [func.count()]
+    ).order_by(None)
+
     count = query.session.execute(count_query).scalar()
 
     return count

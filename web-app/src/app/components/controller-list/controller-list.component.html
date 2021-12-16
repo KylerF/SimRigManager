@@ -1,0 +1,58 @@
+<h1>Light Controllers</h1>
+<div *ngIf="!error && !loading">
+    <table *ngIf="controllers.length" class="table reactive-font">
+        <thead>
+            <tr>
+                <th scope="col">
+                    Name
+                </th>
+                <th scope="col">
+                    IP Address
+                </th>
+                <th scope="col">
+                    Universe
+                </th>
+                <th scope="col">
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let controller of controllers">
+                <td>
+                    {{ controller.name }}
+                </td>
+                <td>
+                    <span *ngIf="controller.isAvailable === false" class="bi bi-exclamation-circle-fill" style="color:red" title="Connection failed"></span>
+                    <a href="http://{{controller.ipAddress}}" target="_blank" title="WLED controls">
+                        {{ controller.ipAddress }}
+                    </a>
+                </td>
+                <td>
+                    {{ controller.universe }}
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-success mr-1" [disabled]="!controller.isAvailable" (click)="togglePowerController(controller)" title="Power">
+                            <span class="bi bi-power" [ngStyle]="{'color': (controller.state && controller.state.on) ? 'white' : 'red'}"></span>
+                        </button>
+                        <button class="btn btn-primary mr-1" (click)="editController(controller)" title="Settings">
+                            <span class="bi bi-gear-fill"></span>
+                        </button>
+                        <button class="btn btn-danger" (click)="deleteController(controller)" title="Delete">
+                            <span class="bi bi-trash-fill"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="py-2">
+        <button class="btn btn-primary" (click)="showAddControllerDialog()">
+            <span class="bi bi-plus-circle-fill"></span> New controller
+        </button>
+    </div>
+</div>
+
+<app-error-message *ngIf="error" title="Error" message="Unable to access controllers"></app-error-message>

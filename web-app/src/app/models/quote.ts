@@ -1,5 +1,5 @@
 /**
- * Model interface for an inspiraitonal racing quote
+ * Model interface for an inspirational racing quote
  */
 export interface Quote {
     id: number;

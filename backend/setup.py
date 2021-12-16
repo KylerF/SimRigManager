@@ -25,13 +25,17 @@ setup(
         'console_scripts': ['simriglights = simriglights:main'],
     },
     install_requires=[
+        'uvicorn[standard]',
+        'starlette==0.14.2',
+        'python-multipart',
         'sqlalchemy_utils',
+        'sse-starlette', 
         'sqlalchemy',
         'pydantic',
         'pyirsdk', 
         'fastapi', 
-        'uvicorn',
         'colour', 
+        'redis',
         'sacn',
     ],
 )

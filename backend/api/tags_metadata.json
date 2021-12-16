@@ -4,23 +4,31 @@
         "description": "Check whether the API is up and running"
     },
     {
+        "name": "avatars", 
+        "description": "Get and set driver avatar images"
+    },
+    {
         "name": "drivers",
         "description": "Manage and select drivers"
-    }, 
+    },
     {
-        "name": "scores",
+        "name": "laptimes",
         "description": "Fetch and set fastest lap times"
     }, 
     {
         "name": "controllers",
         "description": "Manage WLED controllers"
-    }, 
+    },
     {
         "name": "quotes",
-        "description": "Manage the inspirational racing quotes displayed with the high scores"
+        "description": "Manage the inspirational racing quotes displayed on the home page"
     }, 
     {
-        "name": "latest", 
-        "description": "Get the latest data collected from iRacing"
+        "name": "iracing data", 
+        "description": "Get the latest data collected from iRacing", 
+        "externalDocs": {
+            "description": "List of raw attributes",
+            "url": "https://github.com/kutu/pyirsdk/blob/master/vars.txt"
+        }
     }
 ]

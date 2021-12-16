@@ -8,6 +8,9 @@ import { APIHelper } from '../_helpers/api-helper';
   providedIn: 'root'
 })
 
+/**
+ * Service to check whether the API is available
+ */
 export class AvailabilityService {
   endpoint = '';
 

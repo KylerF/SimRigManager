@@ -1,9 +1,9 @@
-'''
+"""
 Pydantic wrappers to transform and validate data models
 for the API
 
 Schemas are provided for CRUD operations on all models
-'''
+"""
 
 from typing import Optional
 from pydantic import BaseModel
@@ -42,6 +42,12 @@ class Driver(DriverBase):
 
     class Config:
         orm_mode = True
+
+
+class DriverStats(BaseModel):
+    trackTime: int
+    recordsHeld: int
+    favoriteTrack: str
 
 class ActiveDriverBase(BaseModel):
     driverId: int
@@ -103,6 +109,52 @@ class LightControllerDelete(LightControllerUpdate):
 
 
 class LightController(LightControllerBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class LightControllerSettingsBase(BaseModel):
+    driverId: int
+    controllerId: int
+    colorThemeId: int
+    autoPower: bool
+    idleEffectId: int
+
+
+class LightControllerSettingsGet(BaseModel):
+    driverId: int
+    controllerId: int
+
+
+class LightControllerSettingsCreate(LightControllerSettingsBase):
+    driverId: int
+    controllerId: int
+    colorThemeId: int
+    autoPower: bool
+    idleEffectId: int
+
+
+class LightControllerSettingsUpdate(LightControllerSettingsBase):
+    id: int
+    driverId: int
+    controllerId: int
+    colorThemeId: Optional[int] = None
+    autoPower: Optional[bool] = None
+    idleEffectId: Optional[int] = None
+
+
+class LightControllerSettingsDelete(LightControllerSettingsUpdate):
+    id: int
+    driverId: Optional[int] = None
+    controllerId: Optional[int] = None
+    colorThemeId: Optional[int] = None
+    autoPower: Optional[bool] = None
+    idleEffectId: Optional[int] = None
+
+
+class LightControllerSettings(LightControllerSettingsBase):
     id: int
 
     class Config:

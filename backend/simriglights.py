@@ -1,3 +1,10 @@
+"""
+Entrypoint for the SimRig Manager backend application, responsible for:
+  - Collecting iRacing data
+  - Storing driver profile information
+  - Controlling WLED fixtures
+  - Hosting the SimRig API for web applications
+"""
 from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser
@@ -39,7 +46,7 @@ def main():
     log_level = config.get('logging', 'level', fallback='INFO')
 
     # Set up logging    
-    file_handler = RotatingFileHandler('simriglights.log', maxBytes=20000000)
+    file_handler = RotatingFileHandler('simriglights.log', maxBytes=200000, backupCount=5)
     stdout_handler = logging.StreamHandler(sys.stdout)
 
     logging.basicConfig(
@@ -72,7 +79,8 @@ def main():
     # Initialize communication queues between the API and worker threads
     queue_manager = QueueManager()
     queue_manager.open_channel('active_driver') # API sends updates to worker threads that need it
-    queue_manager.open_channel('iracing_data') # Streams data from worker thread to API
+    queue_manager.open_channel('iracing_data_latest') # Pushes latest data from worker thread to REST API
+    queue_manager.open_channel('iracing_data_stream') # Pushes a stream of data from worker thread to websocket API
     queue_manager.open_channel('tasks') # Used to trigger worker threads to start a specific task
 
     # Kick off the iRacing worker thread
@@ -86,7 +94,7 @@ def main():
     atexit.register(queue_manager.close_all)
 
     # Start the API on the main thread
-    api = APIServer(queue_manager)
+    api = APIServer(queue_manager, log)
     api.start()
 
     # If we're here, exit everything
