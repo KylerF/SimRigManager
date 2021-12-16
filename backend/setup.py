@@ -26,7 +26,7 @@ setup(
     },
     install_requires=[
         'uvicorn[standard]',
-        'starlette==0.14.2',
+        'starlette==0.17.1',
         'python-multipart',
         'sqlalchemy_utils',
         'sse-starlette', 
