@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { APIHelper } from 'src/app/_helpers/api-helper';
 
 @Component({
   selector: 'app-driver-avatar',
@@ -16,5 +17,9 @@ export class DriverAvatarComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    if (this.driver?.profilePic) {
+      this.driver.profilePic = `${APIHelper.getBaseUrl()}${this.driver.profilePic.substring(1)}`;
+    }
+  }
 }

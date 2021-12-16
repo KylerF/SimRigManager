@@ -42,7 +42,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
     # Update driver profile with link to new avatar image
     data = {
         "id": driver_id, 
-        "profilePic": f"http://127.0.0.1:8000/avatars/{driver_id}"
+        "profilePic": f"/avatars/{driver_id}"
     }
     driver = schemas.DriverUpdate(**data)
 

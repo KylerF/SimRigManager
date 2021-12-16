@@ -102,7 +102,7 @@ export class ScoreboardComponent implements OnInit {
       this.filteredLapTimes = this.lapTimes.filter(lapTime =>
         lapTime.driver.id == activeDriver.id
       );
-    })
+    });
   }
 
   /**

@@ -182,6 +182,7 @@ export class DriverService {
 
   /**
    * Check whether HTML5 local storage is supported
+   *
    * @returns true if supported, false otherwise
    */
   private checkLocalStorageSupported() {
@@ -190,6 +191,7 @@ export class DriverService {
 
   /**
    * Retrieve the active driver from local storage
+   *
    * @returns active driver or null
    */
   private getFromLocalStorage() {
@@ -202,6 +204,7 @@ export class DriverService {
 
   /**
    * Save the active driver in local storage
+   *
    * @param driver the driver to save
    * @returns true if successful, false otherwise
    */

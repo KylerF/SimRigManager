@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Driver } from '../models/driver';
 import { DriverService } from '../services/driver.service';
+import { APIHelper } from '../_helpers/api-helper';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +48,7 @@ export class AppComponent {
       response => {
         // Success!
         this.activeDriver = response;
+        this.activeDriver.profilePic = `${APIHelper.getBaseUrl()}${this.activeDriver.profilePic.substring(1)}`;
       },
       error => {
         // Failed. Save the response.
