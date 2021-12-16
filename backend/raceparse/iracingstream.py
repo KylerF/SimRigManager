@@ -48,7 +48,7 @@ class IracingStream:
 
         self.is_active = False
         self.ir = None
-        #self.state = {}
+        self.state = {}
         
     def restart(self):
         """
@@ -152,4 +152,3 @@ class IracingStream:
         self.ir.parse_to(self.snapshot_file)
 
         return True
-    

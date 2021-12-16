@@ -7,7 +7,6 @@ from sqlalchemy import func
 
 from database import models, schemas
 
-from database import models, schemas
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
 

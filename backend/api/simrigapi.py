@@ -70,13 +70,6 @@ class SimRigAPI:
 
         self.api.post("/drivers/active", tags=["drivers"], response_model=schemas.Driver)(self.set_active_driver)
 
-        self.api.get("/randomquote", tags=["quotes"], response_model=schemas.Quote)(self.get_random_quote)
-        self.api.get("/quotes", tags=["quotes"], response_model=List[schemas.Quote])(self.get_quotes)
-        self.api.post("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.create_quote)
-        self.api.patch("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.update_quote)
-        self.api.delete("/quotes", tags=["quotes"], response_model=schemas.Quote)(self.delete_quote)
-
-
     async def get_root(self):
         """
         Availability check 

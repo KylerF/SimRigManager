@@ -1,4 +1,4 @@
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { SseClient } from 'angular-sse-client';
 import { Injectable } from '@angular/core';
