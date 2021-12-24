@@ -75,13 +75,15 @@ app.get("/files/:file", (req, res) => {
   const file = req.params.file;
   const filePath = `./src/data/${file}.json`;
 
-  if (fs.existsSync(filePath)) {
-    stream.destroy();
-    stream = getFileStream(filePath);
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(404);
-  }
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      res.sendStatus(404);
+    } else {
+      stream.destroy();
+      stream = getFileStream(filePath);
+      res.sendStatus(200);
+    }
+  });
 });
 
 expressWebSocket(app, null, {
