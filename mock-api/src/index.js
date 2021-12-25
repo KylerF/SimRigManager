@@ -74,7 +74,9 @@ app.get("/files", (_, res) => {
  */
 app.get("/files/:file", (req, res) => {
   const file = req.params.file;
-  const filePath = `./src/data/${file}.json`;
+  const sanitizedFile = path.normalize(file).replace(/^(\.\.[\/\\])+/, '');
+
+  const filePath = `./src/data/${sanitizedFile}.json`;
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
