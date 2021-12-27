@@ -5,6 +5,7 @@ import shutil
 
 from sqlalchemy.sql.expression import update
 
+from api.exceptions import SecurityException
 from api.utils import update_driver_cache
 from database.database import get_db
 from database import crud, schemas
@@ -22,7 +23,13 @@ async def get_avatar(driver_id: int):
     """
     Get a driver's profile picture
     """
-    avatar_path = __get_avatar_path(driver_id)
+    try:
+        avatar_path = __get_avatar_path(driver_id)
+    except SecurityException:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid request for driver with id {driver_id}"
+        )
 
     if not path.exists(avatar_path):
         raise HTTPException(
@@ -37,7 +44,13 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
     """
     Upload a new driver profile picture
     """
-    file_location = __get_avatar_path(driver_id)
+    try:
+        file_location = __get_avatar_path(driver_id)
+    except SecurityException:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Invalid request for driver with id {driver_id}"
+        )
 
     # Update driver profile with link to new avatar image
     data = {
@@ -69,7 +82,13 @@ async def delete_avatar(driver_id: int):
     """
     Delete a driver's profile picture
     """
-    file_location = __get_avatar_path(driver_id)
+    try:
+        file_location = __get_avatar_path(driver_id)
+    except SecurityException:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"No avatar found for driver with id {driver_id}"
+        )
 
     # Update driver profile to clear image URL
     data = {
@@ -100,6 +119,12 @@ def __get_avatar_path(driver_id):
     Retrieve the file path to a driver's avatar image
     """
     current_path = path.abspath(getcwd())
+    filename = f"{driver_id}-avatar.png"
+    safe_avatar_path = path.normpath(path.join(current_path, filename))
+
+    if not safe_avatar_path.startswith(current_path):
+        raise SecurityException()
+
     return path.join(
         current_path, 
         "userdata", "images", 
