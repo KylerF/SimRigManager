@@ -32,8 +32,8 @@ const limiter = rateLimit({
   message: 'Whoa there partner, slow down! Only 5 requests per second.',
 });
 
-// Apply rate limiter to all requests that use the file system
-app.use('/files', limiter);
+// Apply rate limiter to all requests
+app.use(limiter);
 
 var stream = getFileStream('./src/data/default.json');
 
