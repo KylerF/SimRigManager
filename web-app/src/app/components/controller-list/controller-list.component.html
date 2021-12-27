@@ -24,7 +24,7 @@
                 </td>
                 <td>
                     <span *ngIf="controller.isAvailable === false" class="bi bi-exclamation-circle-fill" style="color:red" title="Connection failed"></span>
-                    <a href="http://{{controller.ipAddress}}" target="_blank" title="WLED controls">
+                    <a href="http://{{controller.ipAddress}}" target="_blank" rel="noopener" title="WLED controls">
                         {{ controller.ipAddress }}
                     </a>
                 </td>
