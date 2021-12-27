@@ -14,6 +14,7 @@
 
 const StreamArray = require('stream-json/streamers/StreamArray');
 const expressWebSocket = require('express-ws');
+const rateLimit = require('express-rate-limit').default;
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -23,6 +24,16 @@ var currentFrame = {};
 
 var jsonStream = StreamArray.withParser();
 const app = express();
+
+// Set up rate limiter: maximum of five requests per second
+const limiter = rateLimit({
+  windowMs: 1000, // 1 second
+  max: 5,
+  message: 'Whoa there partner, slow down! Only 5 requests per second.',
+});
+
+// Apply rate limiter to all requests that use the file system
+app.use('/files', limiter);
 
 var stream = getFileStream('./src/data/default.json');
 

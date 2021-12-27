@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "express-rate-limit": "^6.0.1",
     "express-ws": "^5.0.2",
     "stream-json": "^1.7.3",
     "ws": "^8.2.3"
