@@ -41,24 +41,9 @@ export class ScoreboardComponent implements OnInit {
   ngOnInit(): void {
     // Get laptimes from server
     this.getLapTimes();
-
-    // Watch stream for new lap times to update in real time
-    this.newLapTimeStream = this.lapTimeService.streamNewLapTimes().subscribe(
-      laptime => {
-          if(this.lapTimes.filter(oldLapTime => oldLapTime.id == laptime.id).length == 0) {
-            this.lapTimes.push(laptime);
-            this.filterScores();
-          }
-      },
-      error => {
-        this.error = error;
-      }
-    )
   }
 
-  ngOnDestroy(): void {
-    this.newLapTimeStream.unsubscribe();
-  }
+  ngOnDestroy(): void { }
 
   /**
    * Fetch all lap times from the API
