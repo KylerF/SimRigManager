@@ -1,6 +1,5 @@
 import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { SseClient } from 'angular-sse-client';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -20,7 +19,6 @@ export class LapTimeService {
 
   constructor(
     private http: HttpClient,
-    private sseClient: SseClient
   ) { }
 
   /**
@@ -31,20 +29,6 @@ export class LapTimeService {
   getLapTimes(): Observable<LapTime[]> {
     return this.http.get<LapTime[]>(
       APIHelper.getBaseUrl() + this.endpoint
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
-  }
-
-  /**
-   * Stream new lap times in real time
-   *
-   * @returns observable which streams new lap times
-   */
-  streamNewLapTimes(): Observable<LapTime> {
-    return this.sseClient.get(
-      `${APIHelper.getBaseUrl()}${this.streamEndpoint}`
     )
     .pipe(
       catchError(APIHelper.handleError)
