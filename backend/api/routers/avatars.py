@@ -1,9 +1,7 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
-from os import path, remove, getcwd
+from os import path, remove, getcwd, makedirs
 import shutil
-
-from sqlalchemy.sql.expression import update
 
 from api.exceptions import SecurityException
 from api.utils import update_driver_cache
@@ -116,17 +114,29 @@ async def delete_avatar(driver_id: int):
 
 def __get_avatar_path(driver_id):
     """
-    Retrieve the file path to a driver's avatar image
+    Retrieve the file path to a driver's avatar image. If the file structure
+    does not exist, it will be created.
     """
     current_path = path.abspath(getcwd())
     filename = f"{driver_id}-avatar.png"
     safe_avatar_path = path.normpath(path.join(current_path, filename))
 
+    # Filter out unsafe paths
     if not safe_avatar_path.startswith(current_path):
         raise SecurityException()
 
-    return path.join(
+    avatar_directory = path.join(
         current_path, 
-        "userdata", "images", 
+        "userdata", "images"
+    )
+
+    # Create the file structure if it does not exist
+    try:
+        makedirs(avatar_directory)
+    except FileExistsError:
+        pass
+
+    return path.join(
+        avatar_directory,
         f"{driver_id}-avatar.png"
     )
