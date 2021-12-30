@@ -20,6 +20,18 @@ export class DriverAvatarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+    this.setAvatarURL();
+
+    // Watch for changes to the driver's profile picture
+    this.driverService.selectedDriver$.subscribe(driver => {
+      this.driver = driver;
+      this.setAvatarURL();
+    });
+  }
+
+  setAvatarURL() {
+    if (this.driver) {
+      this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+    }
   }
 }

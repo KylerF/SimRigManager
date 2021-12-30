@@ -88,9 +88,7 @@ export class DriverProfileComponent implements OnInit {
     }
 
     this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
-      response => {
-        // Add timestamp to src to force an immediate update
-        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+      _ => {
         this.saveProfile();
       },
       error => {
@@ -114,6 +112,7 @@ export class DriverProfileComponent implements OnInit {
       response => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
+        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
       error => {
