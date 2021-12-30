@@ -181,6 +181,19 @@ export class DriverService {
   }
 
   /**
+   * Get URL to the profile pic for a driver. If the driver has no
+   * profile pic, return the default avatar.
+   * The current datetime is passed as a parameter is passed to the
+   * URL to trigger a reload of the image on static pages.
+   *
+   * @param driver the driver to retrieve avatar for
+   * @returns the avatar URL
+   */
+  getAvatarURLForDriver(driver: Driver) {
+    return `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driver.id}?${Date.now().toString()}`;
+  }
+
+  /**
    * Check whether HTML5 local storage is supported
    *
    * @returns true if supported, false otherwise
