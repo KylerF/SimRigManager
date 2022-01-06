@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 from os import path, remove, getcwd, makedirs
 from typing import Optional
 from io import BytesIO
@@ -26,6 +26,7 @@ async def get_avatar(driver_id: int, width: Optional[int]=0, height: Optional[in
     If width is provided, a square image with the width is returned.
     If width and height are both provided, an image with those dimensions 
     is returned.
+    If neither width nor height are provided, the original image is returned.
     """
     try:
         avatar_path = __get_avatar_path(driver_id)
@@ -41,12 +42,8 @@ async def get_avatar(driver_id: int, width: Optional[int]=0, height: Optional[in
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
-    avatar = __resize_image_file(avatar_path, width, height)
-
-    return StreamingResponse(
-        content=avatar,
-        media_type="image/png"
-    )
+    print(__create_image_response(avatar_path, width, height))
+    return __create_image_response(avatar_path, width, height)
 
 @router.post("/{driver_id}")
 async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
@@ -151,6 +148,20 @@ def __get_avatar_path(driver_id):
         avatar_directory,
         f"{driver_id}-avatar.png"
     )
+
+def __create_image_response(image_path, width: Optional[int], height: Optional[int]):
+    """
+    Resize the given image and return either:
+        - A FileResponse containing the original image file
+        - A StreamingResponse containing the image resized to width x height
+    """
+    if width or height:
+        return StreamingResponse(
+            __resize_image_file(image_path, width, height),
+            media_type="image/png"
+        )
+
+    return FileResponse(image_path)
 
 def __resize_image_file(image_path, width: Optional[int], height: Optional[int]):
     """
