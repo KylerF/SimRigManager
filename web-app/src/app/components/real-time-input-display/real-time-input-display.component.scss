@@ -1,9 +1,9 @@
 .progress-bar-vertical {
-  width: 20px;
+  width: 30px;
   min-height: 100px;
   display: flex;
   align-items: flex-end;
-  margin-right: 20px;
+  margin-right: 30px;
   float: left;
 }
 
@@ -13,4 +13,8 @@
   -webkit-transition: height 0.6s ease;
   -o-transition: height 0.6s ease;
   transition: height 0.6s ease;
+}
+
+#pedalsContainer {
+  padding-left: 50px;
 }
