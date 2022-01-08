@@ -16,7 +16,7 @@ export class APIHelper {
      * @returns URL to the API
      */
     static getBaseUrl(protocol: string = 'http'): string {
-        let url = `${protocol}://127.0.0.1:8000/`;
+        let url = `${protocol}://127.0.0.1:8001/`;
 
         if(environment.production) {
             url = `${protocol}://${window.location.hostname}:8000/`;
