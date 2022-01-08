@@ -4,6 +4,7 @@ import { IracingDataService } from '../../services/iracing-data.service';
 import { Constants } from '../../_helpers/constants';
 import { IracingDataFrame } from '../../models/iracing/data-frame';
 import * as d3 from 'd3';
+import { CarImageHelper } from 'src/app/_helpers/car-image-helper';
 
 @Component({
   selector: 'app-real-time-input-display',
@@ -22,6 +23,8 @@ export class RealTimeInputDisplayComponent implements OnInit {
   config: string;
   car: string;
 
+  wheelImage: string;
+
   speed: number;
   speedUnitMultiplier: number;
   rpm: number;
@@ -29,6 +32,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
   wheelAngle: number;
   throttle: number;
   brake: number;
+  handBrake: number;
   clutch: number;
 
   vertAccel: number;
@@ -96,14 +100,20 @@ export class RealTimeInputDisplayComponent implements OnInit {
     this.eventType = jsonData.WeekendInfo.EventType;
     this.track = jsonData.WeekendInfo.TrackName;
     this.config = jsonData.WeekendInfo.TrackConfigName;
+
+    let lastCar = this.car;
     this.car = jsonData.DriverInfo.Drivers[this.driverIndex].CarScreenName;
+    if ( lastCar !== this.car ) {
+      this.wheelImage = CarImageHelper.getImageForCar(this.car);
+    }
 
     this.speed = jsonData.Speed;
     this.rpm = jsonData.RPM;
 
     this.throttle = jsonData.Throttle;
     this.brake = jsonData.Brake;
-    this.clutch = jsonData.Clutch;
+    this.handBrake = jsonData.HandbrakeRaw;
+    this.clutch = 1 - jsonData.Clutch;
 
     this.vertAccel = jsonData.VertAccel - Constants.g;
     this.latAccel = jsonData.LatAccel;
@@ -112,6 +122,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
     this.rotateWheel(jsonData.SteeringWheelAngle);
 
     // Update chart data
+    /*
     this.throttleHistory.push(this.throttle);
     this.brakeHistory.push(this.brake);
     this.clutchHistory.push(this.clutch);
@@ -123,6 +134,7 @@ export class RealTimeInputDisplayComponent implements OnInit {
     this.resize(this.clutchHistory);
     this.resize(this.speedHistory);
     this.resize(this.rpmHistory);
+    */
   }
 
   /**
