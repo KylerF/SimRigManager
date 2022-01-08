@@ -36,6 +36,7 @@ const routes: Routes = [
   { path: 'driverstats', component: DriverStatsComponent },
   { path: 'scoreboard', component: ScoreboardComponent },
   { path: 'controllers', component: ControllerListComponent },
+  { path: 'telemetry', component: RealTimeInputDisplayComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }
 ]
