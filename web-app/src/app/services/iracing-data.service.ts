@@ -26,7 +26,7 @@ export class IracingDataService {
    * @returns an observable wrapping latest data
    */
   getLatest(): Observable<any> {
-    return this.http.get<any>(APIHelper.getBaseUrl() + this.endpoint)
+    return this.http.get<any>(APIHelper.getMockBaseUrl() + this.endpoint)
       .pipe(catchError(APIHelper.handleError));
   }
 
@@ -38,7 +38,7 @@ export class IracingDataService {
    */
   getStream(): Observable<IracingDataFrame> {
     let subject = webSocket(
-      `${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`
+      `${APIHelper.getMockBaseUrl('ws')}${this.wsEndpoint}`
     );
 
     return subject.pipe(

@@ -16,13 +16,20 @@ export class APIHelper {
      * @returns URL to the API
      */
     static getBaseUrl(protocol: string = 'http'): string {
-        let url = `${protocol}://127.0.0.1:8001/`;
+        let url = `${protocol}://127.0.0.1:8000/`;
 
         if(environment.production) {
             url = `${protocol}://${window.location.hostname}:8000/`;
         }
 
         return url;
+    }
+
+    /**
+     * Get the base URL for the mock API
+     */
+    static getMockBaseUrl(protocol: string = 'http'): string {
+      return `${protocol}://127.0.0.1:8001/`;
     }
 
     /**
