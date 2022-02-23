@@ -13,9 +13,10 @@
  */
 
 const StreamArray = require('stream-json/streamers/StreamArray');
-const expressWebSocket = require('express-ws');
 const rateLimit = require('express-rate-limit').default;
+const expressWebSocket = require('express-ws');
 const express = require('express');
+const cors = require("cors");
 const path = require('path');
 const fs = require('fs');
 
@@ -49,7 +50,7 @@ app.get('/', (_, res) => {
 /**
  * Endpoint for the latest iRacing data.
  */
-app.get("/latest", (_, res) => {
+app.get("/latest", cors(), (_, res) => {
   res.send(currentFrame);
 });
 
@@ -129,7 +130,7 @@ function getFileStream(file) {
   let newStream = fs.createReadStream(file)
     .pipe(jsonStream.input);
 
-  jsonStream.on('data', ({key, value}) => {
+  jsonStream.on('data', ({_, value}) => {
     wsConnections.forEach(ws => {
       ws.send(JSON.stringify(value));
     });

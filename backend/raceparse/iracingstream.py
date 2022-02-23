@@ -1,6 +1,8 @@
 import irsdk
 import math
 
+from raceparse.yamlheaders import iracing_yaml_headers
+
 class IracingStream:
     """
     Collects and organizes data from iRacing
@@ -136,9 +138,10 @@ class IracingStream:
         for var in vars:
             raw_data[var] = self.ir[var]
 
-        # Add missing headers
-        raw_data["WeekendInfo"] = self.ir["WeekendInfo"]
-        raw_data["DriverInfo"] = self.ir["DriverInfo"]
+        # Add additional headers
+        for header in iracing_yaml_headers:
+            if header in self.ir:
+                raw_data[header] = self.ir[header]
 
         return raw_data
 

@@ -20,14 +20,14 @@ import { Driver } from '../models/driver';
  * WLED light controllers
  */
 export class ControllerService {
-  endpoint = 'controllers';
-  settingsEndpoint = 'controllersettings';
+  private endpoint = 'controllers';
+  private settingsEndpoint = 'controllersettings';
 
   // Flag to enable power on/off (allowed only once per second to avoid
   // spamming the controller)
   powerEnabled = true;
 
-  wledRequestOptions: Object = {
+  private wledRequestOptions: Object = {
     responseType: 'text'
   }
 

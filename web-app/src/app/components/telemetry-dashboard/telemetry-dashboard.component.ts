@@ -1,39 +1,28 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { delay, retryWhen, Subscription, tap } from 'rxjs';
 import { IracingDataService } from '../../services/iracing-data.service';
 import { Constants } from '../../_helpers/constants';
 import { IracingDataFrame } from '../../models/iracing/data-frame';
-import * as d3 from 'd3';
-import { CarImageHelper } from 'src/app/_helpers/car-image-helper';
+import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-real-time-input-display',
-  templateUrl: './real-time-input-display.component.html',
-  styleUrls: ['./real-time-input-display.component.scss']
+  selector: 'app-telemtry-display',
+  templateUrl: './telemetry-dashboard.component.html',
+  styleUrls: ['./telemetry-dashboard.component.scss']
 })
 
 /**
  * Dashboard to show real time iRacing data
  */
-export class RealTimeInputDisplayComponent implements OnInit {
-  driverIndex: number;
+export class TelemetryDashboardComponent implements OnInit {
+  iracingDataSubscription: Subscription;
+  connected: boolean;
 
   eventType: string;
   track: string;
   config: string;
-  car: string;
 
-  wheelImage: string;
-
-  speed: number;
-  speedUnitMultiplier: number;
   rpm: number;
-
-  wheelAngle: number;
-  throttle: number;
-  brake: number;
-  handBrake: number;
-  clutch: number;
 
   vertAccel: number;
   latAccel: number;
@@ -47,15 +36,13 @@ export class RealTimeInputDisplayComponent implements OnInit {
   speedHistory: number[];
   rpmHistory: number[];
 
-  wsSubscription: Subscription;
-
   error: string;
 
   /**
-   * Get current speed in selected units
+   * Get the current iRacing data status (true if data available, false otherwise)
    */
-  get currentSpeed() {
-    return this.speed * this.speedUnitMultiplier;
+  get iracingDataAvailable() {
+    return this.connected;
   }
 
   /**
@@ -67,26 +54,51 @@ export class RealTimeInputDisplayComponent implements OnInit {
    */
   constructor(
     private iracingDataService: IracingDataService,
-    private renderer: Renderer2
   )
-  {
-    this.wsSubscription =
-      this.iracingDataService.getStream()
-       .subscribe(
-        data => {
-          this.update(data);
-        },
-        err => {
-          this.error = err.message;
-        }
-      );
+  { }
+
+  /**
+   * Start updating the dashboard with the latest iRacing data
+   */
+  ngOnInit(): void {
+    this.subscribeToIracingData();
   }
 
   /**
-   * Set default parameters on initialization
+   * Destroy the websocket connection when the component is destroyed
    */
-  ngOnInit(): void {
-    this.speedUnitMultiplier = Constants.speedMphMultiplier;
+  ngOnDestroy(): void {
+    this.iracingDataSubscription.unsubscribe();
+    this.iracingDataService.stopStream();
+  }
+
+  /**
+   * Subscribe to the iRacing data stream
+   */
+  subscribeToIracingData() {
+    this.iracingDataService.startStream();
+
+    this.iracingDataSubscription = this.iracingDataService.latestData$
+      .pipe(
+        retryWhen(error => error.pipe(
+          tap(err => {
+            this.connected = false;
+            this.error = err.message;
+          }),
+          delay(3000)
+        ))
+      )
+      .subscribe(
+        response => {
+          if (!_.isEmpty(response)) {
+            this.connected = true;
+            this.update(response);
+          } else {
+            this.connected = false;
+            this.error = 'No data available';
+          }
+        }
+      );
   }
 
   /**
@@ -95,31 +107,20 @@ export class RealTimeInputDisplayComponent implements OnInit {
    * @param jsonData latest frame of data
    */
   update(jsonData: IracingDataFrame) {
-    this.driverIndex = jsonData.DriverInfo.DriverCarIdx;
-
-    this.eventType = jsonData.WeekendInfo.EventType;
-    this.track = jsonData.WeekendInfo.TrackName;
-    this.config = jsonData.WeekendInfo.TrackConfigName;
-
-    let lastCar = this.car;
-    this.car = jsonData.DriverInfo.Drivers[this.driverIndex].CarScreenName;
-    if ( lastCar !== this.car ) {
-      this.wheelImage = CarImageHelper.getImageForCar(this.car);
+    if (this.iracingDataSubscription.closed) {
+      this.connected = false;
+      return;
     }
 
-    this.speed = jsonData.Speed;
-    this.rpm = jsonData.RPM;
+    this.eventType = jsonData.WeekendInfo.EventType;
+    this.track = jsonData.WeekendInfo.TrackDisplayName;
+    this.config = jsonData.WeekendInfo.TrackConfigName;
 
-    this.throttle = jsonData.Throttle;
-    this.brake = jsonData.Brake;
-    this.handBrake = jsonData.HandbrakeRaw;
-    this.clutch = 1 - jsonData.Clutch;
+    this.rpm = jsonData.RPM;
 
     this.vertAccel = jsonData.VertAccel - Constants.g;
     this.latAccel = jsonData.LatAccel;
     this.longAccel = jsonData.LongAccel;
-
-    this.rotateWheel(jsonData.SteeringWheelAngle);
 
     // Update chart data
     /*
@@ -146,21 +147,5 @@ export class RealTimeInputDisplayComponent implements OnInit {
     if (data.length > this.windowSize) {
       data.splice(0, data.length - this.windowSize);
     }
-  }
-
-  /**
-   * Rotate the steering wheel graphic by a given number
-   * of radians
-   *
-   * @param radians angle to rotate wheel
-   */
-  rotateWheel(radians: number) {
-    const image = document.getElementById('wheel');
-
-    this.renderer.setStyle(
-      image,
-      'transform',
-      `rotate(${-radians}rad)`
-    )
   }
 }

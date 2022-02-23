@@ -14,8 +14,8 @@ import { APIHelper } from '../_helpers/api-helper';
  * Service to retrieve best lap times from the API
  */
 export class LapTimeService {
-  endpoint = 'laptimes';
-  streamEndpoint = 'laptimes/stream';
+  private endpoint = 'laptimes';
+  private streamEndpoint = 'laptimes/stream';
 
   constructor(
     private http: HttpClient,

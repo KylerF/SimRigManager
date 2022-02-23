@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', async () => {
+  it('should display the home page', async () => {
     await page.navigateTo();
-    expect(await page.getTitleText()).toEqual('simriglights-web-app app is running!');
+    expect(await page.getTitleText()).toEqual('SimRig');
   });
 
   afterEach(async () => {

@@ -21,12 +21,23 @@ import { HoursMinutesSecondsPipe } from './pipes/hours-minutes-seconds.pipe';
 import { ControllerSettingsComponent } from './components/controller-settings/controller-settings.component';
 import { IpAddressValidator } from './directives/validators/ip-address-validator.directive';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { RealTimeInputDisplayComponent } from './components/real-time-input-display/real-time-input-display.component';
 import { DriverProfileComponent } from './components/driver-profile/driver-profile.component';
 import { DriverStatsComponent } from './components/driver-stats/driver-stats.component';
 import { HourglassIconComponent } from './components/hourglass-icon/hourglass-icon.component';
 import { DriverAvatarComponent } from './components/driver-avatar/driver-avatar.component';
 import { DeleteDriverComponent } from './components/delete-driver/delete-driver.component';
+import { TelemetryDashboardComponent } from './components/telemetry-dashboard/telemetry-dashboard.component';
+import { WheelDisplayComponent } from './components/telemetry-dashboard/inputs/wheel/wheel-display.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { reducers, metaReducers } from './store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { IracingEffects } from './store/effects/iracing.effects';
+import { ApiHealthcheckEffects } from './store/effects/api-healthcheck.effects';
+import { QuoteEffects } from './store/effects/quote.effects';
+import { PedalsDisplayComponent } from './components/telemetry-dashboard/inputs/pedals/pedals-display.component';
+import { SpeedometerComponent } from './components/telemetry-dashboard/speedometer/speedometer.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -36,7 +47,7 @@ const routes: Routes = [
   { path: 'driverstats', component: DriverStatsComponent },
   { path: 'scoreboard', component: ScoreboardComponent },
   { path: 'controllers', component: ControllerListComponent },
-  { path: 'telemetry', component: RealTimeInputDisplayComponent },
+  { path: 'telemetry', component: TelemetryDashboardComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '**', component: NotFoundComponent }
 ]
@@ -58,12 +69,15 @@ const routes: Routes = [
     ControllerSettingsComponent,
     IpAddressValidator,
     NotFoundComponent,
-    RealTimeInputDisplayComponent,
+    TelemetryDashboardComponent,
+    WheelDisplayComponent,
+    PedalsDisplayComponent,
     DriverProfileComponent,
     DriverStatsComponent,
     HourglassIconComponent,
     DriverAvatarComponent,
-    DeleteDriverComponent
+    DeleteDriverComponent,
+    SpeedometerComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +86,16 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([
+      IracingEffects,
+      ApiHealthcheckEffects,
+      QuoteEffects
+    ]),
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]

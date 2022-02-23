@@ -1,22 +1,22 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RealTimeInputDisplayComponent } from './real-time-input-display.component';
+import { PedalsDisplayComponent } from './pedals-display.component';
 
-describe('RealTimeInputDisplayComponent', () => {
-  let component: RealTimeInputDisplayComponent;
-  let fixture: ComponentFixture<RealTimeInputDisplayComponent>;
+describe('PedalsDisplayComponent', () => {
+  let component: PedalsDisplayComponent;
+  let fixture: ComponentFixture<PedalsDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RealTimeInputDisplayComponent ] ,
+      declarations: [ PedalsDisplayComponent ],
       imports: [ HttpClientModule ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RealTimeInputDisplayComponent);
+    fixture = TestBed.createComponent(PedalsDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

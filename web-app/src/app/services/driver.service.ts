@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -20,12 +20,12 @@ export class DriverService {
   private _selectedDriver = new BehaviorSubject<Driver>(null);
   selectedDriver$ = this._selectedDriver.asObservable();
 
-  localStorage: Storage;
+  private localStorage: Storage;
 
-  driversEndpoint = 'drivers';
-  activeDriverEndpoint = 'drivers/active';
-  profilePicEndpoint = 'avatars';
-  statsEndpoint = 'stats';
+  private driversEndpoint = 'drivers';
+  private activeDriverEndpoint = 'drivers/active';
+  private profilePicEndpoint = 'avatars';
+  private statsEndpoint = 'stats';
 
   constructor(private http: HttpClient) {
     if(this.checkLocalStorageSupported()) {
@@ -44,7 +44,6 @@ export class DriverService {
      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`
     )
     .pipe(
-      retry(3),
       catchError(APIHelper.handleError)
     );
   }
@@ -59,7 +58,6 @@ export class DriverService {
       `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`
     )
     .pipe(
-      retry(3),
       catchError(APIHelper.handleError)
     );
   }
@@ -104,7 +102,6 @@ export class DriverService {
       { 'driverId': driver.id }
     )
     .pipe(
-      retry(3),
       catchError(APIHelper.handleError)
     );
   }
@@ -121,7 +118,6 @@ export class DriverService {
       driver
     )
     .pipe(
-      retry(3),
       catchError(APIHelper.handleError)
     );
   }

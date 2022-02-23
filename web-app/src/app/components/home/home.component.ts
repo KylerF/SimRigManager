@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as _ from 'lodash';
 
-import { AvailabilityService } from '../../services/availability.service';
 import { ControllerStatus } from '../../models/controller-status';
 import { ControllerService } from '../../services/controller.service';
 import { DriverService } from '../../services/driver.service';
 import { IracingDataService } from '../../services/iracing-data.service';
-import { Subscription } from 'rxjs';
+import { delay, Observable, retryWhen, Subscription, take, tap } from 'rxjs';
 import { Driver } from '../../models/driver';
-import { IracingDataFrame } from 'src/app/models/iracing/data-frame';
+import { IracingDataFrame } from '../../models/iracing/data-frame';
+import * as fromRoot from '../../store/reducers';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,7 @@ import { IracingDataFrame } from 'src/app/models/iracing/data-frame';
  * Component to show the home page with service availability status
  */
 export class HomeComponent implements OnInit {
-  apiActive: boolean;
+  apiActive$: Observable<boolean>;
   iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
@@ -28,57 +30,48 @@ export class HomeComponent implements OnInit {
   errors: string[] = [];
 
   constructor(
-    private availabilityService: AvailabilityService, // used to check whether the backend API is running
     private iracingDataService: IracingDataService,
     private controllerService: ControllerService, // used to check connection to WLED controllers
-    private driverService: DriverService // used to check whether a driver has been selected
+    private driverService: DriverService, // used to check whether a driver has been selected
+    private store: Store<fromRoot.State>
   )
   { }
 
   ngOnInit(): void {
-    this.getAPIAvailable();
+    this.apiActive$ = this.store.select(fromRoot.selectAPIActive);
     this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();
   }
 
   ngOnDestroy(): void {
+    this.iracingDataService.stopStream();
     this.iracingDataSubscription.unsubscribe();
-  }
-
-  /**
-   * Check the backend API status
-   */
-  getAPIAvailable() {
-    this.availabilityService.getAPIAvailability().subscribe(
-      response => {
-        // Success!
-        this.apiActive = response.active;
-      },
-      error => {
-        // Failed. Save the response.
-        this.errors.push(error.message);
-      }
-    );
   }
 
   /**
    * Check whether data is being streamed from iRacing
    */
   getIracingStatus() {
-    this.iracingDataSubscription = this.iracingDataService.getStream()
-       .subscribe(
-          response => {
-            if (response) {
-              this.iracingData = response;
-            } else {
-              this.iracingData = null;
-            }
-          },
-          error => {
-            this.errors.push(error.message);
+    this.iracingDataService.startStream();
+    this.iracingDataSubscription = this.iracingDataService.latestData$
+      .pipe(
+        retryWhen(error => error.pipe(
+          tap(err => {
+            this.errors.push(err.message)
+            this.iracingData = null;
+          }),
+          delay(3000)
+        ))
+      )
+      .subscribe(
+        response => {
+          if (!_.isEmpty(response)) {
+            this.iracingData = response;
+          } else {
             this.iracingData = null;
           }
+        }
       );
   }
 

@@ -52,10 +52,13 @@ export class ScoreboardComponent implements OnInit {
     this.lapTimeService.getLapTimes().subscribe(
       response => {
         // Success!
-        this.lapTimes = response;
-        this.filteredLapTimes = this.lapTimes;
-        this.showOverallBestTimes();
-        this.sortScores('setAt', 'desc');
+        if (response.length) {
+          this.lapTimes = response;
+          this.filteredLapTimes = this.lapTimes;
+          this.showOverallBestTimes();
+          this.sortScores('setAt', 'desc');
+        }
+
         this.loading = false;
       },
       error => {

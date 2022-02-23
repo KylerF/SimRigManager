@@ -15,6 +15,13 @@
   transition: height 0.6s ease;
 }
 
-#pedalsContainer {
-  padding-left: 50px;
+.clutch-bar {
+  position: relative;
+  left: 25px;
+}
+
+.handbrake-bar {
+  width: 5px;
+  position: relative;
+  left: 25px;
 }
