@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiActive$ = this.store.select(fromRoot.selectAPIActive);
+
     this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();

@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
-import { Constants } from 'src/app/_helpers/constants';
+
+import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from '../../../services/iracing-data.service';
+import { Constants } from '../../../_helpers/constants';
 
 @Component({
   selector: 'app-speedometer-display',
@@ -13,37 +14,27 @@ import { IracingDataService } from '../../../services/iracing-data.service';
 /**
  * Component to show a speedometer
  */
-export class SpeedometerComponent implements OnInit {
-  /**
-   * If true, this component will unsubscribe from the websocket
-   * connection when destroyed, but will leave the connection open.
-   * This is useful when displaying multiple telemetry components
-   * on the same page.
-   */
-  @Input('keepAlive')
-  keepWsAlive: boolean = false;
-
-  private iracingDataSubscription: Subscription;
-
+export class SpeedometerComponent extends BaseTelemetryDisplayComponent {
   speed: number;
 
-  constructor (
-    private iracingDataService: IracingDataService,
-  )
-  { }
+  constructor (iracingDataService: IracingDataService) {
+    super(iracingDataService);
+  }
 
   /**
    * Get current speed in MPH
    */
   get speedMph() {
-    return this.speed * Constants.speedMphMultiplier;
+    return this.speed * Constants.mathematical.speedMphMultiplier;
   }
 
   /**
-   * Subscribe to iRacing data and start updating the speed
+   * Subscribe to iRacing data and start updating the speed.
+   * The component will attempt to start the stream if it is not
+   * already running.
    */
   ngOnInit(): void {
-    this.iracingDataService.startStream();
+    super.ngOnInit();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
@@ -53,16 +44,5 @@ export class SpeedometerComponent implements OnInit {
           }
         }
       );
-  }
-
-  /**
-   * Unsubscribe from iRacing data
-   */
-  ngOnDestroy(): void {
-    this.iracingDataSubscription.unsubscribe();
-
-    if (!this.keepWsAlive) {
-      this.iracingDataService.stopStream();
-    }
   }
 }

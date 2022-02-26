@@ -28,6 +28,10 @@ export class IracingDataService {
   private _latestData = new BehaviorSubject<IracingDataFrame>(null);
   latestData$ = this._latestData.asObservable();
 
+  // Whether the websocket connection is open -
+  // used to prevent multiple connections
+  private streamOpen: boolean = false;
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -45,10 +49,12 @@ export class IracingDataService {
    * new data is received.
    */
   startStream() {
-    if (this._latestData.getValue() != null) {
+    if (this.streamOpen) {
       // Stream already running, do nothing
       return;
     }
+
+    this.streamOpen = true;
 
     let url = `${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`;
 
@@ -83,5 +89,6 @@ export class IracingDataService {
   stopStream() {
     this._latestData.next(null);
     this.wsSubscription.unsubscribe();
+    this.streamOpen = false;
   }
 }

@@ -1,9 +1,8 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { delay, retryWhen, Subscription, tap } from 'rxjs';
-import { IracingDataService } from '../../services/iracing-data.service';
-import { Constants } from '../../_helpers/constants';
-import { IracingDataFrame } from '../../models/iracing/data-frame';
 import * as _ from 'lodash';
+
+import { IracingDataService } from '../../services/iracing-data.service';
 
 @Component({
   selector: 'app-telemtry-display',
@@ -17,16 +16,6 @@ import * as _ from 'lodash';
 export class TelemetryDashboardComponent implements OnInit {
   iracingDataSubscription: Subscription;
   connected: boolean;
-
-  eventType: string;
-  track: string;
-  config: string;
-
-  rpm: number;
-
-  vertAccel: number;
-  latAccel: number;
-  longAccel: number;
 
   // Rolling data for charts
   windowSize: number = 300; // last 10 seconds
@@ -92,50 +81,16 @@ export class TelemetryDashboardComponent implements OnInit {
         response => {
           if (!_.isEmpty(response)) {
             this.connected = true;
-            this.update(response);
           } else {
             this.connected = false;
             this.error = 'No data available';
           }
+        },
+        error => {
+          this.connected = false;
+          this.error = error.message;
         }
       );
-  }
-
-  /**
-   * Update dashboard with current data
-   *
-   * @param jsonData latest frame of data
-   */
-  update(jsonData: IracingDataFrame) {
-    if (this.iracingDataSubscription.closed) {
-      this.connected = false;
-      return;
-    }
-
-    this.eventType = jsonData.WeekendInfo.EventType;
-    this.track = jsonData.WeekendInfo.TrackDisplayName;
-    this.config = jsonData.WeekendInfo.TrackConfigName;
-
-    this.rpm = jsonData.RPM;
-
-    this.vertAccel = jsonData.VertAccel - Constants.g;
-    this.latAccel = jsonData.LatAccel;
-    this.longAccel = jsonData.LongAccel;
-
-    // Update chart data
-    /*
-    this.throttleHistory.push(this.throttle);
-    this.brakeHistory.push(this.brake);
-    this.clutchHistory.push(this.clutch);
-    this.speedHistory.push(this.speed);
-    this.rpmHistory.push(this.rpm);
-
-    this.resize(this.throttleHistory);
-    this.resize(this.brakeHistory);
-    this.resize(this.clutchHistory);
-    this.resize(this.speedHistory);
-    this.resize(this.rpmHistory);
-    */
   }
 
   /**

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+
+import { BaseTelemetryDisplayComponent } from '../../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from '../../../../services/iracing-data.service';
 import { CarImageHelper } from '../../../../_helpers/car-image-helper';
 
@@ -13,33 +14,25 @@ import { CarImageHelper } from '../../../../_helpers/car-image-helper';
 /**
  * Component to show the steering wheel angle
  */
-export class WheelDisplayComponent implements OnInit {
-  /**
-   * If true, this component will unsubscribe from the websocket
-   * connection when destroyed, but will leave the connection open.
-   * This is useful when displaying multiple telemetry components
-   * on the same page.
-   */
-  @Input('keepAlive')
-  keepWsAlive: boolean = false;
-
-  private iracingDataSubscription: Subscription;
-
+export class WheelDisplayComponent extends BaseTelemetryDisplayComponent {
   driverIndex: number;
   car: string;
   wheelImage: string;
 
   constructor (
-    private iracingDataService: IracingDataService,
+    iracingDataService: IracingDataService,
     private renderer: Renderer2
-  )
-  { }
+  ) {
+    super(iracingDataService)
+  }
 
   /**
-   * Subscribe to iRacing data and start updating the steering wheel angle
+   * Subscribe to iRacing data and start updating the steering wheel angle.
+   * The component will attempt to start the stream if it is not
+   * already running.
    */
   ngOnInit(): void {
-    this.iracingDataService.startStream();
+    super.ngOnInit();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
@@ -58,17 +51,6 @@ export class WheelDisplayComponent implements OnInit {
           }
         }
       );
-  }
-
-  /**
-   * Unsubscribe from iRacing data
-   */
-  ngOnDestroy(): void {
-    this.iracingDataSubscription.unsubscribe();
-
-    if (!this.keepWsAlive) {
-      this.iracingDataService.stopStream();
-    }
   }
 
   /**

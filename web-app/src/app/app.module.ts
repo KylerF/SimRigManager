@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './components/app.component';
 import { ControllerListComponent } from './components/controller-list/controller-list.component';
@@ -38,6 +39,12 @@ import { ApiHealthcheckEffects } from './store/effects/api-healthcheck.effects';
 import { QuoteEffects } from './store/effects/quote.effects';
 import { PedalsDisplayComponent } from './components/telemetry-dashboard/inputs/pedals/pedals-display.component';
 import { SpeedometerComponent } from './components/telemetry-dashboard/speedometer/speedometer.component';
+import { WeekendInfoDisplayComponent } from './components/telemetry-dashboard/weekend-info-display/weekend-info-display.component';
+import { IncidentCountDisplayComponent } from './components/telemetry-dashboard/incident-count-display/incident-count-display.component';
+import { FlagDisplayComponent } from './components/telemetry-dashboard/flag-display/flag-display.component';
+import { ResourceUsageDisplayComponent } from './components/telemetry-dashboard/resource-usage-display/resource-usage-display.component';
+import { BaseTelemetryDisplayComponent } from './components/telemetry-dashboard/base-telemetry-display/base-telemetry-display.component';
+import { BestLapTimeDisplayComponent } from './components/telemetry-dashboard/best-lap-time-display/best-lap-time-display.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -78,6 +85,12 @@ const routes: Routes = [
     DriverAvatarComponent,
     DeleteDriverComponent,
     SpeedometerComponent,
+    WeekendInfoDisplayComponent,
+    IncidentCountDisplayComponent,
+    FlagDisplayComponent,
+    ResourceUsageDisplayComponent,
+    BaseTelemetryDisplayComponent,
+    BestLapTimeDisplayComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +100,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
+    DragDropModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([
       IracingEffects,
