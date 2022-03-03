@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 
-import { ControllerStatus } from '../../models/controller-status';
-import { ControllerService } from '../../services/controller.service';
-import { DriverService } from '../../services/driver.service';
-import { IracingDataService } from '../../services/iracing-data.service';
+import { ControllerStatus } from 'models/controller-status';
+import { ControllerService } from 'services/controller.service';
+import { DriverService } from 'services/driver.service';
+import { IracingDataService } from 'services/iracing-data.service';
 import { delay, Observable, retryWhen, Subscription, take, tap } from 'rxjs';
-import { Driver } from '../../models/driver';
-import { IracingDataFrame } from '../../models/iracing/data-frame';
-import * as fromRoot from '../../store/reducers';
+import { Driver } from 'models/driver';
+import { IracingDataFrame } from 'models/iracing/data-frame';
+import * as fromRoot from 'store/reducers';
 
 @Component({
   selector: 'app-home',
@@ -46,8 +46,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.iracingDataService.stopStream();
     this.iracingDataSubscription.unsubscribe();
+    this.iracingDataService.stopStream();
   }
 
   /**

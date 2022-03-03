@@ -3,6 +3,32 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "services/*": [
+        "./src/app/services/*"
+      ],
+      "components/*": [
+        "./src/app/components/*"
+      ],
+      "directives/*": [
+        "./src/app/directives/*"
+      ],
+      "pipes/*": [
+        "./src/app/pipes/*"
+      ],
+      "models/*": [
+        "./src/app/models/*"
+      ],
+      "store/*": [
+        "./src/app/store/*"
+      ],
+      "environments/*": [
+        "./src/environments/*"
+      ],
+      "helpers/*": [
+        "./src/app/_helpers/*"
+      ],
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

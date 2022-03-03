@@ -1,4 +1,4 @@
-import { IracingDataFrame } from '../../models/iracing/data-frame';
+import { IracingDataFrame } from 'models/iracing/data-frame';
 import * as iracingActions from '../actions/iracing.actions';
 
 export const iracingFeatureKey = 'iracing';

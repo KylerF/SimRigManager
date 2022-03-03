@@ -3,15 +3,15 @@ import {
   MetaReducer
 } from '@ngrx/store';
 
-import { environment } from '../../../environments/environment';
+import { environment } from 'environments/environment';
 
 import * as fromApiHealthcheck from './api-healthcheck.reducer';
 import * as fromIracing from './iracing.reducer';
 import * as fromQuote from './quote.reducer';
 
-import { AvailabilityCheck } from '../../models/availability-check';
-import { IracingDataFrame } from '../../models/iracing/data-frame';
-import { Quote } from '../../models/quote';
+import { AvailabilityCheck } from 'models/availability-check';
+import { IracingDataFrame } from 'models/iracing/data-frame';
+import { Quote } from 'models/quote';
 
 /**
  * The complete state of the application (combined from all reducers)

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { LoadQuote } from '../../store/actions/quote.actions';
-import { State, selectQuote } from '../../store/reducers';
-import { Quote } from '../../models/quote';
+import { LoadQuote } from 'store/actions/quote.actions';
+import { State, selectQuote } from 'store/reducers';
+import { Quote } from 'models/quote';
 
 @Component({
   selector: 'app-quote',

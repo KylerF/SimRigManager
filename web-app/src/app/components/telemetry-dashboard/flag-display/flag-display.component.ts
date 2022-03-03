@@ -2,14 +2,18 @@ import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
-import { Constants } from 'src/app/_helpers/constants';
-import { IracingDataService } from 'src/app/services/iracing-data.service';
+import { Constants } from 'helpers/constants';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-flag-display',
   templateUrl: './flag-display.component.html',
   styleUrls: ['./flag-display.component.scss']
 })
+
+/**
+ * Component to display the current flag
+ */
 export class FlagDisplayComponent extends BaseTelemetryDisplayComponent {
   private flagColorMap = new Map([
     [ Constants.iracing.flags.noFlag, 0 ],

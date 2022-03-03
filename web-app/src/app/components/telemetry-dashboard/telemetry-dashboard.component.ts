@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { delay, retryWhen, Subscription, tap } from 'rxjs';
 import * as _ from 'lodash';
 
-import { IracingDataService } from '../../services/iracing-data.service';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-telemtry-display',
@@ -31,7 +31,7 @@ export class TelemetryDashboardComponent implements OnInit {
    * Get the current iRacing data status (true if data available, false otherwise)
    */
   get iracingDataAvailable() {
-    return this.connected;
+    return this.connected && !this.error;
   }
 
   /**
@@ -79,11 +79,12 @@ export class TelemetryDashboardComponent implements OnInit {
       )
       .subscribe(
         response => {
-          if (!_.isEmpty(response)) {
-            this.connected = true;
-          } else {
-            this.connected = false;
+          this.connected = true;
+
+          if (_.isEmpty(response)) {
             this.error = 'No data available';
+          } else {
+            this.error = null;
           }
         },
         error => {

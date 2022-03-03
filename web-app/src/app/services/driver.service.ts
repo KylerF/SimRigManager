@@ -3,10 +3,10 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { DriverStats } from '../models/driver-stats';
-import { APIHelper } from '../_helpers/api-helper';
-import { NewDriver } from '../models/new-driver';
-import { Driver } from '../models/driver';
+import { DriverStats } from 'models/driver-stats';
+import { APIHelper } from 'helpers/api-helper';
+import { NewDriver } from 'models/new-driver';
+import { Driver } from 'models/driver';
 
 @Injectable({
   providedIn: 'root'

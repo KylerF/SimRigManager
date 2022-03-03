@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, delay, retryWhen, tap } from 'rxjs/operators';
 import { webSocket } from 'rxjs/webSocket'
 
-import { APIHelper } from '../_helpers/api-helper';
-import { IracingDataFrame } from '../models/iracing/data-frame';
+import { APIHelper } from 'helpers/api-helper';
+import { IracingDataFrame } from 'models/iracing/data-frame';
 import * as _ from 'lodash';
 
 @Injectable({

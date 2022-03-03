@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
-import { LapTimeService } from '../../services/lap-time.service';
-import { LapTime } from '../../models/lap-time';
-import { DriverService } from '../../services/driver.service';
+import { LapTimeService } from 'services/lap-time.service';
+import { DriverService } from 'services/driver.service';
+import { LapTime } from 'models/lap-time';
 import { Subscription } from 'rxjs';
 
 @Component({

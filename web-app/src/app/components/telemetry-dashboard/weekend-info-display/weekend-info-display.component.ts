@@ -2,13 +2,17 @@ import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
-import { IracingDataService } from '../../../services/iracing-data.service';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-weekend-info-display',
   templateUrl: './weekend-info-display.component.html',
   styleUrls: ['./weekend-info-display.component.scss']
 })
+
+/**
+ * Component to display the weekend info (track, weather, etc.)
+ */
 export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent {
   eventType: string;
   track: string;
@@ -18,11 +22,6 @@ export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent {
     super(iracingDataService);
   }
 
-  /**
-   * Subscribe to iRacing data and start updating the weekend info.
-   * The component will attempt to start the stream if it is not
-   * already running.
-   */
   ngOnInit(): void {
     super.ngOnInit();
 

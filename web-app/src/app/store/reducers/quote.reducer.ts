@@ -1,5 +1,5 @@
 import * as quoteActions from '../actions/quote.actions';
-import { Quote } from '../../models/quote';
+import { Quote } from 'models/quote';
 
 export const quoteFeatureKey = 'quote';
 

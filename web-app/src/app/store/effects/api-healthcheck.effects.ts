@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { asyncScheduler, Observable, timer } from 'rxjs';
 import { map, mergeMap, catchError, takeUntil } from 'rxjs/operators';
 
-import { AvailabilityService } from '../../services/availability.service';
+import { AvailabilityService } from 'services/availability.service';
 import { ApiHealthcheckActionTypes } from '../actions/api-healthcheck.actions';
 
 @Injectable()

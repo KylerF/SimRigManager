@@ -1,5 +1,5 @@
 import * as apiHealthcheckActions from '../actions/api-healthcheck.actions';
-import { AvailabilityCheck } from '../../models/availability-check';
+import { AvailabilityCheck } from 'models/availability-check';
 
 export const apiHealthcheckFeatureKey = 'apiHealthcheck';
 

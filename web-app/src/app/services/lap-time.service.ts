@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { LapTime } from '../models/lap-time';
-import { APIHelper } from '../_helpers/api-helper';
+import { LapTime } from 'models/lap-time';
+import { APIHelper } from 'helpers/api-helper';
 
 @Injectable({
   providedIn: 'root'

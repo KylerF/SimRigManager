@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mergeMap, map, catchError } from 'rxjs';
 
-import { IracingDataService } from '../../services/iracing-data.service';
+import { IracingDataService } from 'services/iracing-data.service';
 import { IracingActionTypes } from '../actions/iracing.actions';
 
 @Injectable()

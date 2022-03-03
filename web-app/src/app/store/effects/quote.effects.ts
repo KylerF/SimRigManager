@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mergeMap, map, catchError } from 'rxjs';
 
-import { QuoteService } from '../../services/quote.service';
+import { QuoteService } from 'services/quote.service';
 import { QuoteActionTypes } from '../actions/quote.actions';
 
 @Injectable()

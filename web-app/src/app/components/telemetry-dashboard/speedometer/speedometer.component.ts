@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
-import { IracingDataService } from '../../../services/iracing-data.service';
-import { Constants } from '../../../_helpers/constants';
+import { IracingDataService } from 'services/iracing-data.service';
+import { Constants } from 'helpers/constants';
 
 @Component({
   selector: 'app-speedometer-display',

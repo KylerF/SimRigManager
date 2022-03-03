@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { IracingDataService } from '../../../services/iracing-data.service';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-base-telemetry-display',

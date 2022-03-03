@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { Driver } from '../models/driver';
-import { DriverService } from '../services/driver.service';
-import { APIHelper } from '../_helpers/api-helper';
-import * as fromRoot from '../store/reducers';
-import * as apiHealthcheckActions from '../store/actions/api-healthcheck.actions';
+import { Driver } from 'models/driver';
+import { DriverService } from 'services/driver.service';
+import { APIHelper } from 'helpers/api-helper';
+import * as fromRoot from 'store/reducers';
+import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 
 @Component({
   selector: 'app-root',
