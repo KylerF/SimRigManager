@@ -1,15 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
-import { IracingDataService } from '../../../services/iracing-data.service';
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-incident-count-display',
   templateUrl: './incident-count-display.component.html',
   styleUrls: ['./incident-count-display.component.scss']
 })
+
+/**
+ * Component to show the current incident count / maximum incident count
+ */
 export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent {
   iracingDataSubscription: Subscription;
 

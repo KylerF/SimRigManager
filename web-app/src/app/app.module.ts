@@ -45,6 +45,10 @@ import { FlagDisplayComponent } from './components/telemetry-dashboard/flag-disp
 import { ResourceUsageDisplayComponent } from './components/telemetry-dashboard/resource-usage-display/resource-usage-display.component';
 import { BaseTelemetryDisplayComponent } from './components/telemetry-dashboard/base-telemetry-display/base-telemetry-display.component';
 import { BestLapTimeDisplayComponent } from './components/telemetry-dashboard/best-lap-time-display/best-lap-time-display.component';
+import { CurrentLapTimeDisplayComponent } from './components/telemetry-dashboard/current-lap-time-display/current-lap-time-display.component';
+import { GearIndicatorDisplayComponent } from './components/telemetry-dashboard/gear-indicator-display/gear-indicator-display.component';
+import { RpmDisplayComponent } from './components/telemetry-dashboard/rpm-display/rpm-display.component';
+import { DeltaDisplayComponent } from './components/telemetry-dashboard/delta-display/delta-display.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -91,6 +95,10 @@ const routes: Routes = [
     ResourceUsageDisplayComponent,
     BaseTelemetryDisplayComponent,
     BestLapTimeDisplayComponent,
+    CurrentLapTimeDisplayComponent,
+    GearIndicatorDisplayComponent,
+    RpmDisplayComponent,
+    DeltaDisplayComponent,
   ],
   imports: [
     BrowserModule,

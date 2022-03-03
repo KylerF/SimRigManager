@@ -1,33 +1,92 @@
-<div *ngIf="iracingDataAvailable" id="mainGrid" class="container">
-  <div class="row">
-    <div class="col">
-      <div class="telemetry-component" cdkDrag>
-        <app-wheel-display [keepAlive]="true"></app-wheel-display>
-      </div>
-    </div>
-    <div class="col" cdkDrag>
-      <div class="telemetry-component" cdkDrag>
-        <app-weekend-info-display [keepAlive]="true"></app-weekend-info-display>
-        <app-speedometer-display [keepAlive]="true"></app-speedometer-display>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col" cdkDrag>
-      <div class="telemetry-component" cdkDrag>
-        <app-pedals-display [keepAlive]="true"></app-pedals-display>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div *ngIf="!iracingDataAvailable" id="noData" class="pulse">
   <h1 class="display-3">
     Waiting for telemetry data
   </h1>
 </div>
 
-<app-incident-count-display [keepAlive]="true"></app-incident-count-display>
-<app-flag-display [keepAlive]="true"></app-flag-display>
-<app-resource-usage-display [keepAlive]="true"></app-resource-usage-display>
-<app-best-lap-time-display [keepAlive]="true"></app-best-lap-time-display>
+<div *ngIf="iracingDataAvailable" id="mainGrid" class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-wheel-display [keepAlive]="true"></app-wheel-display>
+      </div>
+    </div>
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-speedometer-display [keepAlive]="true"></app-speedometer-display>
+      </div>
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-gear-indicator-display [keepAlive]="true"></app-gear-indicator-display>
+      </div>
+    </div>
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-weekend-info-display [keepAlive]="true"></app-weekend-info-display>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-pedals-display [keepAlive]="true"></app-pedals-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-incident-count-display [keepAlive]="true"></app-incident-count-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-flag-display [keepAlive]="true"></app-flag-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-resource-usage-display [keepAlive]="true"></app-resource-usage-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-rpm-display [keepAlive]="true"></app-rpm-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-delta-display [keepAlive]="true"></app-delta-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-best-lap-time-display [keepAlive]="true"></app-best-lap-time-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid">
+        <app-current-lap-time-display [keepAlive]="true"></app-current-lap-time-display>
+      </div>
+    </div>
+  </div>
+</div>

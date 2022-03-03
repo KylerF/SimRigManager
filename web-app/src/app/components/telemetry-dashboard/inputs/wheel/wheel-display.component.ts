@@ -2,8 +2,8 @@ import { Component, Renderer2 } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../../base-telemetry-display/base-telemetry-display.component';
-import { IracingDataService } from '../../../../services/iracing-data.service';
-import { CarImageHelper } from '../../../../_helpers/car-image-helper';
+import { IracingDataService } from 'services/iracing-data.service';
+import { CarImageHelper } from 'helpers/car-image-helper';
 
 @Component({
   selector: 'app-wheel-display',
@@ -12,7 +12,7 @@ import { CarImageHelper } from '../../../../_helpers/car-image-helper';
 })
 
 /**
- * Component to show the steering wheel angle
+ * Component to display the steering wheel angle
  */
 export class WheelDisplayComponent extends BaseTelemetryDisplayComponent {
   driverIndex: number;
