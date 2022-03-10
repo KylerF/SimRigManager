@@ -23,7 +23,7 @@ export class IracingDataService {
 
   private wsSubscription: Subscription;
 
-  // Holds the latest data returned from the API - can be accessed by
+  // Holds the latest data returned from the API - can be subscribed to by
   // any component that needs it
   private _latestData = new BehaviorSubject<IracingDataFrame>(null);
   latestData$ = this._latestData.asObservable();
@@ -36,6 +36,7 @@ export class IracingDataService {
 
   /**
    * Request the latest data from the REST API
+   *
    * @returns an observable wrapping latest data
    */
   getLatest(): Observable<IracingDataFrame> {
@@ -74,11 +75,7 @@ export class IracingDataService {
     )
     .subscribe(
       (response: IracingDataFrame) => {
-        if (!_.isEmpty(response)) {
-          this._latestData.next(response);
-        } else {
-          this._latestData.next(response);
-        }
+        this._latestData.next(response);
       }
     );
   }

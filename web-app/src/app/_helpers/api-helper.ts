@@ -43,4 +43,15 @@ export class APIHelper {
   static handleError(error: HttpErrorResponse) {
     return throwError(() => new Error(error.message));
   }
+
+  /**
+   * Get a link to the iRacing SDK documentation for the given key
+   *
+   * @param key the key to get the link for - if not provided, returns
+   *            the base documentation URL
+   * @returns a link to the iRacing SDK documentation for the given key
+   */
+  static getSdkDocLink(key: string = ''): string {
+    return `https://sajax.github.io/irsdkdocs/telemetry/${key ? `${key.toLowerCase()}.html` : ''}`;
+  }
 }

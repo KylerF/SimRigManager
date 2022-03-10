@@ -1,0 +1,15 @@
+<div id="rawDataContainer">
+  <label for="keySelect"><b>Raw Data</b></label>
+  <a href="{{ docsURL }}" target="_blank" title="Go to Documentation">
+    <span class="bi bi-question-circle px-1"></span>
+  </a>
+  <select class="form-select" id="keySelect" [(ngModel)]="selectedKey">
+      <option *ngFor="let key of allKeys">
+          {{ key }}
+      </option>
+  </select>
+
+  <div id="rawData">
+    {{ rawValue }}
+  </div>
+</div>

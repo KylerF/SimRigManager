@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { delay, retryWhen, Subscription, tap } from 'rxjs';
+import { CdkDragEnd } from '@angular/cdk/drag-drop';
+
 import * as _ from 'lodash';
 
 import { IracingDataService } from 'services/iracing-data.service';
@@ -16,14 +18,6 @@ import { IracingDataService } from 'services/iracing-data.service';
 export class TelemetryDashboardComponent implements OnInit {
   iracingDataSubscription: Subscription;
   connected: boolean;
-
-  // Rolling data for charts
-  windowSize: number = 300; // last 10 seconds
-  throttleHistory: number[];
-  brakeHistory: number[];
-  clutchHistory: number[];
-  speedHistory: number[];
-  rpmHistory: number[];
 
   error: string;
 
@@ -95,13 +89,11 @@ export class TelemetryDashboardComponent implements OnInit {
   }
 
   /**
-   * Shift the array to fit the window size
+   * Save the drag position of components in the dashboard
    *
-   * @param data data to shift
+   * @param event drag event
    */
-  resize(data: number[]) {
-    if (data.length > this.windowSize) {
-      data.splice(0, data.length - this.windowSize);
-    }
+  onDragEnded($event: CdkDragEnd) {
+    console.log($event.source.getFreeDragPosition());
   }
 }

@@ -8,6 +8,10 @@ import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-te
   templateUrl: './rpm-display.component.html',
   styleUrls: ['./rpm-display.component.scss']
 })
+
+/**
+ * Component to display the current RPM of the car
+ */
 export class RpmDisplayComponent extends BaseTelemetryDisplayComponent {
   rpm: number;
   shiftRpm: number = 0;
@@ -16,6 +20,9 @@ export class RpmDisplayComponent extends BaseTelemetryDisplayComponent {
     super(iracingDataService);
   }
 
+  /**
+   * Subscribe to iRacing data and start updating the RPM
+   */
   ngOnInit(): void {
     super.ngOnInit();
 

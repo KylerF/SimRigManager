@@ -40,6 +40,16 @@ export const Constants = {
       twoCarsLeft:   5,
       twoCarsRight:  6
     },
+    sessionState: {
+      // iRacing SessionState values
+      invalid:    0x00000001,
+      getInCar:   0x00000002,
+      warmUp:     0x00000004,
+      paradeLaps: 0x00000008,
+      racing:     0x00000010,
+      checkered:  0x00000010,
+      coolDown:   0x00000010
+    },
     trackSurface: {
       // iRacing CarIdxTrackSurface values
       notInWorld:     -1,
@@ -47,6 +57,11 @@ export const Constants = {
       inPitStall:      1,
       approachingPits: 2,
       onTrack:         3
+    },
+    displayUnits: {
+      // iRacing DisplayUnits values
+      imperial: 0,
+      metric:   1
     }
   },
   mathematical: {

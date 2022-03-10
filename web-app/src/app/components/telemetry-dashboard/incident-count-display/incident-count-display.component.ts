@@ -20,8 +20,7 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
   incidentCount: number;
   incidentLimit: string;
 
-  constructor (iracingDataService: IracingDataService)
-  {
+  constructor (iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 

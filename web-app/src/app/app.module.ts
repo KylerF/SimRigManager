@@ -49,6 +49,9 @@ import { CurrentLapTimeDisplayComponent } from './components/telemetry-dashboard
 import { GearIndicatorDisplayComponent } from './components/telemetry-dashboard/gear-indicator-display/gear-indicator-display.component';
 import { RpmDisplayComponent } from './components/telemetry-dashboard/rpm-display/rpm-display.component';
 import { DeltaDisplayComponent } from './components/telemetry-dashboard/delta-display/delta-display.component';
+import { LapCountDisplayComponent } from './components/telemetry-dashboard/lap-count-display/lap-count-display.component';
+import { CarDisplayComponent } from './components/telemetry-dashboard/car-display/car-display.component';
+import { RawDataDisplayComponent } from './components/telemetry-dashboard/raw-data-display/raw-data-display.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -99,6 +102,9 @@ const routes: Routes = [
     GearIndicatorDisplayComponent,
     RpmDisplayComponent,
     DeltaDisplayComponent,
+    LapCountDisplayComponent,
+    CarDisplayComponent,
+    RawDataDisplayComponent,
   ],
   imports: [
     BrowserModule,
