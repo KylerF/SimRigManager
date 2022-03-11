@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { IracingDataService } from 'services/iracing-data.service';
+
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-car-display',
@@ -12,7 +13,7 @@ import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-te
 /**
  * Component to display the current car name
  */
-export class CarDisplayComponent extends BaseTelemetryDisplayComponent {
+export class CarDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   carName: string;
 
   constructor(iracingDataService: IracingDataService) {

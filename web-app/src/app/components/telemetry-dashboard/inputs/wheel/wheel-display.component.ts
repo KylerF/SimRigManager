@@ -1,4 +1,4 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../../base-telemetry-display/base-telemetry-display.component';
@@ -14,7 +14,7 @@ import { CarImageHelper } from 'helpers/car-image-helper';
 /**
  * Component to display the steering wheel angle
  */
-export class WheelDisplayComponent extends BaseTelemetryDisplayComponent {
+export class WheelDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   driverIndex: number;
   car: string;
   wheelImage: string;

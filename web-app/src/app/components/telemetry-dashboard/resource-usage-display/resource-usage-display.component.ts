@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -13,7 +13,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to show the current resource utilization (CPU, GPU) and framrate
  */
-export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent {
+export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   fps: number;
   cpuUsage: number;
   gpuUsage: number;

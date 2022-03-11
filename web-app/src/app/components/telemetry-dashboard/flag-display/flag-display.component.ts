@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -14,7 +14,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to display the current flag
  */
-export class FlagDisplayComponent extends BaseTelemetryDisplayComponent {
+export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   private flagColorMap = new Map([
     [ Constants.iracing.flags.noFlag, 0 ],
     [ Constants.iracing.flags.greenFlag, 10 ],

@@ -23,7 +23,6 @@ import { ControllerSettingsComponent } from './components/controller-settings/co
 import { IpAddressValidator } from './directives/validators/ip-address-validator.directive';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { DriverProfileComponent } from './components/driver-profile/driver-profile.component';
-import { DriverStatsComponent } from './components/driver-stats/driver-stats.component';
 import { HourglassIconComponent } from './components/hourglass-icon/hourglass-icon.component';
 import { DriverAvatarComponent } from './components/driver-avatar/driver-avatar.component';
 import { DeleteDriverComponent } from './components/delete-driver/delete-driver.component';
@@ -59,7 +58,6 @@ const routes: Routes = [
   { path: 'newdriver', component: NewDriverComponent },
   { path: 'selectdriver', component: SelectDriverComponent },
   { path: 'driverprofile', component: DriverProfileComponent },
-  { path: 'driverstats', component: DriverStatsComponent },
   { path: 'scoreboard', component: ScoreboardComponent },
   { path: 'controllers', component: ControllerListComponent },
   { path: 'telemetry', component: TelemetryDashboardComponent },
@@ -88,7 +86,6 @@ const routes: Routes = [
     WheelDisplayComponent,
     PedalsDisplayComponent,
     DriverProfileComponent,
-    DriverStatsComponent,
     HourglassIconComponent,
     DriverAvatarComponent,
     DeleteDriverComponent,

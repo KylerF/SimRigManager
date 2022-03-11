@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -13,7 +13,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to display the weekend info (track, weather, etc.)
  */
-export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent {
+export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   eventType: string;
   track: string;
   config: string;

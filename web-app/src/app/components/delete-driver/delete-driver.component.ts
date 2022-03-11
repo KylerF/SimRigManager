@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { DriverService } from '../../services/driver.service';
@@ -13,7 +13,7 @@ import { Driver } from '../../models/driver';
 /**
  * Modal component to confirm driver profile deletion
  */
-export class DeleteDriverComponent implements OnInit {
+export class DeleteDriverComponent {
   @Input() driver: Driver
   error: string;
 
@@ -22,9 +22,6 @@ export class DeleteDriverComponent implements OnInit {
     private activeModal: NgbActiveModal // Used to reference the modal in which this component is displayed
   )
   { }
-
-  ngOnInit(): void {}
-
 
   /**
    * Submit the request to delete a driver profile.

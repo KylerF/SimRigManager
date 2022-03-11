@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { interval } from "rxjs/internal/observable/interval";
 import { startWith } from "rxjs/operators";
@@ -11,7 +11,7 @@ import { DriverService } from '../../services/driver.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'controller-list',
+  selector: 'app-controller-list',
   templateUrl: './controller-list.component.html',
   styleUrls: ['./controller-list.component.scss']
 })
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 /**
  * Component to list and configure WLED controllers
  */
-export class ControllerListComponent implements OnInit {
+export class ControllerListComponent implements OnInit, OnDestroy {
   controllers: Controller[] = [];
   loading: boolean = true;
   error: string;

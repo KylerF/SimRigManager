@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -13,7 +13,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to display the current gear
  */
-export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent {
+export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   gear: number | string;
 
   constructor(iracingDataService: IracingDataService) {

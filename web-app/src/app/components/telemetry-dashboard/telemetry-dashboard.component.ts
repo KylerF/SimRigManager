@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { delay, retryWhen, Subscription, tap } from 'rxjs';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-
 import * as _ from 'lodash';
 
 import { IracingDataService } from 'services/iracing-data.service';
@@ -15,7 +14,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Dashboard to show real time iRacing data
  */
-export class TelemetryDashboardComponent implements OnInit {
+export class TelemetryDashboardComponent implements OnInit, OnDestroy {
   iracingDataSubscription: Subscription;
   connected: boolean;
 

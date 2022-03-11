@@ -43,8 +43,6 @@ export class ScoreboardComponent implements OnInit {
     this.getLapTimes();
   }
 
-  ngOnDestroy(): void { }
-
   /**
    * Fetch all lap times from the API
    */

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -13,7 +13,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to show the current lap time
  */
-export class CurrentLapTimeDisplayComponent extends BaseTelemetryDisplayComponent {
+export class CurrentLapTimeDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   currentLapTime: number;
 
   constructor(

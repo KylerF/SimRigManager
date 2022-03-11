@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { IracingDataService } from 'services/iracing-data.service';
@@ -13,15 +13,15 @@ import { IracingDataService } from 'services/iracing-data.service';
  * The base telemetry display component, which provides a common
  * interface for all telemetry display components.
  */
-export class BaseTelemetryDisplayComponent implements OnInit {
+export class BaseTelemetryDisplayComponent implements OnInit, OnDestroy {
   /**
    * If true, the component will unsubscribe from the websocket
    * connection when destroyed, but will leave the connection open.
    * This is useful when displaying multiple telemetry components
    * on the same page.
    */
-  @Input('keepAlive')
-  keepWsAlive: boolean = false;
+  @Input()
+  keepAlive: boolean = false;
 
   protected iracingDataSubscription: Subscription;
 
@@ -43,7 +43,7 @@ export class BaseTelemetryDisplayComponent implements OnInit {
   ngOnDestroy(): void {
     this.iracingDataSubscription?.unsubscribe();
 
-    if (!this.keepWsAlive) {
+    if (!this.keepAlive) {
       this.iracingDataService.stopStream();
     }
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -15,7 +15,7 @@ import { APIHelper } from 'helpers/api-helper';
  * Component to display a list of all raw iRacing data attributes and
  * selected raw data
  */
-export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent {
+export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   allKeys: string[];
   selectedKey: string;
   rawValue: string;

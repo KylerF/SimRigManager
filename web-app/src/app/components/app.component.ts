@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
@@ -14,7 +14,7 @@ import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
   driverChangeSubscription: Subscription;
 
   activeDriver: Driver;

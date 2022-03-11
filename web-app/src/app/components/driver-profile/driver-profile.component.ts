@@ -1,5 +1,5 @@
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
 import { DeleteDriverComponent } from '../delete-driver/delete-driver.component';

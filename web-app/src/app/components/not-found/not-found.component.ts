@@ -1,5 +1,5 @@
 import { trigger, transition, style, animate } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-not-found',
@@ -18,10 +18,7 @@ import { Component, OnInit } from '@angular/core';
 /**
  * Redirect here when a 404 is encountered
  */
-export class NotFoundComponent implements OnInit {
+export class NotFoundComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
@@ -13,7 +13,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to show the current session lap count
  */
-export class LapCountDisplayComponent extends BaseTelemetryDisplayComponent {
+export class LapCountDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   iracingDataSubscription: Subscription;
 
   lapCount: number;

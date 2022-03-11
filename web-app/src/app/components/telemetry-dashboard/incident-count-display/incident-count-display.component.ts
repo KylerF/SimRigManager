@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
@@ -14,7 +14,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 /**
  * Component to show the current incident count / maximum incident count
  */
-export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent {
+export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   iracingDataSubscription: Subscription;
 
   incidentCount: number;

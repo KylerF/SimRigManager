@@ -10,7 +10,7 @@
         <span class="bi bi-circle-fill" style="color:green"></span><b> SimRig API: </b>SimRig API is active
     </div>
 
-    <app-error-message *ngIf="!(apiActive$ | async)" title="SimRig API" message="SimRig API is offline"></app-error-message>
+    <app-error-message *ngIf="(apiActive$ | async) === null" title="SimRig API" message="SimRig API is offline"></app-error-message>
 
     <div *ngIf="(apiActive$ | async) && iracingData" class="accordion" id="iracing-accordion">
         <div class="accordion-item">
@@ -42,7 +42,7 @@
         <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for iRacing data
     </div>
 
-    <app-error-message *ngIf="!(apiActive$ | async) && !iracingData" title="iRacing" message="Unable to access iRacing data"></app-error-message>
+    <app-error-message *ngIf="(apiActive$ | async) === null && !iracingData" title="iRacing" message="Unable to access iRacing data"></app-error-message>
 
     <div *ngFor="let status of controllerStatus">
         <div *ngIf="status.online" class="alert alert-success">
@@ -52,5 +52,5 @@
         <app-error-message *ngIf="!status.online" title="WLED" message="{{ status.name }} is offline"></app-error-message>
     </div>
 
-    <app-error-message *ngIf="!(apiActive$ | async)" title="WLED" message="Unable to get WLED controllers"></app-error-message>
+    <app-error-message *ngIf="(apiActive$ | async) === null" title="WLED" message="Unable to get WLED controllers"></app-error-message>
 </div>

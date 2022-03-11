@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as _ from 'lodash';
 
@@ -6,7 +6,7 @@ import { ControllerStatus } from 'models/controller-status';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { IracingDataService } from 'services/iracing-data.service';
-import { delay, Observable, retryWhen, Subscription, take, tap } from 'rxjs';
+import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
 import * as fromRoot from 'store/reducers';
@@ -20,7 +20,7 @@ import * as fromRoot from 'store/reducers';
 /**
  * Component to show the home page with service availability status
  */
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   apiActive$: Observable<boolean>;
   iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;

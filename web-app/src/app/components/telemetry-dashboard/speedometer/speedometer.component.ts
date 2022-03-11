@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -14,7 +14,7 @@ import { Constants } from 'helpers/constants';
 /**
  * Component to show a speedometer
  */
-export class SpeedometerComponent extends BaseTelemetryDisplayComponent {
+export class SpeedometerComponent extends BaseTelemetryDisplayComponent implements OnInit {
   speed: number;
 
   constructor (iracingDataService: IracingDataService) {

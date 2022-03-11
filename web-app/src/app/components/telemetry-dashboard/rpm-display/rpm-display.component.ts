@@ -12,7 +12,7 @@ import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-te
 /**
  * Component to display the current RPM of the car
  */
-export class RpmDisplayComponent extends BaseTelemetryDisplayComponent {
+export class RpmDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   rpm: number;
   shiftRpm: number = 0;
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
@@ -15,7 +15,7 @@ import { IracingDataService } from 'services/iracing-data.service';
  * be generated from the driver's position on the track. To determine the position,
  * the driver's X and Y velocity is recorded throughout a lap.
  */
-export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent {
+export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   xVelocity: number;
   yVelocity: number;
   currentPosition: Position;
