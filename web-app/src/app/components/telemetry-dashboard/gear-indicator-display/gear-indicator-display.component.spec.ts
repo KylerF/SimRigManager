@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { GearIndicatorDisplayComponent } from './gear-indicator-display.component';
 
@@ -8,7 +9,8 @@ describe('GearIndicatorDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GearIndicatorDisplayComponent ]
+      declarations: [ GearIndicatorDisplayComponent ],
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });

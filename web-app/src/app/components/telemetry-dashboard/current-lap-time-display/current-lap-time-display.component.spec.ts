@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { CurrentLapTimeDisplayComponent } from './current-lap-time-display.component';
 
@@ -8,7 +9,8 @@ describe('CurrentLapTimeDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CurrentLapTimeDisplayComponent ]
+      declarations: [ CurrentLapTimeDisplayComponent ],
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });
