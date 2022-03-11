@@ -13,7 +13,7 @@ RUN mkdir -p /usr/src/mock-api
 WORKDIR /usr/src/mock-api
 
 # Copy the package.json files from local machine to the container
-COPY package*.json .
+COPY package*.json ./
 
 # Install dependencies from package.json
 RUN npm install
