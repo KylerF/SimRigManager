@@ -52,6 +52,7 @@ import { DeltaDisplayComponent } from './components/telemetry-dashboard/delta-di
 import { LapCountDisplayComponent } from './components/telemetry-dashboard/lap-count-display/lap-count-display.component';
 import { CarDisplayComponent } from './components/telemetry-dashboard/car-display/car-display.component';
 import { RawDataDisplayComponent } from './components/telemetry-dashboard/raw-data-display/raw-data-display.component';
+import { TrackMapDisplayComponent } from './components/telemetry-dashboard/track-map-display/track-map-display.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -105,6 +106,7 @@ const routes: Routes = [
     LapCountDisplayComponent,
     CarDisplayComponent,
     RawDataDisplayComponent,
+    TrackMapDisplayComponent,
   ],
   imports: [
     BrowserModule,

@@ -39,7 +39,7 @@ export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent {
           if (!_.isEmpty(data)) {
             if (!this.allKeys) {
               // Get all keys from the first data frame
-              this.allKeys = _.keys(data);
+              this.allKeys = _.keys(data).sort();
             }
 
             // Update the selected key
