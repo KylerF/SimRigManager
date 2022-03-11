@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build the application stack
+      - name: Build and test the application stack
         run: docker-compose up -d
