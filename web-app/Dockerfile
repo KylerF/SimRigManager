@@ -23,7 +23,7 @@ RUN mkdir -p /usr/src/web-app
 WORKDIR /usr/src/web-app
 
 # Copy the package.json files from local machine to the container
-COPY package*.json .
+COPY package*.json ./
 
 # Install dependencies from package.json
 RUN npm install
