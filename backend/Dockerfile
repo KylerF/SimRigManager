@@ -5,8 +5,8 @@
 # installs dependencies and runs the application.
 #
 
-# Pull the Ubuntu image
-FROM ubuntu:latest
+# Pull the Python image
+FROM python:3.8-slim-buster
 
 # Update and install Python
 RUN apt update -y && apt install -y python3-pip python-dev python3-venv
@@ -30,6 +30,10 @@ COPY . .
 # Run tests
 RUN pip3 install pytest
 RUN pytest
+
+# Run linter
+RUN pip3 install pycodestyle
+#RUN pycodestyle .
 
 # The API runs on 8000 within the container, so need to expose it
 EXPOSE 8000

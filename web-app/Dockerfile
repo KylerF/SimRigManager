@@ -25,8 +25,8 @@ WORKDIR /usr/src/web-app
 # Copy the package.json files from local machine to the container
 COPY package*.json ./
 
-# Install dependencies from package.json
-RUN npm install
+# Install dependencies from package-lock.json
+RUN npm ci
 
 # Copy the generated modules and all other files to the container
 COPY . .

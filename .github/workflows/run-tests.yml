@@ -1,13 +1,13 @@
-# Builds and runs tests on the entire application every time updates 
+# Builds and runs tests on the entire application every time changes 
 # are pushed.
 #
 # Since Docker Compose is configured to run unit and e2e tests, 
-# this simply calls the 'docker-compose up' command
+# this action simply calls the 'docker-compose up' command
 #
 name: Build and Run Tests
 on: push
 jobs:
-  test:
+  docker-compose:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

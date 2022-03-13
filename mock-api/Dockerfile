@@ -16,7 +16,7 @@ WORKDIR /usr/src/mock-api
 COPY package*.json ./
 
 # Install dependencies from package.json
-RUN npm install
+RUN npm ci
 
 # Copy the generated modules and all other files to the container
 COPY . .
