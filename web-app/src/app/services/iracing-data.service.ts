@@ -18,8 +18,8 @@ import * as _ from 'lodash';
  * websocket connection
  */
 export class IracingDataService {
-  private endpoint = 'latest';
-  private wsEndpoint = 'stream?raw=true';
+  private endpoint = 'iracing/latest';
+  private wsEndpoint = 'iracing/stream?raw=true';
 
   private wsSubscription: Subscription;
 
