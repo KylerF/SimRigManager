@@ -45,7 +45,7 @@ export class APIHelper {
   }
 
   /**
-   * Get a link to the iRacing SDK documentation for the given key
+   * Get a link to the iRacing SDK documentation for the given YAML key
    *
    * @param key the key to get the link for - if not provided, returns
    *            the base documentation URL

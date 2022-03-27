@@ -3,11 +3,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { interval } from "rxjs/internal/observable/interval";
 import { startWith } from "rxjs/operators";
 
-import { NewControllerComponent } from '../new-controller/new-controller.component';
-import { ControllerService } from '../../services/controller.service';
-import { Controller } from '../../models/controller';
 import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
-import { DriverService } from '../../services/driver.service';
+import { NewControllerComponent } from '../new-controller/new-controller.component';
+import { ControllerService } from 'services/controller.service';
+import { DriverService } from 'services/driver.service';
+import { Controller } from 'models/controller';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -141,7 +141,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
         modalRef.componentInstance.activeDriver = response;
 
         // Update controller in table after changes are made
-        modalRef.result.then((updatedController) => {
+        modalRef.result.then((updatedController: Controller) => {
           this.getControllers();
         })
         .catch(_ => {

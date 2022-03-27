@@ -10,23 +10,23 @@
     <title>SimRig Mock API</title>
     </head>
     <body>
-    <div class="container py-2">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">SimRig Mock API</h5>
-                All the fake iRacing data you need to build cool stuff.
-                Provided in real-time via websockets, or over HTTP.
-                <p class="card-text">
-                <h6>Endpoints</h6>
-                <ul>
-                    <li>ws://{baseURL}/stream — websocket connection to stream iRacing data</li>
-                    <li><a href="/latest">http://{baseURL}/latest</a> — returns the latest iRacing data</li>
-                    <li><a href="/files">http://{baseURL}/files</a> — returns a list of available files</li>
-                    <li>http://{baseURL}/files/{fileName} — selects the given file for streaming</li>
-                </ul>
-                </p>
+        <div class="container py-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">SimRig Mock API</h5>
+                    All the fake iRacing data you need to build cool stuff.
+                    Provided in real-time via websockets, or over HTTP.
+                    <p class="card-text">
+                    <h6>Endpoints</h6>
+                    <ul>
+                        <li>ws://{baseURL}/iracing/stream — websocket connection to stream iRacing data</li>
+                        <li><a href="/iracing/latest">http://{baseURL}/iracing/latest</a> — returns the latest iRacing data</li>
+                        <li><a href="/files">http://{baseURL}/files</a> — returns a list of available files</li>
+                        <li>http://{baseURL}/files/{fileName} — selects the given file for streaming</li>
+                    </ul>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
     </body>
 </html>
