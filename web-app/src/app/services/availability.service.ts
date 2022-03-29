@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, retry } from 'rxjs/operators';
-import { AvailabilityCheck } from '../models/availability-check';
-import { APIHelper } from '../_helpers/api-helper';
+import { catchError } from 'rxjs/operators';
+
+import { AvailabilityCheck } from 'models/availability-check';
+import { APIHelper } from 'helpers/api-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,12 @@ import { APIHelper } from '../_helpers/api-helper';
  * Service to check whether the API is available
  */
 export class AvailabilityService {
-  endpoint = '';
+  private endpoint = '';
 
   constructor(private http: HttpClient) { }
 
   getAPIAvailability() {
     return this.http.get<AvailabilityCheck>(APIHelper.getBaseUrl() + this.endpoint)
-      .pipe(retry(3), catchError(APIHelper.handleError));
+      .pipe(catchError(APIHelper.handleError));
   }
 }

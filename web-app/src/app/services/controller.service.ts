@@ -3,13 +3,13 @@ import { catchError, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { NewController } from '../models/new-controller';
-import { APIHelper } from '../_helpers/api-helper';
-import { Controller } from '../models/controller';
-import { WledState } from '../models/wled/wled-state';
-import { WledInfo } from '../models/wled/wled-info';
+import { NewController } from 'models/new-controller';
+import { APIHelper } from 'helpers/api-helper';
+import { Controller } from 'models/controller';
+import { WledState } from 'models/wled/wled-state';
+import { WledInfo } from 'models/wled/wled-info';
 import { ControllerSettings } from '../models/controller-settings';
-import { Driver } from '../models/driver';
+import { Driver } from 'models/driver';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +20,14 @@ import { Driver } from '../models/driver';
  * WLED light controllers
  */
 export class ControllerService {
-  endpoint = 'controllers';
-  settingsEndpoint = 'controllersettings';
+  private endpoint = 'controllers';
+  private settingsEndpoint = 'controllersettings';
 
   // Flag to enable power on/off (allowed only once per second to avoid
   // spamming the controller)
   powerEnabled = true;
 
-  wledRequestOptions: Object = {
+  private wledRequestOptions: Object = {
     responseType: 'text'
   }
 

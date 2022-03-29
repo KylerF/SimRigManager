@@ -1,5 +1,5 @@
 import { FormBuilder, Validators } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NewController } from '../../models/new-controller';
 
@@ -15,7 +15,7 @@ import { ipAddressValidatorFunction } from '../../directives/validators/ip-addre
 /**
  * Modal component to show the light controller creation form
  */
-export class NewControllerComponent implements OnInit {
+export class NewControllerComponent {
   @ViewChild('closebutton') closebutton;
 
   newController: NewController = { 'name': '', 'ipAddress': '', 'universe': null };
@@ -35,9 +35,6 @@ export class NewControllerComponent implements OnInit {
     private formBuilder: FormBuilder // Used to build the new driver form
   )
   { }
-
-  ngOnInit(): void {
-  }
 
   /**
    * Called when the new driver form is submitted. If valid, the

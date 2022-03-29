@@ -11,6 +11,7 @@
   "author": "KylerF",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-rate-limit": "^6.0.1",
     "express-ws": "^5.0.2",

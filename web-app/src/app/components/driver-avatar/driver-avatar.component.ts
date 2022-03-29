@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { APIHelper } from 'src/app/_helpers/api-helper';
+import { APIHelper } from '../../_helpers/api-helper';
 
 @Component({
   selector: 'app-driver-avatar',

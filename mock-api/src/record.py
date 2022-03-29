@@ -39,7 +39,10 @@ def on_open(ws):
     print("Press CTRL+C to stop recording")
 
 def on_close(ws, close_status_code, close_msg):
-    print("### closed ###")
+    print(
+        "### closed: status={0}, msg={1} ###"
+        .format(close_status_code, close_msg)
+    )
 
 def on_error(ws, error):
     print(error)

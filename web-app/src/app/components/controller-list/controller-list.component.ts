@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { interval } from "rxjs/internal/observable/interval";
 import { startWith } from "rxjs/operators";
 
-import { NewControllerComponent } from '../new-controller/new-controller.component';
-import { ControllerService } from '../../services/controller.service';
-import { Controller } from '../../models/controller';
 import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
-import { DriverService } from '../../services/driver.service';
+import { NewControllerComponent } from '../new-controller/new-controller.component';
+import { ControllerService } from 'services/controller.service';
+import { DriverService } from 'services/driver.service';
+import { Controller } from 'models/controller';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'controller-list',
+  selector: 'app-controller-list',
   templateUrl: './controller-list.component.html',
   styleUrls: ['./controller-list.component.scss']
 })
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 /**
  * Component to list and configure WLED controllers
  */
-export class ControllerListComponent implements OnInit {
+export class ControllerListComponent implements OnInit, OnDestroy {
   controllers: Controller[] = [];
   loading: boolean = true;
   error: string;
@@ -141,7 +141,7 @@ export class ControllerListComponent implements OnInit {
         modalRef.componentInstance.activeDriver = response;
 
         // Update controller in table after changes are made
-        modalRef.result.then((updatedController) => {
+        modalRef.result.then((updatedController: Controller) => {
           this.getControllers();
         })
         .catch(_ => {
