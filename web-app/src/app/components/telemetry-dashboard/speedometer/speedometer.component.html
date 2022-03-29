@@ -1,0 +1,9 @@
+<div id="speedometerContainer">
+  <h1 [ngClass]="{
+    'low-speed-text': speedMph < 60,
+    'mid-speed-text': speedMph > 60 && speedMph < 120,
+    'high-speed-text': speedMph >= 120
+  }">
+    {{ speedMph | number : '1.0-0' }} MPH
+  </h1>
+</div>

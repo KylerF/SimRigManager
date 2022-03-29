@@ -23,10 +23,10 @@ RUN mkdir -p /usr/src/web-app
 WORKDIR /usr/src/web-app
 
 # Copy the package.json files from local machine to the container
-COPY package*.json .
+COPY package*.json ./
 
-# Install dependencies from package.json
-RUN npm install
+# Install dependencies from package-lock.json
+RUN npm ci
 
 # Copy the generated modules and all other files to the container
 COPY . .
@@ -34,8 +34,10 @@ COPY . .
 # The app runs on 4200 within the container, so need to expose it
 EXPOSE 4200
 
-# Run tests
+# Run linting and tests
+RUN npm run lint
 RUN npm test
+RUN npm run e2e
 
 # Run the app using Angular cli
 CMD [ "npm", "run", "start_lan" ]

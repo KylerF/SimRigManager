@@ -8,14 +8,17 @@
  * record all session data to a JSON file in ./data.
  * 
  * Endpoints:
- *  ws://{baseURL}/stream: returns a JSON stream of iRacing data
- *  http://{baseURL}/latest: returns the latest iRacing data
+ *  ws://{baseURL}/iracing/stream - websocket connection to stream iRacing data
+ *  http://{baseURL}/iracing/latest - returns the latest iRacing data
+ *  http://{baseURL}/files — returns a list of available files
+ *  http://{baseURL}/files/{fileName} — selects the given file for streaming
  */
 
 const StreamArray = require('stream-json/streamers/StreamArray');
-const expressWebSocket = require('express-ws');
 const rateLimit = require('express-rate-limit').default;
+const expressWebSocket = require('express-ws');
 const express = require('express');
+const cors = require("cors");
 const path = require('path');
 const fs = require('fs');
 
@@ -29,7 +32,8 @@ const app = express();
 const limiter = rateLimit({
   windowMs: 1000, // 1 second
   max: 5,
-  message: 'Whoa there partner, slow down! Only 5 requests per second.',
+  message: 'Whoa there partner, slow down! Only 5 requests per second.\
+            Try a websocket connection if you need real-time data.',
 });
 
 // Apply rate limiter to all requests
@@ -49,7 +53,7 @@ app.get('/', (_, res) => {
 /**
  * Endpoint for the latest iRacing data.
  */
-app.get("/latest", (_, res) => {
+app.get("/iracing/latest", cors(), (_, res) => {
   res.send(currentFrame);
 });
 
@@ -108,7 +112,7 @@ expressWebSocket(app, null, {
  * Websocket endpoint for the mock API.
  * Streams JSON data to all connected clients.
  */
-app.ws('/stream', (ws) => {
+app.ws('/iracing/stream', (ws) => {
   wsConnections.push(ws);
 
   ws.on('close', () => {
@@ -129,7 +133,7 @@ function getFileStream(file) {
   let newStream = fs.createReadStream(file)
     .pipe(jsonStream.input);
 
-  jsonStream.on('data', ({key, value}) => {
+  jsonStream.on('data', ({_, value}) => {
     wsConnections.forEach(ws => {
       ws.send(JSON.stringify(value));
     });

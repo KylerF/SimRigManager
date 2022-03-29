@@ -1,0 +1,4 @@
+# These files are not copied into containers
+node_modules
+npm-debug.log
+src/data/

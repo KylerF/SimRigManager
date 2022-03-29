@@ -1,0 +1,42 @@
+$navbar-height: 10;
+
+@-webkit-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+
+@-moz-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+
+@-o-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+
+@keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+
+#mainGrid {
+  width: 100%;
+  height: 100vh - $navbar-height;
+}
+
+.pulse {
+  -webkit-animation: pulse 3s infinite;
+  -moz-animation: pulse 3s infinite;
+  -o-animation: pulse 3s infinite;
+  animation: pulse 3s infinite;
+}
+
+#noData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh - $navbar-height;
+}
+
+.telemetry-component {
+  width: fit-content;
+  height: fit-content;
+  cursor: move;
+}
