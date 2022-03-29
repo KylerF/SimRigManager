@@ -34,9 +34,10 @@ COPY . .
 # The app runs on 4200 within the container, so need to expose it
 EXPOSE 4200
 
-# Run tests and linting
-RUN npm test
+# Run linting and tests
 RUN npm run lint
+RUN npm test
+RUN npm run e2e
 
 # Run the app using Angular cli
 CMD [ "npm", "run", "start_lan" ]

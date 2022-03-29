@@ -123,7 +123,7 @@ def __get_avatar_path(driver_id):
     safe_avatar_path = path.normpath(path.join(current_path, filename))
 
     if not safe_avatar_path.startswith(current_path):
-        raise SecurityException()
+        raise SecurityException("Unsafe file path requested")
 
     return path.join(
         current_path, 

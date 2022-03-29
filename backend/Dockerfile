@@ -24,13 +24,13 @@ RUN pip install -r requirements.txt
 # Copy source files into the container
 COPY . .
 
+# Run linter
+#RUN pip install pycodestyle
+#RUN pycodestyle .
+
 # Run tests
 RUN pip install pytest
 RUN pytest
-
-# Run linter
-RUN pip install pycodestyle
-#RUN pycodestyle .
 
 # The API runs on 8000 within the container, so need to expose it
 EXPOSE 8000
