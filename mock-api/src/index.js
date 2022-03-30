@@ -23,6 +23,7 @@ const path = require('path');
 const fs = require('fs');
 
 var wsConnections = [];
+var eventSourceConnections = [];
 var currentFrame = {};
 
 var jsonStream = StreamArray.withParser();
@@ -120,6 +121,34 @@ app.ws('/iracing/stream', (ws) => {
   });
 });
 
+/**
+ * HTTP endpoint to stream iRacing data via server sent events.
+ */
+app.get('/iracing/stream', (req, res) => {
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive',
+  });
+  res.flushHeaders();
+
+  // Ping every 15 seconds
+  setInterval(() => {
+    res.write('event: ping\n');
+    res.write(`data: ${new Date().toISOString()}\n\n`);
+  }, 15000);
+
+  eventSourceConnections.push(res);
+
+  stream.on('end', () => {
+    eventSourceConnections = eventSourceConnections.filter(
+      conn => conn !== res
+    );
+
+    res.end();
+  });
+})
+
 app.listen(8001);
 
 /**
@@ -134,11 +163,19 @@ function getFileStream(file) {
     .pipe(jsonStream.input);
 
   jsonStream.on('data', ({_, value}) => {
+    // Update all connected clients with the latest data
     wsConnections.forEach(ws => {
       ws.send(JSON.stringify(value));
     });
 
+    eventSourceConnections.forEach(conn => {
+      conn.write(`data: ${JSON.stringify(value)}\n\n`);
+    });
+
+    // Update the current frame
     currentFrame = value;
+
+    // Slow down the stream to simulate real-time
     slowDownStream(newStream);
   });
 
