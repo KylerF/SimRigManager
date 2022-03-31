@@ -9,6 +9,7 @@
  * 
  * Endpoints:
  *  ws://{baseURL}/iracing/stream - websocket connection to stream iRacing data
+ *  http://{baseURL}/iracing/stream - stream iRacing data via Server Sent Events
  *  http://{baseURL}/iracing/latest - returns the latest iRacing data
  *  http://{baseURL}/files — returns a list of available files
  *  http://{baseURL}/files/{fileName} — selects the given file for streaming
