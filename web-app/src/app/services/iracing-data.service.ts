@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { isDevMode } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { catchError, delay, retryWhen, tap } from 'rxjs/operators';
-import { webSocket } from 'rxjs/webSocket'
+import { webSocket } from 'rxjs/webSocket';
 
 import { APIHelper } from 'helpers/api-helper';
 import { IracingDataFrame } from 'models/iracing/data-frame';
