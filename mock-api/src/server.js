@@ -28,6 +28,7 @@ const fs = require('fs');
 var wsConnections = [];
 var eventSourceConnections = [];
 var currentFrame = {};
+var stream;
 
 var options = {
   selectedFile: "default",
@@ -43,6 +44,7 @@ fs.readFile('config.json', 'utf8', (error, data) => {
       let config = JSON.parse(data);
       verifyConfig(config);
       options = config;
+      stream = getFileStream(`./src/data/${options.selectedFile}.json`);
     } catch (error) {
       console.error(`There is an error in your configuration file: ${error}`);
       console.log('Using default config options');
@@ -69,10 +71,6 @@ const limiter = rateLimit({
 
 // Apply rate limiter to all requests
 app.use(limiter);
-
-var stream = getFileStream('./src/data/default.json');
-
-// Load any saved config options
 
 // Save config options on exit
 process.on("SIGINT", saveConfigOptions);
