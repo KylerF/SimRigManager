@@ -43,7 +43,8 @@
                         </div>
                         <div class="form-group">
                             <label for="delayInput">Stream Delay</label>
-                            <input id="delayInput" class="form-control" type="number" value="<%=delay%>" onchange="setDelay()"/>
+                            <input id="delayInput" class="form-control" type="number" min="0" max="100" value="<%=delay%>" onchange="setDelay(this)"/>
+                            <input type="range" class="form-range" min="0" max="100" id="delaySlider" value="<%=delay%>" oninput="delayInput()" onchange="setDelay(this)">
                             <small class="form-text text-muted">
                                 Delay between frames (in milliseconds). Lower values will result in faster streaming.
                             </small>
@@ -59,8 +60,14 @@
         var file = $("#fileSelect").val();
         $.get(`/files/${file}`);
     }
-    function setDelay() {
-        var delay = $("#delayInput").val();
+    function delayInput() {
+        $("#delayInput").val($("#delaySlider").val());
+    }
+    function setDelay(input) {
+        var delay = input.value;
         $.get(`/delay/${delay}`);
+
+        $("#delayInput").val(delay);
+        $("#delaySlider").val(delay);
     }
 </script>
