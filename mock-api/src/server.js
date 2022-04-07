@@ -44,7 +44,15 @@ fs.readFile('config.json', 'utf8', (error, data) => {
       let config = JSON.parse(data);
       verifyConfig(config);
       options = config;
-      stream = getFileStream(`./src/data/${options.selectedFile}.json`);
+
+      fs.stat(`./src/data/${options.selectedFile}.json`, (err, stat) => {
+        if(err) {
+          console.error(`Unable to load selected file: ${err}`);
+          console.log('Using default file');
+          options.selectedFile = 'default';
+        }
+        stream = getFileStream(`./src/data/${options.selectedFile}.json`);
+      });
     } catch (error) {
       console.error(`There is an error in your configuration file: ${error}`);
       console.log('Using default config options');
