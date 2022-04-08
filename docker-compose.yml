@@ -23,6 +23,7 @@ services:
             - "8000:8000"
         environment:
             - REDIS_HOST=redis
+            - PORT=8000
     
     # Configure the web app
     web-app:
@@ -43,6 +44,8 @@ services:
             - /usr/src/mock-api/node_modules
         ports:
             - "8001:8001"
+        environment:
+            - PORT=8001
 
     # Configure the Redis server
     redis:

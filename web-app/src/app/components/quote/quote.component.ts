@@ -14,7 +14,7 @@ import { Quote } from 'models/quote';
 
 /**
  * Component to display an inspirational racing quote.
- * Included in the scoreboard component.
+ * Included in the home component.
  */
 export class QuoteComponent implements OnInit {
   quote$: Observable<Quote>;
