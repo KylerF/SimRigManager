@@ -12,11 +12,11 @@ FROM node:lts-alpine as base
 RUN mkdir -p /usr/src/mock-api
 WORKDIR /usr/src/mock-api
 
-# Copy the package.json files from local machine to the container
-COPY package*.json .
+# Copy package.json and lockfile into the container
+COPY package.json yarn.lock ./
 
-# Install dependencies from package.json
-RUN npm install
+# Install dependencies from lockfile
+RUN yarn install --frozen-lockfile
 
 # Copy the generated modules and all other files to the container
 COPY . .
@@ -25,7 +25,7 @@ COPY . .
 EXPOSE 8001
 
 # Run tests
-RUN npm test
+RUN yarn test
 
 # Run the app
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

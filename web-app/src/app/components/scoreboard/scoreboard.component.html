@@ -72,7 +72,7 @@
 	</div>
 </div>
 
-<table *ngIf="!error" class="table table-bordered row-border reactive-font">
+<table *ngIf="!error" class="table table-bordered reactive-font">
 	<thead>
 		<tr>
 			<th (click)="sortScores('driver', 'toggle')">
@@ -81,8 +81,8 @@
 						Driver
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'driver' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
-						<span *ngIf="sortColumn == 'driver' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'driver' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'driver' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
 					</div>
 				</div>
 			</th>
@@ -92,8 +92,8 @@
 						Car
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'car' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
-						<span *ngIf="sortColumn == 'car' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'car' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'car' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
 					</div>
 				</div>
 			</th>
@@ -103,8 +103,8 @@
 						Track
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'trackName' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
-						<span *ngIf="sortColumn == 'trackName' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'trackName' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'trackName' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
 					</div>
 				</div>
 			</th>
@@ -114,8 +114,8 @@
 						Config
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'trackConfig' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
-						<span *ngIf="sortColumn == 'trackConfig' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'trackConfig' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'trackConfig' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
 					</div>
 				</div>
 			</th>
@@ -125,8 +125,8 @@
 						Time
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'time' && sortOrder == 'asc'" class="bi bi-sort-down-alt"></span>
-						<span *ngIf="sortColumn == 'time' && sortOrder == 'desc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'time' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'time' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
 					</div>
 				</div>
 			</th>
@@ -136,8 +136,8 @@
 						Set
 					</div>
 					<div class="ms-auto m-1">
-						<span *ngIf="sortColumn == 'setAt' && sortOrder == 'asc'" class="bi bi-sort-up"></span>
-						<span *ngIf="sortColumn == 'setAt' && sortOrder == 'desc'" class="bi bi-sort-down-alt"></span>
+						<span *ngIf="sortColumn === 'setAt' && sortOrder === 'asc'" class="bi bi-sort-up"></span>
+						<span *ngIf="sortColumn === 'setAt' && sortOrder === 'desc'" class="bi bi-sort-down-alt"></span>
 					</div>
 				</div>
 			</th>

@@ -1,0 +1,9 @@
+<div
+  id="deltaContainer"
+  [ngClass]="{
+    'delta-positive': delta <= 0,
+    'delta-negative': delta > 0
+  }"
+>
+  {{ delta > 0 ? '+' : delta === 0 ? '-' : '' }}{{ delta | number : '1.2-2'}}
+</div>

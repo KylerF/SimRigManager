@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -14,7 +14,7 @@ import { NewDriver } from '../../models/new-driver';
 /**
  * Modal component to show the driver creation form
  */
-export class NewDriverComponent implements OnInit {
+export class NewDriverComponent {
   newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
   submitted = false;
   error: string;
@@ -31,10 +31,6 @@ export class NewDriverComponent implements OnInit {
     private formBuilder: FormBuilder // Used to build the new driver form
   )
   { }
-
-  ngOnInit(): void {
-
-  }
 
   /**
    * Called when the new driver form is submitted. If valid, the

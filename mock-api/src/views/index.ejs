@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <script src="./js/bootstrap.min.js"></script>
+        <script src="./js/jquery.min.js"></script>
+        <title>SimRig Mock API</title>
+    </head>
+    <body>
+        <div class="container py-2">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">SimRig Mock API</h1>
+                    <hr/>
+                    All the fake iRacing data you need to build cool stuff.
+                    Provided in real-time via websockets, or over HTTP.
+                    <p class="card-text">
+                        <h5>Endpoints</h5>
+                        <hr/>
+                        <ul>
+                            <li>ws://{baseURL}/iracing/stream — websocket connection to stream iRacing data</li>
+                            <li><a href="/iracing/stream">http://{baseURL}/iracing/stream</a> - stream iRacing data via Server Sent Events</li>
+                            <li><a href="/iracing/latest">http://{baseURL}/iracing/latest</a> — returns the latest iRacing data</li>
+                            <li><a href="/files">http://{baseURL}/files</a> — returns a list of available files</li>
+                            <li>http://{baseURL}/files/{fileName} — selects the given file for streaming</li>
+                            <li>http://{baseURL}/delay/{ms} - sets the streaming delay between frames in milliseconds</li>
+                        </ul>
+                        <h5>Controls</h5>
+                        <hr/>
+                        <div class="form-group">
+                            <label for="fileSelect">Data File</label>
+                            <select id="fileSelect" class="form-control" onchange="setFile()">
+                                <option disabled>Select a File</option>
+                                <%
+                                    for (var i = 0; i < files.length; i++) {
+                                        var selected = (files[i] == selectedFile) ? "selected" : "";
+                                        %><option value="<%=files[i]%>" <%=selected %>><%= files[i] %></option><%
+                                    }
+                                %>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="delayInput">Stream Delay</label>
+                            <input id="delayInput" class="form-control" type="number" min="0" max="100" value="<%=delay%>" onchange="setDelay(this)"/>
+                            <input type="range" class="form-range" min="0" max="100" id="delaySlider" value="<%=delay%>" oninput="delayInput()" onchange="setDelay(this)">
+                            <small class="form-text text-muted">
+                                Delay between frames (in milliseconds). Lower values will result in faster streaming.
+                            </small>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    function setFile() {
+        var file = $("#fileSelect").val();
+        $.get(`/files/${file}`);
+    }
+    function delayInput() {
+        $("#delayInput").val($("#delaySlider").val());
+    }
+    function setDelay(input) {
+        var delay = input.value;
+        $.get(`/delay/${delay}`);
+
+        $("#delayInput").val(delay);
+        $("#delaySlider").val(delay);
+    }
+</script>

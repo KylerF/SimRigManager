@@ -131,7 +131,7 @@ def __get_avatar_path(driver_id):
 
     # Filter out unsafe paths
     if not safe_avatar_path.startswith(current_path):
-        raise SecurityException()
+        raise SecurityException("Unsafe file path requested")
 
     avatar_directory = path.join(
         current_path, 

@@ -1,6 +1,10 @@
-import { Quote } from '../../models/quote';
 import { Component, OnInit } from '@angular/core';
-import { QuoteService } from '../../services/quote.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
+import { LoadQuote } from 'store/actions/quote.actions';
+import { State, selectQuote } from 'store/reducers';
+import { Quote } from 'models/quote';
 
 @Component({
   selector: 'app-quote',
@@ -10,28 +14,19 @@ import { QuoteService } from '../../services/quote.service';
 
 /**
  * Component to display an inspirational racing quote.
- * Included in the scoreboard component.
+ * Included in the home component.
  */
 export class QuoteComponent implements OnInit {
-  quote: Quote;
-  error: string;
+  quote$: Observable<Quote>;
 
-  constructor(private quoteService: QuoteService) { }
+  constructor(private store: Store<State>) { }
 
   ngOnInit(): void {
+    this.quote$ = this.store.select(selectQuote);
     this.getRandomQuote();
   }
 
   getRandomQuote() {
-    this.quoteService.getRandomQuote().subscribe(
-      response => {
-        // Success! Sort by set date by default.
-        this.quote = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
-      }
-    );
+    this.store.dispatch(new LoadQuote());
   }
 }

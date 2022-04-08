@@ -5,11 +5,8 @@
 # installs dependencies and runs the application.
 #
 
-# Pull the Ubuntu image
-FROM ubuntu:latest
-
-# Update and install Python
-RUN apt update -y && apt install -y python3-pip python-dev python3-venv
+# Pull the Python image
+FROM python:3.8-slim-buster
 
 # Create the source directory inside the container
 RUN mkdir -p /usr/src/backend
@@ -17,18 +14,22 @@ WORKDIR /usr/src/backend
 
 # Set up a virtual environment
 ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
+RUN python -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install dependencies:
 COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy source files into the container
 COPY . .
 
+# Run linter
+#RUN pip install pycodestyle
+#RUN pycodestyle .
+
 # Run tests
-RUN pip3 install pytest
+RUN pip install pytest
 RUN pytest
 
 # The API runs on 8000 within the container, so need to expose it

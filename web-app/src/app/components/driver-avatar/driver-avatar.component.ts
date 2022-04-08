@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { DriverService } from 'src/app/services/driver.service';
+import { Driver } from 'models/driver';
+
 @Component({
   selector: 'app-driver-avatar',
   templateUrl: './driver-avatar.component.html',
@@ -10,7 +13,7 @@ import { DriverService } from 'src/app/services/driver.service';
  * Component to display a driver's avatar
  */
 export class DriverAvatarComponent implements OnInit {
-  @Input() driver;
+  @Input() driver: Driver;
   @Input() maxWidth;
 
   avatarURL: string;
@@ -31,7 +34,7 @@ export class DriverAvatarComponent implements OnInit {
 
   setAvatarURL() {
     if (this.driver) {
-      this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+      this.avatarURL = this.driver.profilePic;
     }
   }
 }

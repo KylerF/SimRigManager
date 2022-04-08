@@ -22,11 +22,11 @@ ENV CHROME_BIN /usr/bin/chromium-browser
 RUN mkdir -p /usr/src/web-app
 WORKDIR /usr/src/web-app
 
-# Copy the package.json files from local machine to the container
-COPY package*.json .
+# Copy package.json and lockfile into the container
+COPY package.json yarn.lock ./
 
-# Install dependencies from package.json
-RUN npm install
+# Install dependencies from lockfile
+RUN yarn install --frozen-lockfile
 
 # Copy the generated modules and all other files to the container
 COPY . .
@@ -34,8 +34,10 @@ COPY . .
 # The app runs on 4200 within the container, so need to expose it
 EXPOSE 4200
 
-# Run tests
-RUN npm test
+# Run linting and tests
+RUN yarn run lint
+RUN yarn test
+RUN yarn run e2e
 
 # Run the app using Angular cli
-CMD [ "npm", "run", "start_lan" ]
+CMD [ "yarn", "run", "start_lan" ]

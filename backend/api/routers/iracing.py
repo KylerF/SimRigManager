@@ -21,7 +21,8 @@ async def get_latest(raw=False):
     """
     return get_iracing_data(raw=raw)
 
-@router.websocket("/stream")
+# Websockets do not pick up the prefix for some reason
+@router.websocket("/iracing/stream")
 async def ws_stream_iracing_data(websocket: WebSocket, ws_connection_manager=Depends(get_ws_manager)):
     """
     Stream current iRacing data over a websocket connection. 
@@ -51,7 +52,8 @@ async def ws_stream_iracing_data(websocket: WebSocket, ws_connection_manager=Dep
 @router.get("/stream")
 async def stream_iracing_data(request: Request):
     """
-    Stream iracing data via server sent events
+    Stream iracing data via server sent events. This endpoint also 
+    supports websocket connections.
     """
     event_generator = SSEGenerators.get_generator(request, "iracing")
     return EventSourceResponse(event_generator)

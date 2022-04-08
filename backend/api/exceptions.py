@@ -1,8 +1,8 @@
 """
 Custom exceptions for the API
 """
-def SecurityException(message):
+def SecurityException(Exception):
     """
     Exception for security issues
     """
-    return Exception(message)
+    pass

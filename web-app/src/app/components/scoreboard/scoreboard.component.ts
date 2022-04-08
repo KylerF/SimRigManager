@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
-import { LapTimeService } from '../../services/lap-time.service';
-import { LapTime } from '../../models/lap-time';
-import { DriverService } from '../../services/driver.service';
+import { LapTimeService } from 'services/lap-time.service';
+import { DriverService } from 'services/driver.service';
+import { LapTime } from 'models/lap-time';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -43,8 +43,6 @@ export class ScoreboardComponent implements OnInit {
     this.getLapTimes();
   }
 
-  ngOnDestroy(): void { }
-
   /**
    * Fetch all lap times from the API
    */
@@ -52,10 +50,13 @@ export class ScoreboardComponent implements OnInit {
     this.lapTimeService.getLapTimes().subscribe(
       response => {
         // Success!
-        this.lapTimes = response;
-        this.filteredLapTimes = this.lapTimes;
-        this.showOverallBestTimes();
-        this.sortScores('setAt', 'desc');
+        if (response.length) {
+          this.lapTimes = response;
+          this.filteredLapTimes = this.lapTimes;
+          this.showOverallBestTimes();
+          this.sortScores('setAt', 'desc');
+        }
+
         this.loading = false;
       },
       error => {

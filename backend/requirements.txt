@@ -1,14 +1,16 @@
 uvicorn[standard]
+starlette==0.17.1
 python-multipart
 sqlalchemy_utils
+fastapi==0.75.0
 sse-starlette
 sqlalchemy
-starlette==0.17.1
 pydantic
 aiofiles
 pyirsdk
 fastapi
 Pillow
 colour 
+pylint
 redis
 sacn

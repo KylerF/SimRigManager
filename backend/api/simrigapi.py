@@ -1,11 +1,12 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from os import path, getenv
+from os import path
 import redis
 import json
 
 from database.database import get_db
 from database import crud, schemas
+from api.utils import get_redis_store
 from api.routers import (
     controllers, 
     laptimes, 
@@ -34,7 +35,7 @@ class SimRigAPI:
         )
 
         # Connect to Redis
-        self.redis_store = self.get_redis_store()
+        self.redis_store = get_redis_store()
 
         # Set up the API
         self.api = FastAPI(
@@ -75,16 +76,6 @@ class SimRigAPI:
         Availability check 
         """
         return {"active": True}
-
-    def get_redis_store(self):
-        """
-        Provides a connection to Redis to API routers
-        """
-        return redis.Redis(
-            host=getenv("REDIS_HOST", "127.0.0.1"), 
-            charset="utf-8", 
-            decode_responses=True
-        )
 
     async def set_active_driver(self, driver: schemas.ActiveDriverCreate):
         """

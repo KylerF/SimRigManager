@@ -1,4 +1,8 @@
 # SimRig Manager
+
+[![CodeQL](https://github.com/KylerF/SimRigManager/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/KylerF/SimRigManager/actions/workflows/codeql-analysis.yml)
+[![Build and Run Tests](https://github.com/KylerF/SimRigManager/actions/workflows/run-tests.yml/badge.svg)](https://github.com/KylerF/SimRigManager/actions/workflows/run-tests.yml)
+
 Manage all of your iRacing accessories and data
 1. Control custom LED fixtures (currently just an RPM gauge)
 2. Set up driver profiles and compete for the fastest lap times
