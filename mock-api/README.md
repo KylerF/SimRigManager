@@ -34,3 +34,6 @@ python record.py [FILENAME] --host=[URL_TO_SIMRIG_API]
 This will record all real-time session data being streamed by the SimRig API (so you will need an actual session running in iRacing), and save it to data/[FILENAME].json. You can manage data files through the mock API using these endpoints:
 - [/files](http://localhost:8001/files): lists all available data files
 - /files/[FILENAME]: will open the given file - if it exists - and begin streaming it
+- /delay/[DELAY VALUE]: sets the delay between data streams in milliseconds
+
+These options are also configurable through the UI controls on the home page.
