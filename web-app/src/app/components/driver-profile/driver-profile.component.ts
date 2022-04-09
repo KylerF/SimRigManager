@@ -21,12 +21,10 @@ import { Driver } from '../../models/driver';
 export class DriverProfileComponent implements OnInit {
   driver: Driver;
   driverStats: DriverStats
+  avatarURL: string;
   editingProfile: boolean;
   profileUpdated: boolean;
   error: string;
-
-  // Updated when avatar is changed to trigger a redraw
-  params: string;
 
   constructor(
     private driverService: DriverService,
@@ -46,7 +44,7 @@ export class DriverProfileComponent implements OnInit {
     this.driverService.getSelectedDriver().subscribe (
       response => {
         this.driver = response;
-        this.driver.profilePic = `${APIHelper.getBaseUrl()}${this.driver.profilePic.substring(1)}`;
+        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.getDriverStats(this.driver.id);
       },
       error => {
@@ -90,9 +88,7 @@ export class DriverProfileComponent implements OnInit {
     }
 
     this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
-      response => {
-        // Add timestamp to src to force an immediate update
-        this.params = `?${Date.now().toString()}`;
+      _ => {
         this.saveProfile();
       },
       error => {
@@ -116,6 +112,7 @@ export class DriverProfileComponent implements OnInit {
       response => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
+        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
       error => {
