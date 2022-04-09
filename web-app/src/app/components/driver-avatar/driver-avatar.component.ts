@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 import { DriverService } from 'src/app/services/driver.service';
 import { Driver } from 'models/driver';
@@ -12,7 +12,7 @@ import { Driver } from 'models/driver';
 /**
  * Component to display a driver's avatar
  */
-export class DriverAvatarComponent implements OnInit {
+export class DriverAvatarComponent implements OnInit, OnChanges {
   @Input() driver: Driver;
   @Input() maxWidth;
 
@@ -24,14 +24,18 @@ export class DriverAvatarComponent implements OnInit {
 
   ngOnInit(): void {
     this.setAvatarURL();
-
-    // Watch for changes to the driver's profile picture
-    this.driverService.selectedDriver$.subscribe(driver => {
-      this.driver = driver;
-      this.setAvatarURL();
-    });
   }
 
+  /**
+   * Update the avatar URL when the driver changes
+   */
+  ngOnChanges() {
+    this.setAvatarURL();
+  }
+
+  /**
+   * Set the avatar URL using the driver service
+   */
   setAvatarURL() {
     if (this.driver) {
       this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
