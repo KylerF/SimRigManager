@@ -34,7 +34,7 @@ export class DriverAvatarComponent implements OnInit {
 
   setAvatarURL() {
     if (this.driver) {
-      this.avatarURL = this.driver.profilePic;
+      this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
     }
   }
 }

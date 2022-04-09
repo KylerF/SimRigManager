@@ -42,7 +42,6 @@ async def get_avatar(driver_id: int, width: Optional[int]=0, height: Optional[in
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
-    print(__create_image_response(avatar_path, width, height))
     return __create_image_response(avatar_path, width, height)
 
 @router.post("/{driver_id}")
@@ -175,16 +174,19 @@ def __resize_image_file(image_path, width: Optional[int], height: Optional[int])
     format = image.format
 
     if width:
+        width = min(width, 1280)
         if height:
-            image = image.resize((width, height), Image.ANTIALIAS)
+            height = min(height, 720)
+            image.thumbnail((width, height), Image.ANTIALIAS)
         else:
-            image = image.resize((width, width), Image.ANTIALIAS)
+            image.thumbnail((width, width), Image.ANTIALIAS)
 
         # Convert to bytes using original file format
         return __image_to_bytes(image, format)
 
     if height:
-        image = image.resize((height, height), Image.ANTIALIAS)
+        height = min(height, 720)
+        image.thumbnail((height, height), Image.ANTIALIAS)
 
     return __image_to_bytes(image, format)
 
