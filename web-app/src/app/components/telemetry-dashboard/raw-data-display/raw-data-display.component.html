@@ -4,6 +4,7 @@
     <span class="bi bi-question-circle px-1"></span>
   </a>
   <select class="form-select" id="keySelect" [(ngModel)]="selectedKey">
+    <option selected disabled>Select a Variable</option>
       <option *ngFor="let key of allKeys">
           {{ key }}
       </option>

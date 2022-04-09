@@ -93,6 +93,7 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
    * @param event drag event
    */
   onDragEnded($event: CdkDragEnd) {
-    console.log($event.source.getFreeDragPosition());
+    //TODO: save the position of the component
+    //console.log($event.source.getFreeDragPosition());
   }
 }

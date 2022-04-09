@@ -3,7 +3,7 @@
         <div class="card-header">
             <div (click)="fileInput.click()">
                 <div class="profile-pic">
-                    <svg *ngIf="!driver.profilePic" class="img-fluid rounded-circle"
+                    <svg *ngIf="!avatarURL" class="img-fluid rounded-circle"
                     width="512pt" height="512pt" viewBox="0 0 512 512">
                         <g transform="translate(0,512) scale(0.1,-0.1)"
                         fill="#000000" stroke="none">
@@ -37,8 +37,8 @@
                         </g>
                     </svg>
                     <img
-                      *ngIf="driver.profilePic" class="img-responsive full-width rounded-circle"
-                      src="{{ driver.profilePic }}{{ params }}" width="350px" height="350px"
+                      *ngIf="avatarURL" class="img-responsive full-width rounded-circle"
+                      src="{{ avatarURL }}" width="350px" height="350px"
                     >
                     <div class="upload-button">
                         <button *ngIf="!driver.profilePic" class="btn btn-secondary">

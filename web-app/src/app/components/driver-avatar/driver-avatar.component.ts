@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { APIHelper } from '../../_helpers/api-helper';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+
+import { DriverService } from 'src/app/services/driver.service';
+import { Driver } from 'models/driver';
 
 @Component({
   selector: 'app-driver-avatar',
@@ -10,16 +12,33 @@ import { APIHelper } from '../../_helpers/api-helper';
 /**
  * Component to display a driver's avatar
  */
-export class DriverAvatarComponent implements OnInit {
-  @Input() driver;
+export class DriverAvatarComponent implements OnInit, OnChanges {
+  @Input() driver: Driver;
   @Input() maxWidth;
-  @Input() params: string = "";
 
-  constructor() { }
+  avatarURL: string;
+
+  constructor(
+    private driverService: DriverService
+  ) { }
 
   ngOnInit(): void {
-    if (this.driver?.profilePic) {
-      this.driver.profilePic = `${APIHelper.getBaseUrl()}${this.driver.profilePic.substring(1)}`;
+    this.setAvatarURL();
+  }
+
+  /**
+   * Update the avatar URL when the driver changes
+   */
+  ngOnChanges() {
+    this.setAvatarURL();
+  }
+
+  /**
+   * Set the avatar URL using the driver service
+   */
+  setAvatarURL() {
+    if (this.driver) {
+      this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
     }
   }
 }
