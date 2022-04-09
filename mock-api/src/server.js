@@ -13,22 +13,61 @@
  *  http://{baseURL}/iracing/latest - returns the latest iRacing data
  *  http://{baseURL}/files — returns a list of available files
  *  http://{baseURL}/files/{fileName} — selects the given file for streaming
+ *  http://{baseURL}/delay/{ms} — sets the delay between streaming data frames in milliseconds
  */
 
 const StreamArray = require('stream-json/streamers/StreamArray');
 const rateLimit = require('express-rate-limit').default;
 const expressWebSocket = require('express-ws');
 const express = require('express');
-const cors = require("cors");
+const process = require('process');
+const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
 var wsConnections = [];
 var eventSourceConnections = [];
 var currentFrame = {};
+var stream;
+
+var options = {
+  selectedFile: "default",
+  streamDelay: 30
+};
+
+// Load config options from file
+fs.readFile('config.json', 'utf8', (error, data) => {
+  if (error) {
+    console.log('Using default config options');
+  } else {
+    try {
+      let config = JSON.parse(data);
+      verifyConfig(config);
+      options = config;
+
+      fs.stat(`./src/data/${options.selectedFile}.json`, (err, stat) => {
+        if(err) {
+          console.error(`Unable to load selected file: ${err}`);
+          console.log('Using default file');
+          options.selectedFile = 'default';
+        }
+        stream = getFileStream(`./src/data/${options.selectedFile}.json`);
+      });
+    } catch (error) {
+      console.error(`There is an error in your configuration file: ${error}`);
+      console.log('Using default config options');
+    }
+  }
+});
 
 var jsonStream = StreamArray.withParser();
 const app = express();
+
+app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views')); 
+app.use('/css', express.static('node_modules/bootstrap/dist/css'));
+app.use('/js', express.static('node_modules/bootstrap/dist/js'));
+app.use('/js', express.static('node_modules/jquery/dist'));
 
 // Set up rate limiter: maximum of five requests per second
 const limiter = rateLimit({
@@ -41,21 +80,40 @@ const limiter = rateLimit({
 // Apply rate limiter to all requests
 app.use(limiter);
 
-var stream = getFileStream('./src/data/default.json');
+// Save config options on exit
+process.on("SIGINT", saveConfigOptions);
+process.on("SIGTERM", saveConfigOptions);
+process.on("SIGHUP", saveConfigOptions);
 
 /**
  * Root endpoint for the mock API.
- * Returns all available endpoints with their descriptions in a fancy card using bootstrap.
- * Routes to index.html
+ * Returns all available endpoints with their descriptions in a 
+ * fancy card using bootstrap.
  */
-app.get('/', (_, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.get('/', (req, res) => {
+  fs.readdir('./src/data', (err, files) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(500);
+    } else {
+      let fileNames = files.filter(file => 
+        file.endsWith('.json')
+      )
+      .map(file => file.split('.')[0]);
+
+      res.render('index', {
+        files: fileNames,
+        selectedFile: options.selectedFile,
+        delay: options.streamDelay
+      });
+    }
+  });
 });
 
 /**
  * Endpoint for the latest iRacing data.
  */
-app.get("/iracing/latest", cors(), (_, res) => {
+app.get('/iracing/latest', cors(), (req, res) => {
   res.send(currentFrame);
 });
 
@@ -66,10 +124,10 @@ app.get("/iracing/latest", cors(), (_, res) => {
  * @returns {array} list of files without file extensions
  * @example ['default', 'test']
  */
-app.get("/files", (_, res) => {
+app.get('/files', (req, res) => {
   fs.readdir('./src/data', (err, files) => {
     if (err) {
-      console.log(err);
+      console.error(err);
       res.sendStatus(500);
     } else {
       res.send(
@@ -89,7 +147,7 @@ app.get("/files", (_, res) => {
  * 
  * @param {string} file name of the file to stream
  */
-app.get("/files/:file", (req, res) => {
+app.get('/files/:file', (req, res) => {
   const file = req.params.file;
   const sanitizedFile = path.normalize(file).replace(/^(\.\.[\/\\])+/, '');
 
@@ -99,6 +157,7 @@ app.get("/files/:file", (req, res) => {
     if (err) {
       res.sendStatus(404);
     } else {
+      options.selectedFile = sanitizedFile;
       stream.destroy();
       stream = getFileStream(filePath);
       res.sendStatus(200);
@@ -148,9 +207,23 @@ app.get('/iracing/stream', (req, res) => {
 
     res.end();
   });
-})
+});
 
-app.listen(8001);
+/**
+ * Endpoint used to set the delay between frames
+ * 
+ * @param {integer} delay milliseconds to wait between frames
+ */
+app.get('/delay/:delay', (req, res) => {
+  const delay = req.params.delay;
+  options.streamDelay = delay;
+
+  res.sendStatus(200);
+});
+
+app.listen(8001, () => {
+  console.log('Listening on port 8001');
+});
 
 /**
  * Open the mock data file and return a readstream
@@ -190,11 +263,11 @@ function getFileStream(file) {
 /**
  * Slows down a JSON file stream to simulate a real-time stream
  * 
- * @param {*} stream readstream to be paused
+ * @param {stream} stream readstream to be paused
  */
 async function slowDownStream(stream) {
   stream.pause();
-  await sleep(30);
+  await sleep(options.streamDelay);
   stream.resume();
 }
 
@@ -205,4 +278,33 @@ async function slowDownStream(stream) {
  */
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Check that loaded configuration options include the expected keys
+ * 
+ * @param {object} config object to verify
+ */
+function verifyConfig(config) {
+  for (let key in options) {
+    if (!config[key]) {
+      throw Error(`"${key}" option missing`)
+    }
+  }
+}
+
+/**
+ * Save configuration options to disk
+ */
+function saveConfigOptions() {
+  try {
+    fs.writeFileSync(
+      './config.json',
+      JSON.stringify(options)
+    );
+  } catch(error) {
+    console.error(`Unable to save config options: ${error}`);
+  } finally {
+    process.exit(0);
+  }
 }

@@ -7,7 +7,7 @@
 <div *ngIf="iracingDataAvailable" id="mainGrid" class="container-fluid">
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)" [cdkDragFreeDragPosition]="{x: 368, y: 407}">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
         <app-wheel-display [keepAlive]="true"></app-wheel-display>
       </div>
     </div>

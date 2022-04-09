@@ -12,9 +12,9 @@ export const initialState: Quote = {
 export function reducer(state = initialState, action: quoteActions.QuoteActions): Quote {
   switch (action.type) {
     case quoteActions.QuoteActionTypes.LoadQuoteSuccess:
-      return hanndleLoadQuoteSuccess(action);
+      return handleLoadQuoteSuccess(action);
     case quoteActions.QuoteActionTypes.LoadQuoteFailure:
-      return hanndleLoadQuoteFailure();
+      return handleLoadQuoteFailure();
     default:
       return state;
   }
@@ -26,7 +26,7 @@ export function reducer(state = initialState, action: quoteActions.QuoteActions)
  * @param action load quote success action
  * @returns quote data
  */
- function hanndleLoadQuoteSuccess(action: quoteActions.LoadQuoteSuccess): Quote {
+ function handleLoadQuoteSuccess(action: quoteActions.LoadQuoteSuccess): Quote {
   return {
     id: action.payload.data.id,
     text: action.payload.data.text,
@@ -39,6 +39,6 @@ export function reducer(state = initialState, action: quoteActions.QuoteActions)
  *
  * @returns a default quote
  */
-function hanndleLoadQuoteFailure(): Quote {
+function handleLoadQuoteFailure(): Quote {
   return initialState;
 }

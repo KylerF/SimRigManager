@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DriverAvatarComponent } from './driver-avatar.component';
 
@@ -8,7 +9,8 @@ describe('DriverAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DriverAvatarComponent ]
+      declarations: [ DriverAvatarComponent ],
+      imports: [ HttpClientTestingModule ]
     })
     .compileComponents();
   });

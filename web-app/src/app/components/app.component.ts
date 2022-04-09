@@ -18,9 +18,9 @@ export class AppComponent implements OnInit {
   driverChangeSubscription: Subscription;
 
   activeDriver: Driver;
-  error: string;
+  avatarURL: string;
 
-  params: string = "";
+  error: string;
 
   constructor(
     private store: Store<fromRoot.State>,
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
    */
   updateDriverDisplay(driver) {
     this.activeDriver = driver;
-    this.params = `?${Date.now().toString()}`;
+    this.avatarURL = this.driverService.getAvatarURLForDriver(this.activeDriver);
   }
 
   /**
@@ -61,7 +61,6 @@ export class AppComponent implements OnInit {
       response => {
         // Success!
         this.activeDriver = response;
-        this.activeDriver.profilePic = `${APIHelper.getBaseUrl()}${this.activeDriver.profilePic.substring(1)}`;
       },
       error => {
         // Failed. Save the response.

@@ -2,14 +2,13 @@
  * Unit tests for the DriverService
  */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { DriverService } from './driver.service';
 
 describe('DriverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [ DriverService ]
+      imports: [ HttpClientModule ]
     });
   });
 
