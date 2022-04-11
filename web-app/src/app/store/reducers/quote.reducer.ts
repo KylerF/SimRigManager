@@ -35,9 +35,9 @@ export function reducer(
  * @param action load quote success action
  * @returns quote data
  */
- function handleLoadQuoteSuccess(
+function handleLoadQuoteSuccess(
    action: quoteActions.LoadQuoteSuccess
-  ): StateContainer<Quote> {
+): StateContainer<Quote> {
   return {
     state: {
       id: action.payload.data.id,
