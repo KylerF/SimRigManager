@@ -1,10 +1,16 @@
 import * as apiHealthcheckActions from '../actions/api-healthcheck.actions';
 import { AvailabilityCheck } from 'models/availability-check';
+import { StateContainer } from 'models/state';
+import * as moment from 'moment';
 
 export const apiHealthcheckFeatureKey = 'apiHealthcheck';
 
-export const initialState: AvailabilityCheck = {
-  active: false
+export const initialState: StateContainer<AvailabilityCheck> = {
+  state: {
+    active: false
+  },
+  error: '',
+  lastUpdated: null
 };
 
 /**
@@ -14,12 +20,15 @@ export const initialState: AvailabilityCheck = {
  * @param action The action to process
  * @returns The new state
  */
-export function reducer(state = initialState, action: apiHealthcheckActions.ApiHealthcheckActions): AvailabilityCheck {
+export function reducer(
+  state = initialState,
+  action: apiHealthcheckActions.ApiHealthcheckActions
+): StateContainer<AvailabilityCheck> {
   switch (action.type) {
     case apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess:
       return handleSetStatusSuccess(action);
     case apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure:
-      return handleSetStatusFailure();
+      return handleSetStatusFailure(action);
     default:
       return state;
   }
@@ -31,9 +40,15 @@ export function reducer(state = initialState, action: apiHealthcheckActions.ApiH
  * @param action update healthcheck success action
  * @returns active status reported by the API
  */
-function handleSetStatusSuccess(action: apiHealthcheckActions.UpdateApiHealthcheckSuccess): AvailabilityCheck {
+function handleSetStatusSuccess(
+  action: apiHealthcheckActions.UpdateApiHealthcheckSuccess
+): StateContainer<AvailabilityCheck> {
   return {
-    active: action.payload.data.active
+    state: {
+      ...action.payload.data
+    },
+    error: '',
+    lastUpdated: moment().toDate()
   };
 }
 
@@ -42,8 +57,14 @@ function handleSetStatusSuccess(action: apiHealthcheckActions.UpdateApiHealthche
  *
  * @returns active: false
  */
-function handleSetStatusFailure(): AvailabilityCheck {
+function handleSetStatusFailure(
+  action: apiHealthcheckActions.UpdateApiHealthcheckFailure
+): StateContainer<AvailabilityCheck> {
   return {
-    active: false
-  };
+    state: {
+      active: false
+    },
+    error: action.payload.error,
+    lastUpdated: moment().toDate()
+  }
 }
