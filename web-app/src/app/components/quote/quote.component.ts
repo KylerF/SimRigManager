@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { LoadQuote } from 'store/actions/quote.actions';
 import { State, selectQuote } from 'store/reducers';
 import { Quote } from 'models/quote';
+import { StateContainer } from 'models/state';
 
 @Component({
   selector: 'app-quote',
@@ -17,7 +18,7 @@ import { Quote } from 'models/quote';
  * Included in the home component.
  */
 export class QuoteComponent implements OnInit {
-  quote$: Observable<Quote>;
+  quote$: Observable<StateContainer<Quote>>;
 
   constructor(private store: Store<State>) { }
 

@@ -12,14 +12,15 @@ import * as fromQuote from './quote.reducer';
 import { AvailabilityCheck } from 'models/availability-check';
 import { IracingDataFrame } from 'models/iracing/data-frame';
 import { Quote } from 'models/quote';
+import { StateContainer } from 'models/state';
 
 /**
  * The complete state of the application (combined from all reducers)
  */
 export interface State {
   [fromIracing.iracingFeatureKey]: IracingDataFrame;
-  [fromApiHealthcheck.apiHealthcheckFeatureKey]: AvailabilityCheck;
-  [fromQuote.quoteFeatureKey]: Quote;
+  [fromApiHealthcheck.apiHealthcheckFeatureKey]: StateContainer<AvailabilityCheck>;
+  [fromQuote.quoteFeatureKey]: StateContainer<Quote>;
 }
 
 /**
@@ -36,7 +37,7 @@ export const metaReducers: MetaReducer<State>[] = !environment.production ? [] :
 // Top-level state selectors
 export const selectAPIActive =
   (state: State) =>
-    state[fromApiHealthcheck.apiHealthcheckFeatureKey].active;
+    state[fromApiHealthcheck.apiHealthcheckFeatureKey].state.active;
 
 export const selectQuote =
   (state: State) =>

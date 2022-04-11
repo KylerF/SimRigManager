@@ -1,16 +1,22 @@
-<div *ngIf="(quote$ | async) as quote; else loading">
-  <figure *ngIf="quote?.text; else loading" class="text-center">
-    <blockquote class="blockquote">
-      <p>{{ quote.text }}</p>
-    </blockquote>
-    <figcaption class="blockquote-footer">
-      {{ quote.by }}
-    </figcaption>
-  </figure>
+<div *ngIf="(quote$ | async) as quote">
+  <div *ngIf="!quote.error; else error">
+    <figure *ngIf="quote.state.text; else loading" class="text-center">
+      <blockquote class="blockquote">
+        <p>{{ quote.state.text }}</p>
+      </blockquote>
+      <figcaption class="blockquote-footer">
+        {{ quote.state.by }}
+      </figcaption>
+    </figure>
+  </div>
 </div>
 
 <ng-template #loading>
   <div class="text-center">
     <div class="spinner-border" role="status"></div>
   </div>
+</ng-template>
+
+<ng-template #error>
+
 </ng-template>
