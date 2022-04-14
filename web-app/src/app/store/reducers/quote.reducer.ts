@@ -35,14 +35,12 @@ export function reducer(
  * @param action load quote success action
  * @returns quote data
  */
- function handleLoadQuoteSuccess(
+function handleLoadQuoteSuccess(
    action: quoteActions.LoadQuoteSuccess
-  ): StateContainer<Quote> {
+): StateContainer<Quote> {
   return {
     state: {
-      id: action.payload.data.id,
-      text: action.payload.data.text,
-      by: action.payload.data.by
+      ...action.payload.data
     },
     error: '',
     lastUpdated: moment().toDate()
@@ -59,9 +57,7 @@ function handleLoadQuoteFailure(
 ): StateContainer<Quote> {
   return {
     state: {
-      id: 0,
-      text: '',
-      by: ''
+      ...initialState.state
     },
     error: action.payload.error,
     lastUpdated: moment().toDate()

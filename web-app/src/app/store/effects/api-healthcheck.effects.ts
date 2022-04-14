@@ -41,7 +41,7 @@ export class ApiHealthcheckEffects {
                 catchError(
                   error => [{
                     type: ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure,
-                    payload: error
+                    payload: { error: error.message }
                   }]
                 )
               )

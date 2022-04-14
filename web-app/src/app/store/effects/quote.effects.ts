@@ -31,7 +31,7 @@ export class QuoteEffects {
         catchError(
           error => [{
             type: QuoteActionTypes.LoadQuoteFailure,
-            payload: error
+            payload: { error: error.message }
           }]
         )
       ))

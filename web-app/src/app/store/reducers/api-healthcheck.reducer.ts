@@ -62,7 +62,7 @@ function handleSetStatusFailure(
 ): StateContainer<AvailabilityCheck> {
   return {
     state: {
-      active: false
+      ...initialState.state
     },
     error: action.payload.error,
     lastUpdated: moment().toDate()

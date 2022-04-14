@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
 import { DriverService } from 'services/driver.service';
-import { APIHelper } from 'helpers/api-helper';
 import * as fromRoot from 'store/reducers';
 import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 
