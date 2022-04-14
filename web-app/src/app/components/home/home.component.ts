@@ -80,42 +80,27 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Get the last selected driver
    */
   getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        // Success!
-        this.selectedDriver = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.errors.push(error.message);
-      }
-    );
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => this.selectedDriver = driver,
+      error: error => this.errors.push(error.message)
+    });
   }
 
   /**
    * Query the status of all WLED controllers
    */
   getControllerStatus() {
-    this.controllerService.getControllers().subscribe(
-      controllers => {
+    this.controllerService.getControllers().subscribe({
+      next: controllers => {
         // Try to connect to each controller
         controllers.forEach(controller => {
-          this.controllerService.getControllerState(controller).subscribe(
-            response => {
-              // Connection succeeded
-              this.controllerStatus.push({ 'name': controller.name, 'online': true});
-            },
-            error => {
-              // Connection failed
-              this.controllerStatus.push({ 'name': controller.name, 'online': false});
-            }
-          )
+          this.controllerService.getControllerState(controller).subscribe({
+            next: () => this.controllerStatus.push({ 'name': controller.name, 'online': true }),
+            error: () => this.controllerStatus.push({ 'name': controller.name, 'online': false })
+          });
         });
       },
-      error => {
-        // Failed. Save the response.
-        this.errors.push(error.message);
-      }
-    )
+      error: error => this.errors.push(error.message)
+    });
   }
 }

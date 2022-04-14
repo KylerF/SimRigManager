@@ -40,6 +40,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Get laptimes from server
     this.getLapTimes();
+
+    // Start listening for new lap times
+    this.listenForNewLapTimes();
   }
 
   ngOnDestroy(): void {
@@ -50,11 +53,10 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
    * Fetch all lap times from the API
    */
   getLapTimes() {
-    this.lapTimeService.getLapTimes().subscribe(
-      response => {
-        // Success!
-        if (response.length) {
-          this.lapTimes = response;
+    this.lapTimeService.getLapTimes().subscribe({
+      next: lapTimes => {
+        if (lapTimes) {
+          this.lapTimes = lapTimes;
           this.filteredLapTimes = this.lapTimes;
           this.showOverallBestTimes();
           this.sortScores('setAt', 'desc');
@@ -62,15 +64,11 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
         this.loading = false;
       },
-      error => {
-        // Failed. Save the response.
+      error: error => {
         this.error = error.message;
         this.loading = false;
       }
-    );
-
-    // Start listening for new lap times
-    this.listenForNewLapTimes();
+    });
   }
 
   /**

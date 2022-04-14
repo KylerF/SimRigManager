@@ -18,7 +18,7 @@ export class QuoteService {
   constructor(private http: HttpClient) { }
 
   getRandomQuote(): Observable<Quote> {
-    return this.http.get<Quote>(`${APIHelper.getBaseUrl()}${this.endpoint}`)
+    return this.http.get<Quote>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
       .pipe(catchError(APIHelper.handleError));
   }
 }

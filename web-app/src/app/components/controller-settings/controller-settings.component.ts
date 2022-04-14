@@ -64,28 +64,22 @@ export class ControllerSettingsComponent implements OnInit {
    * Query current user settings for the controller
    */
   getControllerSettings() {
-    this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe(
-      settings => {
+    this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe({
+      next: controllerSettings => {
 
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**
    * Query available effects from provided controller
    */
   getAvailableEffects() {
-    this.controllerService.getControllerEffects(this.controller).subscribe(
-      effects => {
-        this.availableEffects = effects.sort();
-      },
-      error => {
-        this.error = error;
-      }
-    )
+    this.controllerService.getControllerEffects(this.controller).subscribe({
+      next: effects => this.availableEffects = effects.sort(),
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -97,18 +91,16 @@ export class ControllerSettingsComponent implements OnInit {
     this.connecting = true;
     this.ipValid = null;
 
-    this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe(
-      response => {
-        // Connection succeeded
+    this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe({
+      next: controller => {
         this.connecting = false;
         this.ipValid = true;
       },
-      error => {
-        // Connection failed
+      error: error => {
         this.connecting = false;
         this.ipValid = false;
       }
-    );
+    });
   }
 
   /**
@@ -141,14 +133,10 @@ export class ControllerSettingsComponent implements OnInit {
       universe: this.controllerSettingsForm.get('universe').value
     };
 
-    this.controllerService.updateController(updatedController).subscribe(
-      response => {
-        this.activeModal.close(response);
-      },
-      error => {
-        this.error = error;
-      }
-    );
+    this.controllerService.updateController(updatedController).subscribe({
+      next: controller => this.activeModal.close(controller),
+      error: error => this.error = error.message
+    });
   }
 
   /**

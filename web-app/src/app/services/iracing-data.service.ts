@@ -40,7 +40,7 @@ export class IracingDataService {
    * @returns an observable wrapping latest data
    */
   getLatest(): Observable<IracingDataFrame> {
-    return this.http.get<any>(`${APIHelper.getMockBaseUrl()}${this.endpoint}`)
+    return this.http.get<any>(`${APIHelper.getMockBaseUrl()}/${this.endpoint}`)
       .pipe(catchError(APIHelper.handleError));
   }
 
@@ -57,11 +57,11 @@ export class IracingDataService {
 
     this.streamOpen = true;
 
-    let url = `${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`;
+    let url = `${APIHelper.getBaseUrl('ws')}/${this.wsEndpoint}`;
 
     // If we're in the development environment, use the mock API
     if (isDevMode()) {
-      url = `${APIHelper.getMockBaseUrl('ws')}${this.wsEndpoint}`;
+      url = `${APIHelper.getMockBaseUrl('ws')}/${this.wsEndpoint}`;
     }
 
     this.wsSubscription = webSocket(url).pipe(

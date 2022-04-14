@@ -4,6 +4,7 @@ from os import path, remove, getcwd, makedirs
 from typing import Optional
 from io import BytesIO
 from PIL import Image
+from time import time
 import shutil
 
 from api.exceptions import SecurityException
@@ -60,7 +61,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
     # Update driver profile with link to new avatar image
     data = {
         "id": driver_id, 
-        "profilePic": f"/avatars/{driver_id}"
+        "profilePic": f"/avatars/{driver_id}?{int(time()) * 1000}"
     }
     driver = schemas.DriverUpdate(**data)
 
@@ -80,7 +81,10 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
     with open(file_location, "wb+") as file_object:
         shutil.copyfileobj(profile_pic.file, file_object)
 
-    return {"success": "image upload completed"}
+    return {
+        "success": "Avatar image uploaded successfully",
+        "image_url": data["profilePic"]
+    }
 
 @router.delete("/{driver_id}")
 async def delete_avatar(driver_id: int):
@@ -117,7 +121,7 @@ async def delete_avatar(driver_id: int):
     # Delete the image file
     remove(file_location)
 
-    return {"success": "image removed"}
+    return {"success": "Avatar image deleted successfully"}
 
 def __get_avatar_path(driver_id):
     """

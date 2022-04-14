@@ -73,18 +73,16 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * @param controller controller from which to retrieve data
    */
   getControllerState(controller: Controller) {
-    this.controllerService.getControllerState(controller).subscribe(
-      response => {
-        // Save the state
-        controller.state = response;
+    this.controllerService.getControllerState(controller).subscribe({
+      next: state => {
+        controller.state = state;
         controller.isAvailable = true;
       },
-      error => {
-        // Connection failed
+      error: error => {
         controller.state = null;
         controller.isAvailable = false;
       }
-    )
+    });
   }
 
   /**
@@ -93,42 +91,31 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * @param controller controller to toggle
    */
   togglePowerController(controller: Controller) {
-    this.controllerService.togglePowerController(controller).subscribe(
-      response => {
-        // Success! Update the state.
-        this.getControllerState(controller);
-      },
-      error => {
-        this.error = error.message;
-      }
-    );
+    this.controllerService.togglePowerController(controller).subscribe({
+      next: controller => this.getControllerState(controller),
+      error: error => this.error = error.message
+    });
   }
 
   /**
    * Delete a controller
    */
   deleteController(controller: Controller) {
-    this.controllerService.deleteController(controller).subscribe(
-      response => {
-        // Success! Update the controller list.
-        this.getControllers();
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
-      }
-    );
+    this.controllerService.deleteController(controller).subscribe({
+      next: () => this.getControllers(),
+      error: error => this.error = error.message
+    });
   }
 
   /**
    * Show the modal controller settings dialog
    */
   editController(controller: Controller) {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => {
         const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
         modalRef.componentInstance.controller = controller;
-        modalRef.componentInstance.activeDriver = response;
+        modalRef.componentInstance.activeDriver = driver;
 
         // Update controller in table after changes are made
         modalRef.result.then((updatedController: Controller) => {
@@ -139,10 +126,8 @@ export class ControllerListComponent implements OnInit, OnDestroy {
           {}
         });
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**

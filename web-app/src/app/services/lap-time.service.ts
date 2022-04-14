@@ -28,7 +28,7 @@ export class LapTimeService {
    */
   getLapTimes(): Observable<LapTime[]> {
     return this.http.get<LapTime[]>(
-      `${APIHelper.getBaseUrl()}${this.endpoint}`
+      `${APIHelper.getBaseUrl()}/${this.endpoint}`
     )
     .pipe(
       catchError(APIHelper.handleError)
@@ -40,7 +40,7 @@ export class LapTimeService {
    */
   streamLapTimes(): EventSource {
     let eventSource = new EventSource(
-      `${APIHelper.getBaseUrl()}${this.streamEndpoint}`
+      `${APIHelper.getBaseUrl()}/${this.streamEndpoint}`
     );
 
     eventSource.addEventListener('error', () => {

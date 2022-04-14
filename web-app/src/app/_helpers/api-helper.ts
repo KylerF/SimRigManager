@@ -13,7 +13,7 @@ export class APIHelper {
    * @returns URL to the API
    */
   static getBaseUrl(protocol: string = 'http'): string {
-    return `${protocol}://${window.location.hostname}:8000/`;
+    return `${protocol}://${window.location.hostname}:8000`;
   }
 
   /**
@@ -23,7 +23,7 @@ export class APIHelper {
    * @returns URL to the mock API
    */
   static getMockBaseUrl(protocol: string = 'http'): string {
-    return `${protocol}://${window.location.hostname}:8001/`;
+    return `${protocol}://${window.location.hostname}:8001`;
   }
 
   /**

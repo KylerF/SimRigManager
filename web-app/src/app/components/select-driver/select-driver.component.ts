@@ -37,33 +37,26 @@ export class SelectDriverComponent implements OnInit {
    * Get all available drivers
    */
   getDrivers() {
-    this.driverService.getDrivers().subscribe(
-      response => {
-        // Success!
+    this.driverService.getDrivers().subscribe({
+      next: drivers => {
+        this.drivers = drivers;
         this.loading = false;
-        this.drivers = response;
       },
-      error => {
-        // Failed. Save the response.
+      error: error => {
         this.error = error;
+        this.loading = false;
       }
-    );
+    });
   }
 
   /**
    * Get the currently selected driver
    */
   getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        // Success!
-        this.selectedDriver = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
-      }
-    );
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => this.selectedDriver = driver,
+      error: error => this.error = error
+    });
   }
 
   /**
@@ -76,15 +69,13 @@ export class SelectDriverComponent implements OnInit {
       return;
     }
 
-    this.driverService.selectDriver(driver).subscribe(
-      response => {
-        this.selectedDriver = response;
+    this.driverService.selectDriver(driver).subscribe({
+      next: () => {
+        this.selectedDriver = driver;
         this.driverChanged = true;
       },
-      error => {
-        this.error = error;
-      }
-    )
+      error: error => this.error = error
+    });
   }
 
   /**

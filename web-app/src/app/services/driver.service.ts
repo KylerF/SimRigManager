@@ -41,7 +41,7 @@ export class DriverService {
    */
   getDrivers(): Observable<Driver[]> {
     return this.http.get<Driver[]>(
-     `${APIHelper.getBaseUrl()}${this.driversEndpoint}`
+     `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`
     )
     .pipe(
       catchError(APIHelper.handleError)
@@ -55,7 +55,7 @@ export class DriverService {
    */
   getSelectedDriver(): Observable<Driver> {
     return this.http.get<Driver>(
-      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`
+      `${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`
     )
     .pipe(
       catchError(APIHelper.handleError)
@@ -70,7 +70,7 @@ export class DriverService {
    */
   getDriverStats(driverId: number): Observable<DriverStats> {
     return this.http.get<DriverStats>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}/${driverId}/${this.statsEndpoint}`
+      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driverId}/${this.statsEndpoint}`
     )
     .pipe(
       catchError(APIHelper.handleError)
@@ -98,7 +98,7 @@ export class DriverService {
     this.setCachedDriver(driver);
 
     return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}${this.activeDriverEndpoint}`,
+      `${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`,
       { 'driverId': driver.id }
     )
     .pipe(
@@ -114,7 +114,7 @@ export class DriverService {
    */
   addDriver(driver: NewDriver): Observable<Driver> {
     return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`,
+      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`,
       driver
     )
     .pipe(
@@ -130,7 +130,7 @@ export class DriverService {
    */
   updateDriver(driver: Driver): Observable<Driver> {
     return this.http.patch<Driver>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}`,
+      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`,
       driver
     )
     .pipe(
@@ -149,7 +149,7 @@ export class DriverService {
    */
   deleteDriver(driver: Driver): Observable<Driver> {
     return this.http.delete<Driver>(
-      `${APIHelper.getBaseUrl()}${this.driversEndpoint}/${driver.id}`
+      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driver.id}`
     )
     .pipe(
       catchError(APIHelper.handleError)
@@ -168,7 +168,7 @@ export class DriverService {
     formData.append("profile_pic", profilePic);
 
     return this.http.post<any>(
-      `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driverId}`,
+      `${APIHelper.getBaseUrl()}/${this.profilePicEndpoint}/${driverId}`,
       formData
     )
     .pipe(
@@ -180,9 +180,6 @@ export class DriverService {
    * Get URL to the profile pic for a driver. If the driver has no
    * profile pic, return the default avatar.
    *
-   * The current datetime is passed as a parameter is passed to the
-   * URL to trigger a reload of the image on static pages.
-   *
    * @param driver the driver to retrieve avatar for
    * @returns the avatar URL
    */
@@ -191,7 +188,7 @@ export class DriverService {
       return '';
     }
 
-    return `${APIHelper.getBaseUrl()}${this.profilePicEndpoint}/${driver.id}?${new Date().getTime()}`;
+    return `${APIHelper.getBaseUrl()}${driver.profilePic}`;
   }
 
   /**

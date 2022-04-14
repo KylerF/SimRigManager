@@ -39,7 +39,7 @@ export class ControllerService {
    * @returns observable wrapping returned controller objects
    */
   getControllers(): Observable<Controller[]> {
-    return this.http.get<Controller[]>(`${APIHelper.getBaseUrl()}${this.endpoint}`)
+    return this.http.get<Controller[]>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
       .pipe(
         catchError(APIHelper.handleError)
       );
@@ -55,7 +55,7 @@ export class ControllerService {
    */
   getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
     return this.http.get<ControllerSettings>(
-      `${APIHelper.getBaseUrl()}${this.endpoint}?controllerId=${controller.id}&driverId=${driver.id}`)
+      `${APIHelper.getBaseUrl()}/${this.endpoint}?controllerId=${controller.id}&driverId=${driver.id}`)
         .pipe(
           catchError(APIHelper.handleError)
         )
@@ -182,7 +182,7 @@ export class ControllerService {
    * @param controller the controller to add
    */
   addController(controller: NewController): Observable<Controller> {
-    return this.http.post<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, controller)
+    return this.http.post<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, controller)
       .pipe(
         catchError(APIHelper.handleError)
       );
@@ -194,7 +194,7 @@ export class ControllerService {
    * @param controller the controller to update
    */
   updateController(controller: any): Observable<Controller> {
-    return this.http.patch<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, controller)
+    return this.http.patch<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, controller)
       .pipe(
         catchError(APIHelper.handleError)
       );
@@ -207,7 +207,7 @@ export class ControllerService {
    */
   updateControllerSettings(controllerSettings: any): Observable<ControllerSettings> {
     return this.http.patch<ControllerSettings>(
-      `${APIHelper.getBaseUrl()}${this.settingsEndpoint}`,
+      `${APIHelper.getBaseUrl()}/${this.settingsEndpoint}`,
       controllerSettings
     )
     .pipe(
@@ -228,7 +228,7 @@ export class ControllerService {
       body: controller
     };
 
-    return this.http.delete<Controller>(`${APIHelper.getBaseUrl()}${this.endpoint}`, options)
+    return this.http.delete<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, options)
       .pipe(
         catchError(APIHelper.handleError)
       );

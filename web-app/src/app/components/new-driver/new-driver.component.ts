@@ -45,15 +45,10 @@ export class NewDriverComponent {
   }
 
   addDriver() {
-    this.driverService.addDriver(this.newDriver).subscribe(
-      response => {
-        // Close and return the new driver to parent
-        this.activeModal.close(response);
-      },
-      error => {
-        this.error = error;
-      }
-    )
+    this.driverService.addDriver(this.newDriver).subscribe({
+      next: driver => this.activeModal.close(driver),
+      error: error => this.error = error
+    });
   }
 
   dismiss() {

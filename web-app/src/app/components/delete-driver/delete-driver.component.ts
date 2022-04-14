@@ -29,15 +29,10 @@ export class DeleteDriverComponent {
    * user wants to do this.
    */
   deleteDriver() {
-    this.driverService.deleteDriver(this.driver).subscribe(
-      response => {
-        // Close and return the new driver to parent
-        this.activeModal.close(response);
-      },
-      error => {
-        this.error = error;
-      }
-    )
+    this.driverService.deleteDriver(this.driver).subscribe({
+      next: driver => this.activeModal.close(driver),
+      error: error => this.error = error.message
+    });
   }
 
   /**

@@ -57,14 +57,10 @@ export class DriverProfileComponent implements OnInit {
    * Get stats for a driver (records held, favorite track etc..)
    */
   getDriverStats(driverId) {
-    this.driverService.getDriverStats(driverId).subscribe(
-      response => {
-        this.driverStats = response;
-      },
-      error => {
-        this.error = error.message;
-      }
-    )
+    this.driverService.getDriverStats(driverId).subscribe({
+      next: stats => this.driverStats = stats,
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -88,8 +84,12 @@ export class DriverProfileComponent implements OnInit {
     }
 
     this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
-      _ => {
-        this.saveProfile();
+      response => {
+        //this.saveProfile();
+        this.driver.profilePic = response.image_url;
+        this.driverService.setCachedDriver(this.driver);
+        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+        this.profileUpdated = true;
       },
       error => {
         this.error = error.message;

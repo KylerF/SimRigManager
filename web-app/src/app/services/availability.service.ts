@@ -18,7 +18,11 @@ export class AvailabilityService {
   constructor(private http: HttpClient) { }
 
   getAPIAvailability() {
-    return this.http.get<AvailabilityCheck>(APIHelper.getBaseUrl() + this.endpoint)
-      .pipe(catchError(APIHelper.handleError));
+    return this.http.get<AvailabilityCheck>(
+      `${APIHelper.getBaseUrl()}/${this.endpoint}`
+      )
+      .pipe(
+        catchError(APIHelper.handleError)
+      );
   }
 }

@@ -52,15 +52,10 @@ export class NewControllerComponent {
    * Add the controller to the database
    */
   addController() {
-    this.controllerService.addController(this.newController).subscribe(
-      response => {
-        // Close and return the new controller to parent
-        this.activeModal.close(response);
-      },
-      error => {
-        this.error = error;
-      }
-    )
+    this.controllerService.addController(this.newController).subscribe({
+      next: controller => this.activeModal.close(controller),
+      error: error => this.error = error
+    });
   }
 
   /**

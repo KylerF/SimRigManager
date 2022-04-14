@@ -70,21 +70,21 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
           delay(3000)
         ))
       )
-      .subscribe(
-        response => {
+      .subscribe({
+        next: data => {
           this.connected = true;
 
-          if (_.isEmpty(response)) {
+          if (_.isEmpty(data)) {
             this.error = 'No data available';
           } else {
             this.error = null;
           }
         },
-        error => {
+        error: error => {
           this.connected = false;
           this.error = error.message;
         }
-      );
+      });
   }
 
   /**

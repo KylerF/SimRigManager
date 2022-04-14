@@ -56,15 +56,9 @@ export class AppComponent implements OnInit {
    * Get the active driver
    */
   getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        // Success!
-        this.activeDriver = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error.message;
-      }
-    );
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => this.updateDriverDisplay(driver),
+      error: error => this.error = error.message
+    });
   }
 }
