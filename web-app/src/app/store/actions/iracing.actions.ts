@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-
-import { IracingDataFrame } from '../../models/iracing/data-frame';
+import { IracingConnectionStatus } from 'models/iracing/connection-status';
 
 export enum IracingActionTypes {
   UpdateIracing = '[iracing] Update Data',
@@ -14,7 +13,7 @@ export class UpdateIracing implements Action {
 
 export class UpdateIracingSuccess implements Action {
   readonly type = IracingActionTypes.UpdateIracingSuccess;
-  constructor(public payload: { data: IracingDataFrame }) { }
+  constructor(public payload: { data: IracingConnectionStatus }) { }
 }
 
 export class UpdateIracingFailure implements Action {
