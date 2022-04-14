@@ -26,7 +26,6 @@ describe('ControllerSettingsComponent', () => {
       name: 'TestController',
       ipAddress: '127.0.0.1',
       universe: 1,
-      isBeingEdited: false,
       isAvailable: false,
       state: null
     };

@@ -2,13 +2,17 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { interval } from "rxjs/internal/observable/interval";
 import { startWith } from "rxjs/operators";
+import { Store } from '@ngrx/store';
+import { State, selectControllers } from 'store/reducers';
 
 import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
 import { NewControllerComponent } from '../new-controller/new-controller.component';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { Controller } from 'models/controller';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { LoadControllers } from 'store/actions/controller.actions';
+import { StateContainer } from 'models/state';
 
 @Component({
   selector: 'app-controller-list',
@@ -20,7 +24,7 @@ import { Subscription } from 'rxjs';
  * Component to list and configure WLED controllers
  */
 export class ControllerListComponent implements OnInit, OnDestroy {
-  controllers: Controller[] = [];
+  controllers$: Observable<StateContainer<Controller[]>>;
   loading: boolean = true;
   error: string;
 
@@ -30,51 +34,37 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
     private modalService: NgbModal, // Service to display and interface with modal dialogs
-    private driverService: DriverService
+    private driverService: DriverService,
+    private store: Store<State>
   ) { }
 
   // Poll controllers to update their status
   ngOnInit(): void {
-    this.getControllers()
+    this.controllers$ = this.store.select(selectControllers);
+    this.getControllers();
 
     this.wledPoller = interval(this.pollingInterval)
       .pipe(
         startWith(0)
       )
-      .subscribe(_ => this.pollControllerStatus())
+      .subscribe(_ => this.pollControllerStatus());
   }
 
   /**
-   * Retrieve configured WLED controllers, along with the connection
-   * status of each
+   * Retrieve configured WLED controllers, and start polling their status
+   * TODO: Poll all controller states
    */
   getControllers() {
-    this.controllerService.getControllers().subscribe(
-      controllers => {
-        // Success!
-        this.controllers = controllers;
-        this.loading = false;
-
-        // Try to connect to each controller and get the state
-        controllers.forEach(controller => {
-          this.getControllerState(controller);
-        });
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
-        this.loading = false;
-      }
-    );
+    this.store.dispatch(new LoadControllers());
   }
 
   /**
    * Poll all available controllers for status
    */
   pollControllerStatus() {
-    for(let controller of this.controllers) {
-      this.getControllerState(controller);
-    }
+    //for(let controller of this.controllers) {
+    //  this.getControllerState(controller);
+    //}
   }
 
   /**
@@ -163,8 +153,8 @@ export class ControllerListComponent implements OnInit, OnDestroy {
 
     // Add the new controller after successful creation
     modalRef.result.then((newController) => {
-      this.controllers.push(newController);
-      this.getControllerState(newController)
+      //this.controllers.push(newController);
+      this.getControllerState(newController);
     })
     .catch(_ => {
       // Cancelled

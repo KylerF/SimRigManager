@@ -36,6 +36,7 @@ import { environment } from '../environments/environment';
 import { IracingEffects } from './store/effects/iracing.effects';
 import { ApiHealthcheckEffects } from './store/effects/api-healthcheck.effects';
 import { QuoteEffects } from './store/effects/quote.effects';
+import { ControllerEffects } from 'store/effects/controller.effects';
 import { PedalsDisplayComponent } from './components/telemetry-dashboard/inputs/pedals/pedals-display.component';
 import { SpeedometerComponent } from './components/telemetry-dashboard/speedometer/speedometer.component';
 import { WeekendInfoDisplayComponent } from './components/telemetry-dashboard/weekend-info-display/weekend-info-display.component';
@@ -118,7 +119,8 @@ const routes: Routes = [
     EffectsModule.forRoot([
       IracingEffects,
       ApiHealthcheckEffects,
-      QuoteEffects
+      QuoteEffects,
+      ControllerEffects
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
