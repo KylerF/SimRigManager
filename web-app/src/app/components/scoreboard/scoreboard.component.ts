@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
 import { LapTimeService } from 'services/lap-time.service';
 import { DriverService } from 'services/driver.service';
 import { LapTime } from 'models/lap-time';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-scoreboard',
@@ -15,11 +14,11 @@ import { Subscription } from 'rxjs';
 /**
  * Component to render the scoreboard table
  */
-export class ScoreboardComponent implements OnInit {
+export class ScoreboardComponent implements OnInit, OnDestroy {
   lapTimes: LapTime[] = [];
   filteredLapTimes: LapTime[] = [];
 
-  newLapTimeStream: Subscription;
+  newLapTimeStream: EventSource;
 
   showFilter = 'overall';
   timeFilter = 'forever';
@@ -41,6 +40,10 @@ export class ScoreboardComponent implements OnInit {
   ngOnInit(): void {
     // Get laptimes from server
     this.getLapTimes();
+  }
+
+  ngOnDestroy(): void {
+    this.newLapTimeStream.close();
   }
 
   /**
@@ -65,6 +68,25 @@ export class ScoreboardComponent implements OnInit {
         this.loading = false;
       }
     );
+
+    // Start listening for new lap times
+    this.listenForNewLapTimes();
+  }
+
+  /**
+   * Listen for new laptimes from the API
+   */
+  listenForNewLapTimes() {
+    this.newLapTimeStream = this.lapTimeService.streamLapTimes();
+    this.newLapTimeStream.onmessage = (event) => {
+      if (event.type == 'message') {
+        const newLapTime = JSON.parse(event.data);
+        this.lapTimes.push(newLapTime);
+
+        this.filterScores();
+        this.sortScores(this.sortColumn, this.sortOrder);
+      }
+    }
   }
 
   /**
