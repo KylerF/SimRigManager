@@ -2,15 +2,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StoreModule } from '@ngrx/store';
 
-import { ControllerListComponent } from './controller-list.component';
+import { QuoteComponent } from './quote.component';
 
-describe('ControllerListComponent', () => {
-  let component: ControllerListComponent;
-  let fixture: ComponentFixture<ControllerListComponent>;
+describe('QuoteComponent', () => {
+  let component: QuoteComponent;
+  let fixture: ComponentFixture<QuoteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerListComponent ],
+      declarations: [ QuoteComponent ],
       imports: [
         HttpClientModule,
         StoreModule.forRoot({})
@@ -20,7 +20,7 @@ describe('ControllerListComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ControllerListComponent);
+    fixture = TestBed.createComponent(QuoteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
