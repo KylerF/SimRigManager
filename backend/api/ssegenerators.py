@@ -6,11 +6,11 @@ import json
 from api.utils import get_session_best_lap
 
 class SSEGenerators:
-    """
-    Factory method to get a new SSE generator function for a 
-    specific event
-    """
     def get_generator(request, event_type):
+        """
+        Factory method to get a new SSE generator function for a 
+        specific event
+        """
         if event_type == "laptimes":
             return GeneratorFunctions(request=request).new_lap_time_generator()
         if event_type == "active_driver":
@@ -48,8 +48,8 @@ class GeneratorFunctions:
             lap_time = get_session_best_lap()
 
             if lap_time:
-                if not last_time or lap_time.id != last_time.id:
-                    yield lap_time.json()
+                if not last_time or lap_time["id"] != last_time["id"]:
+                    yield json.dumps(lap_time)
                     last_time = lap_time
 
             await sleep(self.update_period)

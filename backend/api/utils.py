@@ -52,7 +52,7 @@ def get_session_best_lap():
     """
     Get the session best lap time from Redis
     """
-    return schemas.LapTime(**read_redis_key("session_best_lap"))
+    return read_redis_key("session_best_lap")
 
 def set_session_best_lap(laptime: models.LapTime):
     """
