@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.exceptions import HTTPException
 from typing import List
 
 from database.database import get_db
@@ -28,6 +29,13 @@ async def create_controller(controller: schemas.LightControllerCreate):
     Create a new WLED light controller
     """
     db = next(get_db())
+
+    # Check if controller already exists
+    if crud.get_light_controller_by_name(db, controller.name):
+        raise HTTPException(status_code=400, detail="Controller already exists")
+    if crud.get_light_controller_by_ip(db, controller.ipAddress):
+        raise HTTPException(status_code=400, detail="IP address already in use")
+
     new_controller = crud.create_light_controller(db, controller)
 
     return new_controller

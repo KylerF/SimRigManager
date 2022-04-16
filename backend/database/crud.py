@@ -204,6 +204,30 @@ def get_light_controllers(db: Session, skip: int = 0, limit: int = -1):
     ).offset(skip).limit(limit).all()
 
 
+def get_light_controller_by_name(db: Session, name: str):
+    """
+    Get a WLED light controller by name
+    Names are unique, so this will always return 1 or 0
+    """
+    return db.query(
+        models.LightController
+    ).filter(
+        models.LightController.name == name
+    ).one_or_none()
+
+
+def get_light_controller_by_ip(db: Session, ip: str):
+    """
+    Get a WLED light controller by IP
+    IPs are unique, so this will always return 1 or 0
+    """
+    return db.query(
+        models.LightController
+    ).filter(
+        models.LightController.ipAddress == ip
+    ).one_or_none()
+
+
 def create_light_controller(db: Session, controller: schemas.LightControllerCreate):
     """
     Create a new WLED light controller
