@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError, Observable } from 'rxjs';
+import { Controller } from 'models/controller';
+import { mergeMap, map, catchError, Observable, switchMap, of } from 'rxjs';
 
 import { ControllerService } from 'services/controller.service';
-import { ControllerActionTypes } from '../actions/controller.actions';
+import * as controllerActions from '../actions/controller.actions';
 
 @Injectable()
 export class ControllerEffects {
@@ -20,24 +21,50 @@ export class ControllerEffects {
    * Retrieve all WLED light controllers from the API
    */
   loadControllers$ = createEffect(() => this.actions$.pipe(
-    ofType(ControllerActionTypes.LoadControllers),
+    ofType(controllerActions.LoadControllers),
     mergeMap(() => this.controllerService.getControllers()
       .pipe(
         map(
-          controllers => ({
-            type: ControllerActionTypes.LoadControllersSuccess,
-            payload: {
-              data: controllers
-            }
-          })
+          controllers => controllerActions.LoadControllersSuccess({ payload: { data: controllers } })
         ),
         catchError(
-          error => [{
-            type: ControllerActionTypes.LoadControllersFailure,
-            payload: { error: error.message }
-          }]
+          error => of(controllerActions.LoadControllersFailure({ payload: error }))
         )
       ))
     )
   );
+
+  /**
+   * Create a new WLED light controller
+   */
+  createController$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.CreateController),
+    switchMap(action => {
+      return this.controllerService.addController(action.payload.data).pipe(
+        map((controller: Controller) => {
+          return controllerActions.CreateControllerSuccess({ payload: { data: controller } });
+        }),
+        catchError(error => {
+          return of(controllerActions.CreateControllerFailure({payload: { error: error } }));
+        })
+      )
+    })
+  ));
+
+  /**
+   * Delete a WLED light controller
+   */
+  deleteController$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.DeleteController),
+    switchMap(action => {
+      return this.controllerService.deleteController(action.payload.data).pipe(
+        map((controller: Controller) => {
+          return controllerActions.DeleteControllerSuccess({ payload: { data: controller } });
+        }),
+        catchError(error => {
+          return of(controllerActions.DeleteControllerFailure({ payload: { error: error } }));
+        })
+      )
+    })
+  ));
 }

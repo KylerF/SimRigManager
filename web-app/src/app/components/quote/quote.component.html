@@ -1,6 +1,6 @@
 <div *ngIf="(quote$ | async) as quote">
   <div *ngIf="!quote.error; else error">
-    <figure *ngIf="quote.state.text; else loading" class="text-center">
+    <figure *ngIf="!quote.loading || quote.state.text; else loading" class="text-center">
       <blockquote class="blockquote">
         <p>{{ quote.state.text }}</p>
       </blockquote>

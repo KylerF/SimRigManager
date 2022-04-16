@@ -1,4 +1,4 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 import { Quote } from '../../models/quote';
 
@@ -8,18 +8,16 @@ export enum QuoteActionTypes {
   LoadQuoteFailure = '[Quote] Load Quote Failure',
 }
 
-export class LoadQuote implements Action {
-  readonly type = QuoteActionTypes.LoadQuote;
-}
+export const LoadQuote = createAction(
+  QuoteActionTypes.LoadQuote
+);
 
-export class LoadQuoteSuccess implements Action {
-  readonly type = QuoteActionTypes.LoadQuoteSuccess;
-  constructor(public payload: { data: Quote }) { }
-}
+export const LoadQuoteSuccess = createAction(
+  QuoteActionTypes.LoadQuoteSuccess,
+  props<{ payload: { data: Quote } }>()
+);
 
-export class LoadQuotesFailure implements Action {
-  readonly type = QuoteActionTypes.LoadQuoteFailure;
-  constructor(public payload: { error: any }) { }
-}
-
-export type QuoteActions = LoadQuote | LoadQuoteSuccess | LoadQuotesFailure;
+export const LoadQuoteFailure = createAction(
+  QuoteActionTypes.LoadQuoteFailure,
+  props<{ payload: { error: any } }>()
+);

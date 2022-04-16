@@ -1,12 +1,12 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 import { Controller } from 'models/controller';
 
 export enum ControllerActionTypes {
   // Actions for getting the list of controllers
-  LoadControllers = '[Controller] Update Controllers',
-  LoadControllersSuccess = '[Controller] Update Controllers Success',
-  LoadControllersFailure = '[Controller] Update Controllers Failure',
+  LoadControllers = '[Controller] Load Controllers',
+  LoadControllersSuccess = '[Controller] Load Controllers Success',
+  LoadControllersFailure = '[Controller] Load Controllers Failure',
 
   // Actions for getting the state of controllers
   UpdateControllerState = '[Controller] Update Controller State',
@@ -30,79 +30,75 @@ export enum ControllerActionTypes {
 }
 
 /**
- * Main action dispatched by components to update the light controller
- * status in the store
+ * Action dispatched to get the list of controllers
  */
-export class LoadControllers implements Action {
-  readonly type = ControllerActionTypes.LoadControllers;
-}
+export const LoadControllers = createAction(
+  ControllerActionTypes.LoadControllers
+);
 
-/**
- * Triggered when response from the API was received
- */
-export class LoadControllersSuccess implements Action {
-  readonly type = ControllerActionTypes.LoadControllersSuccess;
-  constructor(
-    public payload: {
-      data: Controller[]
-    })
-  { }
-}
+export const LoadControllersSuccess = createAction(
+  ControllerActionTypes.LoadControllersSuccess,
+  props<{ payload: { data: Controller[] } }>()
+);
 
-/**
- * Triggered when no response from the API was received
- */
-export class LoadControllersFailure implements Action {
-  readonly type = ControllerActionTypes.LoadControllersFailure;
-  constructor(
-    public payload: {
-      error: any
-    })
-  { }
-}
+export const LoadControllersFailure = createAction(
+  ControllerActionTypes.LoadControllersFailure,
+  props<{ payload: { error: any } }>()
+);
 
 /**
  * Action dispatched by components to update the status of a light controller
  * @param controllerId The ID of the controller to update
  */
-export class UpdateControllerState implements Action {
-  readonly type = ControllerActionTypes.UpdateControllerState;
-  constructor(
-    public payload:{
-      controllerId: number
-    })
-  { }
-}
+export const UpdateControllerState = createAction(
+  ControllerActionTypes.UpdateControllerState,
+  props<{ controllerId: number }>()
+);
+
+export const UpdateControllerStateSuccess = createAction(
+  ControllerActionTypes.UpdateControllerStateSuccess,
+  props<{ controllerId: number, status: Controller }>()
+);
+
+export const UpdateControllerStateFailure = createAction(
+  ControllerActionTypes.UpdateControllerStateFailure,
+  props<{ controllerId: number, error: any }>()
+);
 
 /**
- * Triggered when response from the API was received
+ * Action dispatched by components to create a new light controller
+ * @param controller The controller to create
  */
-export class UpdateControllerStateSuccess implements Action {
-  readonly type = ControllerActionTypes.UpdateControllerStateSuccess;
-  constructor(
-    public payload: {
-      controllerId: number,
-      status: Controller
-    })
-  { }
-}
+export const CreateController = createAction(
+  ControllerActionTypes.CreateController,
+  props<{ payload: { data: Controller } }>()
+);
+
+export const CreateControllerSuccess = createAction(
+  ControllerActionTypes.CreateControllerSuccess,
+  props<{ payload: { data: Controller } }>()
+);
+
+export const CreateControllerFailure = createAction(
+  ControllerActionTypes.CreateControllerFailure,
+  props<{ payload: { error: any } }>()
+);
 
 /**
- * Triggered when no response from the API was received
+ * Action dispatched by components to delete a light controller
+ * @param controller The controller to delete
  */
-export class UpdateControllerStateFailure implements Action {
-  readonly type = ControllerActionTypes.UpdateControllerStateFailure;
-  constructor(
-    public payload: {
-      controllerId: number,
-      error: any
-    })
-  { }
-}
+export const DeleteController = createAction(
+  ControllerActionTypes.DeleteController,
+  props<{ payload: { data: Controller } }>()
+);
 
-export type ControllerActions = LoadControllers              |
-                                LoadControllersSuccess       |
-                                LoadControllersFailure       |
-                                UpdateControllerState        |
-                                UpdateControllerStateSuccess |
-                                UpdateControllerStateFailure;
+export const DeleteControllerSuccess = createAction(
+  ControllerActionTypes.DeleteControllerSuccess,
+  props<{ payload: { data: Controller } }>()
+);
+
+export const DeleteControllerFailure = createAction(
+  ControllerActionTypes.DeleteControllerFailure,
+  props<{ payload: { error: any } }>()
+);

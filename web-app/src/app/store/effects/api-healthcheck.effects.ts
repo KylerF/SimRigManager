@@ -4,7 +4,7 @@ import { asyncScheduler, Observable, timer } from 'rxjs';
 import { map, mergeMap, catchError, takeUntil } from 'rxjs/operators';
 
 import { AvailabilityService } from 'services/availability.service';
-import { ApiHealthcheckActionTypes } from '../actions/api-healthcheck.actions';
+import * as apiHealthcheckActions from '../actions/api-healthcheck.actions';
 
 @Injectable()
 export class ApiHealthcheckEffects {
@@ -23,7 +23,7 @@ export class ApiHealthcheckEffects {
   startHealthcheckPolling$ = createEffect(
     () => ({ scheduler = asyncScheduler, stopTimer = this.stopPolling$ } = {}) =>
     this.actions$.pipe(
-      ofType(ApiHealthcheckActionTypes.UpdateApiHealthcheck),
+      ofType(apiHealthcheckActions.UpdateApiHealthcheck),
       mergeMap(() => (
         timer(0, this.POLL_INTERVAL, scheduler).pipe(
           takeUntil(stopTimer),
@@ -32,7 +32,7 @@ export class ApiHealthcheckEffects {
               .pipe(
                 map(
                   availability => ({
-                    type: ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess,
+                    type: apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess,
                     payload: {
                       data: availability,
                     }
@@ -40,7 +40,7 @@ export class ApiHealthcheckEffects {
                 ),
                 catchError(
                   error => [{
-                    type: ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure,
+                    type: apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure,
                     payload: { error: error.message }
                   }]
                 )

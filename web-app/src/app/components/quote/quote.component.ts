@@ -28,6 +28,6 @@ export class QuoteComponent implements OnInit {
   }
 
   getRandomQuote() {
-    this.store.dispatch(new LoadQuote());
+    this.store.dispatch(LoadQuote());
   }
 }

@@ -11,7 +11,7 @@ import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { Controller } from 'models/controller';
 import { Observable, Subscription } from 'rxjs';
-import { LoadControllers } from 'store/actions/controller.actions';
+import { LoadControllers, DeleteController } from 'store/actions/controller.actions';
 import { StateContainer } from 'models/state';
 
 @Component({
@@ -55,7 +55,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * TODO: Poll all controller states
    */
   getControllers() {
-    this.store.dispatch(new LoadControllers());
+    this.store.dispatch(LoadControllers());
   }
 
   /**
@@ -101,10 +101,11 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Delete a controller
    */
   deleteController(controller: Controller) {
-    this.controllerService.deleteController(controller).subscribe({
-      next: () => this.getControllers(),
-      error: error => this.error = error.message
-    });
+    this.store.dispatch(DeleteController({
+      payload: {
+        data: controller
+      }
+    }));
   }
 
   /**

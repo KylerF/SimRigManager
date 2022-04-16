@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Driver } from 'models/driver';
 import { DriverService } from 'services/driver.service';
 import * as fromRoot from 'store/reducers';
-import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
+import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
    * Start polling the API availability status and updating the store
    */
   pollAPIAvailable() {
-    this.store.dispatch(new apiHealthcheckActions.UpdateApiHealthcheck());
+    this.store.dispatch(UpdateApiHealthcheck());
   }
 
   /**

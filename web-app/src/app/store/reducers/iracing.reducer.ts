@@ -9,7 +9,8 @@ export const initialState = {
   state: {
     connected: false
   },
-  error: '',
+  error: null,
+  loading: false,
   lastUpdated: null
 };
 
@@ -44,7 +45,8 @@ function handleSetIracingDataSuccess(action: iracingActions.UpdateIracingSuccess
     state: {
       ...action.payload.data
     },
-    error: '',
+    error: null,
+    loading: false,
     lastUpdated: moment().toDate()
   };
 }
@@ -61,6 +63,7 @@ function handleSetIracingDataFailure(action: iracingActions.UpdateIracingFailure
       ...initialState.state
     },
     error: action.payload.error,
+    loading: false,
     lastUpdated: moment().toDate()
   }
 }
