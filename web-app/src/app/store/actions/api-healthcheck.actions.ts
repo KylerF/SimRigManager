@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { AvailabilityCheck } from '../../models/availability-check';
+import { AvailabilityCheck } from 'models/availability-check';
 
 export enum ApiHealthcheckActionTypes {
   UpdateApiHealthcheck = '[ApiHealthcheck] Update ApiHealthcheck',

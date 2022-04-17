@@ -54,7 +54,7 @@
 
             <div class="mb-3">
                 <label for="effectSelect">Idle Effect</label>
-                <select class="form-select" id="effectSelect" [disabled]="!availableEffects.length">
+                <select class="form-select" id="effectSelect">
                     <option *ngFor="let effect of availableEffects">
                         {{ effect }}
                     </option>

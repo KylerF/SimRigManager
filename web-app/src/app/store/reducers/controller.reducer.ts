@@ -29,6 +29,7 @@ export const reducer = createReducer(
   on(controllerActions.LoadControllersFailure, (state, action) => ({
     ...state,
     error: action.payload.error,
+    loading: false,
     lastUpdated: moment().toDate()
   })),
   on(controllerActions.CreateController, state => ({

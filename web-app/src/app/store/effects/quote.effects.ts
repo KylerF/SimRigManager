@@ -24,7 +24,7 @@ export class QuoteEffects {
           controllers => quoteActions.LoadQuoteSuccess({ payload: { data: controllers } })
         ),
         catchError(
-          error => of(quoteActions.LoadQuoteFailure({ payload: error }))
+          error => of(quoteActions.LoadQuoteFailure({ payload: { error: error.message } }))
         )
       ))
     )

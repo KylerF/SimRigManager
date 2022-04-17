@@ -2,10 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ipAddressValidatorFunction } from '../../directives/validators/ip-address-validator-function';
-import { ControllerService } from '../../services/controller.service';
-import { Controller } from '../../models/controller';
-import { Driver } from '../../models/driver';
+import { ipAddressValidatorFunction } from 'directives/validators/ip-address-validator-function';
+import { ControllerService } from 'services/controller.service';
+import { Controller } from 'models/controller';
+import { Driver } from 'models/driver';
+import { Store } from '@ngrx/store';
+import { State } from 'store/reducers';
+import { GetControllerSettings } from 'store/actions/controller.actions';
 
 @Component({
   selector: 'app-controller-settings',
@@ -41,7 +44,8 @@ export class ControllerSettingsComponent implements OnInit {
   constructor(
     private controllerService: ControllerService, // Used to edit controller settings
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: FormBuilder // Used to build the controller settings form
+    private formBuilder: FormBuilder, // Used to build the controller settings form
+    private store: Store<State>
   )
   { }
 
@@ -64,12 +68,14 @@ export class ControllerSettingsComponent implements OnInit {
    * Query current user settings for the controller
    */
   getControllerSettings() {
-    this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe({
-      next: controllerSettings => {
-
-      },
-      error: error => this.error = error.message
-    });
+    this.store.dispatch(GetControllerSettings({
+      payload: {
+        data: {
+          controller: this.controller,
+          driver: this.activeDriver
+        }
+      }
+    }));
   }
 
   /**

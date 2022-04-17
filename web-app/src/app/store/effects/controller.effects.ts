@@ -28,11 +28,34 @@ export class ControllerEffects {
           controllers => controllerActions.LoadControllersSuccess({ payload: { data: controllers } })
         ),
         catchError(
-          error => of(controllerActions.LoadControllersFailure({ payload: error }))
+          error => of(controllerActions.LoadControllersFailure({ payload: { error: error.message } }))
         )
       ))
     )
   );
+
+  /**
+   * Get controller settings
+   */
+  getControllerSettings$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.GetControllerSettings),
+    switchMap(action => this.controllerService.getControllerSettings(
+      action.payload.data.controller,
+      action.payload.data.driver
+    )
+    .pipe(
+      map(
+        controllerSettings => controllerActions.GetControllerSettingsSuccess({
+          payload: {
+            data: controllerSettings
+          }
+        })
+      ),
+      catchError(
+        error => of(controllerActions.GetControllerSettingsFailure({ payload: error }))
+      )
+    ))
+  ));
 
   /**
    * Create a new WLED light controller

@@ -35,7 +35,7 @@ export const reducer = createReducer(
     lastUpdated: moment().toDate()
   })),
   on(apiHealthcheckActions.UpdateApiHealthcheckFailure, (state, action) => ({
-    ...state,
+    state: initialState.state,
     error: action.payload.error,
     loading: false,
     lastUpdated: moment().toDate()

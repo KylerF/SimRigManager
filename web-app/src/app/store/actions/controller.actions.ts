@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 
 import { Controller } from 'models/controller';
+import { ControllerSettings } from 'models/controller-settings';
+import { Driver } from 'models/driver';
 
 export enum ControllerActionTypes {
   // Actions for getting the list of controllers
@@ -43,6 +45,24 @@ export const LoadControllersSuccess = createAction(
 
 export const LoadControllersFailure = createAction(
   ControllerActionTypes.LoadControllersFailure,
+  props<{ payload: { error: any } }>()
+);
+
+/**
+ * Action dispatched to get controller settings
+ */
+export const GetControllerSettings = createAction(
+  ControllerActionTypes.GetControllerSettings,
+  props<{ payload: { data: { controller: Controller, driver: Driver } } }>()
+);
+
+export const GetControllerSettingsSuccess = createAction(
+  ControllerActionTypes.GetControllerSettingsSuccess,
+  props<{ payload: { data: ControllerSettings } }>()
+);
+
+export const GetControllerSettingsFailure = createAction(
+  ControllerActionTypes.GetControllerSettingsFailure,
   props<{ payload: { error: any } }>()
 );
 
