@@ -34,11 +34,5 @@ export const reducer = createReducer(
     error: action.payload.error,
     loading: false,
     lastUpdated: moment().toDate()
-  })),
-  on(quoteActions.LoadQuoteSuccess, (state, action) => ({
-    ...state,
-    loading: false,
-    error: null,
-    lastUpdated: moment().toDate()
   }))
 );

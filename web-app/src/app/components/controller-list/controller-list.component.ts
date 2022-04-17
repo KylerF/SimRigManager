@@ -11,7 +11,7 @@ import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { Controller } from 'models/controller';
 import { Observable, Subscription } from 'rxjs';
-import { LoadControllers, DeleteController } from 'store/actions/controller.actions';
+import { LoadControllers, DeleteController, UpdateControllerState } from 'store/actions/controller.actions';
 import { StateContainer } from 'models/state';
 
 @Component({
@@ -25,11 +25,11 @@ import { StateContainer } from 'models/state';
  */
 export class ControllerListComponent implements OnInit, OnDestroy {
   controllers$: Observable<StateContainer<Controller[]>>;
+  controllers: Controller[];
   loading: boolean = true;
   error: string;
 
-  wledPoller: Subscription;
-  pollingInterval = 10000; // ms
+  private wledPoller: Subscription;
 
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
@@ -41,13 +41,23 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   // Poll controllers to update their status
   ngOnInit(): void {
     this.controllers$ = this.store.select(selectControllers);
-    this.getControllers();
+    this.controllers$.subscribe({
+      next: controllers => {
+        if (!this.controllers && controllers.lastUpdated) {
+          this.controllers = controllers.state;
+          // Poll controllers to update their status
+          this.wledPoller = interval(10000)
+            .pipe(startWith(0)).subscribe(() => {
+              this.controllers.forEach(controller => {
+                this.getControllerState(controller);
+              });
+            });
+        }
+      },
+      error: error => this.error = error.message
+    });
 
-    this.wledPoller = interval(this.pollingInterval)
-      .pipe(
-        startWith(0)
-      )
-      .subscribe(_ => this.pollControllerStatus());
+    this.getControllers();
   }
 
   /**
@@ -59,30 +69,14 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Poll all available controllers for status
-   */
-  pollControllerStatus() {
-    //for(let controller of this.controllers) {
-    //  this.getControllerState(controller);
-    //}
-  }
-
-  /**
    * Get the state of a controller
    *
    * @param controller controller from which to retrieve data
    */
   getControllerState(controller: Controller) {
-    this.controllerService.getControllerState(controller).subscribe({
-      next: state => {
-        controller.state = state;
-        controller.isAvailable = true;
-      },
-      error: error => {
-        controller.state = null;
-        controller.isAvailable = false;
-      }
-    });
+    this.store.dispatch(UpdateControllerState({
+      controller: controller
+    }));
   }
 
   /**
@@ -92,7 +86,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   togglePowerController(controller: Controller) {
     this.controllerService.togglePowerController(controller).subscribe({
-      next: controller => this.getControllerState(controller),
+      next: _ => this.getControllerState(controller),
       error: error => this.error = error.message
     });
   }

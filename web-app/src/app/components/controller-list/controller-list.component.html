@@ -1,82 +1,96 @@
 <h1>Light Controllers</h1>
 <div *ngIf="(controllers$ | async) as controllers">
   <div *ngIf="!controllers.error; else error">
-    <div *ngIf="!controllers.loading || controllers.state.length; else loading">
-      <table class="table reactive-font">
-        <thead>
-          <tr>
-            <th scope="col">
-              Name
-            </th>
-            <th scope="col">
-              IP Address
-            </th>
-            <th scope="col">
-              Universe
-            </th>
-            <th scope="col">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let controller of controllers.state">
-            <td>
-              {{ controller.name }}
-            </td>
-            <td>
-              <span
-                *ngIf="controller.isAvailable === false"
-                class="bi bi-exclamation-circle-fill"
-                style="color:red"
-                title="Connection failed"
-              >
-              </span>
-              <a
-                href="http://{{controller.ipAddress}}"
-                target="_blank"
-                rel="noopener"
-                title="WLED controls"
-              >
-                {{ controller.ipAddress }}
-              </a>
-            </td>
-            <td>
-              {{ controller.universe }}
-            </td>
-            <td>
-              <div class="btn-group" role="group">
-                <button
-                  class="btn btn-success mr-1"
-                  [disabled]="!controller.isAvailable"
-                  (click)="togglePowerController(controller)"
-                  title="Power"
+    <div *ngIf="!controllers.loading || controllers.lastUpdated; else loading">
+      <div *ngIf="controllers.state.length; else noControllers">
+        <table class="table reactive-font">
+          <thead>
+            <tr>
+              <th scope="col">
+                Name
+              </th>
+              <th scope="col">
+                IP Address
+              </th>
+              <th scope="col">
+                Universe
+              </th>
+              <th scope="col">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let controller of controllers.state">
+              <td>
+                {{ controller.name }}
+              </td>
+              <td>
+                <span
+                  *ngIf="controller.isAvailable === false"
+                  class="bi bi-exclamation-circle-fill"
+                  style="color:red"
+                  title="Connection failed"
                 >
-                  <span
-                    class="bi bi-power"
-                    [ngStyle]="{'color': (controller.state && controller.state.on) ? 'white' : 'red'}"
+                </span>
+                <span
+                  *ngIf="controller.isAvailable === undefined"
+                  class="spinner-border spinner-border-sm"
+                >
+                </span>
+                <span
+                  *ngIf="controller.isAvailable"
+                  class="bi bi-check-circle-fill"
+                  style="color:green"
+                  title="Connection successful"
+                >
+                </span>
+                <a
+                  href="http://{{controller.ipAddress}}"
+                  target="_blank"
+                  rel="noopener"
+                  title="WLED controls"
+                >
+                  {{ controller.ipAddress }}
+                </a>
+              </td>
+              <td>
+                {{ controller.universe }}
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button
+                    class="btn btn-success mr-1"
+                    [disabled]="!controller.isAvailable"
+                    (click)="togglePowerController(controller)"
+                    title="Power"
                   >
-                  </span>
-                </button>
-                <button
-                  class="btn btn-primary mr-1"
-                  (click)="editController(controller)"
-                  title="Settings"
-                >
-                  <span class="bi bi-gear-fill"></span>
-                </button>
-                <button
-                  class="btn btn-danger"
-                  (click)="deleteController(controller)"
-                  title="Delete"
-                >
-                  <span class="bi bi-trash-fill"></span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                    <span
+                      class="bi bi-power"
+                      [ngStyle]="{'color': (controller.state && controller.state.on) ? 'white' : 'red'}"
+                    >
+                    </span>
+                  </button>
+                  <button
+                    class="btn btn-primary mr-1"
+                    (click)="editController(controller)"
+                    title="Settings"
+                  >
+                    <span class="bi bi-gear-fill"></span>
+                  </button>
+                  <button
+                    class="btn btn-danger"
+                    (click)="deleteController(controller)"
+                    title="Delete"
+                  >
+                    <span class="bi bi-trash-fill"></span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="py-2">
         <button class="btn btn-primary" (click)="showAddControllerDialog()">
@@ -100,4 +114,13 @@
     message="Unable to access controllers"
   >
   </app-error-message>
+</ng-template>
+
+<ng-template #noControllers>
+  <div class="text-center">
+    <h3>No controllers found</h3>
+    <p>
+      You can add a new controller by clicking the button below.
+    </p>
+  </div>
 </ng-template>

@@ -35,6 +35,33 @@ export class ControllerEffects {
   );
 
   /**
+   * Update the state of a WLED light controller
+   */
+  updateControllerState$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.UpdateControllerState),
+    mergeMap(action => this.controllerService.getControllerState(action.controller)
+      .pipe(
+        map(
+          controllerState => controllerActions.UpdateControllerStateSuccess({
+            payload: {
+              controller: action.controller,
+              data: controllerState
+            }
+          })
+        ),
+        catchError(
+          error => of(controllerActions.UpdateControllerStateFailure({
+            payload: {
+              controller: action.controller,
+              error: error.message
+            }
+          })
+        ))
+      ))
+    )
+  );
+
+  /**
    * Get controller settings
    */
   getControllerSettings$ = createEffect(() => this.actions$.pipe(

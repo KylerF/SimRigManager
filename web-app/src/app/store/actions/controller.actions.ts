@@ -3,6 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { Controller } from 'models/controller';
 import { ControllerSettings } from 'models/controller-settings';
 import { Driver } from 'models/driver';
+import { WledState } from 'models/wled/wled-state';
 
 export enum ControllerActionTypes {
   // Actions for getting the list of controllers
@@ -72,17 +73,17 @@ export const GetControllerSettingsFailure = createAction(
  */
 export const UpdateControllerState = createAction(
   ControllerActionTypes.UpdateControllerState,
-  props<{ controllerId: number }>()
+  props<{ controller: Controller }>()
 );
 
 export const UpdateControllerStateSuccess = createAction(
   ControllerActionTypes.UpdateControllerStateSuccess,
-  props<{ controllerId: number, status: Controller }>()
+  props<{ payload: { controller: Controller, data: WledState } }>()
 );
 
 export const UpdateControllerStateFailure = createAction(
   ControllerActionTypes.UpdateControllerStateFailure,
-  props<{ controllerId: number, error: any }>()
+  props<{ payload: { controller: Controller, error: any } }>()
 );
 
 /**

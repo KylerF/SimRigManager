@@ -32,6 +32,41 @@ export const reducer = createReducer(
     loading: false,
     lastUpdated: moment().toDate()
   })),
+  on(controllerActions.UpdateControllerState, state => ({
+    ...state,
+    loading: true
+  })),
+  on(controllerActions.UpdateControllerStateSuccess, (state, action) => ({
+    ...state,
+    state: state.state.map(controller => {
+      if (controller.id === action.payload.controller.id) {
+        return {
+          ...controller,
+          isAvailable: true,
+          state: action.payload.data
+        };
+      }
+      return controller;
+    }),
+    error: null,
+    loading: false,
+    lastUpdated: moment().toDate()
+  })),
+  on(controllerActions.UpdateControllerStateFailure, (state, action) => ({
+    ...state,
+    state: state.state.map(controller => {
+      if (controller.id === action.payload.controller.id) {
+        return {
+          ...controller,
+          isAvailable: false,
+          state: null
+        };
+      }
+      return controller;
+    }),
+    loading: false,
+    lastUpdated: moment().toDate()
+  })),
   on(controllerActions.CreateController, state => ({
     ...state,
     loading: true
