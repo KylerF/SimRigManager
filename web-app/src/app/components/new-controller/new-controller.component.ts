@@ -21,16 +21,10 @@ import { StateContainer } from 'models/state';
 export class NewControllerComponent implements OnInit {
   @ViewChild('closebutton') closebutton;
 
-  newController: Controller = {
-    'id': null,
-    'name': '',
-    'ipAddress': '',
-    'universe': null
-  };
   controllers: Controller[];
   submitted = false;
+  loading = false;
   error: string;
-  success: boolean;
 
   // Create the reactive controller form with validation
   newControllerForm = this.formBuilder.group({
@@ -51,6 +45,7 @@ export class NewControllerComponent implements OnInit {
     this.store.select(selectControllers)
       .subscribe((controllers: StateContainer<Controller[]>) => {
         this.controllers = controllers.state;
+        this.loading = controllers.loading;
       });
   }
 
@@ -64,13 +59,13 @@ export class NewControllerComponent implements OnInit {
     if(this.newControllerForm.valid) {
       // Validate that the controller does not already exist
       if (this.controllers.find(controller =>
-        controller.ipAddress === this.newController.ipAddress)
+        controller.ipAddress === this.newControllerForm.value.ipAddress)
       ) {
         this.error = 'IP address already in use';
         return;
       }
       if (this.controllers.find(controller =>
-        controller.name === this.newController.name)
+        controller.name === this.newControllerForm.value.name)
       ) {
         this.error = 'Controller name already in use';
         return;
@@ -88,7 +83,12 @@ export class NewControllerComponent implements OnInit {
   addController() {
     this.store.dispatch(CreateController({
       payload: {
-        data: this.newController
+        data: {
+          id: null,
+          name: this.newControllerForm.value.name,
+          ipAddress: this.newControllerForm.value.ipAddress,
+          universe: this.newControllerForm.value.universe
+        }
       }
     }));
   }
