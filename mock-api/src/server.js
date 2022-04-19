@@ -187,20 +187,23 @@ app.ws('/iracing/stream', (ws) => {
 app.get('/iracing/stream', (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
+    'Cache-Control': 'no-store',
+    'Connection': 'keep-alive'
   });
   res.flushHeaders();
+
+  // Tell the client to retry connection every 5 seconds
+  res.write('retry: 5000\n\n');
 
   // Ping every 15 seconds
   setInterval(() => {
     res.write('event: ping\n');
-    res.write(`data: ${new Date().toISOString()}\n\n`);
-  }, 15000);
+    res.write(`data: {"time": ${new Date().toISOString()}}\n\n`);
+  }, 1000);
 
   eventSourceConnections.push(res);
 
-  stream.on('end', () => {
+  res.on('close', () => {
     eventSourceConnections = eventSourceConnections.filter(
       conn => conn !== res
     );
