@@ -25,7 +25,7 @@ import { StateContainer } from 'models/state';
  */
 export class ControllerListComponent implements OnInit, OnDestroy {
   controllers$: Observable<StateContainer<Controller[]>>;
-  controllers: Controller[];
+  controllers: Controller[] = [];
   loading: boolean = true;
   error: string;
 
@@ -41,21 +41,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   // Poll controllers to update their status
   ngOnInit(): void {
     this.controllers$ = this.store.select(selectControllers);
-    this.controllers$.subscribe({
-      next: controllers => {
-        if (!this.controllers && controllers.lastUpdated) {
-          this.controllers = controllers.state;
-          // Poll controllers to update their status
-          this.wledPoller = interval(10000)
-            .pipe(startWith(0)).subscribe(() => {
-              this.controllers.forEach(controller => {
-                this.getControllerState(controller);
-              });
-            });
-        }
-      },
-      error: error => this.error = error.message
-    });
+    this.startWLEDPoller();
 
     this.getControllers();
   }
@@ -66,6 +52,32 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   getControllers() {
     this.store.dispatch(LoadControllers());
+  }
+
+  /**
+   * Start polling the WLED controllers every 10 seconds.
+   * Each time the controller list is updated, the poller will be restarted.
+   */
+  startWLEDPoller() {
+    this.controllers$.subscribe(
+      controllers => {
+        if (this.controllers.length !== controllers.state.length) {
+          if (this.wledPoller) {
+            // Restart if already polling
+            this.wledPoller.unsubscribe();
+          }
+
+          this.controllers = controllers.state;
+
+          // Poll controllers to update their status
+          this.wledPoller = interval(10000)
+            .pipe(startWith(0)).subscribe(() => {
+              this.controllers.forEach(controller => {
+                this.getControllerState(controller);
+              });
+            });
+        }
+      });
   }
 
   /**
@@ -111,15 +123,6 @@ export class ControllerListComponent implements OnInit, OnDestroy {
         const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
         modalRef.componentInstance.controller = controller;
         modalRef.componentInstance.activeDriver = driver;
-
-        // Update controller in table after changes are made
-        modalRef.result.then((updatedController: Controller) => {
-          this.getControllers();
-        })
-        .catch(_ => {
-          // Cancelled
-          {}
-        });
       },
       error: error => this.error = error.message
     });
@@ -129,20 +132,12 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Show the modal add controller dialog
    */
   showAddControllerDialog() {
-    const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
-
-    // Add the new controller after successful creation
-    modalRef.result.then((newController) => {
-      //this.controllers.push(newController);
-      this.getControllerState(newController);
-    })
-    .catch(_ => {
-      // Cancelled
-      {}
-    });
+    this.modalService.open(NewControllerComponent, { centered: true });
   }
 
   ngOnDestroy() {
-    this.wledPoller.unsubscribe();
+    if (this.wledPoller) {
+      this.wledPoller.unsubscribe();
+    }
   }
 }
