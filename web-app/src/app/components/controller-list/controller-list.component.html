@@ -13,9 +13,6 @@
                 IP Address
               </th>
               <th scope="col">
-                Universe
-              </th>
-              <th scope="col">
                 Actions
               </th>
             </tr>
@@ -31,6 +28,7 @@
                   class="bi bi-exclamation-circle-fill"
                   style="color:red"
                   title="Connection failed"
+                  (click)="getControllerState(controller)"
                 >
                 </span>
                 <span
@@ -53,9 +51,6 @@
                 >
                   {{ controller.ipAddress }}
                 </a>
-              </td>
-              <td>
-                {{ controller.universe }}
               </td>
               <td>
                 <div class="btn-group" role="group">
@@ -117,7 +112,7 @@
 </ng-template>
 
 <ng-template #noControllers>
-  <div class="text-center">
+  <div class="text-center py-4">
     <h3>No controllers found</h3>
     <p>
       You can add a new controller by clicking the button below.
