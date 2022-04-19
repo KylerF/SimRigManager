@@ -8,7 +8,7 @@ import { Controller } from 'models/controller';
 import { Driver } from 'models/driver';
 import { Store } from '@ngrx/store';
 import { State } from 'store/reducers';
-import { GetControllerSettings } from 'store/actions/controller.actions';
+import { GetControllerSettings, UpdateController } from 'store/actions/controller.actions';
 
 @Component({
   selector: 'app-controller-settings',
@@ -139,10 +139,9 @@ export class ControllerSettingsComponent implements OnInit {
       universe: this.controllerSettingsForm.get('universe').value
     };
 
-    this.controllerService.updateController(updatedController).subscribe({
-      next: controller => this.activeModal.close(controller),
-      error: error => this.error = error.message
-    });
+    this.store.dispatch(UpdateController({
+      controller: updatedController
+    }));
   }
 
   /**

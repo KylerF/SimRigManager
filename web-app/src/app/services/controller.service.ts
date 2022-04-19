@@ -167,6 +167,7 @@ export class ControllerService {
       return of({});
     }
 
+    // Debounce power requests to avoid spamming the controller
     this.disablePowerFor(1);
 
     return this.http.get<any>(`http://${controller.ipAddress}/win&T=2`, this.wledRequestOptions)

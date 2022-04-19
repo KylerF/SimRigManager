@@ -102,6 +102,23 @@ export class ControllerEffects {
   ));
 
   /**
+   * Update a WLED light controller
+   */
+  updateController$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.UpdateController),
+    switchMap(action => {
+      return this.controllerService.updateController(action.controller).pipe(
+        map((controller: Controller) => {
+          return controllerActions.UpdateControllerSuccess({ payload: { data: controller } });
+        }),
+        catchError(error => {
+          return of(controllerActions.UpdateControllerFailure({payload: { error: error } }));
+        })
+      )
+    })
+  ));
+
+  /**
    * Delete a WLED light controller
    */
   deleteController$ = createEffect(() => this.actions$.pipe(

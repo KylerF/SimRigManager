@@ -26,6 +26,11 @@ export enum ControllerActionTypes {
   CreateControllerSuccess = '[Controller] Create Controller Success',
   CreateControllerFailure = '[Controller] Create Controller Failure',
 
+  // Actions for updating a controller
+  UpdateController = '[Controller] Update Controller',
+  UpdateControllerSuccess = '[Controller] Update Controller Success',
+  UpdateControllerFailure = '[Controller] Update Controller Failure',
+
   // Actions for deleting a controller
   DeleteController = '[Controller] Delete Controller',
   DeleteControllerSuccess = '[Controller] Delete Controller Success',
@@ -102,6 +107,25 @@ export const CreateControllerSuccess = createAction(
 
 export const CreateControllerFailure = createAction(
   ControllerActionTypes.CreateControllerFailure,
+  props<{ payload: { error: any } }>()
+);
+
+/**
+ * Action dispatched by components to update a light controller
+ * @param controller The controller to update
+ */
+ export const UpdateController = createAction(
+  ControllerActionTypes.UpdateController,
+  props<{ controller: Controller }>()
+);
+
+export const UpdateControllerSuccess = createAction(
+  ControllerActionTypes.UpdateControllerSuccess,
+  props<{ payload: { data: Controller } }>()
+);
+
+export const UpdateControllerFailure = createAction(
+  ControllerActionTypes.UpdateControllerFailure,
   props<{ payload: { error: any } }>()
 );
 
