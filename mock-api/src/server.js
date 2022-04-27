@@ -19,50 +19,34 @@
 const StreamArray = require('stream-json/streamers/StreamArray');
 const rateLimit = require('express-rate-limit').default;
 const expressWebSocket = require('express-ws');
+const favicon = require('serve-favicon');
 const express = require('express');
 const process = require('process');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-var wsConnections = [];
-var eventSourceConnections = [];
-var currentFrame = {};
-var stream;
-
+// Default configuration options
 var options = {
   selectedFile: "default",
   streamDelay: 30
 };
 
-// Load config options from file
-fs.readFile('config.json', 'utf8', (error, data) => {
-  if (error) {
-    console.log('Using default config options');
-  } else {
-    try {
-      let config = JSON.parse(data);
-      verifyConfig(config);
-      options = config;
+// Lists of all connected clients
+var wsConnections = [];
+var eventSourceConnections = [];
 
-      fs.stat(`./src/data/${options.selectedFile}.json`, (err, stat) => {
-        if(err) {
-          console.error(`Unable to load selected file: ${err}`);
-          console.log('Using default file');
-          options.selectedFile = 'default';
-        }
-        stream = getFileStream(`./src/data/${options.selectedFile}.json`);
-      });
-    } catch (error) {
-      console.error(`There is an error in your configuration file: ${error}`);
-      console.log('Using default config options');
-    }
-  }
-});
+// Latest frame of iRacing data
+var currentFrame = {};
 
+// Used to stream data from a JSON file
+var fileStream;
+
+// Used to stream data to clients
 var jsonStream = StreamArray.withParser();
-const app = express();
 
+// Set up the express server
+const app = express();
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views')); 
 app.use('/css', express.static('node_modules/bootstrap/dist/css'));
@@ -80,10 +64,38 @@ const limiter = rateLimit({
 // Apply rate limiter to all requests
 app.use(limiter);
 
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
+
+// Load config options from file
+fs.readFile('config.json', 'utf8', (error, data) => {
+  if (error) {
+    console.error(`Unable to load config options: ${error}`);
+    console.log('Using default config options');
+  } else {
+    try {
+      let config = JSON.parse(data);
+      verifyConfig(config);
+      options = config;
+
+      fs.stat(`./src/data/${options.selectedFile}.json`, (error, stat) => {
+        if(error) {
+          console.error(`Unable to load selected file: ${error}`);
+          console.log('Using default file');
+          options.selectedFile = 'default';
+        }
+        fileStream = getFileStream(`./src/data/${options.selectedFile}.json`);
+      });
+    } catch (error) {
+      console.error(`There is an error in your configuration file: ${error}`);
+      console.log('Using default config options');
+    }
+  }
+});
+
 // Save config options on exit
-process.on("SIGINT", saveConfigOptions);
-process.on("SIGTERM", saveConfigOptions);
-process.on("SIGHUP", saveConfigOptions);
+process.on("SIGINT", saveAndExit);
+process.on("SIGTERM", saveAndExit);
+process.on("SIGHUP", saveAndExit);
 
 /**
  * Root endpoint for the mock API.
@@ -158,8 +170,8 @@ app.get('/files/:file', (req, res) => {
       res.sendStatus(404);
     } else {
       options.selectedFile = sanitizedFile;
-      stream.destroy();
-      stream = getFileStream(filePath);
+      fileStream?.destroy();
+      fileStream = getFileStream(filePath);
       res.sendStatus(200);
     }
   });
@@ -257,7 +269,7 @@ function getFileStream(file) {
   });
 
   newStream.on('end', () => {
-    stream = getFileStream(file);
+    fileStream = getFileStream(file);
   });
 
   return newStream;
@@ -297,9 +309,9 @@ function verifyConfig(config) {
 }
 
 /**
- * Save configuration options to disk
+ * Save configuration options to disk and exit
  */
-function saveConfigOptions() {
+function saveAndExit() {
   try {
     fs.writeFileSync(
       './config.json',
