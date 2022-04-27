@@ -4,6 +4,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
+      "src/*": [
+        "./src/*"
+      ],
       "services/*": [
         "./src/app/services/*"
       ],
