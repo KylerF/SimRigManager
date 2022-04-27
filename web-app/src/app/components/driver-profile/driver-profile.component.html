@@ -38,7 +38,7 @@
                     </svg>
                     <img
                       *ngIf="avatarURL" class="img-responsive full-width rounded-circle"
-                      src="{{ avatarURL }}" width="350px" height="350px"
+                      src="{{ avatarURL }}" width="350px" height="350px" alt="{{ driver.name }}"
                     >
                     <div class="upload-button">
                         <button *ngIf="!driver.profilePic" class="btn btn-secondary">
