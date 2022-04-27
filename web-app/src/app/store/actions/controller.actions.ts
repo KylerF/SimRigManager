@@ -3,7 +3,7 @@ import { createAction, props } from '@ngrx/store';
 import { Controller } from 'models/controller';
 import { ControllerSettings } from 'models/controller-settings';
 import { Driver } from 'models/driver';
-import { WledState } from 'models/wled/wled-state';
+import { WledMessage } from 'src/app/models/wled/wled-message';
 
 export enum ControllerActionTypes {
   // Actions for getting the list of controllers
@@ -16,6 +16,14 @@ export enum ControllerActionTypes {
   UpdateControllerStateSuccess = '[Controller] Update Controller State Success',
   UpdateControllerStateFailure = '[Controller] Update Controller State Failure',
 
+  // Actions for streaming controller state
+  StartStream = '[Controller] Start Stream',
+  StartStreamSuccess = '[Controller] Start Stream Success',
+  StartStreamFailure = '[Controller] Start Stream Failure',
+  StopStream = '[Controller] Stop Stream',
+  StopStreamSuccess = '[Controller] Stop Stream Success',
+  StopStreamFailure = '[Controller] Stop Stream Failure',
+
   // Actions for getting controller settings
   GetControllerSettings = '[Controller] Get Controller Settings',
   GetControllerSettingsSuccess = '[Controller] Get Controller Settings Success',
@@ -26,10 +34,10 @@ export enum ControllerActionTypes {
   CreateControllerSuccess = '[Controller] Create Controller Success',
   CreateControllerFailure = '[Controller] Create Controller Failure',
 
-  // Actions for updating a controller
-  UpdateController = '[Controller] Update Controller',
-  UpdateControllerSuccess = '[Controller] Update Controller Success',
-  UpdateControllerFailure = '[Controller] Update Controller Failure',
+  // Actions for updating a controller's settings
+  UpdateControllerSettings = '[Controller] Update Settings Controller',
+  UpdateControllerSettingsSuccess = '[Controller] Update Controller Settings Success',
+  UpdateControllerSettingsFailure = '[Controller] Update Controller Settings Failure',
 
   // Actions for deleting a controller
   DeleteController = '[Controller] Delete Controller',
@@ -83,12 +91,22 @@ export const UpdateControllerState = createAction(
 
 export const UpdateControllerStateSuccess = createAction(
   ControllerActionTypes.UpdateControllerStateSuccess,
-  props<{ payload: { controller: Controller, data: WledState } }>()
+  props<{ payload: { controller: Controller, data: WledMessage } }>()
 );
 
 export const UpdateControllerStateFailure = createAction(
   ControllerActionTypes.UpdateControllerStateFailure,
   props<{ payload: { controller: Controller, error: any } }>()
+);
+
+/**
+ * Action dispatched to subscribe to the state of a light controller using
+ * its websocket API
+ * @param controller The controller to subscribe to
+ */
+export const StartStream = createAction(
+  ControllerActionTypes.StartStream,
+  props<{ controller: Controller }>()
 );
 
 /**
@@ -114,18 +132,18 @@ export const CreateControllerFailure = createAction(
  * Action dispatched by components to update a light controller
  * @param controller The controller to update
  */
- export const UpdateController = createAction(
-  ControllerActionTypes.UpdateController,
+ export const UpdateControllerSettings = createAction(
+  ControllerActionTypes.UpdateControllerSettings,
   props<{ controller: Controller }>()
 );
 
-export const UpdateControllerSuccess = createAction(
-  ControllerActionTypes.UpdateControllerSuccess,
+export const UpdateControllerSettingsSuccess = createAction(
+  ControllerActionTypes.UpdateControllerSettingsSuccess,
   props<{ payload: { data: Controller } }>()
 );
 
-export const UpdateControllerFailure = createAction(
-  ControllerActionTypes.UpdateControllerFailure,
+export const UpdateControllerSettingsFailure = createAction(
+  ControllerActionTypes.UpdateControllerSettingsFailure,
   props<{ payload: { error: any } }>()
 );
 

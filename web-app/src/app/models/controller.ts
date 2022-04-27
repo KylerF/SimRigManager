@@ -1,4 +1,5 @@
-import { WledState } from "./wled/wled-state";
+import { Info } from "./wled/info";
+import { State } from "./wled/state";
 
 /**
  * Model interface for a WLED controller
@@ -9,5 +10,6 @@ export interface Controller {
   ipAddress: string;
   universe: number;
   isAvailable?: boolean;
-  state?: WledState;
+  state?: State;
+  info?: Info;
 }

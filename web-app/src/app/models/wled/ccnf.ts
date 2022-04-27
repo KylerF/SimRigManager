@@ -1,5 +1,5 @@
 export interface Ccnf {
-    min: number;
-    max: number;
-    time: number;
+  min: number;
+  max: number;
+  time: number;
 }

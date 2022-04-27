@@ -43,7 +43,8 @@ export const reducer = createReducer(
         return {
           ...controller,
           isAvailable: true,
-          state: action.payload.data
+          state: action.payload.data.state,
+          info: action.payload.data.info
         };
       }
       return controller;
@@ -82,11 +83,11 @@ export const reducer = createReducer(
     error: action.payload.error,
     lastUpdated: moment().toDate()
   })),
-  on(controllerActions.UpdateController, state => ({
+  on(controllerActions.UpdateControllerSettings, state => ({
     ...state,
     loading: true
   })),
-  on(controllerActions.UpdateControllerSuccess, (state, action) => ({
+  on(controllerActions.UpdateControllerSettingsSuccess, (state, action) => ({
     state: state.state.map(controller => {
       if (controller.id === action.payload.data.id) {
         return action.payload.data;
@@ -97,7 +98,7 @@ export const reducer = createReducer(
     loading: false,
     lastUpdated: moment().toDate()
   })),
-  on(controllerActions.UpdateControllerFailure, (state, action) => ({
+  on(controllerActions.UpdateControllerSettingsFailure, (state, action) => ({
     ...state,
     error: action.payload.error,
     loading: false,

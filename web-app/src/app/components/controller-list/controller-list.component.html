@@ -28,19 +28,18 @@
                   class="bi bi-exclamation-circle-fill"
                   style="color:red"
                   title="Connection failed"
-                  (click)="getControllerState(controller)"
                 >
                 </span>
                 <span
                   *ngIf="controller.isAvailable === undefined"
-                  class="spinner-border spinner-border-sm"
+                  class="spinner-border spinner-border-tiny"
                 >
                 </span>
                 <span
                   *ngIf="controller.isAvailable"
                   class="bi bi-check-circle-fill"
                   style="color:green"
-                  title="Connection successful"
+                  title="Controller is available"
                 >
                 </span>
                 <a

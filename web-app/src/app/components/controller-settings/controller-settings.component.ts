@@ -8,7 +8,7 @@ import { Controller } from 'models/controller';
 import { Driver } from 'models/driver';
 import { Store } from '@ngrx/store';
 import { State } from 'store/reducers';
-import { GetControllerSettings, UpdateController } from 'store/actions/controller.actions';
+import { GetControllerSettings, UpdateControllerSettings } from 'store/actions/controller.actions';
 
 @Component({
   selector: 'app-controller-settings',
@@ -23,7 +23,7 @@ export class ControllerSettingsComponent implements OnInit {
   @Input() public controller: Controller;
   @Input() public activeDriver: Driver;
 
-  availableEffects: [string];
+  availableEffects: string[];
 
   connecting: boolean;
   ipValid: boolean;
@@ -82,8 +82,8 @@ export class ControllerSettingsComponent implements OnInit {
    * Query available effects from provided controller
    */
   getAvailableEffects() {
-    this.controllerService.getControllerEffects(this.controller).subscribe({
-      next: effects => this.availableEffects = effects.sort(),
+    this.controllerService.getControllerState(this.controller).subscribe({
+      next: state => this.availableEffects = state.effects.sort(),
       error: error => this.error = error.message
     });
   }
@@ -139,7 +139,7 @@ export class ControllerSettingsComponent implements OnInit {
       universe: this.controllerSettingsForm.get('universe').value
     };
 
-    this.store.dispatch(UpdateController({
+    this.store.dispatch(UpdateControllerSettings({
       controller: updatedController
     }));
   }

@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Controller } from 'models/controller';
-import { mergeMap, map, catchError, Observable, switchMap, of } from 'rxjs';
+import { mergeMap, map, catchError, switchMap, of, delay, retryWhen, tap } from 'rxjs';
 
 import { ControllerService } from 'services/controller.service';
 import * as controllerActions from '../actions/controller.actions';
 
 @Injectable()
 export class ControllerEffects {
-  private readonly POLL_INTERVAL = 5000;
-  private stopPolling$ = new Observable<void>();
-
   constructor(
     private actions$: Actions,
     private controllerService: ControllerService
@@ -25,10 +22,14 @@ export class ControllerEffects {
     mergeMap(() => this.controllerService.getControllers()
       .pipe(
         map(
-          controllers => controllerActions.LoadControllersSuccess({ payload: { data: controllers } })
+          controllers => controllerActions.LoadControllersSuccess({
+            payload: { data: controllers }
+          })
         ),
         catchError(
-          error => of(controllerActions.LoadControllersFailure({ payload: { error: error.message } }))
+          error => of(controllerActions.LoadControllersFailure({
+            payload: { error: error.message }
+          }))
         )
       ))
     )
@@ -61,6 +62,30 @@ export class ControllerEffects {
     )
   );
 
+  streamControllerState$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.StartStream),
+    mergeMap(action => this.controllerService.getStateStream(action.controller)
+      .pipe(
+        map(
+          controllerState => controllerActions.UpdateControllerStateSuccess({
+            payload: {
+              controller: action.controller,
+              data: controllerState
+            }
+          })
+        ),
+        catchError(error => of(
+          controllerActions.UpdateControllerStateFailure({
+            payload: {
+              controller: action.controller,
+              error: error.message
+            }
+          })
+        ))
+      ))
+    )
+  );
+
   /**
    * Get controller settings
    */
@@ -79,7 +104,9 @@ export class ControllerEffects {
         })
       ),
       catchError(
-        error => of(controllerActions.GetControllerSettingsFailure({ payload: error }))
+        error => of(controllerActions.GetControllerSettingsFailure({
+          payload: error
+        }))
       )
     ))
   ));
@@ -92,27 +119,35 @@ export class ControllerEffects {
     switchMap(action => {
       return this.controllerService.addController(action.payload.data).pipe(
         map((controller: Controller) => {
-          return controllerActions.CreateControllerSuccess({ payload: { data: controller } });
+          return controllerActions.CreateControllerSuccess({
+            payload: { data: controller }
+          });
         }),
         catchError(error => {
-          return of(controllerActions.CreateControllerFailure({payload: { error: error } }));
+          return of(controllerActions.CreateControllerFailure({
+            payload: { error: error }
+          }));
         })
       )
     })
   ));
 
   /**
-   * Update a WLED light controller
+   * Update a controller's settub
    */
-  updateController$ = createEffect(() => this.actions$.pipe(
-    ofType(controllerActions.UpdateController),
+  updateControllerSettings$ = createEffect(() => this.actions$.pipe(
+    ofType(controllerActions.UpdateControllerSettings),
     switchMap(action => {
       return this.controllerService.updateController(action.controller).pipe(
         map((controller: Controller) => {
-          return controllerActions.UpdateControllerSuccess({ payload: { data: controller } });
+          return controllerActions.UpdateControllerSettingsSuccess({
+            payload: { data: controller }
+          });
         }),
         catchError(error => {
-          return of(controllerActions.UpdateControllerFailure({payload: { error: error } }));
+          return of(controllerActions.UpdateControllerSettingsFailure({
+            payload: { error: error }
+          }));
         })
       )
     })
@@ -126,10 +161,14 @@ export class ControllerEffects {
     switchMap(action => {
       return this.controllerService.deleteController(action.payload.data).pipe(
         map((controller: Controller) => {
-          return controllerActions.DeleteControllerSuccess({ payload: { data: controller } });
+          return controllerActions.DeleteControllerSuccess({
+            payload: { data: controller }
+          });
         }),
         catchError(error => {
-          return of(controllerActions.DeleteControllerFailure({ payload: { error: error } }));
+          return of(controllerActions.DeleteControllerFailure({
+            payload: { error: error }
+          }));
         })
       )
     })
