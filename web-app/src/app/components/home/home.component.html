@@ -29,9 +29,12 @@
                   <div id="sessionTime">
                     Session time:
                     {{ iracingData.SessionTime | hoursMinutesSeconds }}
-                  </div>
-                  <a class="nav-link" routerLink="/telemetry">
-                    More
+                  </div><br>
+                  <a routerLink="/telemetry">
+                    <button class="btn btn-primary" type="button">
+                      <span class="bi bi-speedometer"></span>
+                      Telemetry Dashboard
+                    </button>
                   </a>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
 import * as fromRoot from 'store/reducers';
+import { GetConnectionStatus } from 'store/actions/iracing.actions';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ import * as fromRoot from 'store/reducers';
  */
 export class HomeComponent implements OnInit, OnDestroy {
   apiActive$: Observable<boolean>;
+  iracingConnected$: Observable<boolean>;
   iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
@@ -39,6 +41,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.apiActive$ = this.store.select(fromRoot.selectAPIActive);
+    this.iracingConnected$ = this.store.select(fromRoot.selectIracingConnected);
 
     this.getIracingStatus();
     this.getSelectedDriver();
@@ -55,6 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   getIracingStatus() {
     this.iracingDataService.startStream();
+    this.store.dispatch(GetConnectionStatus());
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .pipe(
         retryWhen(error => error.pipe(
@@ -95,7 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Try to connect to each controller
         controllers.forEach(controller => {
           this.controllerService.getControllerState(controller).subscribe({
-            next: () => this.controllerStatus.push({ 'name': controller.name, 'online': true }),
+            next: state => this.controllerStatus.push({ 'name': controller.name, 'online': true, 'power': state.on }),
             error: () => this.controllerStatus.push({ 'name': controller.name, 'online': false })
           });
         });

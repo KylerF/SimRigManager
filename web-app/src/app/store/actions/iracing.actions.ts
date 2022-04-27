@@ -1,24 +1,22 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 import { IracingConnectionStatus } from 'models/iracing/connection-status';
 
 export enum IracingActionTypes {
-  UpdateIracing = '[iracing] Update Data',
-  UpdateIracingSuccess = '[iracing] Update Data Success',
-  UpdateIracingFailure = '[iracing] Update Data Failure',
+  GetConnectionStatus = '[iracing] Get Connection Status',
+  GetConnectionStatusSuccess = '[iracing] Get Connection Status Success',
+  GetConnectionStatusFailure = '[iracing] Get Connection Status Failure'
 }
 
-export class UpdateIracing implements Action {
-  readonly type = IracingActionTypes.UpdateIracing;
-}
+export const GetConnectionStatus = createAction(
+  IracingActionTypes.GetConnectionStatus
+);
 
-export class UpdateIracingSuccess implements Action {
-  readonly type = IracingActionTypes.UpdateIracingSuccess;
-  constructor(public payload: { data: IracingConnectionStatus }) { }
-}
+export const GetConnectionStatusSuccess = createAction(
+  IracingActionTypes.GetConnectionStatusSuccess,
+  props<{ status: IracingConnectionStatus }>()
+);
 
-export class UpdateIracingFailure implements Action {
-  readonly type = IracingActionTypes.UpdateIracingFailure;
-  constructor(public payload: { error: any }) { }
-}
-
-export type IracingActions = UpdateIracing | UpdateIracingSuccess | UpdateIracingFailure;
+export const GetConnectionStatusFailure = createAction(
+  IracingActionTypes.GetConnectionStatusFailure,
+  props<{ error: any }>()
+);
