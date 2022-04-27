@@ -1,0 +1,33 @@
+//
+// Reusable styles applied globally to the app
+//
+
+@import 'src/variables.scss';
+
+// Center vertically and horizontally on the screen
+.center-vh {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh - $navbar-height;
+}
+
+// Pulse contents at a 3 second interval
+.pulse {
+  -webkit-animation: pulse 3s infinite;
+  -moz-animation: pulse 3s infinite;
+  -o-animation: pulse 3s infinite;
+  animation: pulse 3s infinite;
+}
+@-webkit-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+@-moz-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+@-o-keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
+@keyframes pulse {
+  50% { color: rgb(129, 129, 129); }
+}
