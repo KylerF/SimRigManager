@@ -90,6 +90,16 @@ export const reducer = createReducer(
   on(controllerActions.UpdateControllerSettingsSuccess, (state, action) => ({
     state: state.state.map(controller => {
       if (controller.id === action.payload.data.id) {
+        // Preserve the controller state if IP address has not changed
+        if (controller.ipAddress === action.payload.data.ipAddress) {
+          return {
+            ...action.payload.data,
+            isAvailable: controller.isAvailable,
+            state: controller.state,
+            info: controller.info
+          }
+        }
+
         return action.payload.data;
       }
       return controller;

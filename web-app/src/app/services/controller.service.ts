@@ -1,24 +1,22 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, delay, retryWhen, take, timeout } from 'rxjs/operators';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { catchError, take, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { NewController } from 'models/new-controller';
-import { APIHelper } from 'helpers/api-helper';
-import { Controller } from 'models/controller';
-import { State } from 'models/wled/state';
 import { ControllerSettings } from '../models/controller-settings';
-import { Driver } from 'models/driver';
 import { WledMessage } from 'src/app/models/wled/wled-message';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-
+import { Controller } from 'models/controller';
+import { APIHelper } from 'helpers/api-helper';
+import { State } from 'models/wled/state';
+import { Driver } from 'models/driver';
 @Injectable({
   providedIn: 'root'
 })
 
 /**
- * Service to retrieve, add, interact with and check the status of
- * WLED light controllers
+ * Service to retrieve, add, update, delete, interact with and check
+ * the status of WLED light controllers
  */
 export class ControllerService {
   private endpoint = 'controllers';
@@ -53,8 +51,7 @@ export class ControllerService {
    *
    * @param controller controller to query settings
    * @param driver driver which set said settings
-   *
-   * @returns promise expected to resolve as controller settings
+   * @returns observable expected to return the controller settings
    */
   getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
     return this.http.get<ControllerSettings>(
@@ -70,7 +67,6 @@ export class ControllerService {
    * controller
    *
    * @param ipAddress the IP address of the controller to test
-   *
    * @returns promise expected to resolve as a WledState object
    */
   testIp(ipAddress: string): Observable<State> {
@@ -89,7 +85,7 @@ export class ControllerService {
    * palettes.
    *
    * @param controller the controller from which to retrieve state
-   * @returns promise expected to resolve as a WledState object
+   * @returns observable expected to return a WledState object
    */
   getControllerState(controller: Controller): Observable<WledMessage> {
     return this.http.get<WledMessage>(
@@ -131,10 +127,10 @@ export class ControllerService {
   }
 
   /**
-   * Toggle the power of a controller via a request to the WLED API
+   * Toggle the power of a controller using a websocket connection
    *
    * @param controller the controller to toggle power
-   * @returns promise expected to resolve as the result
+   * @returns observable expected to return the resulting state
    */
   togglePowerController(controller: Controller): Observable<WledMessage> {
     let connection = this.getStateStream(controller);
@@ -154,8 +150,9 @@ export class ControllerService {
    * Add a new controller
    *
    * @param controller the controller to add
+   * @returns observable expected to return the added controller object
    */
-  addController(controller: NewController): Observable<Controller> {
+  addController(controller: Controller): Observable<Controller> {
     return this.http.post<Controller>(
       `${APIHelper.getBaseUrl()}/${this.endpoint}`,
       controller
@@ -169,18 +166,23 @@ export class ControllerService {
    * Update an existing controller with new details
    *
    * @param controller the controller to update
+   * @returns observable expected to return the updated controller object
    */
   updateController(controller: any): Observable<Controller> {
-    return this.http.patch<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, controller)
-      .pipe(
-        catchError(APIHelper.handleError)
-      );
+    return this.http.patch<Controller>(
+      `${APIHelper.getBaseUrl()}/${this.endpoint}`,
+      controller
+    )
+    .pipe(
+      catchError(APIHelper.handleError)
+    );
   }
 
   /**
    * Update a controller settings profile with new details
    *
    * @param controller the settings to update
+   * @returns observable expected to return the updated controller settings
    */
   updateControllerSettings(controllerSettings: any): Observable<ControllerSettings> {
     return this.http.patch<ControllerSettings>(
@@ -196,6 +198,7 @@ export class ControllerService {
    * Delete an existing controller
    *
    * @param controller the controller to delete
+   * @returns observable expected to return the deleted controller object
    */
   deleteController(controller: Controller): Observable<Controller | ArrayBuffer> {
     const options = {

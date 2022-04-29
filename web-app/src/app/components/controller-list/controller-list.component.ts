@@ -37,6 +37,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.controllers$ = this.store.select(selectControllers);
     this.getControllers();
+    this.startControllerUpdates();
   }
 
   /**
@@ -44,7 +45,6 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   getControllers() {
     this.store.dispatch(LoadControllers());
-    this.startControllerUpdates();
   }
 
   /**
@@ -52,13 +52,15 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   startControllerUpdates() {
     this.controllers$.pipe(
-      first(controllers => controllers.state.length > 0)
+      first(controllers => controllers.state.some(controller => controller.isAvailable == undefined))
     )
     .subscribe({
       next: controllers => {
         controllers.state.forEach(controller => {
-          this.controllerService.disconnectController(controller);
-          this.store.dispatch(StartStream({ controller: controller }));
+          if (controller.isAvailable == undefined) {
+            this.controllerService.disconnectController(controller);
+            this.store.dispatch(StartStream({ controller: controller }));
+          }
         });
       },
       error: error => this.error = error.message
@@ -85,8 +87,6 @@ export class ControllerListComponent implements OnInit, OnDestroy {
         data: controller
       }
     }));
-
-    this.startControllerUpdates();
   }
 
   /**
@@ -95,14 +95,19 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   editController(controller: Controller) {
     this.driverService.getSelectedDriver().subscribe({
       next: driver => {
-        const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
+        const modalRef = this.modalService.open(
+          ControllerSettingsComponent,
+          { centered: true }
+        );
+
         modalRef.componentInstance.controller = controller;
         modalRef.componentInstance.activeDriver = driver;
 
         modalRef.result.then(() => {
           // Update controller state
           this.startControllerUpdates();
-        }).catch(_ => {
+        })
+        .catch(_ => {
           // Cancelled
           {}
         });
@@ -115,7 +120,19 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Show the modal add controller dialog
    */
   showAddControllerDialog() {
-    this.modalService.open(NewControllerComponent, { centered: true });
+    const modalRef = this.modalService.open(
+      NewControllerComponent,
+      { centered: true }
+    );
+
+    modalRef.result.then(() => {
+      // Update controller state
+      this.startControllerUpdates();
+    })
+    .catch(_ => {
+      // Cancelled
+      {}
+    });
   }
 
   ngOnDestroy() {
