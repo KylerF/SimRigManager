@@ -16,6 +16,9 @@ def get_iracing_data(raw=False):
     """
     Helper function to retrieve iRacing data from Redis
     """
+    if raw:
+        return read_redis_key("session_data_raw")
+
     return read_redis_key("session_data")
 
 def get_active_driver_from_cache():
