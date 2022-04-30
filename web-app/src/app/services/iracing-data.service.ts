@@ -20,7 +20,7 @@ import { IracingConnectionStatus } from 'models/iracing/connection-status';
  */
 export class IracingDataService {
   private endpoint = 'iracing/latest';
-  private wsEndpoint = 'iracing/stream?raw=true';
+  private wsEndpoint = 'iracing/stream';
 
   private wsSubscription: Subscription;
 
