@@ -15,6 +15,9 @@ import { Quote } from 'models/quote';
 import { StateContainer } from 'models/state';
 import { IracingConnectionStatus } from 'models/iracing/connection-status';
 import { Controller } from 'models/controller';
+import * as fromLaptime from './laptime.reducer';
+import { LapTime } from 'src/app/models/lap-time';
+import * as moment from 'moment';
 
 /**
  * The complete state of the application (combined from all reducers)
@@ -24,6 +27,7 @@ export interface State {
   [fromApiHealthcheck.apiHealthcheckFeatureKey]: StateContainer<AvailabilityCheck>;
   [fromQuote.quoteFeatureKey]: StateContainer<Quote>;
   [fromController.controllerFeatureKey]: StateContainer<Controller[]>;
+  [fromLaptime.laptimeFeatureKey]: StateContainer<LapTime[]>;
 }
 
 /**
@@ -33,7 +37,8 @@ export const reducers: ActionReducerMap<State> = {
   [fromIracing.iracingFeatureKey]: fromIracing.reducer,
   [fromApiHealthcheck.apiHealthcheckFeatureKey]: fromApiHealthcheck.reducer,
   [fromQuote.quoteFeatureKey]: fromQuote.reducer,
-  [fromController.controllerFeatureKey]: fromController.reducer
+  [fromController.controllerFeatureKey]: fromController.reducer,
+  [fromLaptime.laptimeFeatureKey]: fromLaptime.reducer
 };
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
@@ -54,3 +59,21 @@ export const selectIracingConnected =
 export const selectControllers =
   (state: State) =>
     state[fromController.controllerFeatureKey];
+
+export const selectAllLaptimes =
+  (state: State) =>
+    state[fromLaptime.laptimeFeatureKey];
+
+
+// Laptime filters
+export const selectLaptimesForDriver =
+  (state: State, driverId: number) =>
+    state[fromLaptime.laptimeFeatureKey].state.filter(
+      laptime => laptime.driver.id === driverId
+    );
+
+export const selectLaptimesSince =
+  (state: State, since: moment.Moment) =>
+    state[fromLaptime.laptimeFeatureKey].state.filter(
+      laptime => moment(laptime.setAt).isAfter(since)
+    );

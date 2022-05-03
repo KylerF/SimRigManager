@@ -54,6 +54,7 @@ import { CarDisplayComponent } from 'components/telemetry-dashboard/car-display/
 import { RawDataDisplayComponent } from 'components/telemetry-dashboard/raw-data-display/raw-data-display.component';
 import { TrackMapDisplayComponent } from 'components/telemetry-dashboard/track-map-display/track-map-display.component';
 import { ApiStatusBannerComponent } from 'components/status-banner/api-status-banner/api-status-banner.component';
+import { LaptimeEffects } from './store/effects/laptime.effects';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -121,7 +122,8 @@ const routes: Routes = [
       IracingEffects,
       ApiHealthcheckEffects,
       QuoteEffects,
-      ControllerEffects
+      ControllerEffects,
+      LaptimeEffects
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

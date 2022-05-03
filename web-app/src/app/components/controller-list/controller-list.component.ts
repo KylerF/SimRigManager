@@ -73,9 +73,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * @param controller controller to toggle
    */
   togglePowerController(controller: Controller) {
-    this.controllerService.togglePowerController(controller).subscribe({
-      error: error => this.error = error.message
-    });
+    this.controllerService.togglePowerController(controller);
   }
 
   /**

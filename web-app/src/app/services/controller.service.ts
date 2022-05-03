@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { catchError, take, timeout } from 'rxjs/operators';
+import { catchError, delay, retryWhen, take, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 import { ControllerSettings } from '../models/controller-settings';
 import { WledMessage } from 'src/app/models/wled/wled-message';
@@ -96,6 +96,19 @@ export class ControllerService {
     );
   }
 
+  getConnection(controller: Controller): WebSocketSubject<WledMessage> {
+    if (this.connections.has(controller.id)) {
+      // Return existing connection
+      return this.connections.get(controller.id);
+    }
+
+    // Create new connection
+    let ws = webSocket<WledMessage>(`ws://${controller.ipAddress}/ws`);
+    this.connections.set(controller.id, ws);
+
+    return ws;
+  }
+
   /**
    * Disconnect from a controller websocket
    *
@@ -115,13 +128,8 @@ export class ControllerService {
    * @param controller the controller to connect to
    * @returns websocket connection
    */
-  getStateStream(controller: Controller): WebSocketSubject<WledMessage> {
-    if (this.connections.has(controller.id)) {
-      return this.connections.get(controller.id);
-    }
-
-    const ws = webSocket<WledMessage>(`ws://${controller.ipAddress}/ws`);
-    this.connections.set(controller.id, ws);
+  getStateStream(controller: Controller): Observable<WledMessage> {
+    let ws = this.getConnection(controller);
 
     return ws;
   }
@@ -133,7 +141,7 @@ export class ControllerService {
    * @returns observable expected to return the resulting state
    */
   togglePowerController(controller: Controller): Observable<WledMessage> {
-    let connection = this.getStateStream(controller);
+    let connection = this.getConnection(controller);
 
     connection.next({
       on: !controller.state.on,

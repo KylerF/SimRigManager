@@ -155,7 +155,7 @@
   },
   "cli": {
     "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@ngrx/schematics"
   },
   "schematics": {
     "@schematics/angular:component": {

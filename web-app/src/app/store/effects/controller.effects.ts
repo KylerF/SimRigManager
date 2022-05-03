@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Controller } from 'models/controller';
-import { mergeMap, map, catchError, switchMap, of, delay, retryWhen, tap } from 'rxjs';
+import { mergeMap, map, catchError, switchMap, of, delay, retryWhen, tap, timeout } from 'rxjs';
 
 import { ControllerService } from 'services/controller.service';
 import * as controllerActions from '../actions/controller.actions';
@@ -62,6 +62,9 @@ export class ControllerEffects {
     )
   );
 
+  /**
+   * Start streaming controller state over websocket
+   */
   streamControllerState$ = createEffect(() => this.actions$.pipe(
     ofType(controllerActions.StartStream),
     mergeMap(action => this.controllerService.getStateStream(action.controller)
@@ -74,8 +77,8 @@ export class ControllerEffects {
             }
           })
         ),
-        catchError(error => of(
-          controllerActions.UpdateControllerStateFailure({
+        catchError(
+          error => of(controllerActions.UpdateControllerStateFailure({
             payload: {
               controller: action.controller,
               error: error.message
@@ -83,8 +86,7 @@ export class ControllerEffects {
           })
         ))
       ))
-    )
-  );
+    ));
 
   /**
    * Get controller settings
