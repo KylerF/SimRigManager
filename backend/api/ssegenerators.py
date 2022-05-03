@@ -88,7 +88,7 @@ class GeneratorFunctions:
                 break
 
             try:
-                session_data = json.loads(self.redis_store.get("session_data")) or {}
+                session_data = json.loads(self.redis_store.get("session_data_raw")) or {}
             except (redis.exceptions.ConnectionError, TypeError):
                 session_data = {}
 
