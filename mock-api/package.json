@@ -1,5 +1,5 @@
 {
-  "name": "mock-simrig-api",
+  "name": "simrig-mock-api",
   "version": "1.0.0",
   "description": "Provides a mock iRacing stream with recorded session data",
   "main": "src/server.js",

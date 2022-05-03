@@ -26,7 +26,12 @@ WORKDIR /usr/src/web-app
 COPY package.json yarn.lock ./
 
 # Install dependencies from lockfile
-RUN yarn install --frozen-lockfile
+RUN apk add --no-cache --virtual .gyp \
+        python3 \
+        make \
+        g++ \
+    && yarn install --frozen-lockfile \
+    && apk del .gyp
 
 # Copy the generated modules and all other files to the container
 COPY . .
