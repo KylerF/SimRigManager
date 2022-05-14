@@ -53,6 +53,10 @@ class IracingWorker(threading.Thread):
                 latest = self.data_stream.latest()
                 latest_raw = self.data_stream.latest(raw=True)
 
+                # Update Redis keys
+                self.redis_store.set('session_data', json.dumps(latest))
+                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
+
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
                 pending_task = self.queue_manager.get('tasks')
@@ -129,10 +133,6 @@ class IracingWorker(threading.Thread):
 
                         # Update Redis key for streaming
                         self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
-
-                # Update Redis keys
-                self.redis_store.set('session_data', json.dumps(latest))
-                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
                         
                 self.log.debug(latest)
                 
