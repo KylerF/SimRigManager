@@ -1,7 +1,7 @@
 import * as fromLaptime from './laptime.actions';
 
-describe('loadLaptimes', () => {
+describe('LoadLaptimes', () => {
   it('should return an action', () => {
-    expect(fromLaptime.loadLaptimes().type).toBe('[Laptime] Load Laptimes');
+    expect(fromLaptime.LoadLaptimes().type).toBe('[Laptime] Load Laptimes');
   });
 });
