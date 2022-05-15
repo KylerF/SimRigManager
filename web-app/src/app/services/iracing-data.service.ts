@@ -32,7 +32,7 @@ export class IracingDataService {
   // Whether the websocket connection is open -
   // used to prevent multiple connections
   private streamOpen: boolean = false;
-  private connected: boolean = false;
+  public connected: boolean = false;
 
   constructor(private http: HttpClient) {}
 
