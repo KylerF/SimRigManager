@@ -139,7 +139,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
     )
     .subscribe({
       next: controllers => {
-        controllers.state.forEach(controller => {
+        controllers?.state.forEach(controller => {
           this.controllerService.disconnectController(controller);
         });
       },

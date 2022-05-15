@@ -1,9 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import {
+  State,
+  selectLaptimesForDriver,
+  selectLaptimesSince,
+  selectAllLaptimes,
+  selectFilteredLaptimes
+} from 'store/reducers';
 
 import { LapTimeService } from 'services/lap-time.service';
 import { DriverService } from 'services/driver.service';
 import { LapTime } from 'models/lap-time';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as moment from 'moment';
+import { StateContainer } from 'src/app/models/state';
+import { LoadLaptimes } from 'src/app/store/actions/laptime.actions';
+import { LapTimeFilterParams } from 'src/app/models/lap-time-search-params';
 
 @Component({
   selector: 'app-scoreboard',
@@ -17,6 +29,9 @@ import { LapTime } from 'models/lap-time';
 export class ScoreboardComponent implements OnInit, OnDestroy {
   lapTimes: LapTime[] = [];
   filteredLapTimes: LapTime[] = [];
+
+  laptimes$: Observable<StateContainer<LapTime[]>>;
+  filteredLaptimes$: Observable<LapTime[]>;
 
   newLapTimeStream: EventSource;
 
@@ -33,7 +48,8 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private lapTimeService: LapTimeService,
-    private driverService: DriverService
+    private driverService: DriverService,
+    private store: Store<State>
   )
   { }
 
@@ -53,6 +69,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
    * Fetch all lap times from the API
    */
   getLapTimes() {
+    this.store.dispatch(LoadLaptimes());
+    this.laptimes$ = this.store.select(selectAllLaptimes);
+
     this.lapTimeService.getLapTimes().subscribe({
       next: lapTimes => {
         if (lapTimes) {

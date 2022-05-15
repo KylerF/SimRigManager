@@ -7,16 +7,16 @@ export enum LaptimeActionTypes {
   LoadLaptimesFailure = '[Laptime] Load Laptimes Failure'
 }
 
-export const loadLaptimes = createAction(
+export const LoadLaptimes = createAction(
   LaptimeActionTypes.LoadLaptimes
 );
 
-export const loadLaptimesSuccess = createAction(
+export const LoadLaptimesSuccess = createAction(
   LaptimeActionTypes.LoadLaptimesSuccess,
   props<{ payload: { data: LapTime[] }}>()
 );
 
-export const loadLaptimesFailure = createAction(
+export const LoadLaptimesFailure = createAction(
   LaptimeActionTypes.LoadLaptimesFailure,
   props<{ payload: { error: any }}>()
 );

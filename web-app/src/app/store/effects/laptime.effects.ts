@@ -14,18 +14,18 @@ export class LaptimeEffects {
   ) { }
 
   loadLaptimes$ = createEffect(() => this.actions$.pipe(
-    ofType(laptimeActions.loadLaptimes),
+    ofType(laptimeActions.LoadLaptimes),
     mergeMap(() => this.lapTimeService.getLapTimes()
       .pipe(
         map(
-          laptimes => laptimeActions.loadLaptimesSuccess({
+          laptimes => laptimeActions.LoadLaptimesSuccess({
             payload: {
               data: laptimes
             }
           })
         ),
         catchError(
-          error => of(laptimeActions.loadLaptimesFailure({
+          error => of(laptimeActions.LoadLaptimesFailure({
             payload: {
               error: error.message
             }

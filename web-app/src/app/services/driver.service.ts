@@ -24,6 +24,7 @@ export class DriverService {
 
   private driversEndpoint = 'drivers';
   private activeDriverEndpoint = 'drivers/active';
+  private streamEndpoint = 'drivers/active/stream';
   private profilePicEndpoint = 'avatars';
   private statsEndpoint = 'stats';
 
@@ -60,6 +61,21 @@ export class DriverService {
     .pipe(
       catchError(APIHelper.handleError)
     );
+  }
+
+  /**
+   * Stream lap times via an EventSource
+   */
+   streamSelectedDriver(): EventSource {
+    let eventSource = new EventSource(
+      `${APIHelper.getBaseUrl()}/${this.streamEndpoint}`
+    );
+
+    eventSource.addEventListener('error', () => {
+      catchError(APIHelper.handleError);
+    });
+
+    return eventSource;
   }
 
   /**

@@ -36,7 +36,7 @@ export class LapTimeService {
   }
 
   /**
-   * Stream lap times via an EventSource
+   * Stream lap times via Server Sent Events
    */
   streamLapTimes(): EventSource {
     let eventSource = new EventSource(

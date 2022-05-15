@@ -1,5 +1,6 @@
 import {
   ActionReducerMap,
+  createSelector,
   MetaReducer
 } from '@ngrx/store';
 
@@ -16,8 +17,14 @@ import { StateContainer } from 'models/state';
 import { IracingConnectionStatus } from 'models/iracing/connection-status';
 import { Controller } from 'models/controller';
 import * as fromLaptime from './laptime.reducer';
-import { LapTime } from 'src/app/models/lap-time';
+import { LapTime } from 'models/lap-time';
 import * as moment from 'moment';
+import {
+  LapTimeColumn,
+  LapTimeFilterParams,
+  LaptimeSortParams,
+  SortOrder
+} from 'models/lap-time-search-params';
 
 /**
  * The complete state of the application (combined from all reducers)
@@ -54,26 +61,57 @@ export const selectQuote =
 
 export const selectIracingConnected =
   (state: State) =>
-    state[fromIracing.iracingFeatureKey].state.connected
+    state[fromIracing.iracingFeatureKey].state.connected;
 
 export const selectControllers =
   (state: State) =>
     state[fromController.controllerFeatureKey];
 
-export const selectAllLaptimes =
-  (state: State) =>
-    state[fromLaptime.laptimeFeatureKey];
-
+export const selectAllLaptimes = () =>
+  createSelector(
+    selectAllLaptimes,
+    (state: State) => state[fromLaptime.laptimeFeatureKey]
+  );
 
 // Laptime filters
-export const selectLaptimesForDriver =
-  (state: State, driverId: number) =>
-    state[fromLaptime.laptimeFeatureKey].state.filter(
-      laptime => laptime.driver.id === driverId
-    );
+export const selectLaptimesForDriver = (driverId: number) =>
+  createSelector(
+    selectLaptimesForDriver,
+    (state: State) => state[fromLaptime.laptimeFeatureKey].state.filter(
+      (laptime: LapTime) => laptime.driver.id === driverId
+    )
+  );
 
-export const selectLaptimesSince =
-  (state: State, since: moment.Moment) =>
-    state[fromLaptime.laptimeFeatureKey].state.filter(
-      laptime => moment(laptime.setAt).isAfter(since)
-    );
+export const selectLaptimesSince = (since: moment.Moment) =>
+  createSelector(
+    selectLaptimesSince,
+    (state: State) => state[fromLaptime.laptimeFeatureKey].state.filter(
+      (laptime: LapTime) => moment(laptime.setAt).isAfter(since)
+    )
+  );
+
+export const selectSortedLaptimes = (sortParams: LaptimeSortParams) =>
+  createSelector(
+    selectSortedLaptimes,
+    (state: State) => state[fromLaptime.laptimeFeatureKey].state.sort((lapTime1, lapTime2) => {
+      if (sortParams.sortBy == LapTimeColumn.DRIVER) {
+        return sortParams.sortOrder == SortOrder.DESC ?
+          (lapTime2.driver.name > lapTime1.driver.name ?
+            1 : lapTime2.driver.name < lapTime1.driver.name ? -1 : 0) :
+          (lapTime1.driver.name > lapTime2.driver.name ?
+            1 : lapTime1.driver.name < lapTime2.driver.name ? -1 : 0);
+      } else {
+        return sortParams.sortOrder == SortOrder.DESC ?
+          (lapTime2[sortParams.sortBy] > lapTime1[sortParams.sortBy] ?
+            1 : lapTime2[sortParams.sortBy] < lapTime1[sortParams.sortBy] ? -1 : 0) :
+          (lapTime1[sortParams.sortBy] > lapTime2[sortParams.sortBy] ?
+            1 : lapTime1[sortParams.sortBy] < lapTime2[sortParams.sortBy] ? -1 : 0);
+      }
+    })
+  );
+
+export const selectFilteredLaptimes = (filterParams: LapTimeFilterParams) =>
+  createSelector(
+    selectLaptimesSince(filterParams.since),
+    selectSortedLaptimes(filterParams.sortParams)
+  );
