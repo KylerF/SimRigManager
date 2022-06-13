@@ -1,5 +1,5 @@
 uvicorn[standard]==0.17.6
-starlette==0.17.1
+starlette==0.20.3
 python-multipart==0.0.5
 sqlalchemy_utils==0.38.2
 fastapi==0.75.0
