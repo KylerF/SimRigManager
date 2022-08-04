@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
    */
   ngOnInit() {
     this.pollAPIAvailable();
-    this.getSelectedDriver();
+    this.driverService.streamSelectedDriver();
 
     this.driverChangeSubscription = this.driverService.selectedDriver$
        .subscribe(driver => this.updateDriverDisplay(driver));
@@ -50,15 +50,5 @@ export class AppComponent implements OnInit {
   updateDriverDisplay(driver) {
     this.activeDriver = driver;
     this.avatarURL = this.driverService.getAvatarURLForDriver(this.activeDriver);
-  }
-
-  /**
-   * Get the active driver
-   */
-  getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe({
-      next: driver => this.updateDriverDisplay(driver),
-      error: error => this.error = error.message
-    });
   }
 }

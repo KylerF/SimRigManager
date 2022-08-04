@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { GraphQLModule } from './graphql.module';
 
 import { AppComponent } from 'components/app.component';
 import { ControllerListComponent } from 'components/controller-list/controller-list.component';
@@ -55,6 +57,8 @@ import { RawDataDisplayComponent } from 'components/telemetry-dashboard/raw-data
 import { TrackMapDisplayComponent } from 'components/telemetry-dashboard/track-map-display/track-map-display.component';
 import { ApiStatusBannerComponent } from 'components/status-banner/api-status-banner/api-status-banner.component';
 import { LaptimeEffects } from './store/effects/laptime.effects';
+import { PositionDisplayComponent } from './components/telemetry-dashboard/position-display/position-display.component';
+import { FuelLevelDisplayComponent } from './components/telemetry-dashboard/fuel-level-display/fuel-level-display.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -107,6 +111,8 @@ const routes: Routes = [
     RawDataDisplayComponent,
     TrackMapDisplayComponent,
     ApiStatusBannerComponent,
+    PositionDisplayComponent,
+    FuelLevelDisplayComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,6 +123,7 @@ const routes: Routes = [
     HttpClientModule,
     NgbModule,
     DragDropModule,
+    ScrollingModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([
       IracingEffects,
@@ -127,7 +134,8 @@ const routes: Routes = [
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    GraphQLModule
   ],
   providers: [],
   bootstrap: [AppComponent]

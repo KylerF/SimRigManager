@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { IracingDataService } from 'services/iracing-data.service';
 
@@ -61,7 +61,7 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe({
         next: data => {
-          if (_.isEmpty(data)) {
+          if (isEmpty(data)) {
             this.error = 'No data available';
           } else {
             this.error = null;

@@ -49,8 +49,8 @@ var jsonStream = StreamArray.withParser();
 const app = express();
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views')); 
-app.use('/css', express.static('node_modules/bootstrap/dist/css'));
-app.use('/js', express.static('node_modules/bootstrap/dist/js'));
+app.use('/css', express.static('node_modules/bootstrap-dark-5/dist/css'));
+app.use('/js', express.static('node_modules/bootstrap-dark-5/dist/js'));
 app.use('/js', express.static('node_modules/jquery/dist'));
 
 // Set up rate limiter: maximum of five requests per second

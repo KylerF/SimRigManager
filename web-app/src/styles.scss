@@ -11,6 +11,18 @@
   align-items: center;
   height: 100vh - $navbar-height;
 }
+.center-vh-15 {
+  @extend .center-vh;
+  height: 100vh - $navbar-height - 15;
+}
+.center-vh-20 {
+  @extend .center-vh;
+  height: 100vh - $navbar-height - 20;
+}
+.center-vh-40 {
+  @extend .center-vh;
+  height: 100vh - $navbar-height - 40;
+}
 
 // Pulse contents at a 3 second interval
 .pulse {

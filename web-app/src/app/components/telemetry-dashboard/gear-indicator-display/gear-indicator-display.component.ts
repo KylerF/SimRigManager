@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -26,7 +26,7 @@ export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             let newGear: number = data.Gear;
 
             switch (newGear) {

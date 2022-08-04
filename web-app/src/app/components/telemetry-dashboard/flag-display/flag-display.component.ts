@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { Constants } from 'helpers/constants';
@@ -19,7 +19,8 @@ export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implemen
     [ Constants.iracing.flags.noFlag, 0 ],
     [ Constants.iracing.flags.greenFlag, 10 ],
     [ Constants.iracing.flags.blackFlag, 20 ],
-    [ Constants.iracing.flags.cautionFlag, 30 ]
+    [ Constants.iracing.flags.cautionFlag, 30 ],
+    [ Constants.iracing.flags.redFlag, 40 ],
   ]);
 
   flag: number;
@@ -37,7 +38,7 @@ export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implemen
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             this.flag = data.SessionFlags;
           }
         }

@@ -1,7 +1,11 @@
+/**
+ * Models used to filter lap times displayed on the scoreboard
+ */
 export interface LapTimeFilterParams {
   sortParams?: LaptimeSortParams;
   searchParams?: LapTimeSearchParams[];
   show?: DriverFilterType;
+  showForDriverId?: number;
   since?: moment.Moment;
 }
 
@@ -30,5 +34,6 @@ export enum LapTimeColumn {
   CAR = 'car',
   TRACK = 'track',
   CONFIG = 'config',
+  TIME = 'time',
   SET_AT = 'setAt',
 }

@@ -83,18 +83,15 @@ export class DriverProfileComponent implements OnInit {
       return;
     }
 
-    this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
-      response => {
-        //this.saveProfile();
+    this.driverService.uploadProfilePic(this.driver.id, file).subscribe({
+      next: response => {
         this.driver.profilePic = response.image_url;
         this.driverService.setCachedDriver(this.driver);
         this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -108,17 +105,15 @@ export class DriverProfileComponent implements OnInit {
    * Save changes to driver profile
    */
   saveProfile() {
-    this.driverService.updateDriver(this.driver).subscribe (
-      response => {
+    this.driverService.updateDriver(this.driver).subscribe({
+      next: response => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
         this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
 
     this.editingProfile = false;
   }

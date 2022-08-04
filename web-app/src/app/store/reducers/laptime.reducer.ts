@@ -31,5 +31,10 @@ export const reducer = createReducer(
     error: action.payload.error,
     loading: false,
     lastUpdated: moment().toDate()
+  })),
+  on(laptimeActions.AddLaptime, (state, action) => ({
+    ...state,
+    state: [...state.state, action.payload.data],
+    lastUpdated: moment().toDate()
   }))
 );

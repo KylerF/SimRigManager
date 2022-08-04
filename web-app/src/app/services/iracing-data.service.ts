@@ -7,7 +7,6 @@ import { webSocket } from 'rxjs/webSocket';
 
 import { APIHelper } from 'helpers/api-helper';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import * as _ from 'lodash';
 import { IracingConnectionStatus } from 'models/iracing/connection-status';
 
 @Injectable({

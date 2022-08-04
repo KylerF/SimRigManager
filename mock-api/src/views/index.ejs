@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="SimRig Mock API home page">
-        <link rel="stylesheet" href="./css/bootstrap.min.css">
-        <script src="./js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="./css/bootstrap-dark.min.css">
+        <script src="./js/darkmode.min.js"></script>
         <script src="./js/jquery.min.js"></script>
         <title>SimRig Mock API</title>
     </head>
@@ -21,11 +21,11 @@
                         <h2>Endpoints</h2>
                         <hr/>
                         <ul>
-                            <li>ws://{baseURL}/iracing/stream — websocket connection to stream iRacing data</li>
+                            <li>ws://{baseURL}/iracing/stream - websocket connection to stream iRacing data</li>
                             <li><a href="/iracing/stream">http://{baseURL}/iracing/stream</a> - stream iRacing data via Server Sent Events</li>
-                            <li><a href="/iracing/latest">http://{baseURL}/iracing/latest</a> — returns the latest iRacing data</li>
-                            <li><a href="/files">http://{baseURL}/files</a> — returns a list of available files</li>
-                            <li>http://{baseURL}/files/{fileName} — selects the given file for streaming</li>
+                            <li><a href="/iracing/latest">http://{baseURL}/iracing/latest</a> - returns the latest iRacing data</li>
+                            <li><a href="/files">http://{baseURL}/files</a> - returns a list of available files</li>
+                            <li>http://{baseURL}/files/{fileName} - selects the given file for streaming</li>
                             <li>http://{baseURL}/delay/{ms} - sets the streaming delay between frames in milliseconds</li>
                         </ul>
                         <h2>Controls</h2>

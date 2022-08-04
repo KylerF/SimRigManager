@@ -2,15 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
-import { IracingDataService } from 'services/iracing-data.service';
+import { IracingDataService } from 'src/app/services/iracing-data.service';
 
 @Component({
-  selector: 'app-delta-display',
-  templateUrl: './delta-display.component.html',
-  styleUrls: ['./delta-display.component.scss']
+  selector: 'app-position-display',
+  templateUrl: './position-display.component.html',
+  styleUrls: ['./position-display.component.scss']
 })
-export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
-  delta: number;
+/**
+ * Component to show the driver's position
+ */
+export class PositionDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
+  position: number;
 
   constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
@@ -23,7 +26,7 @@ export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent impleme
       .subscribe(
         data => {
           if (!isEmpty(data)) {
-            this.delta = data.LapDeltaToSessionBestLap;
+            this.position = data.PlayerCarPosition;
           }
         }
       );

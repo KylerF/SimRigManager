@@ -74,9 +74,21 @@ def read_redis_key(key):
 
     try:
         return json.loads(redis_store.get(key))
-    except (redis.exceptions.ConnectionError, TypeError):
+    except (redis.exceptions.ConnectionError):
         print("Could not connect to Redis server")
         return None
+    except (TypeError):
+        # Redis key does not exist
+        return None
+
+def subscribe_to_redis_key(key, callback):
+    redis_store = get_redis_store()
+    p = redis_store.pubsub()
+    p.psubscribe(key)
+
+    for msg in p.listen():
+        if msg['type'] == 'pmessage':
+            callback(json.loads(msg['data']))
 
 def set_redis_key(key, value):
     """

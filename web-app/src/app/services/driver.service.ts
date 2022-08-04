@@ -21,6 +21,7 @@ export class DriverService {
   selectedDriver$ = this._selectedDriver.asObservable();
 
   private localStorage: Storage;
+  private eventSource: EventSource;
 
   private driversEndpoint = 'drivers';
   private activeDriverEndpoint = 'drivers/active';
@@ -66,16 +67,20 @@ export class DriverService {
   /**
    * Stream lap times via an EventSource
    */
-   streamSelectedDriver(): EventSource {
-    let eventSource = new EventSource(
+  streamSelectedDriver(): EventSource {
+    this.eventSource = new EventSource(
       `${APIHelper.getBaseUrl()}/${this.streamEndpoint}`
     );
 
-    eventSource.addEventListener('error', () => {
+    this.eventSource.addEventListener('message', (event) => {
+      this._selectedDriver.next(JSON.parse(event.data));
+    });
+
+    this.eventSource.addEventListener('error', () => {
       catchError(APIHelper.handleError);
     });
 
-    return eventSource;
+    return this.eventSource;
   }
 
   /**
@@ -115,7 +120,9 @@ export class DriverService {
 
     return this.http.post<Driver>(
       `${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`,
-      { 'driverId': driver.id }
+      {
+        'driverId': driver.id
+      }
     )
     .pipe(
       catchError(APIHelper.handleError)

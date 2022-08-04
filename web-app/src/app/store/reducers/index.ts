@@ -1,10 +1,13 @@
 import {
   ActionReducerMap,
+  createFeatureSelector,
   createSelector,
   MetaReducer
 } from '@ngrx/store';
 
 import { environment } from 'environments/environment';
+
+import { cloneDeep } from 'lodash-es'
 
 import * as fromApiHealthcheck from './api-healthcheck.reducer';
 import * as fromIracing from './iracing.reducer';
@@ -20,11 +23,11 @@ import * as fromLaptime from './laptime.reducer';
 import { LapTime } from 'models/lap-time';
 import * as moment from 'moment';
 import {
-  LapTimeColumn,
   LapTimeFilterParams,
+  LapTimeSearchParams,
   LaptimeSortParams,
   SortOrder
-} from 'models/lap-time-search-params';
+} from 'src/app/models/lap-time-filter-params';
 
 /**
  * The complete state of the application (combined from all reducers)
@@ -67,51 +70,101 @@ export const selectControllers =
   (state: State) =>
     state[fromController.controllerFeatureKey];
 
-export const selectAllLaptimes = () =>
+// Laptime selectors
+export const selectLaptimes = createFeatureSelector<StateContainer<LapTime[]>>(
+  fromLaptime.laptimeFeatureKey
+);
+
+export const selectLaptimesState = () =>
   createSelector(
-    selectAllLaptimes,
-    (state: State) => state[fromLaptime.laptimeFeatureKey]
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) =>
+      laptimeState
   );
 
-// Laptime filters
 export const selectLaptimesForDriver = (driverId: number) =>
   createSelector(
-    selectLaptimesForDriver,
-    (state: State) => state[fromLaptime.laptimeFeatureKey].state.filter(
-      (laptime: LapTime) => laptime.driver.id === driverId
-    )
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) => {
+      let filteredState = cloneDeep(laptimeState);
+      filteredState.state = laptimeState.state.filter(
+        (lapTime: LapTime) => lapTime.driver.id === driverId
+      );
+
+      return filteredState;
+    }
+  );
+
+export const selectOverallBestLaptimes = () =>
+  createSelector(
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) => {
+      let filteredState = laptimeState;
+      filteredState.state = laptimeState.state.filter(lapTime =>
+        lapTime.time == Math.min(laptimeState.state.filter(cLapTime =>
+          cLapTime.car == lapTime.car
+          && cLapTime.trackName == lapTime.trackName
+          && cLapTime.trackConfig == lapTime.trackConfig
+        )[0].time)
+      );
+
+      return filteredState;
+    }
   );
 
 export const selectLaptimesSince = (since: moment.Moment) =>
   createSelector(
-    selectLaptimesSince,
-    (state: State) => state[fromLaptime.laptimeFeatureKey].state.filter(
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) => laptimeState.state.filter(
       (laptime: LapTime) => moment(laptime.setAt).isAfter(since)
     )
   );
 
+export const selectLaptimesBySearchParams = (searchParams: LapTimeSearchParams[]) =>
+  createSelector(
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) => {
+      return searchParams.reduce((acc, searchParam) => {
+        return acc.filter(
+          (laptime: LapTime) =>
+            laptime[searchParam.searchKey] === searchParam.searchValue
+        );
+      }
+      , laptimeState.state);
+    }
+  );
+
 export const selectSortedLaptimes = (sortParams: LaptimeSortParams) =>
   createSelector(
-    selectSortedLaptimes,
-    (state: State) => state[fromLaptime.laptimeFeatureKey].state.sort((lapTime1, lapTime2) => {
-      if (sortParams.sortBy == LapTimeColumn.DRIVER) {
-        return sortParams.sortOrder == SortOrder.DESC ?
-          (lapTime2.driver.name > lapTime1.driver.name ?
-            1 : lapTime2.driver.name < lapTime1.driver.name ? -1 : 0) :
-          (lapTime1.driver.name > lapTime2.driver.name ?
-            1 : lapTime1.driver.name < lapTime2.driver.name ? -1 : 0);
-      } else {
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) => {
+      let sortedState = cloneDeep(laptimeState);
+      sortedState.state = [...laptimeState.state].sort((lapTime1, lapTime2) => {
         return sortParams.sortOrder == SortOrder.DESC ?
           (lapTime2[sortParams.sortBy] > lapTime1[sortParams.sortBy] ?
             1 : lapTime2[sortParams.sortBy] < lapTime1[sortParams.sortBy] ? -1 : 0) :
           (lapTime1[sortParams.sortBy] > lapTime2[sortParams.sortBy] ?
             1 : lapTime1[sortParams.sortBy] < lapTime2[sortParams.sortBy] ? -1 : 0);
-      }
-    })
+      });
+
+      return sortedState;
+    }
   );
 
 export const selectFilteredLaptimes = (filterParams: LapTimeFilterParams) =>
   createSelector(
-    selectLaptimesSince(filterParams.since),
-    selectSortedLaptimes(filterParams.sortParams)
+    selectLaptimes,
+    selectSortedLaptimes(filterParams.sortParams),
+    selectLaptimesForDriver(filterParams.showForDriverId),
+    selectLaptimesBySearchParams(filterParams.searchParams),
+    (_, sorted, driver, searched) => {
+      let laptimeIds = new Set();
+      let combined = driver.state.filter(laptime => !laptimeIds.has(laptime.id) && laptimeIds.add(laptime.id));
+      combined.concat(searched.filter(laptime => !laptimeIds.has(laptime.id) && laptimeIds.add(laptime.id)));
+
+      return combined.sort(
+        (lapTime1, lapTime2) =>
+          sorted.state.indexOf(lapTime1) - sorted.state.indexOf(lapTime2)
+      );
+    }
   );

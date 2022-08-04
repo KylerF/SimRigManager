@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { LapTimeService } from 'src/app/services/lap-time.service';
-import { LaptimeActionTypes } from '../actions/laptime.actions';
 import * as laptimeActions from '../actions/laptime.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, takeUntil } from 'rxjs';
 
 @Injectable()
 export class LaptimeEffects {
@@ -13,6 +12,7 @@ export class LaptimeEffects {
     private lapTimeService: LapTimeService
   ) { }
 
+  // Get all lap times
   loadLaptimes$ = createEffect(() => this.actions$.pipe(
     ofType(laptimeActions.LoadLaptimes),
     mergeMap(() => this.lapTimeService.getLapTimes()
@@ -30,6 +30,25 @@ export class LaptimeEffects {
               error: error.message
             }
           }))
+        )
+      ))
+    )
+  );
+
+  // Stream new lap times
+  streamLaptimes$ = createEffect(() => this.actions$.pipe(
+    ofType(laptimeActions.StreamLaptimes),
+    mergeMap(() => this.lapTimeService.streamLapTimes()
+      .pipe(
+        takeUntil(this.actions$.pipe(
+          ofType(laptimeActions.StopStreamLaptimes)
+        )),
+        map(
+          laptime => laptimeActions.AddLaptime({
+            payload: {
+              data: laptime
+            }
+          })
         )
       ))
     )

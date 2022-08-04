@@ -15,6 +15,7 @@ from api.routers import (
     iracing,
     quotes,
 )
+from api.routers.graphql.root import graphql_app
 
 class SimRigAPI:
     """
@@ -61,7 +62,7 @@ class SimRigAPI:
             self.get_root
         )
 
-        # Register routers
+        # Register REST routers
         self.api.include_router(avatars.router)
         self.api.include_router(controllers.router)
         self.api.include_router(drivers.router)
@@ -69,7 +70,14 @@ class SimRigAPI:
         self.api.include_router(laptimes.router)
         self.api.include_router(quotes.router)
 
-        self.api.post("/drivers/active", tags=["drivers"], response_model=schemas.Driver)(self.set_active_driver)
+        self.api.post(
+            "/drivers/active",
+            tags=["drivers"],
+            response_model=schemas.Driver
+        )(self.set_active_driver)
+
+        # Register GraphQL router
+        self.api.include_router(graphql_app, prefix="/graphql")
 
     async def get_root(self):
         """

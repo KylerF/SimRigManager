@@ -5,17 +5,24 @@ import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-te
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-delta-display',
-  templateUrl: './delta-display.component.html',
-  styleUrls: ['./delta-display.component.scss']
+  selector: 'app-fuel-level-display',
+  templateUrl: './fuel-level-display.component.html',
+  styleUrls: ['./fuel-level-display.component.scss']
 })
-export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
-  delta: number;
 
-  constructor(iracingDataService: IracingDataService) {
+/**
+ * Component to display the current fuel level
+ */
+export class FuelLevelDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
+  fuelLevel: number;
+
+  constructor (iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
+  /**
+   * Subscribe to iRacing data and start updating the fuel level.
+   */
   ngOnInit(): void {
     super.ngOnInit();
 
@@ -23,7 +30,7 @@ export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent impleme
       .subscribe(
         data => {
           if (!isEmpty(data)) {
-            this.delta = data.LapDeltaToSessionBestLap;
+            this.fuelLevel = data.FuelLevel;
           }
         }
       );

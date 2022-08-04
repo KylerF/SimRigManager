@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { ControllerStatus } from 'models/controller-status';
 import { ControllerService } from 'services/controller.service';
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         response => {
-          if (!_.isEmpty(response)) {
+          if (!isEmpty(response)) {
             this.iracingData = response;
           } else {
             this.iracingData = null;
