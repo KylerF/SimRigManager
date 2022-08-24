@@ -54,7 +54,7 @@
     "@ngrx/schematics": "^13.0.2",
     "@nightwatch/schematics": "^0.1.9",
     "@types/d3": "^7.1.0",
-    "@types/jasmine": "~4.0.0",
+    "@types/jasmine": "~4.3.0",
     "@types/jquery": "^3.5.14",
     "@types/lodash": "^4.14.178",
     "@types/nightwatch": "2.0.4",
