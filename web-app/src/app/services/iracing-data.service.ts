@@ -41,7 +41,14 @@ export class IracingDataService {
    * @returns an observable wrapping latest data
    */
   getLatest(): Observable<IracingDataFrame> {
-    return this.http.get<any>(`${APIHelper.getMockBaseUrl()}/${this.endpoint}`)
+    let url = `${APIHelper.getBaseUrl('ws')}/${this.wsEndpoint}`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl('ws')}/${this.wsEndpoint}`;
+    }
+
+    return this.http.get<any>(`${url}/${this.endpoint}`)
       .pipe(catchError(APIHelper.handleError));
   }
 

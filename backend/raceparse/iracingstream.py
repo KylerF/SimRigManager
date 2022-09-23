@@ -140,8 +140,7 @@ class IracingStream:
 
         # Add additional headers
         for header in iracing_yaml_headers:
-            if header in self.ir:
-                raw_data[header] = self.ir[header]
+            raw_data[header] = self.ir[header]
 
         return raw_data
 

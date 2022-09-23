@@ -1,10 +1,9 @@
 from redis.exceptions import ConnectionError
 from time import sleep
-from os import getenv
 import threading
-import redis
 import math
 import json
+from api.utils import set_redis_key
 
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
@@ -27,9 +26,6 @@ class IracingWorker(threading.Thread):
         self.controller = controller
         self.rpm_strip = rpm_strip
         self.framerate = framerate
-
-        # Set up Redis storage
-        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
 
     def run(self):
         # Get the active driver and their track time
@@ -54,8 +50,8 @@ class IracingWorker(threading.Thread):
                 latest_raw = self.data_stream.latest(raw=True)
 
                 # Update Redis keys
-                self.redis_store.set('session_data', json.dumps(latest))
-                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
+                set_redis_key('session_data', json.dumps(latest))
+                set_redis_key('session_data_raw', json.dumps(latest_raw))
 
                 # Check for updates from the API
                 updated_driver = self.queue_manager.get('active_driver')
@@ -132,7 +128,7 @@ class IracingWorker(threading.Thread):
                         new_laptime = crud.create_laptime(db, new_record)
 
                         # Update Redis key for streaming
-                        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
+                        set_redis_key('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
                         
                 self.log.debug(latest)
                 

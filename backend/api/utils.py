@@ -81,7 +81,7 @@ def read_redis_key(key):
         # Redis key does not exist
         return None
 
-def subscribe_to_redis_key(key, callback):
+def subscribe_to_redis_key(key: str, callback):
     redis_store = get_redis_store()
     p = redis_store.pubsub()
     p.psubscribe(key)

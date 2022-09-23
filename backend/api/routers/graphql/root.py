@@ -21,25 +21,23 @@ class DriverType:
 )
 class Query:
     @strawberry.field(
-        description="True if the API is active and running",
-        name="active",
+        description="True if the API is active and running"
     )
-    def apiActive(self) -> bool:
+    def api_active(self) -> bool:
         return True
 
     @strawberry.field(
-        description="Get the active driver",
-        name="activeDriver",
+        description="Get the active driver"
     )
-    def getActiveDriver(self) -> DriverType:
+    def active_driver(self) -> DriverType:
         active_driver = get_active_driver_from_cache()
 
         return DriverType(
-            id=active_driver['id'],
-            name=active_driver['name'],
-            nickname=active_driver['nickname'],
-            profilePic=active_driver['profilePic'],
-            trackTime=active_driver['trackTime'],
+            id=active_driver.get('id'),
+            name=active_driver.get('name'),
+            nickname=active_driver.get('nickname'),
+            profilePic=active_driver.get('profilePic'),
+            trackTime=active_driver.get('trackTime'),
         )
 
 @strawberry.type(
@@ -48,27 +46,26 @@ class Query:
 )
 class Subscription:
     @strawberry.subscription(
-        description="Subscribe to active driver changes",
-        name="activeDriver",
+        description="Subscribe to active driver changes"
     )
-    async def activeDriver(self) -> AsyncGenerator[DriverType, None]:
+    async def active_driver(self) -> AsyncGenerator[DriverType, None]:
         last_driver = get_active_driver_from_cache()
 
         while True:
             active_driver = get_active_driver_from_cache()
 
-            if active_driver['id'] != last_driver['id']:
+            if active_driver.get('id') != last_driver.get('id'):
                 yield DriverType(
-                    id=active_driver['id'],
-                    name=active_driver['name'],
-                    nickname=active_driver['nickname'],
-                    profilePic=active_driver['profilePic'],
-                    trackTime=active_driver['trackTime'],
+                    id=active_driver.get('id'),
+                    name=active_driver.get('name'),
+                    nickname=active_driver.get('nickname'),
+                    profilePic=active_driver.get('profilePic'),
+                    trackTime=active_driver.get('trackTime'),
                 )
 
                 last_driver = active_driver
 
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
 
 schema = strawberry.Schema(query=Query, subscription=Subscription)
 graphql_app = GraphQLRouter(schema=schema)
