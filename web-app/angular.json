@@ -33,7 +33,9 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "allowedCommonJsDependencies": [
-              "rxjs/internal/observable/interval"
+              "rxjs/internal/observable/interval",
+              "moment",
+              "lodash"
             ]
           },
           "configurations": {
