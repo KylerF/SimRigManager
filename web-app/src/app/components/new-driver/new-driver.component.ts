@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 
 import { DriverService } from '../../services/driver.service';
 import { NewDriver } from '../../models/new-driver';
@@ -28,7 +28,7 @@ export class NewDriverComponent {
   constructor(
     private driverService: DriverService, // Used to add a new driver
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: FormBuilder // Used to build the new driver form
+    private formBuilder: UntypedFormBuilder // Used to build the new driver form
   )
   { }
 

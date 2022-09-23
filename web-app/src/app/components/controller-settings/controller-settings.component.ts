@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ipAddressValidatorFunction } from 'directives/validators/ip-address-validator-function';
@@ -44,7 +44,7 @@ export class ControllerSettingsComponent implements OnInit {
   constructor(
     private controllerService: ControllerService, // Used to edit controller settings
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: FormBuilder, // Used to build the controller settings form
+    private formBuilder: UntypedFormBuilder, // Used to build the controller settings form
     private store: Store<State>
   )
   { }

@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { selectControllers, State } from 'store/reducers';
@@ -35,7 +35,7 @@ export class NewControllerComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: FormBuilder, // Used to build the new driver form
+    private formBuilder: UntypedFormBuilder, // Used to build the new driver form
     private store: Store<State>
   )
   { }
