@@ -30,6 +30,10 @@ class TestWled(unittest.TestCase):
             self.wled.universes, 1,
             msg='Expected 1 universes for 170 pixels'
         )
+        self.assertEqual(
+            self.wled.sender[2], None,
+            msg='2 sender threads created when only one is required'
+        )
         self.wled.stop()
 
         self.wled = Wled.connect('127.0.0.1', 171)
