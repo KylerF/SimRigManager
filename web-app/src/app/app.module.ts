@@ -59,6 +59,7 @@ import { ApiStatusBannerComponent } from 'components/status-banner/api-status-ba
 import { LaptimeEffects } from './store/effects/laptime.effects';
 import { PositionDisplayComponent } from './components/telemetry-dashboard/position-display/position-display.component';
 import { FuelLevelDisplayComponent } from './components/telemetry-dashboard/fuel-level-display/fuel-level-display.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -135,7 +136,13 @@ const routes: Routes = [
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    GraphQLModule
+    GraphQLModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
