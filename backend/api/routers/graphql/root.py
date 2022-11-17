@@ -7,7 +7,7 @@ from strawberry.fastapi import GraphQLRouter
 from database import crud, models
 from database.database import get_db
 from . import modeltypes
-from api.helpers.modelhelpers import get_valid_data
+from api.helpers.modelhelpers import get_valid_data, get_iracing_type
 from api.utils import get_iracing_data
 
 @strawberry.type(
@@ -74,7 +74,7 @@ class Query:
     )
     def iracing(self) -> modeltypes.IracingFrameType:
         frame = get_iracing_data(raw=True)
-        return modeltypes.IracingFrameType(**frame)
+        return get_iracing_type(frame)
 
 
 @strawberry.type(
@@ -124,8 +124,7 @@ class Subscription:
             frame = get_iracing_data(raw=True)
             
             if frame:
-                # Only send if new data is available
-                yield modeltypes.IracingFrameType(**frame)
+                yield get_iracing_type(frame)
                 await asyncio.sleep(fps / 100)
             else:
                 await asyncio.sleep(1)
