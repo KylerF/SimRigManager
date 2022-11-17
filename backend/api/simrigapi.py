@@ -7,7 +7,7 @@ import json
 from database.database import get_db
 from database import crud, schemas
 from api.utils import get_redis_store
-from api.routers import (
+from api.routers.rest import (
     controllers, 
     laptimes, 
     avatars, 
