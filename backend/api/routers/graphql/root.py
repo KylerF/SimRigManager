@@ -8,6 +8,7 @@ from database import crud, models
 from database.database import get_db
 from . import modeltypes
 from api.helpers.modelhelpers import get_valid_data
+from api.utils import get_iracing_data
 
 @strawberry.type(
     description="Used to query the API",
@@ -67,6 +68,13 @@ class Query:
         return modeltypes.QuoteType(
             **get_valid_data(quote, models.Quote)
         )
+
+    @strawberry.field(
+        description="Get the latest frame of iRacing data"
+    )
+    def iracing(self) -> modeltypes.IracingFrameType:
+        frame = get_iracing_data(raw=True)
+        return modeltypes.IracingFrameType(**frame)
 
 
 @strawberry.type(
