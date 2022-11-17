@@ -116,6 +116,20 @@ class Subscription:
 
             await asyncio.sleep(update_sec)
 
+    @strawberry.subscription(
+        description="Subscribe to real-time iRacing data"
+    )
+    async def iracing(self, fps: int = 30) -> AsyncGenerator[modeltypes.IracingFrameType, None]:
+        while True:
+            frame = get_iracing_data(raw=True)
+            
+            if frame:
+                # Only send if new data is available
+                yield modeltypes.IracingFrameType(**frame)
+                await asyncio.sleep(fps / 100)
+            else:
+                await asyncio.sleep(1)
+
 
 schema = strawberry.Schema(query=Query, subscription=Subscription)
 graphql_app = GraphQLRouter(schema=schema)
