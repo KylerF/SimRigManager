@@ -4,7 +4,7 @@ method of tanslating pydantic schemas directly to GraphQL types.
 """
 import strawberry
 
-from database import schemas
+from database import schemas, iracingschemas
 
 
 @strawberry.experimental.pydantic.type(
@@ -40,4 +40,58 @@ class QuoteType:
     all_fields=True
 )
 class LightControllerType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="iRacing driver schema",
+    model=iracingschemas.Driver,
+    all_fields=True
+)
+class IracingDriverType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="iRacing telemetry options",
+    model=iracingschemas.TelemetryOptions,
+    all_fields=True
+)
+class TelemetryOptionsType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="iRacing weekend options",
+    model=iracingschemas.WeekendOptions,
+    all_fields=True
+)
+class WeekendOptionsType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="iRacing weekend info",
+    model=iracingschemas.WeekendInfo,
+    all_fields=True
+)
+class WeekendInfoType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="iRacing driver info",
+    model=iracingschemas.DriverInfo,
+    all_fields=True
+)
+class DriverInfoType:
+    pass
+
+
+@strawberry.experimental.pydantic.type(
+    description="A frame of iRacing data",
+    model=iracingschemas.IracingFrame,
+    all_fields=True
+)
+class IracingFrameType:
     pass
