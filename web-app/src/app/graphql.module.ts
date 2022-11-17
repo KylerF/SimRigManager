@@ -5,7 +5,7 @@ import { HttpLink } from 'apollo-angular/http';
 
 import { APIHelper } from 'helpers/api-helper';
 
-const uri = `${APIHelper.getBaseUrl()}/graphql`; // <-- add the URL of the GraphQL server here
+const uri = `${APIHelper.getBaseUrl()}/graphql`;
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   return {
     link: httpLink.create({uri}),
