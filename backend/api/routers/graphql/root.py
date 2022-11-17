@@ -1,19 +1,13 @@
 import asyncio
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List
 import strawberry
 
 from strawberry.fastapi import GraphQLRouter
 
-from api.utils import get_active_driver_from_cache
-from database.schemas import Driver
-
-@strawberry.experimental.pydantic.type(
-    description="A driver profile object",
-    model=Driver,
-    all_fields=True
-)
-class DriverType:
-    pass
+from database import crud, models
+from database.database import get_db
+from . import modeltypes
+from api.helpers.modelhelpers import get_valid_data
 
 @strawberry.type(
     description="Used to query the API",
@@ -27,18 +21,53 @@ class Query:
         return True
 
     @strawberry.field(
+        description="Get all drivers"
+    )
+    def all_drivers(self) -> List[modeltypes.DriverType]:
+        db = next(get_db())
+        all_drivers = crud.get_drivers(db)
+
+        return [
+            modeltypes.DriverType(
+                **get_valid_data(driver, models.Driver)
+            ) for driver in all_drivers
+        ]
+
+    @strawberry.field(
         description="Get the active driver"
     )
-    def active_driver(self) -> DriverType:
-        active_driver = get_active_driver_from_cache()
+    def active_driver(self) -> modeltypes.DriverType:
+        db = next(get_db())
+        active_driver = crud.get_active_driver(db).driver
 
-        return DriverType(
-            id=active_driver.get('id'),
-            name=active_driver.get('name'),
-            nickname=active_driver.get('nickname'),
-            profilePic=active_driver.get('profilePic'),
-            trackTime=active_driver.get('trackTime'),
+        return modeltypes.DriverType(
+            **get_valid_data(active_driver, models.Driver)
         )
+
+    @strawberry.field(
+        description="Get all lap times"
+    )
+    def all_laptimes(self) -> List[modeltypes.LapTimeType]:
+        db = next(get_db())
+        all_laptimes = crud.get_laptimes(db)
+
+        return [
+            modeltypes.LapTimeType(
+                **get_valid_data(laptime, models.LapTime)
+            ) for laptime in all_laptimes
+        ]
+
+    @strawberry.field(
+        description="Get a random inspirational racing quote"
+    )
+    def random_quote(self) -> modeltypes.QuoteType:
+        db = next(get_db())
+        quote = crud.get_random_quote(db)
+
+        return modeltypes.QuoteType(
+            **get_valid_data(quote, models.Quote)
+        )
+
 
 @strawberry.type(
     description="Subscription to changes in the API",
@@ -48,24 +77,37 @@ class Subscription:
     @strawberry.subscription(
         description="Subscribe to active driver changes"
     )
-    async def active_driver(self) -> AsyncGenerator[DriverType, None]:
-        last_driver = get_active_driver_from_cache()
+    async def active_driver(self) -> AsyncGenerator[modeltypes.DriverType, None]:
+        db = next(get_db())
+        last_driver = crud.get_active_driver(db).driver
 
         while True:
-            active_driver = get_active_driver_from_cache()
+            active_driver = crud.get_active_driver(db).driver
 
-            if active_driver.get('id') != last_driver.get('id'):
-                yield DriverType(
-                    id=active_driver.get('id'),
-                    name=active_driver.get('name'),
-                    nickname=active_driver.get('nickname'),
-                    profilePic=active_driver.get('profilePic'),
-                    trackTime=active_driver.get('trackTime'),
+            if active_driver.id != last_driver.id:
+                yield modeltypes.DriverType(
+                    **get_valid_data(active_driver, models.Driver)
                 )
 
                 last_driver = active_driver
 
             await asyncio.sleep(1)
+
+    @strawberry.subscription(
+        description="Subscribe to random inspirational racing quotes at a given frequency"
+    )
+    async def random_quote(self, update_sec: int = 10) -> AsyncGenerator[modeltypes.QuoteType, None]:
+        db = next(get_db())
+
+        while True:
+            quote = crud.get_random_quote(db)
+
+            yield modeltypes.QuoteType(
+                **get_valid_data(quote, models.Quote)
+            )
+
+            await asyncio.sleep(update_sec)
+
 
 schema = strawberry.Schema(query=Query, subscription=Subscription)
 graphql_app = GraphQLRouter(schema=schema)

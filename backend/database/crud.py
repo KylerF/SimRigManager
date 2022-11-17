@@ -4,6 +4,7 @@ Functions to perform CRUD operations on the database
 
 from sqlalchemy.orm import Session
 from sqlalchemy import func
+from typing import List
 
 from database import models, schemas
 
@@ -33,7 +34,7 @@ def get_driver_by_id(db: Session, id: int):
     ).first()
 
 
-def get_drivers(db: Session, skip: int = 0, limit: int = -1):
+def get_drivers(db: Session, skip: int = 0, limit: int = -1) -> List[models.Driver]:
     """
     Get all drivers
     """
@@ -112,7 +113,7 @@ def delete_driver_by_id(db: Session, driver_id: int):
     return stored_driver
 
 
-def get_active_driver(db: Session):
+def get_active_driver(db: Session) -> models.ActiveDriver:
     """
     Get the active driver
     """
@@ -142,7 +143,7 @@ def delete_active_driver(db: Session):
 
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   # 
 
-def get_laptimes(db: Session, skip: int = 0, limit: int = -1):
+def get_laptimes(db: Session, skip: int = 0, limit: int = -1) -> List[models.LapTime]:
     """
     Get all lap times
     """
@@ -357,7 +358,7 @@ def get_quotes(db: Session, skip: int = 0, limit: int = -1):
     return db.query(models.Quote).offset(skip).limit(limit).all()
 
 
-def get_random_quote(db: Session):
+def get_random_quote(db: Session) -> models.Quote:
     """
     Get a random inspirational racing quote
     """
