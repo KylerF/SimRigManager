@@ -1,5 +1,7 @@
 """
 Pydantic schemas for iRacing data
+#TODO: Can these be generated dynamically? Fields are different depending on
+car, and new fields are added often with iRacing updates.
 """
 from typing import List, Optional
 from pydantic import BaseModel
@@ -44,6 +46,7 @@ class WeekendInfo(BaseModel):
     TrackName: Optional[str]
     TrackID: Optional[int]
     TrackLength: Optional[str]
+    TrackLengthOfficial: Optional[str]
     TrackDisplayName: Optional[str]
     TrackDisplayShortName: Optional[str]
     TrackConfigName: Optional[str]
@@ -107,6 +110,7 @@ class Driver(BaseModel):
     CarPath: Optional[str]
     CarClassID: Optional[int]
     CarID: Optional[int]
+    CarIsElectric: Optional[int]
     CarIsPaceCar: Optional[int]
     CarIsAI: Optional[int]
     CarScreenName: Optional[str]
@@ -145,6 +149,7 @@ class DriverInfo(BaseModel):
     DriverHeadPosX: Optional[float]
     DriverHeadPosY: Optional[int]
     DriverHeadPosZ: Optional[float]
+    DriverCarIsElectric: Optional[int]
     DriverCarIdleRPM: Optional[int]
     DriverCarRedLine: Optional[int]
     DriverCarEngCylinderCount: Optional[int]
@@ -181,6 +186,8 @@ class IracingFrame(BaseModel):
     SessionLapsRemainEx: Optional[int] = None
     SessionTimeTotal: Optional[int] = None
     SessionLapsTotal: Optional[int] = None
+    SessionOnJokerLap: Optional[int] = None
+    SessionJokerLapsRemain: Optional[int] = None
     SessionTimeOfDay: Optional[int] = None
     RadioTransmitCarIdx: Optional[int] = None
     RadioTransmitRadioIdx: Optional[int] = None
@@ -199,13 +206,14 @@ class IracingFrame(BaseModel):
     FrameRate: Optional[float] = None
     CpuUsageFG: Optional[float] = None
     GpuUsage: Optional[float] = None
-    ChanAvgLatency: Optional[int] = None
-    ChanLatency: Optional[int] = None
-    ChanQuality: Optional[int] = None
+    ChanAvgLatency: Optional[float] = None
+    ChanLatency: Optional[float] = None
+    ChanQuality: Optional[float] = None
     ChanPartnerQuality: Optional[int] = None
     CpuUsageBG: Optional[float] = None
     ChanClockSkew: Optional[int] = None
     MemPageFaultSec: Optional[int] = None
+    MemSoftPageFaultSec: Optional[float] = None
     PlayerCarPosition: Optional[int] = None
     PlayerCarClassPosition: Optional[int] = None
     PlayerCarClass: Optional[int] = None
@@ -240,6 +248,7 @@ class IracingFrame(BaseModel):
     CarIdxTireCompound: Optional[List[int]] = None
     CarIdxQualTireCompound: Optional[List[int]] = None
     CarIdxQualTireCompoundLocked: Optional[List[bool]] = None
+    CarIdxSessionFlags: Optional[List[int]] = None
     CarIdxFastRepairsUsed: Optional[List[int]] = None
     PaceMode: Optional[int] = None
     CarIdxPaceLine: Optional[List[int]] = None
@@ -300,6 +309,8 @@ class IracingFrame(BaseModel):
     WindDir: Optional[float] = None
     RelativeHumidity: Optional[float] = None
     FogLevel: Optional[int] = None
+    SolarAltitude: Optional[float] = None
+    SolarAzimuth: Optional[float] = None
     DCLapStatus: Optional[int] = None
     DCDriversSoFar: Optional[int] = None
     OkToReloadTextures: Optional[bool] = None
@@ -350,10 +361,11 @@ class IracingFrame(BaseModel):
     BrakeRaw: Optional[float] = None
     HandbrakeRaw: Optional[int] = None
     SteeringWheelPeakForceNm: Optional[int] = None
-    SteeringWheelMaxForceNm: Optional[int] = None
+    SteeringWheelMaxForceNm: Optional[float] = None
     SteeringWheelUseLinear: Optional[bool] = None
     BrakeABSactive: Optional[bool] = None
     EngineWarnings: Optional[int] = None
+    Engine0_RPM: Optional[float] = None
     FuelLevel: Optional[float] = None
     FuelLevelPct: Optional[float] = None
     PitSvFlags: Optional[int] = None
@@ -367,7 +379,7 @@ class IracingFrame(BaseModel):
     CarIdxP2P_Count: Optional[List[int]] = None
     ReplayPlaySpeed: Optional[int] = None
     ReplayPlaySlowMotion: Optional[bool] = None
-    ReplaySessionTime: Optional[int] = None
+    ReplaySessionTime: Optional[float] = None
     ReplaySessionNum: Optional[int] = None
     TireLF_RumblePitch: Optional[int] = None
     TireRF_RumblePitch: Optional[int] = None
@@ -394,11 +406,23 @@ class IracingFrame(BaseModel):
     LatAccel: Optional[float] = None
     LongAccel: Optional[float] = None
     dcStarter: Optional[bool] = None
+    dcDRSToggle: Optional[bool] = None
+    DRS_Status: Optional[int] = None
     dcPitSpeedLimiterToggle: Optional[bool] = None
+    dpWingFront: Optional[float] = None
+    dcBrakeBias: Optional[float] = None
+    dcBrakeBiasFine: Optional[float] = None
+    dcPeakBrakeBias: Optional[float] = None
+    dcEngineBraking: Optional[float] = None
+    dcBrakeMisc: Optional[float] = None
     dcTearOffVisor: Optional[bool] = None
     dcToggleWindshieldWipers: Optional[bool] = None
     dcTriggerWindshieldWipers: Optional[bool] = None
     dcDashPage: Optional[int] = None
+    dcMGUKDeployMode: Optional[float] = None
+    dcDiffEntry: Optional[float] = None
+    dcDiffMiddle: Optional[float] = None
+    dcDiffExit: Optional[float] = None
     dpTireChange: Optional[bool] = None
     dpRFTireChange: Optional[int] = None
     dpLFTireChange: Optional[int] = None
@@ -418,7 +442,7 @@ class IracingFrame(BaseModel):
     dpLRTireColdPress: Optional[float] = None
     dpRRTireColdPress: Optional[float] = None
     WaterTemp: Optional[float] = None
-    WaterLevel: Optional[int] = None
+    WaterLevel: Optional[float] = None
     FuelPress: Optional[float] = None
     FuelUsePerHour: Optional[float] = None
     OilTemp: Optional[float] = None
@@ -426,6 +450,13 @@ class IracingFrame(BaseModel):
     OilLevel: Optional[int] = None
     Voltage: Optional[float] = None
     ManifoldPress: Optional[float] = None
+    PowerMGU_K: Optional[float] = None
+    TorqueMGU_K: Optional[float] = None
+    PowerMGU_H: Optional[float] = None
+    EnergyERSBattery: Optional[float] = None
+    EnergyERSBatteryPct: Optional[float] = None
+    EnergyBatteryToMGU_KLap: Optional[float] = None
+    EnergyMGU_KLapDeployPct: Optional[float] = None
     RFbrakeLinePress: Optional[float] = None
     RFcoldPressure: Optional[float] = None
     RFtempCL: Optional[float] = None

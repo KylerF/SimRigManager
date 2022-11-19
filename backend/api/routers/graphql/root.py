@@ -125,7 +125,7 @@ class Subscription:
             
             if frame:
                 yield get_iracing_type(frame)
-                await asyncio.sleep(fps / 100)
+                await asyncio.sleep(fps / 1000)
             else:
                 await asyncio.sleep(1)
 
