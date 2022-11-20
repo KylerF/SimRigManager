@@ -137,7 +137,9 @@ class Driver(BaseModel):
     CarSponsor_1: Optional[int]
     CarSponsor_2: Optional[int]
     ClubName: Optional[str]
+    ClubID: Optional[int]
     DivisionName: Optional[str]
+    DivisionID: Optional[int]
     CurDriverIncidentCount: Optional[int]
     TeamIncidentCount: Optional[int]
 
