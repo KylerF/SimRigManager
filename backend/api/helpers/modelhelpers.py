@@ -13,6 +13,9 @@ def get_valid_data(model_data_object, model_class):
     return data_dict
 
 def get_iracing_type(frame: dict):
+    if not frame:
+        return modeltypes.IracingFrameType(**frame)
+
     frame["WeekendInfo"]["WeekendOptions"] = modeltypes.WeekendOptionsType(
         **frame["WeekendInfo"]["WeekendOptions"]
     )
