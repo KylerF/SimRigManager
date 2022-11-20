@@ -2,11 +2,13 @@
 Database setup via SQLAlchemy and convenience functions to connect and
 interact with it
 """
-
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+
+from quotes.init_quotes import init_quotes
+from . import models
 
 url = "sqlite:///./simrig.db"
 
@@ -34,13 +36,16 @@ def get_db():
     finally:
         db.close()
 
-def generate_database():
+def configure_database():
     """
-    Create the SQLite database if it does not yet exist
+    Create and configure the SQLite database
     """
     if not database_exists(engine.url):
         # Create the database from scratch
         create_database(engine.url)
-        return True
 
-    return False
+    # Create all tables from models
+    models.Base.metadata.create_all(bind=engine)
+
+    # Populate the quotes table with samples
+    init_quotes()
