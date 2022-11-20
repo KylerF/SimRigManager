@@ -10,7 +10,6 @@ from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser
 import logging
-import atexit
 import sys
 
 from database.database import generate_database, engine
@@ -136,18 +135,15 @@ def main():
     )
     iracing_worker.start()
 
-    # Clean up resources upon exit
-    atexit.register(iracing_worker.stop)
-    atexit.register(data_stream.stop)
-    atexit.register(controller.stop)
-    atexit.register(queue_manager.close_all)
-
     # Start the API on the main thread
     api = APIServer(queue_manager, log)
     api.start()
 
     # If we're here, exit everything
     iracing_worker.stop()
+    data_stream.stop()
+    controller.stop()
+    queue_manager.close_all()
 
 
 if __name__ == '__main__':
