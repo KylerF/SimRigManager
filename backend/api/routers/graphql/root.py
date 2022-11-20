@@ -120,12 +120,14 @@ class Subscription:
         description="Subscribe to real-time iRacing data"
     )
     async def iracing(self, fps: int = 30) -> AsyncGenerator[modeltypes.IracingFrameType, None]:
+        if fps <= 0 or fps > 30:
+            raise ValueError("fps must be between 1 and 30")
         while True:
             frame = get_iracing_data(raw=True)
             
             if frame:
                 yield get_iracing_type(frame)
-                await asyncio.sleep(fps / 1000)
+                await asyncio.sleep(1 / fps)
             else:
                 await asyncio.sleep(1)
 
