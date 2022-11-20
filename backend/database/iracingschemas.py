@@ -177,351 +177,351 @@ class DriverInfo(BaseModel):
 
 
 class IracingFrame(BaseModel):
-    SessionTime: Optional[float] = None
-    SessionTick: Optional[int] = None
-    SessionNum: Optional[int] = None
-    SessionState: Optional[int] = None
-    SessionUniqueID: Optional[int] = None
-    SessionFlags: Optional[int] = None
-    SessionTimeRemain: Optional[float] = None
-    SessionLapsRemain: Optional[int] = None
-    SessionLapsRemainEx: Optional[int] = None
-    SessionTimeTotal: Optional[int] = None
-    SessionLapsTotal: Optional[int] = None
-    SessionOnJokerLap: Optional[int] = None
-    SessionJokerLapsRemain: Optional[int] = None
-    SessionTimeOfDay: Optional[int] = None
-    RadioTransmitCarIdx: Optional[int] = None
-    RadioTransmitRadioIdx: Optional[int] = None
-    RadioTransmitFrequencyIdx: Optional[int] = None
-    DisplayUnits: Optional[int] = None
-    DriverMarker: Optional[bool] = None
-    PushToPass: Optional[bool] = None
-    ManualBoost: Optional[bool] = None
-    ManualNoBoost: Optional[bool] = None
-    IsOnTrack: Optional[bool] = None
-    IsReplayPlaying: Optional[bool] = None
-    ReplayFrameNum: Optional[int] = None
-    ReplayFrameNumEnd: Optional[int] = None
-    IsDiskLoggingEnabled: Optional[bool] = None
-    IsDiskLoggingActive: Optional[bool] = None
-    FrameRate: Optional[float] = None
-    CpuUsageFG: Optional[float] = None
-    GpuUsage: Optional[float] = None
-    ChanAvgLatency: Optional[float] = None
-    ChanLatency: Optional[float] = None
-    ChanQuality: Optional[float] = None
-    ChanPartnerQuality: Optional[int] = None
-    CpuUsageBG: Optional[float] = None
-    ChanClockSkew: Optional[int] = None
-    MemPageFaultSec: Optional[int] = None
-    MemSoftPageFaultSec: Optional[float] = None
-    PlayerCarPosition: Optional[int] = None
-    PlayerCarClassPosition: Optional[int] = None
-    PlayerCarClass: Optional[int] = None
-    PlayerTrackSurface: Optional[int] = None
-    PlayerTrackSurfaceMaterial: Optional[int] = None
-    PlayerCarIdx: Optional[int] = None
-    PlayerCarTeamIncidentCount: Optional[int] = None
-    PlayerCarMyIncidentCount: Optional[int] = None
-    PlayerCarDriverIncidentCount: Optional[int] = None
-    PlayerCarWeightPenalty: Optional[int] = None
-    PlayerCarPowerAdjust: Optional[int] = None
-    PlayerCarDryTireSetLimit: Optional[int] = None
-    PlayerCarTowTime: Optional[int] = None
-    PlayerCarInPitStall: Optional[bool] = None
-    PlayerCarPitSvStatus: Optional[int] = None
-    PlayerTireCompound: Optional[int] = None
-    PlayerFastRepairsUsed: Optional[int] = None
-    CarIdxLap: Optional[List[int]] = None
-    CarIdxLapCompleted: Optional[List[int]] = None
-    CarIdxLapDistPct: Optional[List[float]] = None
-    CarIdxTrackSurface: Optional[List[int]] = None
-    CarIdxTrackSurfaceMaterial: Optional[List[int]] = None
-    CarIdxOnPitRoad: Optional[List[bool]] = None
-    CarIdxPosition: Optional[List[int]] = None
-    CarIdxClassPosition: Optional[List[int]] = None
-    CarIdxClass: Optional[List[int]] = None
-    CarIdxF2Time: Optional[List[float]] = None
-    CarIdxEstTime: Optional[List[float]] = None
-    CarIdxLastLapTime: Optional[List[float]] = None
-    CarIdxBestLapTime: Optional[List[float]] = None
-    CarIdxBestLapNum: Optional[List[int]] = None
-    CarIdxTireCompound: Optional[List[int]] = None
-    CarIdxQualTireCompound: Optional[List[int]] = None
-    CarIdxQualTireCompoundLocked: Optional[List[bool]] = None
-    CarIdxSessionFlags: Optional[List[int]] = None
-    CarIdxFastRepairsUsed: Optional[List[int]] = None
-    PaceMode: Optional[int] = None
-    CarIdxPaceLine: Optional[List[int]] = None
-    CarIdxPaceRow: Optional[List[int]] = None
-    CarIdxPaceFlags: Optional[List[int]] = None
-    OnPitRoad: Optional[bool] = None
-    CarIdxSteer: Optional[List[float]] = None
-    CarIdxRPM: Optional[List[float]] = None
-    CarIdxGear: Optional[List[int]] = None
-    SteeringWheelAngle: Optional[float] = None
-    Throttle: Optional[int] = None
-    Brake: Optional[float] = None
-    Clutch: Optional[int] = None
-    Gear: Optional[int] = None
-    RPM: Optional[float] = None
-    Lap: Optional[int] = None
-    LapCompleted: Optional[int] = None
-    LapDist: Optional[float] = None
-    LapDistPct: Optional[float] = None
-    RaceLaps: Optional[int] = None
-    LapBestLap: Optional[int] = None
-    LapBestLapTime: Optional[float] = None
-    LapLastLapTime: Optional[int] = None
-    LapCurrentLapTime: Optional[float] = None
-    LapLasNLapSeq: Optional[int] = None
-    LapLastNLapTime: Optional[int] = None
-    LapBestNLapLap: Optional[int] = None
-    LapBestNLapTime: Optional[int] = None
-    LapDeltaToBestLap: Optional[float] = None
-    LapDeltaToBestLap_DD: Optional[float] = None
-    LapDeltaToBestLap_OK: Optional[bool] = None
-    LapDeltaToOptimalLap: Optional[float] = None
-    LapDeltaToOptimalLap_DD: Optional[float] = None
-    LapDeltaToOptimalLap_OK: Optional[bool] = None
-    LapDeltaToSessionBestLap: Optional[float] = None
-    LapDeltaToSessionBestLap_DD: Optional[float] = None
-    LapDeltaToSessionBestLap_OK: Optional[bool] = None
-    LapDeltaToSessionOptimalLap: Optional[float] = None
-    LapDeltaToSessionOptimalLap_DD: Optional[float] = None
-    LapDeltaToSessionOptimalLap_OK: Optional[bool] = None
-    LapDeltaToSessionLastlLap: Optional[float] = None
-    LapDeltaToSessionLastlLap_DD: Optional[float] = None
-    LapDeltaToSessionLastlLap_OK: Optional[bool] = None
-    Speed: Optional[float] = None
-    Yaw: Optional[float] = None
-    YawNorth: Optional[float] = None
-    Pitch: Optional[float] = None
-    Roll: Optional[float] = None
-    EnterExitReset: Optional[int] = None
-    TrackTemp: Optional[float] = None
-    TrackTempCrew: Optional[float] = None
-    AirTemp: Optional[float] = None
-    WeatherType: Optional[int] = None
-    Skies: Optional[int] = None
-    AirDensity: Optional[float] = None
-    AirPressure: Optional[float] = None
-    WindVel: Optional[float] = None
-    WindDir: Optional[float] = None
-    RelativeHumidity: Optional[float] = None
-    FogLevel: Optional[int] = None
-    SolarAltitude: Optional[float] = None
-    SolarAzimuth: Optional[float] = None
-    DCLapStatus: Optional[int] = None
-    DCDriversSoFar: Optional[int] = None
-    OkToReloadTextures: Optional[bool] = None
-    LoadNumTextures: Optional[bool] = None
-    CarLeftRight: Optional[int] = None
-    PitsOpen: Optional[bool] = None
-    VidCapEnabled: Optional[bool] = None
-    VidCapActive: Optional[bool] = None
-    PitRepairLeft: Optional[int] = None
-    PitOptRepairLeft: Optional[int] = None
-    PitstopActive: Optional[bool] = None
-    FastRepairUsed: Optional[int] = None
-    FastRepairAvailable: Optional[int] = None
-    LFTiresUsed: Optional[int] = None
-    RFTiresUsed: Optional[int] = None
-    LRTiresUsed: Optional[int] = None
-    RRTiresUsed: Optional[int] = None
-    LeftTireSetsUsed: Optional[int] = None
-    RightTireSetsUsed: Optional[int] = None
-    FrontTireSetsUsed: Optional[int] = None
-    RearTireSetsUsed: Optional[int] = None
-    TireSetsUsed: Optional[int] = None
-    LFTiresAvailable: Optional[int] = None
-    RFTiresAvailable: Optional[int] = None
-    LRTiresAvailable: Optional[int] = None
-    RRTiresAvailable: Optional[int] = None
-    LeftTireSetsAvailable: Optional[int] = None
-    RightTireSetsAvailable: Optional[int] = None
-    FrontTireSetsAvailable: Optional[int] = None
-    RearTireSetsAvailable: Optional[int] = None
-    TireSetsAvailable: Optional[int] = None
-    CamCarIdx: Optional[int] = None
-    CamCameraNumber: Optional[int] = None
-    CamGroupNumber: Optional[int] = None
-    CamCameraState: Optional[int] = None
-    IsOnTrackCar: Optional[bool] = None
-    IsInGarage: Optional[bool] = None
-    SteeringWheelPctTorque: Optional[float] = None
-    SteeringWheelPctTorqueSign: Optional[float] = None
-    SteeringWheelPctTorqueSignStops: Optional[float] = None
-    SteeringWheelPctDamper: Optional[float] = None
-    SteeringWheelAngleMax: Optional[float] = None
-    SteeringWheelLimiter: Optional[int] = None
-    ShiftIndicatorPct: Optional[float] = None
-    ShiftPowerPct: Optional[int] = None
-    ShiftGrindRPM: Optional[int] = None
-    ThrottleRaw: Optional[int] = None
-    BrakeRaw: Optional[float] = None
-    HandbrakeRaw: Optional[int] = None
-    SteeringWheelPeakForceNm: Optional[int] = None
-    SteeringWheelMaxForceNm: Optional[float] = None
-    SteeringWheelUseLinear: Optional[bool] = None
-    BrakeABSactive: Optional[bool] = None
-    EngineWarnings: Optional[int] = None
-    Engine0_RPM: Optional[float] = None
-    FuelLevel: Optional[float] = None
-    FuelLevelPct: Optional[float] = None
-    PitSvFlags: Optional[int] = None
-    PitSvLFP: Optional[float] = None
-    PitSvRFP: Optional[float] = None
-    PitSvLRP: Optional[float] = None
-    PitSvRRP: Optional[float] = None
-    PitSvFuel: Optional[int] = None
-    PitSvTireCompound: Optional[int] = None
-    CarIdxP2P_Status: Optional[List[bool]] = None
-    CarIdxP2P_Count: Optional[List[int]] = None
-    ReplayPlaySpeed: Optional[int] = None
-    ReplayPlaySlowMotion: Optional[bool] = None
-    ReplaySessionTime: Optional[float] = None
-    ReplaySessionNum: Optional[int] = None
-    TireLF_RumblePitch: Optional[int] = None
-    TireRF_RumblePitch: Optional[int] = None
-    TireLR_RumblePitch: Optional[int] = None
-    TireRR_RumblePitch: Optional[int] = None
-    SteeringWheelTorque_ST: Optional[List[float]] = None
-    SteeringWheelTorque: Optional[float] = None
-    VelocityZ_ST: Optional[List[float]] = None
-    VelocityY_ST: Optional[List[float]] = None
-    VelocityX_ST: Optional[List[float]] = None
-    VelocityZ: Optional[float] = None
-    VelocityY: Optional[float] = None
-    VelocityX: Optional[float] = None
-    YawRate_ST: Optional[List[float]] = None
-    PitchRate_ST: Optional[List[float]] = None
-    RollRate_ST: Optional[List[float]] = None
-    YawRate: Optional[float] = None
-    PitchRate: Optional[float] = None
-    RollRate: Optional[float] = None
-    VertAccel_ST: Optional[List[float]] = None
-    LatAccel_ST: Optional[List[float]] = None
-    LongAccel_ST: Optional[List[float]] = None
-    VertAccel: Optional[float] = None
-    LatAccel: Optional[float] = None
-    LongAccel: Optional[float] = None
-    dcStarter: Optional[bool] = None
-    dcDRSToggle: Optional[bool] = None
-    DRS_Status: Optional[int] = None
-    dcPitSpeedLimiterToggle: Optional[bool] = None
-    dpWingFront: Optional[float] = None
-    dcBrakeBias: Optional[float] = None
-    dcBrakeBiasFine: Optional[float] = None
-    dcPeakBrakeBias: Optional[float] = None
-    dcEngineBraking: Optional[float] = None
-    dcBrakeMisc: Optional[float] = None
-    dcTearOffVisor: Optional[bool] = None
-    dcToggleWindshieldWipers: Optional[bool] = None
-    dcTriggerWindshieldWipers: Optional[bool] = None
-    dcDashPage: Optional[int] = None
-    dcMGUKDeployMode: Optional[float] = None
-    dcDiffEntry: Optional[float] = None
-    dcDiffMiddle: Optional[float] = None
-    dcDiffExit: Optional[float] = None
-    dpTireChange: Optional[bool] = None
-    dpRFTireChange: Optional[int] = None
-    dpLFTireChange: Optional[int] = None
-    dpRRTireChange: Optional[int] = None
-    dpLRTireChange: Optional[int] = None
-    dpFuelFill: Optional[int] = None
-    dpWindshieldTearoff: Optional[int] = None
-    dpFuelAddKg: Optional[int] = None
-    dpFastRepair: Optional[int] = None
-    dcAntiRollFront: Optional[int] = None
-    dcAntiRollRear: Optional[int] = None
-    dcBrakeBias: Optional[float] = None
-    dcThrottleShape: Optional[int] = None
-    dcLaunchRPM: Optional[int] = None
-    dpLFTireColdPress: Optional[float] = None
-    dpRFTireColdPress: Optional[float] = None
-    dpLRTireColdPress: Optional[float] = None
-    dpRRTireColdPress: Optional[float] = None
-    WaterTemp: Optional[float] = None
-    WaterLevel: Optional[float] = None
-    FuelPress: Optional[float] = None
-    FuelUsePerHour: Optional[float] = None
-    OilTemp: Optional[float] = None
-    OilPress: Optional[float] = None
-    OilLevel: Optional[int] = None
-    Voltage: Optional[float] = None
-    ManifoldPress: Optional[float] = None
-    PowerMGU_K: Optional[float] = None
-    TorqueMGU_K: Optional[float] = None
-    PowerMGU_H: Optional[float] = None
-    EnergyERSBattery: Optional[float] = None
-    EnergyERSBatteryPct: Optional[float] = None
-    EnergyBatteryToMGU_KLap: Optional[float] = None
-    EnergyMGU_KLapDeployPct: Optional[float] = None
-    RFbrakeLinePress: Optional[float] = None
-    RFcoldPressure: Optional[float] = None
-    RFtempCL: Optional[float] = None
-    RFtempCM: Optional[float] = None
-    RFtempCR: Optional[float] = None
-    RFwearL: Optional[float] = None
-    RFwearM: Optional[float] = None
-    RFwearR: Optional[float] = None
-    LFbrakeLinePress: Optional[float] = None
-    LFcoldPressure: Optional[float] = None
-    LFtempCL: Optional[float] = None
-    LFtempCM: Optional[float] = None
-    LFtempCR: Optional[float] = None
-    LFwearL: Optional[float] = None
-    LFwearM: Optional[float] = None
-    LFwearR: Optional[float] = None
-    ROLLFshockDefl: Optional[float] = None
-    ROLLFshockDefl_ST: Optional[List[float]] = None
-    ROLLRshockDefl: Optional[float] = None
-    ROLLRshockDefl_ST: Optional[List[float]] = None
-    ROLLFshockVel: Optional[float] = None
-    ROLLFshockVel_ST: Optional[List[float]] = None
-    ROLLRshockVel: Optional[float] = None
-    ROLLRshockVel_ST: Optional[List[float]] = None
-    CFshockDefl: Optional[float] = None
-    CFshockDefl_ST: Optional[List[float]] = None
-    CFshockVel: Optional[float] = None
-    CFshockVel_ST: Optional[List[float]] = None
-    CRshockDefl: Optional[float] = None
-    CRshockDefl_ST: Optional[List[float]] = None
-    CRshockVel: Optional[float] = None
-    CRshockVel_ST: Optional[List[float]] = None
-    RRbrakeLinePress: Optional[float] = None
-    RRcoldPressure: Optional[float] = None
-    RRtempCL: Optional[float] = None
-    RRtempCM: Optional[float] = None
-    RRtempCR: Optional[float] = None
-    RRwearL: Optional[float] = None
-    RRwearM: Optional[float] = None
-    RRwearR: Optional[float] = None
-    LRbrakeLinePress: Optional[float] = None
-    LRcoldPressure: Optional[float] = None
-    LRtempCL: Optional[float] = None
-    LRtempCM: Optional[float] = None
-    LRtempCR: Optional[float] = None
-    LRwearL: Optional[float] = None
-    LRwearM: Optional[float] = None
-    LRwearR: Optional[float] = None
-    RRshockDefl: Optional[float] = None
-    RRshockDefl_ST: Optional[List[float]] = None
-    RRshockVel: Optional[float] = None
-    RRshockVel_ST: Optional[List[float]] = None
-    LRshockDefl: Optional[float] = None
-    LRshockDefl_ST: Optional[List[float]] = None
-    LRshockVel: Optional[float] = None
-    LRshockVel_ST: Optional[List[float]] = None
-    RFshockDefl: Optional[float] = None
-    RFshockDefl_ST: Optional[List[float]] = None
-    RFshockVel: Optional[float] = None
-    RFshockVel_ST: Optional[List[float]] = None
-    LFshockDefl: Optional[float] = None
-    LFshockDefl_ST: Optional[List[float]] = None
-    LFshockVel: Optional[float] = None
-    LFshockVel_ST: Optional[List[float]] = None
+    SessionTime: Optional[float]
+    SessionTick: Optional[int]
+    SessionNum: Optional[int]
+    SessionState: Optional[int]
+    SessionUniqueID: Optional[int]
+    SessionFlags: Optional[int]
+    SessionTimeRemain: Optional[float]
+    SessionLapsRemain: Optional[int]
+    SessionLapsRemainEx: Optional[int]
+    SessionTimeTotal: Optional[int]
+    SessionLapsTotal: Optional[int]
+    SessionOnJokerLap: Optional[int]
+    SessionJokerLapsRemain: Optional[int]
+    SessionTimeOfDay: Optional[int]
+    RadioTransmitCarIdx: Optional[int]
+    RadioTransmitRadioIdx: Optional[int]
+    RadioTransmitFrequencyIdx: Optional[int]
+    DisplayUnits: Optional[int]
+    DriverMarker: Optional[bool]
+    PushToPass: Optional[bool]
+    ManualBoost: Optional[bool]
+    ManualNoBoost: Optional[bool]
+    IsOnTrack: Optional[bool]
+    IsReplayPlaying: Optional[bool]
+    ReplayFrameNum: Optional[int]
+    ReplayFrameNumEnd: Optional[int]
+    IsDiskLoggingEnabled: Optional[bool]
+    IsDiskLoggingActive: Optional[bool]
+    FrameRate: Optional[float]
+    CpuUsageFG: Optional[float]
+    GpuUsage: Optional[float]
+    ChanAvgLatency: Optional[float]
+    ChanLatency: Optional[float]
+    ChanQuality: Optional[float]
+    ChanPartnerQuality: Optional[int]
+    CpuUsageBG: Optional[float]
+    ChanClockSkew: Optional[int]
+    MemPageFaultSec: Optional[int]
+    MemSoftPageFaultSec: Optional[float]
+    PlayerCarPosition: Optional[int]
+    PlayerCarClassPosition: Optional[int]
+    PlayerCarClass: Optional[int]
+    PlayerTrackSurface: Optional[int]
+    PlayerTrackSurfaceMaterial: Optional[int]
+    PlayerCarIdx: Optional[int]
+    PlayerCarTeamIncidentCount: Optional[int]
+    PlayerCarMyIncidentCount: Optional[int]
+    PlayerCarDriverIncidentCount: Optional[int]
+    PlayerCarWeightPenalty: Optional[int]
+    PlayerCarPowerAdjust: Optional[int]
+    PlayerCarDryTireSetLimit: Optional[int]
+    PlayerCarTowTime: Optional[int]
+    PlayerCarInPitStall: Optional[bool]
+    PlayerCarPitSvStatus: Optional[int]
+    PlayerTireCompound: Optional[int]
+    PlayerFastRepairsUsed: Optional[int]
+    CarIdxLap: Optional[List[int]]
+    CarIdxLapCompleted: Optional[List[int]]
+    CarIdxLapDistPct: Optional[List[float]]
+    CarIdxTrackSurface: Optional[List[int]]
+    CarIdxTrackSurfaceMaterial: Optional[List[int]]
+    CarIdxOnPitRoad: Optional[List[bool]]
+    CarIdxPosition: Optional[List[int]]
+    CarIdxClassPosition: Optional[List[int]]
+    CarIdxClass: Optional[List[int]]
+    CarIdxF2Time: Optional[List[float]]
+    CarIdxEstTime: Optional[List[float]]
+    CarIdxLastLapTime: Optional[List[float]]
+    CarIdxBestLapTime: Optional[List[float]]
+    CarIdxBestLapNum: Optional[List[int]]
+    CarIdxTireCompound: Optional[List[int]]
+    CarIdxQualTireCompound: Optional[List[int]]
+    CarIdxQualTireCompoundLocked: Optional[List[bool]]
+    CarIdxSessionFlags: Optional[List[int]]
+    CarIdxFastRepairsUsed: Optional[List[int]]
+    PaceMode: Optional[int]
+    CarIdxPaceLine: Optional[List[int]]
+    CarIdxPaceRow: Optional[List[int]]
+    CarIdxPaceFlags: Optional[List[int]]
+    OnPitRoad: Optional[bool]
+    CarIdxSteer: Optional[List[float]]
+    CarIdxRPM: Optional[List[float]]
+    CarIdxGear: Optional[List[int]]
+    SteeringWheelAngle: Optional[float]
+    Throttle: Optional[int]
+    Brake: Optional[float]
+    Clutch: Optional[int]
+    Gear: Optional[int]
+    RPM: Optional[float]
+    Lap: Optional[int]
+    LapCompleted: Optional[int]
+    LapDist: Optional[float]
+    LapDistPct: Optional[float]
+    RaceLaps: Optional[int]
+    LapBestLap: Optional[int]
+    LapBestLapTime: Optional[float]
+    LapLastLapTime: Optional[int]
+    LapCurrentLapTime: Optional[float]
+    LapLasNLapSeq: Optional[int]
+    LapLastNLapTime: Optional[int]
+    LapBestNLapLap: Optional[int]
+    LapBestNLapTime: Optional[int]
+    LapDeltaToBestLap: Optional[float]
+    LapDeltaToBestLap_DD: Optional[float]
+    LapDeltaToBestLap_OK: Optional[bool]
+    LapDeltaToOptimalLap: Optional[float]
+    LapDeltaToOptimalLap_DD: Optional[float]
+    LapDeltaToOptimalLap_OK: Optional[bool]
+    LapDeltaToSessionBestLap: Optional[float]
+    LapDeltaToSessionBestLap_DD: Optional[float]
+    LapDeltaToSessionBestLap_OK: Optional[bool]
+    LapDeltaToSessionOptimalLap: Optional[float]
+    LapDeltaToSessionOptimalLap_DD: Optional[float]
+    LapDeltaToSessionOptimalLap_OK: Optional[bool]
+    LapDeltaToSessionLastlLap: Optional[float]
+    LapDeltaToSessionLastlLap_DD: Optional[float]
+    LapDeltaToSessionLastlLap_OK: Optional[bool]
+    Speed: Optional[float]
+    Yaw: Optional[float]
+    YawNorth: Optional[float]
+    Pitch: Optional[float]
+    Roll: Optional[float]
+    EnterExitReset: Optional[int]
+    TrackTemp: Optional[float]
+    TrackTempCrew: Optional[float]
+    AirTemp: Optional[float]
+    WeatherType: Optional[int]
+    Skies: Optional[int]
+    AirDensity: Optional[float]
+    AirPressure: Optional[float]
+    WindVel: Optional[float]
+    WindDir: Optional[float]
+    RelativeHumidity: Optional[float]
+    FogLevel: Optional[int]
+    SolarAltitude: Optional[float]
+    SolarAzimuth: Optional[float]
+    DCLapStatus: Optional[int]
+    DCDriversSoFar: Optional[int]
+    OkToReloadTextures: Optional[bool]
+    LoadNumTextures: Optional[bool]
+    CarLeftRight: Optional[int]
+    PitsOpen: Optional[bool]
+    VidCapEnabled: Optional[bool]
+    VidCapActive: Optional[bool]
+    PitRepairLeft: Optional[int]
+    PitOptRepairLeft: Optional[int]
+    PitstopActive: Optional[bool]
+    FastRepairUsed: Optional[int]
+    FastRepairAvailable: Optional[int]
+    LFTiresUsed: Optional[int]
+    RFTiresUsed: Optional[int]
+    LRTiresUsed: Optional[int]
+    RRTiresUsed: Optional[int]
+    LeftTireSetsUsed: Optional[int]
+    RightTireSetsUsed: Optional[int]
+    FrontTireSetsUsed: Optional[int]
+    RearTireSetsUsed: Optional[int]
+    TireSetsUsed: Optional[int]
+    LFTiresAvailable: Optional[int]
+    RFTiresAvailable: Optional[int]
+    LRTiresAvailable: Optional[int]
+    RRTiresAvailable: Optional[int]
+    LeftTireSetsAvailable: Optional[int]
+    RightTireSetsAvailable: Optional[int]
+    FrontTireSetsAvailable: Optional[int]
+    RearTireSetsAvailable: Optional[int]
+    TireSetsAvailable: Optional[int]
+    CamCarIdx: Optional[int]
+    CamCameraNumber: Optional[int]
+    CamGroupNumber: Optional[int]
+    CamCameraState: Optional[int]
+    IsOnTrackCar: Optional[bool]
+    IsInGarage: Optional[bool]
+    SteeringWheelPctTorque: Optional[float]
+    SteeringWheelPctTorqueSign: Optional[float]
+    SteeringWheelPctTorqueSignStops: Optional[float]
+    SteeringWheelPctDamper: Optional[float]
+    SteeringWheelAngleMax: Optional[float]
+    SteeringWheelLimiter: Optional[int]
+    ShiftIndicatorPct: Optional[float]
+    ShiftPowerPct: Optional[int]
+    ShiftGrindRPM: Optional[int]
+    ThrottleRaw: Optional[int]
+    BrakeRaw: Optional[float]
+    HandbrakeRaw: Optional[int]
+    SteeringWheelPeakForceNm: Optional[int]
+    SteeringWheelMaxForceNm: Optional[float]
+    SteeringWheelUseLinear: Optional[bool]
+    BrakeABSactive: Optional[bool]
+    EngineWarnings: Optional[int]
+    Engine0_RPM: Optional[float]
+    FuelLevel: Optional[float]
+    FuelLevelPct: Optional[float]
+    PitSvFlags: Optional[int]
+    PitSvLFP: Optional[float]
+    PitSvRFP: Optional[float]
+    PitSvLRP: Optional[float]
+    PitSvRRP: Optional[float]
+    PitSvFuel: Optional[int]
+    PitSvTireCompound: Optional[int]
+    CarIdxP2P_Status: Optional[List[bool]]
+    CarIdxP2P_Count: Optional[List[int]]
+    ReplayPlaySpeed: Optional[int]
+    ReplayPlaySlowMotion: Optional[bool]
+    ReplaySessionTime: Optional[float]
+    ReplaySessionNum: Optional[int]
+    TireLF_RumblePitch: Optional[int]
+    TireRF_RumblePitch: Optional[int]
+    TireLR_RumblePitch: Optional[int]
+    TireRR_RumblePitch: Optional[int]
+    SteeringWheelTorque_ST: Optional[List[float]]
+    SteeringWheelTorque: Optional[float]
+    VelocityZ_ST: Optional[List[float]]
+    VelocityY_ST: Optional[List[float]]
+    VelocityX_ST: Optional[List[float]]
+    VelocityZ: Optional[float]
+    VelocityY: Optional[float]
+    VelocityX: Optional[float]
+    YawRate_ST: Optional[List[float]]
+    PitchRate_ST: Optional[List[float]]
+    RollRate_ST: Optional[List[float]]
+    YawRate: Optional[float]
+    PitchRate: Optional[float]
+    RollRate: Optional[float]
+    VertAccel_ST: Optional[List[float]]
+    LatAccel_ST: Optional[List[float]]
+    LongAccel_ST: Optional[List[float]]
+    VertAccel: Optional[float]
+    LatAccel: Optional[float]
+    LongAccel: Optional[float]
+    dcStarter: Optional[bool]
+    dcDRSToggle: Optional[bool]
+    DRS_Status: Optional[int]
+    dcPitSpeedLimiterToggle: Optional[bool]
+    dpWingFront: Optional[float]
+    dcBrakeBias: Optional[float]
+    dcBrakeBiasFine: Optional[float]
+    dcPeakBrakeBias: Optional[float]
+    dcEngineBraking: Optional[float]
+    dcBrakeMisc: Optional[float]
+    dcTearOffVisor: Optional[bool]
+    dcToggleWindshieldWipers: Optional[bool]
+    dcTriggerWindshieldWipers: Optional[bool]
+    dcDashPage: Optional[int]
+    dcMGUKDeployMode: Optional[float]
+    dcDiffEntry: Optional[float]
+    dcDiffMiddle: Optional[float]
+    dcDiffExit: Optional[float]
+    dpTireChange: Optional[bool]
+    dpRFTireChange: Optional[int]
+    dpLFTireChange: Optional[int]
+    dpRRTireChange: Optional[int]
+    dpLRTireChange: Optional[int]
+    dpFuelFill: Optional[int]
+    dpWindshieldTearoff: Optional[int]
+    dpFuelAddKg: Optional[int]
+    dpFastRepair: Optional[int]
+    dcAntiRollFront: Optional[int]
+    dcAntiRollRear: Optional[int]
+    dcBrakeBias: Optional[float]
+    dcThrottleShape: Optional[int]
+    dcLaunchRPM: Optional[int]
+    dpLFTireColdPress: Optional[float]
+    dpRFTireColdPress: Optional[float]
+    dpLRTireColdPress: Optional[float]
+    dpRRTireColdPress: Optional[float]
+    WaterTemp: Optional[float]
+    WaterLevel: Optional[float]
+    FuelPress: Optional[float]
+    FuelUsePerHour: Optional[float]
+    OilTemp: Optional[float]
+    OilPress: Optional[float]
+    OilLevel: Optional[int]
+    Voltage: Optional[float]
+    ManifoldPress: Optional[float]
+    PowerMGU_K: Optional[float]
+    TorqueMGU_K: Optional[float]
+    PowerMGU_H: Optional[float]
+    EnergyERSBattery: Optional[float]
+    EnergyERSBatteryPct: Optional[float]
+    EnergyBatteryToMGU_KLap: Optional[float]
+    EnergyMGU_KLapDeployPct: Optional[float]
+    RFbrakeLinePress: Optional[float]
+    RFcoldPressure: Optional[float]
+    RFtempCL: Optional[float]
+    RFtempCM: Optional[float]
+    RFtempCR: Optional[float]
+    RFwearL: Optional[float]
+    RFwearM: Optional[float]
+    RFwearR: Optional[float]
+    LFbrakeLinePress: Optional[float]
+    LFcoldPressure: Optional[float]
+    LFtempCL: Optional[float]
+    LFtempCM: Optional[float]
+    LFtempCR: Optional[float]
+    LFwearL: Optional[float]
+    LFwearM: Optional[float]
+    LFwearR: Optional[float]
+    ROLLFshockDefl: Optional[float]
+    ROLLFshockDefl_ST: Optional[List[float]]
+    ROLLRshockDefl: Optional[float]
+    ROLLRshockDefl_ST: Optional[List[float]]
+    ROLLFshockVel: Optional[float]
+    ROLLFshockVel_ST: Optional[List[float]]
+    ROLLRshockVel: Optional[float]
+    ROLLRshockVel_ST: Optional[List[float]]
+    CFshockDefl: Optional[float]
+    CFshockDefl_ST: Optional[List[float]]
+    CFshockVel: Optional[float]
+    CFshockVel_ST: Optional[List[float]]
+    CRshockDefl: Optional[float]
+    CRshockDefl_ST: Optional[List[float]]
+    CRshockVel: Optional[float]
+    CRshockVel_ST: Optional[List[float]]
+    RRbrakeLinePress: Optional[float]
+    RRcoldPressure: Optional[float]
+    RRtempCL: Optional[float]
+    RRtempCM: Optional[float]
+    RRtempCR: Optional[float]
+    RRwearL: Optional[float]
+    RRwearM: Optional[float]
+    RRwearR: Optional[float]
+    LRbrakeLinePress: Optional[float]
+    LRcoldPressure: Optional[float]
+    LRtempCL: Optional[float]
+    LRtempCM: Optional[float]
+    LRtempCR: Optional[float]
+    LRwearL: Optional[float]
+    LRwearM: Optional[float]
+    LRwearR: Optional[float]
+    RRshockDefl: Optional[float]
+    RRshockDefl_ST: Optional[List[float]]
+    RRshockVel: Optional[float]
+    RRshockVel_ST: Optional[List[float]]
+    LRshockDefl: Optional[float]
+    LRshockDefl_ST: Optional[List[float]]
+    LRshockVel: Optional[float]
+    LRshockVel_ST: Optional[List[float]]
+    RFshockDefl: Optional[float]
+    RFshockDefl_ST: Optional[List[float]]
+    RFshockVel: Optional[float]
+    RFshockVel_ST: Optional[List[float]]
+    LFshockDefl: Optional[float]
+    LFshockDefl_ST: Optional[List[float]]
+    LFshockVel: Optional[float]
+    LFshockVel_ST: Optional[List[float]]
     WeekendInfo: Optional[WeekendInfo]
     DriverInfo: Optional[DriverInfo]
