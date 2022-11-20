@@ -12,19 +12,27 @@ import configparser
 import logging
 import sys
 
-from database.database import configure_database
+from database.database import generate_database, engine
 from workerthreads.iracingworker import IracingWorker
 from messagequeue.queuemanager import QueueManager
 from raceparse.iracingstream import IracingStream
+from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
 from display.rpmgauge import RpmGauge
 from api.apiserver import APIServer
+from database import models
 from e131.wled import Wled
 
 
 def main():
     # Create the database (if it does not already exist)
-    configure_database()
+    generate_database()
+
+    # Create all tables from models
+    models.Base.metadata.create_all(bind=engine)
+
+    # Populate the quotes table with samples
+    init_quotes()
 
     # Get config options from file
     config = configparser.ConfigParser()

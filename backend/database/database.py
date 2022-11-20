@@ -7,9 +7,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 
-from quotes.init_quotes import init_quotes
-from . import models
-
 url = "sqlite:///./simrig.db"
 
 engine = create_engine(
@@ -36,16 +33,13 @@ def get_db():
     finally:
         db.close()
 
-def configure_database():
+def generate_database():
     """
-    Create and configure the SQLite database
+    Create the SQLite database if it does not yet exist
     """
     if not database_exists(engine.url):
         # Create the database from scratch
         create_database(engine.url)
+        return True
 
-    # Create all tables from models
-    models.Base.metadata.create_all(bind=engine)
-
-    # Populate the quotes table with samples
-    init_quotes()
+    return False
