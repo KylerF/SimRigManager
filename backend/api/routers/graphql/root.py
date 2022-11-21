@@ -87,12 +87,12 @@ class Subscription:
     )
     async def active_driver(self) -> AsyncGenerator[modeltypes.DriverType, None]:
         db = next(get_db())
-        last_driver = crud.get_active_driver(db).driver
+        last_driver = None
 
         while True:
             active_driver = crud.get_active_driver(db).driver
 
-            if active_driver.id != last_driver.id:
+            if not last_driver or active_driver.id != last_driver.id:
                 yield modeltypes.DriverType(
                     **get_valid_data(active_driver, models.Driver)
                 )
