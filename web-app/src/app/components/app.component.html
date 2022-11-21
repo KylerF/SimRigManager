@@ -20,7 +20,7 @@
           </a>
         </li>
 
-        <li *ngIf="activeDriver" class="nav-item dropdown">
+        <li *ngIf="activeDriver$ | async as activeDriver" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <app-driver-avatar [driver]="activeDriver" [maxWidth]="19"></app-driver-avatar>
               {{ activeDriver.name }}
@@ -41,7 +41,7 @@
           </ul>
         </li>
 
-        <li *ngIf="!activeDriver">
+        <li *ngElse>
           <a class="nav-link" routerLink="selectdriver">
             <span class="bi bi-person-circle"></span> Sign in
           </a>

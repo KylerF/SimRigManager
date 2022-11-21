@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
-import { DriverService } from 'services/driver.service';
+import { DriverService, ActiveDriverGQL } from 'services/driver.service';
 import * as fromRoot from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 
@@ -14,16 +14,17 @@ import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 })
 
 export class AppComponent implements OnInit {
-  driverChangeSubscription: Subscription;
+  driverChangeSubscription: Observable<Driver>;
 
-  activeDriver: Driver;
+  activeDriver$: Observable<Driver>;
   avatarURL: string;
 
   error: string;
 
   constructor(
     private store: Store<fromRoot.State>,
-    private driverService: DriverService
+    private driverService: DriverService,
+    private activeDriverService: ActiveDriverGQL
   ) { }
 
   /**
@@ -33,8 +34,9 @@ export class AppComponent implements OnInit {
     this.pollAPIAvailable();
     this.driverService.streamSelectedDriver();
 
-    this.driverChangeSubscription = this.driverService.selectedDriver$
-       .subscribe(driver => this.updateDriverDisplay(driver));
+    this.activeDriver$ = this.activeDriverService.subscribe().pipe(
+      map(result => result.data.activeDriver)
+    )
   }
 
   /**
@@ -42,13 +44,5 @@ export class AppComponent implements OnInit {
    */
   pollAPIAvailable() {
     this.store.dispatch(UpdateApiHealthcheck());
-  }
-
-  /**
-   * Update the active driver display in the toolbar when it is changed
-   */
-  updateDriverDisplay(driver) {
-    this.activeDriver = driver;
-    this.avatarURL = this.driverService.getAvatarURLForDriver(this.activeDriver);
   }
 }
