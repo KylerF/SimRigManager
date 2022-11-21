@@ -7,15 +7,27 @@ import { DriverStats } from 'models/driver-stats';
 import { APIHelper } from 'helpers/api-helper';
 import { NewDriver } from 'models/new-driver';
 import { Driver } from 'models/driver';
+import { Subscription } from 'apollo-angular';
+import { GET_ACTIVE_DRIVER } from '../graphql/queries/drivers';
+
+export interface Response {
+  activeDriver: Driver
+}
 
 @Injectable({
   providedIn: 'root'
 })
+export class ActiveDriverGQL extends Subscription<Response> {
+  document = GET_ACTIVE_DRIVER
+}
 
 /**
  * Service to connect to the Drivers API, providing CRUD operations
  * and caching functionality for driver profiles
  */
+@Injectable({
+  providedIn: 'root'
+})
 export class DriverService {
   private _selectedDriver = new BehaviorSubject<Driver>(null);
   selectedDriver$ = this._selectedDriver.asObservable();
