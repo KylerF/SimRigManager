@@ -56,10 +56,11 @@ import { CarDisplayComponent } from 'components/telemetry-dashboard/car-display/
 import { RawDataDisplayComponent } from 'components/telemetry-dashboard/raw-data-display/raw-data-display.component';
 import { TrackMapDisplayComponent } from 'components/telemetry-dashboard/track-map-display/track-map-display.component';
 import { ApiStatusBannerComponent } from 'components/status-banner/api-status-banner/api-status-banner.component';
-import { LaptimeEffects } from './store/effects/laptime.effects';
-import { PositionDisplayComponent } from './components/telemetry-dashboard/position-display/position-display.component';
-import { FuelLevelDisplayComponent } from './components/telemetry-dashboard/fuel-level-display/fuel-level-display.component';
+import { LaptimeEffects } from 'store/effects/laptime.effects';
+import { PositionDisplayComponent } from 'components/telemetry-dashboard/position-display/position-display.component';
+import { FuelLevelDisplayComponent } from 'components/telemetry-dashboard/fuel-level-display/fuel-level-display.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NotificationComponent } from 'components/notification/notification.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -114,6 +115,7 @@ const routes: Routes = [
     ApiStatusBannerComponent,
     PositionDisplayComponent,
     FuelLevelDisplayComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
