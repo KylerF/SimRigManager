@@ -104,7 +104,7 @@ def main():
     controller = Wled.connect(ip, universe)
 
     log.info('Connecting to iRacing')
-    data_stream = IracingStream.get_stream(test_file='tests/data/summit_mx5_practice.bin')
+    data_stream = IracingStream.get_stream()
 
     rpm_strip = RpmGauge(led_count, color_theme)
 
