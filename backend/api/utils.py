@@ -29,7 +29,8 @@ def get_active_driver_from_cache():
     redis_store = get_redis_store()
 
     try:
-        active_driver = json.loads(redis_store.get("active_driver"))
+        active_driver_dict = json.loads(redis_store.get("active_driver"))
+        active_driver = schemas.Driver(**active_driver_dict)
     except (redis.exceptions.ConnectionError, TypeError):
         db = next(get_db())
         active_driver_object = crud.get_active_driver(db)

@@ -7,8 +7,8 @@ class APIServer:
     """
     Uvicorn server to run the API
     """
-    def __init__(self, data_queue, logger):
-        self.app = SimRigAPI(data_queue, logger)
+    def __init__(self, logger):
+        self.app = SimRigAPI(logger)
         self.port = getenv("PORT", 8000)
 
     def start(self):

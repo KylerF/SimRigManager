@@ -14,7 +14,6 @@ import sys
 
 from database.database import generate_database, engine
 from workerthreads.iracingworker import IracingWorker
-from messagequeue.queuemanager import QueueManager
 from raceparse.iracingstream import IracingStream
 from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
@@ -105,28 +104,12 @@ def main():
     controller = Wled.connect(ip, universe)
 
     log.info('Connecting to iRacing')
-    data_stream = IracingStream.get_stream()
+    data_stream = IracingStream.get_stream(test_file='tests/data/summit_mx5_practice.bin')
 
     rpm_strip = RpmGauge(led_count, color_theme)
 
-    # Initialize communication queues between the API and worker threads
-    queue_manager = QueueManager()
-
-    # API sends updates to worker threads that need it
-    queue_manager.open_channel('active_driver')
-
-    # Pushes latest data from worker thread to REST API
-    queue_manager.open_channel('iracing_data_latest')
-
-    # Pushes a stream of data from worker thread to websocket API
-    queue_manager.open_channel('iracing_data_stream')
-
-    # Used to trigger worker threads to start a specific task
-    queue_manager.open_channel('tasks')
-
     # Kick off the iRacing worker thread
     iracing_worker = IracingWorker(
-        queue_manager,
         log,
         data_stream,
         controller,
@@ -136,14 +119,13 @@ def main():
     iracing_worker.start()
 
     # Start the API on the main thread
-    api = APIServer(queue_manager, log)
+    api = APIServer(log)
     api.start()
 
     # If we're here, exit everything
     iracing_worker.stop()
     data_stream.stop()
     controller.stop()
-    queue_manager.close_all()
 
 
 if __name__ == '__main__':

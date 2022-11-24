@@ -3,7 +3,7 @@ from time import sleep
 import threading
 import math
 import json
-from api.utils import set_redis_key
+from api.utils import set_redis_key, get_active_driver_from_cache
 
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
@@ -14,13 +14,12 @@ class IracingWorker(threading.Thread):
     Background worker to collect and log iRacing data, and send updates
     to WLED light controllers in response to changes
     '''
-    def __init__(self, queue_manager, logger, data_stream, controller, rpm_strip, framerate):
+    def __init__(self, logger, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
         self.name = 'iRacing Worker Thread'
         self.active = True
 
-        self.queue_manager = queue_manager
         self.log = logger
         self.data_stream = data_stream
         self.controller = controller
@@ -54,23 +53,13 @@ class IracingWorker(threading.Thread):
                 set_redis_key('session_data_raw', json.dumps(latest_raw))
 
                 # Check for updates from the API
-                updated_driver = self.queue_manager.get('active_driver')
-                pending_task = self.queue_manager.get('tasks')
-                
-                if updated_driver:
+                updated_driver = get_active_driver_from_cache()
+
+                if updated_driver != active_driver:
                     active_driver = updated_driver
                     track_time = updated_driver.trackTime
 
                     self.log.info('Setting active driver to ' + active_driver.name)
-
-                if pending_task == 'latest':
-                    self.queue_manager.put('iracing_data_latest', latest)
-                if pending_task == 'latest_raw':
-                    self.queue_manager.put('iracing_data_latest', latest_raw)
-                if pending_task == 'stream':
-                    self.queue_manager.put('iracing_data_stream', latest)
-                if pending_task == 'stream_raw':
-                    self.queue_manager.put('iracing_data_stream', latest_raw)
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0
