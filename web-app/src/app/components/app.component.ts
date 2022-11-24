@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
 import { ActiveDriverGQL } from 'services/driver.service';
-import * as fromRoot from 'store/reducers';
+import { State } from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 import { NotificationService } from '../services/notification.service';
 
@@ -13,7 +13,6 @@ import { NotificationService } from '../services/notification.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-
 export class AppComponent implements OnInit {
   activeDriver$: Observable<Driver>;
   avatarURL: string;
@@ -21,7 +20,7 @@ export class AppComponent implements OnInit {
   error: string;
 
   constructor(
-    private store: Store<fromRoot.State>,
+    private store: Store<State>,
     private activeDriverService: ActiveDriverGQL,
     private notificationService: NotificationService
   ) { }
@@ -41,9 +40,8 @@ export class AppComponent implements OnInit {
     this.activeDriver$.subscribe(
       driver => {
         this.notificationService.show(
-          `${driver.name} is now signed in`,
+          `Signed in as ${driver.name}`,
           {
-            delay: 5000,
             autohide: true,
             headertext: 'Notification'
           }

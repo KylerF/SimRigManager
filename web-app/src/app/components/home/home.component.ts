@@ -9,7 +9,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import * as fromRoot from 'store/reducers';
+import { State, selectAPIActive, selectIracingConnected } from 'store/reducers';
 import { GetConnectionStatus } from 'store/actions/iracing.actions';
 
 @Component({
@@ -35,13 +35,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private iracingDataService: IracingDataService,
     private controllerService: ControllerService, // used to check connection to WLED controllers
     private driverService: DriverService, // used to check whether a driver has been selected
-    private store: Store<fromRoot.State>
+    private store: Store<State>
   )
   { }
 
   ngOnInit(): void {
-    this.apiActive$ = this.store.select(fromRoot.selectAPIActive);
-    this.iracingConnected$ = this.store.select(fromRoot.selectIracingConnected);
+    this.apiActive$ = this.store.select(selectAPIActive);
+    this.iracingConnected$ = this.store.select(selectIracingConnected);
 
     this.getIracingStatus();
     this.getSelectedDriver();
