@@ -8,7 +8,7 @@ import { APIHelper } from 'helpers/api-helper';
 import { NewDriver } from 'models/new-driver';
 import { Driver } from 'models/driver';
 import { Subscription } from 'apollo-angular';
-import { GET_ACTIVE_DRIVER } from '../graphql/queries/drivers';
+import { GET_ACTIVE_DRIVER, SUBSCRIBE_TO_ACTIVE_DRIVER } from '../graphql/queries/drivers';
 
 export interface Response {
   activeDriver: Driver
@@ -18,7 +18,7 @@ export interface Response {
   providedIn: 'root'
 })
 export class ActiveDriverGQL extends Subscription<Response> {
-  document = GET_ACTIVE_DRIVER
+  document = SUBSCRIBE_TO_ACTIVE_DRIVER
 }
 
 /**

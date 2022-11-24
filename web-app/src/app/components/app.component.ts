@@ -3,9 +3,10 @@ import { map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
-import { DriverService, ActiveDriverGQL } from 'services/driver.service';
+import { ActiveDriverGQL } from 'services/driver.service';
 import * as fromRoot from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,6 @@ import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 })
 
 export class AppComponent implements OnInit {
-  driverChangeSubscription: Observable<Driver>;
-
   activeDriver$: Observable<Driver>;
   avatarURL: string;
 
@@ -23,8 +22,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private store: Store<fromRoot.State>,
-    private driverService: DriverService,
-    private activeDriverService: ActiveDriverGQL
+    private activeDriverService: ActiveDriverGQL,
+    private notificationService: NotificationService
   ) { }
 
   /**
@@ -32,10 +31,24 @@ export class AppComponent implements OnInit {
    */
   ngOnInit() {
     this.pollAPIAvailable();
-    this.driverService.streamSelectedDriver();
 
     this.activeDriver$ = this.activeDriverService.subscribe().pipe(
-      map(result => result.data.activeDriver)
+      map(
+        result => result.data.activeDriver
+      )
+    );
+
+    this.activeDriver$.subscribe(
+      driver => {
+        this.notificationService.show(
+          `${driver.name} is now signed in`,
+          {
+            delay: 5000,
+            autohide: true,
+            headertext: 'Notification'
+          }
+        );
+      }
     )
   }
 
