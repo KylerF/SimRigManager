@@ -99,8 +99,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         // Try to connect to each controller
         controllers.forEach(controller => {
           this.controllerService.getControllerState(controller).subscribe({
-            next: state => this.controllerStatus.push({ 'name': controller.name, 'online': true, 'power': state.on }),
-            error: () => this.controllerStatus.push({ 'name': controller.name, 'online': false })
+            next: state => this.controllerStatus.push({
+              'name': controller.name,
+              'online': true,
+              'power': state.on
+            }),
+            error: () => this.controllerStatus.push({
+              'name': controller.name,
+              'online': false
+            })
           });
         });
       },
