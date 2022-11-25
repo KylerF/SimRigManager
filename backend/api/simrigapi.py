@@ -4,7 +4,6 @@ from os import path
 import json
 
 from database import schemas
-from api.utils import get_redis_store
 from api.routers.rest import (
     controllers, 
     laptimes, 
@@ -31,9 +30,6 @@ class SimRigAPI:
                 )
             )
         )
-
-        # Connect to Redis
-        self.redis_store = get_redis_store()
 
         # Set up the API
         self.api = FastAPI(
