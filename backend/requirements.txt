@@ -1,4 +1,4 @@
-strawberry-graphql[fastapi]
+strawberry-graphql[fastapi]==0.142.2
 uvicorn[standard]==0.17.6
 sqlalchemy_utils==0.38.2
 python-multipart==0.0.5
