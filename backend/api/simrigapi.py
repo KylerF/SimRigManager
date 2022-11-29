@@ -1,6 +1,7 @@
 from starlette.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from os import path
+import logging
 import json
 
 from database import schemas
@@ -18,8 +19,8 @@ class SimRigAPI:
     """
     Provides the API routes and methods to interact with the entire application
     """
-    def __init__(self, logger):
-        self.log = logger
+    def __init__(self):
+        self.log = logging.getLogger(__name__)
 
         # Load the metadata for documentation tags
         meta_path = path.dirname(path.realpath(__file__))

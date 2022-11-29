@@ -42,11 +42,6 @@ def main():
         'rpm_gauge_ip',
         fallback='127.0.0.1'
     )
-    universe = int(config.get(
-        'wled',
-        'rpm_gauge_universe',
-        fallback=1
-    ))
     led_count = int(config.get(
         'wled',
         'rpm_gauge_led_count',
@@ -76,7 +71,7 @@ def main():
     # Set up logging
     file_handler = RotatingFileHandler(
         'simriglights.log',
-        maxBytes=200000,
+        maxBytes=2097152,
         backupCount=5
     )
     stdout_handler = logging.StreamHandler(sys.stdout)
@@ -94,14 +89,14 @@ def main():
     try:
         _ = config['wled']['rpm_gauge_ip']
     except KeyError:
-        log.error('Unable to load config file - reverting to default settings')
+        log.error('Unable to load config file - using default settings')
 
     # Set the color theme for all displays
     color_theme = ColorTheme(primary_color, secondary_color)
 
     # Set up WLED controller, iRacing data stream and displays
     log.info('Connecting to WLED')
-    controller = Wled.connect(ip, universe)
+    controller = Wled.connect(ip, led_count)
 
     log.info('Connecting to iRacing')
     data_stream = IracingStream.get_stream()
@@ -110,7 +105,6 @@ def main():
 
     # Kick off the iRacing worker thread
     iracing_worker = IracingWorker(
-        log,
         data_stream,
         controller,
         rpm_strip,
@@ -119,7 +113,7 @@ def main():
     iracing_worker.start()
 
     # Start the API on the main thread
-    api = APIServer(log)
+    api = APIServer()
     api.start()
 
     # If we're here, exit everything

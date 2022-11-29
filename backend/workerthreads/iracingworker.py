@@ -1,10 +1,11 @@
 from redis.exceptions import ConnectionError
 from time import sleep
 import threading
+import logging
 import math
 import json
-from api.utils import set_redis_key, get_active_driver_from_cache
 
+from api.utils import set_redis_key, get_active_driver_from_cache
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
 from database import crud, schemas
@@ -14,17 +15,18 @@ class IracingWorker(threading.Thread):
     Background worker to collect and log iRacing data, and send updates
     to WLED light controllers in response to changes
     '''
-    def __init__(self, logger, data_stream, controller, rpm_strip, framerate):
+    def __init__(self, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
         self.name = 'iRacing Worker Thread'
         self.active = True
 
-        self.log = logger
         self.data_stream = data_stream
         self.controller = controller
         self.rpm_strip = rpm_strip
         self.framerate = framerate
+
+        self.log = logging.getLogger(__name__)
 
     def run(self):
         # Get the active driver and their track time
