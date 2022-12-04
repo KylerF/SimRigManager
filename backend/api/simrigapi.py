@@ -34,7 +34,7 @@ class SimRigAPI:
 
         # Set up the API
         self.api = FastAPI(
-            title="SimRig Manager API", 
+            title="SimRig API", 
             openapi_tags=tags_metadata
         )
 

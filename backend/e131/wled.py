@@ -40,7 +40,7 @@ class Wled:
 
             self.sender.stop()
             self.sender = None
-            
+
             self.is_connected = False
 
     def reconnect(self):
@@ -59,7 +59,7 @@ class Wled:
         for universe in range(1, self.universes+1):
             self.sender.activate_output(universe)
             self.sender[universe].destination = self.ip
-        
+
         self.is_connected = True
 
     def update(self, color_list):
@@ -72,7 +72,7 @@ class Wled:
         chunks = [
             color_list[ i*170: (i*170)+170 ] for i in range(self.universes)
         ]
-        
+
         universe = 1
         for colors in chunks:
             data = []
@@ -80,7 +80,7 @@ class Wled:
                 data.append(math.floor(color.rgb[0] * 255))
                 data.append(math.floor(color.rgb[1] * 255))
                 data.append(math.floor(color.rgb[2] * 255))
-            
+
             self.sender[universe].dmx_data = tuple(data)
             universe += 1
 
