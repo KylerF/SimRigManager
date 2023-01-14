@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import { Subscription } from 'rxjs';
+import { first, Subscription } from 'rxjs';
 import { isEmpty } from 'lodash-es';
 
 import { IracingDataService } from 'services/iracing-data.service';
@@ -22,7 +22,7 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
    * Get the current iRacing data status (true if data available, false otherwise)
    */
   get iracingDataAvailable() {
-    return this.iracingDataService.connected && !this.error;
+    return this.iracingDataService.getConnectionStatus().pipe(first()) && !this.error;
   }
 
   /**

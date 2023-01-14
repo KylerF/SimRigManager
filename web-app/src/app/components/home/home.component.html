@@ -12,7 +12,7 @@
 
     <app-error-message *ngIf="(apiActive$ | async) === false" title="SimRig API" message="SimRig API is offline"></app-error-message>
 
-    <div *ngIf="(apiActive$ | async) && iracingData" class="accordion" id="iracing-accordion">
+    <div *ngIf="(apiActive$ | async) && (iracingConnected$ | async)" class="accordion" id="iracing-accordion">
         <div class="accordion-item">
             <div class="accordion-header" id="iracing-status-header">
                 <div class="accordion-button collapsed alert-success" type="button" data-bs-toggle="collapse" data-bs-target="#iracing-info" aria-expanded="false" aria-controls="iracing-info">
@@ -21,14 +21,19 @@
             </div>
             <div id="iracing-info" class="accordion-collapse collapse" aria-labelledby="iracing-status-header" data-bs-parent="#iracing-accordion">
                 <div class="accordion-body">
-                  <div id="sessionInfo">
-                    {{ iracingData.WeekendInfo.EventType }}
-                    at
-                    {{ iracingData.WeekendInfo.TrackDisplayName }}
+                  <div *ngIf="iracingData">
+                    <div id="sessionInfo">
+                      {{ iracingData.WeekendInfo.EventType }}
+                      at
+                      {{ iracingData.WeekendInfo.TrackDisplayName }}
+                    </div>
+                    <div id="sessionTime">
+                      Session time:
+                      {{ iracingData.SessionTime | hoursMinutesSeconds }}
+                    </div>
                   </div>
-                  <div id="sessionTime">
-                    Session time:
-                    {{ iracingData.SessionTime | hoursMinutesSeconds }}
+                  <div *ngIf="!iracingData">
+                    No telemetry data available
                   </div><br>
                   <a routerLink="/telemetry">
                     <button class="btn btn-primary" type="button">
@@ -41,11 +46,11 @@
         </div>
     </div>
 
-    <div *ngIf="(apiActive$ | async) && !iracingData" class="alert alert-warning">
+    <div *ngIf="(apiActive$ | async) && (iracingConnected$ | async) === false" class="alert alert-warning">
         <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for iRacing data
     </div>
 
-    <app-error-message *ngIf="(apiActive$ | async) === false && !iracingData" title="iRacing" message="Unable to access iRacing data"></app-error-message>
+    <app-error-message *ngIf="(apiActive$ | async) === false && (iracingConnected$ | async) === false" title="iRacing" message="Unable to access iRacing data"></app-error-message>
 
     <div *ngFor="let status of controllerStatus">
         <div *ngIf="status.online" class="alert alert-success">

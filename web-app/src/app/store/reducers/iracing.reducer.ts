@@ -15,20 +15,14 @@ export const initialState = {
 
 export const reducer = createReducer(
   initialState,
-  on(iracingActions.GetConnectionStatus, (state, action) => ({
-    ...state,
-    loading: true
-  })),
-  on(iracingActions.GetConnectionStatusSuccess, (state, action) => ({
+  on(iracingActions.SetConnectionStatus, (state, action) => ({
     ...state,
     lastUpdated: moment().toDate(),
     state: {
-      connected: action.status.connected
+      connected: action.connected
     }
   })),
-  on(iracingActions.GetConnectionStatusFailure, (state, action) => ({
+  on(iracingActions.GetConnectionStatus, (state, action) => ({
     ...state,
-    loading: false,
-    error: action.error
   }))
 );

@@ -77,11 +77,11 @@
 
         <div *ngIf="(filteredLaptimes$ | async) as filteredLaptimes">
           <div *ngIf="filteredLaptimes.length else noFiltered">
-            <cdk-virtual-scroll-viewport [itemSize]="20">
+            <cdk-virtual-scroll-viewport [itemSize]="50">
               <table class="table table-bordered reactive-font">
                 <thead>
                   <tr>
-                    <th (click)="sortScores('driver', 'toggle')">
+                    <th class="col-md-1" (click)="sortScores('driver', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Driver
@@ -92,7 +92,7 @@
                         </div>
                       </div>
                     </th>
-                    <th (click)="sortScores('car', 'toggle')">
+                    <th class="col-md-2" (click)="sortScores('car', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Car
@@ -103,7 +103,7 @@
                         </div>
                       </div>
                     </th>
-                    <th (click)="sortScores('trackName', 'toggle')">
+                    <th class="col-md-3" (click)="sortScores('trackName', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Track
@@ -114,7 +114,7 @@
                         </div>
                       </div>
                     </th>
-                    <th (click)="sortScores('trackConfig', 'toggle')">
+                    <th class="col-md-1" (click)="sortScores('trackConfig', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Config
@@ -125,7 +125,7 @@
                         </div>
                       </div>
                     </th>
-                    <th (click)="sortScores('time', 'toggle')">
+                    <th class="col-md-1" (click)="sortScores('time', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Time
@@ -136,7 +136,7 @@
                         </div>
                       </div>
                     </th>
-                    <th (click)="sortScores('setAt', 'toggle')">
+                    <th class="col-md-1" (click)="sortScores('setAt', 'toggle')">
                       <div class="d-flex flex-nowrap">
                         <div class="m-1">
                           Set

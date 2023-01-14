@@ -9,8 +9,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import { State, selectAPIActive, selectIracingConnected } from 'store/reducers';
-import { GetConnectionStatus } from 'store/actions/iracing.actions';
+import { State, selectAPIActive } from 'store/reducers';
 
 @Component({
   selector: 'app-home',
@@ -40,12 +39,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   { }
 
   ngOnInit(): void {
-    this.apiActive$ = this.store.select(selectAPIActive);
-    this.iracingConnected$ = this.store.select(selectIracingConnected);
-
     this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();
+
+    this.apiActive$ = this.store.select(selectAPIActive);
+    this.iracingConnected$ = this.iracingDataService.getConnectionStatus();
   }
 
   ngOnDestroy(): void {
@@ -58,10 +57,9 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   getIracingStatus() {
     this.iracingDataService.startStream();
-    this.store.dispatch(GetConnectionStatus());
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .pipe(
-        retryWhen(error => error.pipe(
+        retryWhen( error => error.pipe(
           tap(err => {
             this.errors.push(err.message)
             this.iracingData = null;

@@ -7,7 +7,6 @@ import { webSocket } from 'rxjs/webSocket';
 
 import { APIHelper } from 'helpers/api-helper';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import { IracingConnectionStatus } from 'models/iracing/connection-status';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +27,15 @@ export class IracingDataService {
   private _latestData = new BehaviorSubject<IracingDataFrame>(null);
   latestData$ = this._latestData.asObservable();
 
+  // Holds subscribable iRacing connection status. Connected means:
+  // 1: The websocket connection is active
+  // 2: Valid iRacing data is being received
+  private _connected = new BehaviorSubject<boolean>(false);
+  connected$ = this._connected.asObservable();
+
   // Whether the websocket connection is open -
   // used to prevent multiple connections
   private streamOpen: boolean = false;
-  public connected: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -55,11 +59,8 @@ export class IracingDataService {
   /**
    * Get the current iRacing connection status
    */
-  getConnectionStatus(): Observable<IracingConnectionStatus> {
-    return new Observable(subscriber => {
-      subscriber.next({ connected: this.connected });
-      subscriber.complete();
-    });
+  getConnectionStatus(): Observable<boolean> {
+    return this.connected$
   }
 
   /**
@@ -86,7 +87,7 @@ export class IracingDataService {
       retryWhen(error => error.pipe(
         // Retry connection every 3 seconds on error
         tap(err => {
-          this.connected = false;
+          this._connected.next(false);
           this._latestData.next(null);
         }),
         delay(3000)
@@ -94,7 +95,7 @@ export class IracingDataService {
     )
     .subscribe(
       (response: IracingDataFrame) => {
-        this.connected = true;
+        this._connected.next(true);
         this._latestData.next(response);
       }
     );
@@ -107,6 +108,6 @@ export class IracingDataService {
     this._latestData.next(null);
     this.wsSubscription.unsubscribe();
     this.streamOpen = false;
-    this.connected = false;
+    this._connected.next(false);
   }
 }

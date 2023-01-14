@@ -16,12 +16,13 @@ export class IracingEffects {
   /**
    * Get connection status
    */
+  /*
   getConnectionStatus$ = createEffect(() => this.actions$.pipe(
     ofType(iracingActions.GetConnectionStatus),
     mergeMap(() => this.iracingDataService.getConnectionStatus()
       .pipe(
         map(
-          connectionStatus => iracingActions.GetConnectionStatusSuccess({ status: connectionStatus })
+          connected => iracingActions.GetConnectionStatusSuccess({ status: {connected: connected} })
         ),
         catchError(
           error => of(iracingActions.GetConnectionStatusFailure({ error: error.message }))
@@ -29,4 +30,5 @@ export class IracingEffects {
       ))
     )
   );
+  */
 }
