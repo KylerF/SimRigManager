@@ -127,34 +127,6 @@
               "src/**/*.html"
             ]
           }
-        },
-        "nightwatch-run": {
-          "builder": "@nightwatch/schematics:nightwatch",
-          "options": {
-            "devServerTarget": "simrigmanager-web-app:serve",
-            "tsConfig": "../nightwatch/tsconfig.e2e.json",
-            "config": "./nightwatch.conf.js",
-            "env": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "simrigmanager-web-app:serve:production"
-            }
-          }
-        },
-        "e2e": {
-          "builder": "@nightwatch/schematics:nightwatch",
-          "options": {
-            "devServerTarget": "simrigmanager-web-app:serve",
-            "tsConfig": "../nightwatch/tsconfig.e2e.json",
-            "config": "./nightwatch.conf.js",
-            "env": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "simrigmanager-web-app:serve:production"
-            }
-          }
         }
       }
     }
@@ -168,6 +140,12 @@
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"
+    },
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
     }
   }
 }
