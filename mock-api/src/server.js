@@ -289,10 +289,16 @@ async function slowDownStream(stream) {
 /**
  * Blocking function to sleep for a given time
  * 
- * @param {int} ms time in milliseconds
+ * @param {int} ms time in milliseconds (max 1000)
  */
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(function (resolve, reject) {
+    if (ms > 1000) {
+      reject('No reason to sleep longer than 1 second');
+    } else {
+      setTimeout(resolve, ms);
+    }
+  });
 }
 
 /**
