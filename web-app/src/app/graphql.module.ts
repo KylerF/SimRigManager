@@ -17,7 +17,8 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   // Create a WebSocket link:
   const ws = new GraphQLWsLink(
     createClient({
-      url: `${APIHelper.getBaseUrl('ws')}/graphql`
+      url: `${APIHelper.getBaseUrl('ws')}/graphql`,
+      retryAttempts: 0 // retry indefinitely
     })
   );
 
