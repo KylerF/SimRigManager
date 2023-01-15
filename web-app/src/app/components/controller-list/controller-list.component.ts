@@ -52,7 +52,11 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   startControllerUpdates() {
     this.controllers$.pipe(
-      first(controllers => controllers.state.some(controller => controller.isAvailable == undefined))
+      first(
+        controllers => controllers.state.some(
+          controller => controller.isAvailable == undefined
+        )
+      )
     )
     .subscribe({
       next: controllers => {

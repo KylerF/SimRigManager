@@ -135,7 +135,7 @@ export class ControllerEffects {
   ));
 
   /**
-   * Update a controller's settub
+   * Update a controller's settings
    */
   updateControllerSettings$ = createEffect(() => this.actions$.pipe(
     ofType(controllerActions.UpdateControllerSettings),
