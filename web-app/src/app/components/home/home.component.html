@@ -52,12 +52,14 @@
 
   <app-error-message *ngIf="(apiActive$ | async) === false && (iracingConnected$ | async) === false" title="iRacing" message="Unable to access iRacing data"></app-error-message>
 
-  <div *ngFor="let status of controllerStatus">
-    <div *ngIf="status.online" class="alert alert-success">
-      <span class="bi bi-circle-fill" style="color:green"></span><b> WLED: </b> {{ status.name }} is online
-   </div>
+  <div *ngIf="(controllers$ | async) as controllers">
+    <div *ngFor="let controller of controllers.state">
+      <div *ngIf="controller.isAvailable" class="alert alert-success">
+        <span class="bi bi-circle-fill" style="color:green"></span><b> WLED: </b> {{ controller.name }} is online
+     </div>
 
-    <app-error-message *ngIf="!status.online" title="WLED" message="{{ status.name }} is offline"></app-error-message>
+      <app-error-message *ngIf="!controller.isAvailable" title="WLED" message="{{ controller.name }} is offline"></app-error-message>
+    </div>
   </div>
 
   <app-error-message *ngIf="(apiActive$ | async) === false" title="WLED" message="Unable to get WLED controllers"></app-error-message>

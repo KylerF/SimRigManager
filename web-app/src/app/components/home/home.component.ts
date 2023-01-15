@@ -2,14 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { isEmpty } from 'lodash-es';
 
-import { ControllerStatus } from 'models/controller-status';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { IracingDataService } from 'services/iracing-data.service';
-import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
+import { delay, first, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import { State, selectAPIActive } from 'store/reducers';
+import { State, selectAPIActive, selectControllers } from 'store/reducers';
+import { LoadControllers, StartStream } from 'store/actions/controller.actions';
+import { StateContainer } from 'models/state';
+import { Controller } from 'models/controller';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
-  controllerStatus: ControllerStatus[] = [];
+  controllers$: Observable<StateContainer<Controller[]>>;
 
   errors: string[] = [];
 
@@ -92,24 +94,32 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Query the status of all WLED controllers
    */
   getControllerStatus() {
-    this.controllerService.getControllers().subscribe({
+    this.store.dispatch(LoadControllers());
+    this.controllers$ = this.store.select(selectControllers);
+
+    this.startControllerUpdates();
+  }
+
+  /**
+   * Connect to WLED controllers and start updating their status
+   */
+  startControllerUpdates() {
+    this.controllers$.pipe(
+      first(
+        controllers => controllers.state.some(
+          controller => controller.isAvailable == undefined
+        )
+      )
+    )
+    .subscribe({
       next: controllers => {
-        // Try to connect to each controller
-        controllers.forEach(controller => {
-          this.controllerService.getControllerState(controller).subscribe({
-            next: state => this.controllerStatus.push({
-              'name': controller.name,
-              'online': true,
-              'power': state.on
-            }),
-            error: () => this.controllerStatus.push({
-              'name': controller.name,
-              'online': false
-            })
-          });
+        controllers.state.forEach(controller => {
+          if (controller.isAvailable == undefined) {
+            this.controllerService.disconnectController(controller);
+            this.store.dispatch(StartStream({ controller: controller }));
+          }
         });
-      },
-      error: error => this.errors.push(error.message)
+      }
     });
   }
 }
