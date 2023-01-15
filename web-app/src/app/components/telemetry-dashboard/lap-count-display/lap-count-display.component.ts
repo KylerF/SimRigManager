@@ -14,8 +14,6 @@ import { IracingDataService } from 'services/iracing-data.service';
  * Component to show the current session lap count
  */
 export class LapCountDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
-  iracingDataSubscription: Subscription;
-
   lapCount: number;
 
   constructor(iracingDataService: IracingDataService) {

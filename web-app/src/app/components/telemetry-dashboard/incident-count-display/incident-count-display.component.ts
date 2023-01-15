@@ -15,8 +15,6 @@ import { IracingDataService } from 'services/iracing-data.service';
  * Component to show the current incident count / maximum incident count
  */
 export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
-  iracingDataSubscription: Subscription;
-
   incidentCount: number;
   incidentLimit: string;
 
