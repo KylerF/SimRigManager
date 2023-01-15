@@ -35,7 +35,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { reducers, metaReducers } from 'store/reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'environments/environment';
-import { IracingEffects } from 'store/effects/iracing.effects';
 import { ApiHealthcheckEffects } from 'store/effects/api-healthcheck.effects';
 import { QuoteEffects } from 'store/effects/quote.effects';
 import { ControllerEffects } from 'store/effects/controller.effects';
@@ -129,7 +128,6 @@ const routes: Routes = [
     ScrollingModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([
-      IracingEffects,
       ApiHealthcheckEffects,
       QuoteEffects,
       ControllerEffects,
