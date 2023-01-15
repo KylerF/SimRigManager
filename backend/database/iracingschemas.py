@@ -1,6 +1,6 @@
 """
 Pydantic schemas for iRacing data
-#TODO: Can these be generated dynamically? Fields are different depending on
+TODO: Can these be generated dynamically? Fields are different depending on
 car, and new fields are added often with iRacing updates.
 """
 from typing import List, Optional

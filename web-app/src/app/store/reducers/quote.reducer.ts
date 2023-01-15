@@ -1,4 +1,4 @@
-import * as quoteActions from '../actions/quote.actions';
+import * as quoteActions from 'store/actions/quote.actions';
 import { Quote } from 'models/quote';
 import { StateContainer } from 'models/state';
 import * as moment from 'moment';

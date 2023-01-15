@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as moment from 'moment';
-import * as iracingActions from '../actions/iracing.actions';
+import * as iracingActions from 'store/actions/iracing.actions';
 
 export const iracingFeatureKey = 'iracing';
 

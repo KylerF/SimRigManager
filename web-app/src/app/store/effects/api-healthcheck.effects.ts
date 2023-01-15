@@ -4,7 +4,7 @@ import { asyncScheduler, Observable, timer } from 'rxjs';
 import { map, mergeMap, catchError, takeUntil } from 'rxjs/operators';
 
 import { AvailabilityService } from 'services/availability.service';
-import * as apiHealthcheckActions from '../actions/api-healthcheck.actions';
+import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 
 @Injectable()
 export class ApiHealthcheckEffects {

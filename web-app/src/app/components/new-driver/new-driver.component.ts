@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 
-import { DriverService } from '../../services/driver.service';
-import { NewDriver } from '../../models/new-driver';
+import { DriverService } from 'services/driver.service';
+import { NewDriver } from 'models/new-driver';
 
 @Component({
   selector: 'app-new-driver',

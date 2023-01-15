@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import { LapTimeService } from 'src/app/services/lap-time.service';
-import * as laptimeActions from '../actions/laptime.actions';
+import * as laptimeActions from 'store/actions/laptime.actions';
 import { catchError, map, mergeMap, of, takeUntil } from 'rxjs';
 
 @Injectable()

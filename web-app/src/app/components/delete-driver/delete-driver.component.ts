@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { DriverService } from '../../services/driver.service';
-import { Driver } from '../../models/driver';
+import { DriverService } from 'services/driver.service';
+import { Driver } from 'models/driver';
 
 @Component({
   selector: 'app-delete-driver',

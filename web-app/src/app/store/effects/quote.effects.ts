@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mergeMap, map, catchError, of } from 'rxjs';
 
+import * as quoteActions from 'store/actions/quote.actions';
 import { QuoteService } from 'services/quote.service';
-import * as quoteActions from '../actions/quote.actions';
 
 @Injectable()
 export class QuoteEffects {

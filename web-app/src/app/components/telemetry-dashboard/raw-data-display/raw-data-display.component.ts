@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
+import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
 import { APIHelper } from 'helpers/api-helper';
 import { isEmpty, keys } from 'lodash-es';

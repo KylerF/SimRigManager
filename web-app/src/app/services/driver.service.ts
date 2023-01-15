@@ -1,16 +1,16 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'apollo-angular';
+import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
+import { SUBSCRIBE_TO_ACTIVE_DRIVER } from 'graphql/queries/drivers';
 import { DriverStats } from 'models/driver-stats';
 import { APIHelper } from 'helpers/api-helper';
 import { NewDriver } from 'models/new-driver';
 import { Driver } from 'models/driver';
-import { Subscription } from 'apollo-angular';
-import { GET_ACTIVE_DRIVER, SUBSCRIBE_TO_ACTIVE_DRIVER } from '../graphql/queries/drivers';
 
-export interface Response {
+interface Response {
   activeDriver: Driver
 }
 

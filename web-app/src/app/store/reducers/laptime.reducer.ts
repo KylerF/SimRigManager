@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { LapTime } from 'src/app/models/lap-time';
 import { StateContainer } from 'src/app/models/state';
 
-import * as laptimeActions from '../actions/laptime.actions';
+import * as laptimeActions from 'store/actions/laptime.actions';
 
 export const laptimeFeatureKey = 'laptimes';
 

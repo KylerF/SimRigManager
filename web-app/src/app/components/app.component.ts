@@ -6,7 +6,7 @@ import { Driver } from 'models/driver';
 import { ActiveDriverGQL } from 'services/driver.service';
 import { State } from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
-import { NotificationService } from '../services/notification.service';
+import { NotificationService } from 'services/notification.service';
 
 @Component({
   selector: 'app-root',

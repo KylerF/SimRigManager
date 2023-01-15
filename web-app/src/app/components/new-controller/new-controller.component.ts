@@ -3,11 +3,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { selectControllers, State } from 'store/reducers';
 
-import { ipAddressValidatorFunction } from '../../directives/validators/ip-address-validator-function';
-import { Store } from '@ngrx/store';
+import { ipAddressValidatorFunction } from 'directives/validators/ip-address-validator-function';
 import { CreateController } from 'store/actions/controller.actions';
 import { Controller } from 'models/controller';
 import { StateContainer } from 'models/state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-new-controller',

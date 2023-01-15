@@ -25,6 +25,9 @@
       "store/*": [
         "./src/app/store/*"
       ],
+      "graphql/*": [
+        "./src/app/graphql/*"
+      ],
       "environments/*": [
         "./src/environments/*"
       ],

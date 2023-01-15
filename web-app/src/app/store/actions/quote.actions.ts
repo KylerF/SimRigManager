@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Quote } from '../../models/quote';
+import { Quote } from 'models/quote';
 
 export enum QuoteActionTypes {
   LoadQuote = '[Quote] Load Quote',

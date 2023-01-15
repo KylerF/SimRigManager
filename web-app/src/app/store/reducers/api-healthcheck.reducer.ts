@@ -1,4 +1,4 @@
-import * as apiHealthcheckActions from '../actions/api-healthcheck.actions';
+import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 import { AvailabilityCheck } from 'models/availability-check';
 import { StateContainer } from 'models/state';
 import * as moment from 'moment';

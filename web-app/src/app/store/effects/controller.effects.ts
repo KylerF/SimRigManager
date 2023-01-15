@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Controller } from 'models/controller';
-import { mergeMap, map, catchError, switchMap, of, delay, retryWhen, tap, timeout } from 'rxjs';
+import { mergeMap, map, catchError, switchMap, of } from 'rxjs';
 
+import * as controllerActions from 'store/actions/controller.actions';
 import { ControllerService } from 'services/controller.service';
-import * as controllerActions from '../actions/controller.actions';
 
 @Injectable()
 export class ControllerEffects {

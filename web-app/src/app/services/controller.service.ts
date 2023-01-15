@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { catchError, delay, retryWhen, take, timeout } from 'rxjs/operators';
+import { catchError, take, timeout } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { ControllerSettings } from '../models/controller-settings';
+import { ControllerSettings } from 'models/controller-settings';
 import { WledMessage } from 'src/app/models/wled/wled-message';
 import { Controller } from 'models/controller';
 import { APIHelper } from 'helpers/api-helper';

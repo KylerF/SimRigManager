@@ -1,4 +1,4 @@
-import * as controllerActions from '../actions/controller.actions';
+import * as controllerActions from 'store/actions/controller.actions';
 import { Controller } from 'models/controller';
 import { StateContainer } from 'models/state';
 
