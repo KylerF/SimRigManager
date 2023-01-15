@@ -5,7 +5,7 @@ python-multipart==0.0.5
 sse-starlette==0.10.3
 sqlalchemy==1.4.35
 starlette==0.17.1
-fastapi==0.75.0
+fastapi==0.89.1
 pydantic==1.9.0
 aiofiles==0.8.0
 alembic==1.9.0
