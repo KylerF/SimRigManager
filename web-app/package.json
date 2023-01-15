@@ -60,7 +60,7 @@
     "@cucumber/cucumber": "^8.0.0",
     "@ngrx/schematics": "^15.1.0",
     "@nightwatch/schematics": "^0.1.9",
-    "@types/jasmine": "~4.0.0",
+    "@types/jasmine": "~4.3.1",
     "@types/jquery": "^3.5.14",
     "@types/lodash-es": "^4.17.6",
     "@types/nightwatch": "2.3.18",
