@@ -7,7 +7,6 @@ import { webSocket } from 'rxjs/webSocket';
 
 import { APIHelper } from 'helpers/api-helper';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import * as _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ import * as _ from 'lodash';
  */
 export class IracingDataService {
   private endpoint = 'iracing/latest';
-  private wsEndpoint = 'iracing/stream?raw=true';
+  private wsEndpoint = 'iracing/stream';
 
   private wsSubscription: Subscription;
 
@@ -27,6 +26,12 @@ export class IracingDataService {
   // any component that needs it
   private _latestData = new BehaviorSubject<IracingDataFrame>(null);
   latestData$ = this._latestData.asObservable();
+
+  // Holds subscribable iRacing connection status. Connected means:
+  // 1: The websocket connection is active
+  // 2: Valid iRacing data is being received
+  private _connected = new BehaviorSubject<boolean>(false);
+  connected$ = this._connected.asObservable();
 
   // Whether the websocket connection is open -
   // used to prevent multiple connections
@@ -40,8 +45,22 @@ export class IracingDataService {
    * @returns an observable wrapping latest data
    */
   getLatest(): Observable<IracingDataFrame> {
-    return this.http.get<any>(`${APIHelper.getMockBaseUrl()}${this.endpoint}`)
+    let url = `${APIHelper.getBaseUrl('ws')}/${this.wsEndpoint}`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl('ws')}/${this.wsEndpoint}`;
+    }
+
+    return this.http.get<any>(`${url}/${this.endpoint}`)
       .pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Get the current iRacing connection status
+   */
+  getConnectionStatus(): Observable<boolean> {
+    return this.connected$
   }
 
   /**
@@ -57,17 +76,18 @@ export class IracingDataService {
 
     this.streamOpen = true;
 
-    let url = `${APIHelper.getBaseUrl('ws')}${this.wsEndpoint}`;
+    let url = `${APIHelper.getBaseUrl('ws')}/${this.wsEndpoint}`;
 
     // If we're in the development environment, use the mock API
     if (isDevMode()) {
-      url = `${APIHelper.getMockBaseUrl('ws')}${this.wsEndpoint}`;
+      url = `${APIHelper.getMockBaseUrl('ws')}/${this.wsEndpoint}`;
     }
 
     this.wsSubscription = webSocket(url).pipe(
       retryWhen(error => error.pipe(
         // Retry connection every 3 seconds on error
         tap(err => {
+          this._connected.next(false);
           this._latestData.next(null);
         }),
         delay(3000)
@@ -75,6 +95,7 @@ export class IracingDataService {
     )
     .subscribe(
       (response: IracingDataFrame) => {
+        this._connected.next(true);
         this._latestData.next(response);
       }
     );
@@ -87,5 +108,6 @@ export class IracingDataService {
     this._latestData.next(null);
     this.wsSubscription.unsubscribe();
     this.streamOpen = false;
+    this._connected.next(false);
   }
 }

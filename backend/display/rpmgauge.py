@@ -11,8 +11,12 @@ class RpmGauge:
         self.rpm = rpm
         self.idle_rpm = idle_rpm
         self.redline = redline
-        
-        self.full_gradient = list(self.start_color.range_to(self.end_color, self.led_count//2))
+
+        self.full_gradient = list(
+            self.start_color.range_to(
+                self.end_color, self.led_count//2
+            )
+        )
 
     def set_rpm(self, rpm):
         """
@@ -22,14 +26,14 @@ class RpmGauge:
             raise TypeError
 
         self.rpm = rpm if rpm > 0 else 0
-        
+
     def set_idle_rpm(self, idle_rpm):
         """
         Set the idle RPM (lower limit used in mapping)
         """
         if idle_rpm is None:
             raise TypeError
-            
+
         self.idle_rpm = idle_rpm if idle_rpm > 0 else 0
 
     def set_redline(self, redline):
@@ -47,7 +51,7 @@ class RpmGauge:
         """
         if self.rpm == 0:
             return []
-        
+
         length = self.translate(self.rpm, 0, self.redline, 0, self.led_count//2)
         colors = self.full_gradient[0:length]
 
@@ -58,11 +62,11 @@ class RpmGauge:
         Map an RPM value to a count within the range of the LED strip
         """
         # Figure out how "wide" each range is
-        leftSpan = left_max - left_min
-        rightSpan = right_max - right_min
+        left_span = left_max - left_min
+        right_span = right_max - right_min
 
         # Convert the left range into a 0-1 range (float)
-        valueScaled = float(value - left_min) / float(leftSpan)
+        value_scaled = float(value - left_min) / float(left_span)
 
         # Convert the 0-1 range into a value in the right range.
-        return int(right_min + (valueScaled * rightSpan))
+        return int(right_min + (value_scaled * right_span))

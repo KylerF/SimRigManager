@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { mergeMap, map, catchError } from 'rxjs';
+import { mergeMap, map, catchError, of } from 'rxjs';
 
 import { QuoteService } from 'services/quote.service';
-import { QuoteActionTypes } from '../actions/quote.actions';
+import * as quoteActions from '../actions/quote.actions';
 
 @Injectable()
 export class QuoteEffects {
@@ -17,22 +17,14 @@ export class QuoteEffects {
    * Retrieve a random quote from the API
    */
   loadQuote$ = createEffect(() => this.actions$.pipe(
-    ofType(QuoteActionTypes.LoadQuote),
+    ofType(quoteActions.LoadQuote),
     mergeMap(() => this.quoteService.getRandomQuote()
       .pipe(
         map(
-          quote => ({
-            type: QuoteActionTypes.LoadQuoteSuccess,
-            payload: {
-              data: quote
-            }
-          })
+          controllers => quoteActions.LoadQuoteSuccess({ payload: { data: controllers } })
         ),
         catchError(
-          error => [{
-            type: QuoteActionTypes.LoadQuoteFailure,
-            payload: error
-          }]
+          error => of(quoteActions.LoadQuoteFailure({ payload: { error: error.message } }))
         )
       ))
     )

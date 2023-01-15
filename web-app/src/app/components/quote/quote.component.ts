@@ -3,14 +3,16 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { LoadQuote } from 'store/actions/quote.actions';
+import { shortFadeIn } from 'src/app/animations/fades';
 import { State, selectQuote } from 'store/reducers';
-import { Quote } from 'models/quote';
 import { StateContainer } from 'models/state';
+import { Quote } from 'models/quote';
 
 @Component({
   selector: 'app-quote',
   templateUrl: './quote.component.html',
-  styleUrls: ['./quote.component.scss']
+  styleUrls: ['./quote.component.scss'],
+  animations: [ shortFadeIn ]
 })
 
 /**
@@ -28,6 +30,6 @@ export class QuoteComponent implements OnInit {
   }
 
   getRandomQuote() {
-    this.store.dispatch(new LoadQuote());
+    this.store.dispatch(LoadQuote());
   }
 }

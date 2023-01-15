@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 
-import { DeleteDriverComponent } from '../delete-driver/delete-driver.component';
-import { DriverService } from '../../services/driver.service';
-import { DriverStats } from '../../models/driver-stats';
-import { APIHelper } from '../../_helpers/api-helper';
-import { Driver } from '../../models/driver';
+import { DeleteDriverComponent } from 'components/delete-driver/delete-driver.component';
+import { DriverService } from 'services/driver.service';
+import { DriverStats } from 'models/driver-stats';
+import { Driver } from 'models/driver';
 
 @Component({
   selector: 'app-driver-profile',
@@ -57,14 +56,10 @@ export class DriverProfileComponent implements OnInit {
    * Get stats for a driver (records held, favorite track etc..)
    */
   getDriverStats(driverId) {
-    this.driverService.getDriverStats(driverId).subscribe(
-      response => {
-        this.driverStats = response;
-      },
-      error => {
-        this.error = error.message;
-      }
-    )
+    this.driverService.getDriverStats(driverId).subscribe({
+      next: stats => this.driverStats = stats,
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -87,14 +82,15 @@ export class DriverProfileComponent implements OnInit {
       return;
     }
 
-    this.driverService.uploadProfilePic(this.driver.id, file).subscribe (
-      _ => {
-        this.saveProfile();
+    this.driverService.uploadProfilePic(this.driver.id, file).subscribe({
+      next: response => {
+        this.driver.profilePic = response.image_url;
+        this.driverService.setCachedDriver(this.driver);
+        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+        this.profileUpdated = true;
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -108,17 +104,15 @@ export class DriverProfileComponent implements OnInit {
    * Save changes to driver profile
    */
   saveProfile() {
-    this.driverService.updateDriver(this.driver).subscribe (
-      response => {
+    this.driverService.updateDriver(this.driver).subscribe({
+      next: response => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
         this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
 
     this.editingProfile = false;
   }

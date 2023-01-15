@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
-import { ControllerStatus } from 'models/controller-status';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { IracingDataService } from 'services/iracing-data.service';
-import { delay, Observable, retryWhen, Subscription, tap } from 'rxjs';
+import { delay, first, Observable, retryWhen, Subscription, tap } from 'rxjs';
 import { Driver } from 'models/driver';
 import { IracingDataFrame } from 'models/iracing/data-frame';
-import * as fromRoot from 'store/reducers';
+import { State, selectAPIActive, selectControllers } from 'store/reducers';
+import { LoadControllers, StartStream } from 'store/actions/controller.actions';
+import { StateContainer } from 'models/state';
+import { Controller } from 'models/controller';
 
 @Component({
   selector: 'app-home',
@@ -22,10 +24,11 @@ import * as fromRoot from 'store/reducers';
  */
 export class HomeComponent implements OnInit, OnDestroy {
   apiActive$: Observable<boolean>;
+  iracingConnected$: Observable<boolean>;
   iracingData: IracingDataFrame;
   iracingDataSubscription: Subscription;
   selectedDriver: Driver;
-  controllerStatus: ControllerStatus[] = [];
+  controllers$: Observable<StateContainer<Controller[]>>;
 
   errors: string[] = [];
 
@@ -33,16 +36,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     private iracingDataService: IracingDataService,
     private controllerService: ControllerService, // used to check connection to WLED controllers
     private driverService: DriverService, // used to check whether a driver has been selected
-    private store: Store<fromRoot.State>
+    private store: Store<State>
   )
   { }
 
   ngOnInit(): void {
-    this.apiActive$ = this.store.select(fromRoot.selectAPIActive);
-
     this.getIracingStatus();
     this.getSelectedDriver();
     this.getControllerStatus();
+
+    this.apiActive$ = this.store.select(selectAPIActive);
+    this.iracingConnected$ = this.iracingDataService.getConnectionStatus();
   }
 
   ngOnDestroy(): void {
@@ -57,7 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.iracingDataService.startStream();
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .pipe(
-        retryWhen(error => error.pipe(
+        retryWhen( error => error.pipe(
           tap(err => {
             this.errors.push(err.message)
             this.iracingData = null;
@@ -67,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         response => {
-          if (!_.isEmpty(response)) {
+          if (!isEmpty(response)) {
             this.iracingData = response;
           } else {
             this.iracingData = null;
@@ -80,42 +84,42 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Get the last selected driver
    */
   getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        // Success!
-        this.selectedDriver = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.errors.push(error.message);
-      }
-    );
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => this.selectedDriver = driver,
+      error: error => this.errors.push(error.message)
+    });
   }
 
   /**
    * Query the status of all WLED controllers
    */
   getControllerStatus() {
-    this.controllerService.getControllers().subscribe(
-      controllers => {
-        // Try to connect to each controller
-        controllers.forEach(controller => {
-          this.controllerService.getControllerState(controller).subscribe(
-            response => {
-              // Connection succeeded
-              this.controllerStatus.push({ 'name': controller.name, 'online': true});
-            },
-            error => {
-              // Connection failed
-              this.controllerStatus.push({ 'name': controller.name, 'online': false});
-            }
-          )
-        });
-      },
-      error => {
-        // Failed. Save the response.
-        this.errors.push(error.message);
-      }
+    this.store.dispatch(LoadControllers());
+    this.controllers$ = this.store.select(selectControllers);
+
+    this.startControllerUpdates();
+  }
+
+  /**
+   * Connect to WLED controllers and start updating their status
+   */
+  startControllerUpdates() {
+    this.controllers$.pipe(
+      first(
+        controllers => controllers.state.some(
+          controller => controller.isAvailable == undefined
+        )
+      )
     )
+    .subscribe({
+      next: controllers => {
+        controllers.state.forEach(controller => {
+          if (controller.isAvailable == undefined) {
+            this.controllerService.disconnectController(controller);
+            this.store.dispatch(StartStream({ controller: controller }));
+          }
+        });
+      }
+    });
   }
 }

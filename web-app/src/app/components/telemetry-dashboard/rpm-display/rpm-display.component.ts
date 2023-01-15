@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
-import { IracingDataService } from 'services/iracing-data.service';
+import { isEmpty } from 'lodash-es';
+
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-rpm-display',
@@ -29,7 +30,7 @@ export class RpmDisplayComponent extends BaseTelemetryDisplayComponent implement
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             this.rpm = data.RPM;
 
             let newShiftRpm = data.DriverInfo.DriverCarSLShiftRPM;

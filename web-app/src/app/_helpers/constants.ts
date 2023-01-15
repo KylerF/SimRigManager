@@ -32,13 +32,13 @@ export const Constants = {
     },
     spotterSignal: {
       // iRacing CarLeftRight values
-      off:           0,
-      clear:         1,
-      carLeft:       2,
-      carRight:      3,
-      carLeftRight:  4,
-      twoCarsLeft:   5,
-      twoCarsRight:  6
+      off:          0,
+      clear:        1,
+      carLeft:      2,
+      carRight:     3,
+      carLeftRight: 4,
+      twoCarsLeft:  5,
+      twoCarsRight: 6
     },
     sessionState: {
       // iRacing SessionState values

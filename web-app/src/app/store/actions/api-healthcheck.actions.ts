@@ -1,6 +1,6 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-import { AvailabilityCheck } from '../../models/availability-check';
+import { AvailabilityCheck } from 'models/availability-check';
 
 export enum ApiHealthcheckActionTypes {
   UpdateApiHealthcheck = '[ApiHealthcheck] Update ApiHealthcheck',
@@ -12,26 +12,22 @@ export enum ApiHealthcheckActionTypes {
  * Main action dispatched by components to update the API healthcheck
  * status in the store
  */
-export class UpdateApiHealthcheck implements Action {
-  readonly type = ApiHealthcheckActionTypes.UpdateApiHealthcheck;
-}
+export const UpdateApiHealthcheck = createAction(
+  ApiHealthcheckActionTypes.UpdateApiHealthcheck
+);
 
 /**
  * Triggered when response from the API was received
  */
-export class UpdateApiHealthcheckSuccess implements Action {
-  readonly type = ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess;
-  constructor(public payload: { data: AvailabilityCheck }) { }
-}
+export const UpdateApiHealthcheckSuccess = createAction(
+  ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess,
+  props<{ payload: { data: AvailabilityCheck } }>()
+);
 
 /**
  * Triggered when no response from the API was received
  */
-export class UpdateApiHealthcheckFailure implements Action {
-  readonly type = ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure;
-  constructor(public payload: { error: any }) { }
-}
-
-export type ApiHealthcheckActions = UpdateApiHealthcheck        |
-                                    UpdateApiHealthcheckSuccess |
-                                    UpdateApiHealthcheckFailure;
+export const UpdateApiHealthcheckFailure = createAction(
+  ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure,
+  props<{ payload: { error: any } }>()
+);

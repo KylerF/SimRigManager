@@ -5,5 +5,6 @@
 export interface StateContainer<T=any> {
   state: T;
   error: string;
+  loading: boolean;
   lastUpdated: Date;
 }

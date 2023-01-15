@@ -70,11 +70,13 @@ if __name__ == "__main__":
     )
 
     websocket.enableTrace(True)
-    ws = websocket.WebSocketApp(f"ws://{args.host}:{args.port}/stream",
-                                on_open = on_open,
-                                on_message=on_message,
-                                on_error=on_error,
-                                on_close=on_close)
+    ws = websocket.WebSocketApp(
+        f"ws://{args.host}:{args.port}/stream",
+        on_open = on_open,
+        on_message=on_message,
+        on_error=on_error,
+        on_close=on_close
+    )
 
     atexit.register(save_data)
 

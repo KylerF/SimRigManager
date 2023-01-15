@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ipAddressValidatorFunction } from '../../directives/validators/ip-address-validator-function';
-import { ControllerService } from '../../services/controller.service';
-import { Controller } from '../../models/controller';
-import { Driver } from '../../models/driver';
+import { ipAddressValidatorFunction } from 'directives/validators/ip-address-validator-function';
+import { ControllerService } from 'services/controller.service';
+import { Controller } from 'models/controller';
+import { Driver } from 'models/driver';
+import { Store } from '@ngrx/store';
+import { State } from 'store/reducers';
+import { GetControllerSettings, UpdateControllerSettings } from 'store/actions/controller.actions';
 
 @Component({
   selector: 'app-controller-settings',
@@ -20,7 +23,7 @@ export class ControllerSettingsComponent implements OnInit {
   @Input() public controller: Controller;
   @Input() public activeDriver: Driver;
 
-  availableEffects: [string];
+  availableEffects: string[];
 
   connecting: boolean;
   ipValid: boolean;
@@ -41,7 +44,8 @@ export class ControllerSettingsComponent implements OnInit {
   constructor(
     private controllerService: ControllerService, // Used to edit controller settings
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: FormBuilder // Used to build the controller settings form
+    private formBuilder: UntypedFormBuilder, // Used to build the controller settings form
+    private store: Store<State>
   )
   { }
 
@@ -64,28 +68,24 @@ export class ControllerSettingsComponent implements OnInit {
    * Query current user settings for the controller
    */
   getControllerSettings() {
-    this.controllerService.getControllerSettings(this.controller, this.activeDriver).subscribe(
-      settings => {
-
-      },
-      error => {
-        this.error = error.message;
+    this.store.dispatch(GetControllerSettings({
+      payload: {
+        data: {
+          controller: this.controller,
+          driver: this.activeDriver
+        }
       }
-    )
+    }));
   }
 
   /**
    * Query available effects from provided controller
    */
   getAvailableEffects() {
-    this.controllerService.getControllerEffects(this.controller).subscribe(
-      effects => {
-        this.availableEffects = effects.sort();
-      },
-      error => {
-        this.error = error;
-      }
-    )
+    this.controllerService.getControllerState(this.controller).subscribe({
+      next: state => this.availableEffects = state.effects.sort(),
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -97,18 +97,16 @@ export class ControllerSettingsComponent implements OnInit {
     this.connecting = true;
     this.ipValid = null;
 
-    this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe(
-      response => {
-        // Connection succeeded
+    this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe({
+      next: controller => {
         this.connecting = false;
         this.ipValid = true;
       },
-      error => {
-        // Connection failed
+      error: error => {
         this.connecting = false;
         this.ipValid = false;
       }
-    );
+    });
   }
 
   /**
@@ -141,14 +139,9 @@ export class ControllerSettingsComponent implements OnInit {
       universe: this.controllerSettingsForm.get('universe').value
     };
 
-    this.controllerService.updateController(updatedController).subscribe(
-      response => {
-        this.activeModal.close(response);
-      },
-      error => {
-        this.error = error;
-      }
-    );
+    this.store.dispatch(UpdateControllerSettings({
+      controller: updatedController
+    }));
   }
 
   /**

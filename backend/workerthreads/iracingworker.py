@@ -1,11 +1,11 @@
 from redis.exceptions import ConnectionError
 from time import sleep
-from os import getenv
 import threading
-import redis
+import logging
 import math
 import json
 
+from api.utils import set_redis_key, get_active_driver_from_cache
 from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
 from database import crud, schemas
@@ -15,21 +15,18 @@ class IracingWorker(threading.Thread):
     Background worker to collect and log iRacing data, and send updates
     to WLED light controllers in response to changes
     '''
-    def __init__(self, queue_manager, logger, data_stream, controller, rpm_strip, framerate):
+    def __init__(self, data_stream, controller, rpm_strip, framerate):
         threading.Thread.__init__(self)
         self.threadID = 1
         self.name = 'iRacing Worker Thread'
         self.active = True
 
-        self.queue_manager = queue_manager
-        self.log = logger
         self.data_stream = data_stream
         self.controller = controller
         self.rpm_strip = rpm_strip
         self.framerate = framerate
 
-        # Set up Redis storage
-        self.redis_store = redis.Redis(host=getenv("REDIS_HOST", "127.0.0.1"), charset='utf-8', decode_responses=True)
+        self.log = logging.getLogger(__name__)
 
     def run(self):
         # Get the active driver and their track time
@@ -53,24 +50,18 @@ class IracingWorker(threading.Thread):
                 latest = self.data_stream.latest()
                 latest_raw = self.data_stream.latest(raw=True)
 
+                # Update Redis keys
+                set_redis_key('session_data', json.dumps(latest))
+                set_redis_key('session_data_raw', json.dumps(latest_raw))
+
                 # Check for updates from the API
-                updated_driver = self.queue_manager.get('active_driver')
-                pending_task = self.queue_manager.get('tasks')
-                
-                if updated_driver:
+                updated_driver = get_active_driver_from_cache()
+
+                if updated_driver != active_driver:
                     active_driver = updated_driver
                     track_time = updated_driver.trackTime
 
                     self.log.info('Setting active driver to ' + active_driver.name)
-
-                if pending_task == 'latest':
-                    self.queue_manager.put('iracing_data_latest', latest)
-                if pending_task == 'latest_raw':
-                    self.queue_manager.put('iracing_data_latest', latest_raw)
-                if pending_task == 'stream':
-                    self.queue_manager.put('iracing_data_stream', latest)
-                if pending_task == 'stream_raw':
-                    self.queue_manager.put('iracing_data_stream', latest_raw)
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0
@@ -128,11 +119,7 @@ class IracingWorker(threading.Thread):
                         new_laptime = crud.create_laptime(db, new_record)
 
                         # Update Redis key for streaming
-                        self.redis_store.set('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
-
-                # Update Redis keys
-                self.redis_store.set('session_data', json.dumps(latest))
-                self.redis_store.set('session_data_raw', json.dumps(latest_raw))
+                        set_redis_key('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
                         
                 self.log.debug(latest)
                 

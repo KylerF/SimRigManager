@@ -2,6 +2,7 @@ import * as quoteActions from '../actions/quote.actions';
 import { Quote } from 'models/quote';
 import { StateContainer } from 'models/state';
 import * as moment from 'moment';
+import { createReducer, on } from '@ngrx/store';
 
 export const quoteFeatureKey = 'quote';
 
@@ -11,59 +12,27 @@ export const initialState: StateContainer<Quote> = {
     text: '',
     by: ''
   },
-  error: '',
+  error: null,
+  loading: false,
   lastUpdated: null
 };
 
-export function reducer(
-  state = initialState,
-  action: quoteActions.QuoteActions
-): StateContainer<Quote> {
-  switch (action.type) {
-    case quoteActions.QuoteActionTypes.LoadQuoteSuccess:
-      return handleLoadQuoteSuccess(action);
-    case quoteActions.QuoteActionTypes.LoadQuoteFailure:
-      return handleLoadQuoteFailure(action);
-    default:
-      return state;
-  }
-}
-
-/**
- * A response from the API was received
- *
- * @param action load quote success action
- * @returns quote data
- */
- function handleLoadQuoteSuccess(
-   action: quoteActions.LoadQuoteSuccess
-  ): StateContainer<Quote> {
-  return {
-    state: {
-      id: action.payload.data.id,
-      text: action.payload.data.text,
-      by: action.payload.data.by
-    },
-    error: '',
+export const reducer = createReducer(
+  initialState,
+  on(quoteActions.LoadQuote, state => ({
+    ...state,
+    loading: true
+  })),
+  on(quoteActions.LoadQuoteSuccess, (state, action) => ({
+    state: action.payload.data,
+    error: null,
+    loading: false,
     lastUpdated: moment().toDate()
-  };
-}
-
-/**
- * No response from the API
- *
- * @returns a default quote
- */
-function handleLoadQuoteFailure(
-  action: quoteActions.LoadQuotesFailure
-): StateContainer<Quote> {
-  return {
-    state: {
-      id: 0,
-      text: '',
-      by: ''
-    },
+  })),
+  on(quoteActions.LoadQuoteFailure, (state, action) => ({
+    ...state,
     error: action.payload.error,
+    loading: false,
     lastUpdated: moment().toDate()
-  }
-}
+  }))
+);

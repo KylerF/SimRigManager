@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -33,7 +33,7 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             this.incidentCount = data.PlayerCarMyIncidentCount;
             let incidentLimit = data.WeekendInfo.WeekendOptions.IncidentLimit;
 

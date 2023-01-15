@@ -1,5 +1,5 @@
 {
-  "name": "mock-simrig-api",
+  "name": "simrig-mock-api",
   "version": "1.0.0",
   "description": "Provides a mock iRacing stream with recorded session data",
   "main": "src/server.js",
@@ -12,13 +12,14 @@
   "license": "ISC",
   "dependencies": {
     "@popperjs/core": "^2.11.5",
-    "bootstrap": "^5.1.3",
+    "bootstrap-dark-5": "^1.1.3",
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-rate-limit": "^6.0.1",
     "express-ws": "^5.0.2",
     "jquery": "^3.6.0",
+    "serve-favicon": "^2.5.0",
     "stream-json": "^1.7.3",
     "ws": "^8.2.3"
   }

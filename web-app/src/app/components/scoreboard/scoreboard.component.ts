@@ -1,10 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  State,
+  selectLaptimesForDriver,
+  selectLaptimesSince,
+  selectLaptimesState,
+  selectSortedLaptimes,
+  selectFilteredLaptimes
+} from 'store/reducers';
 
-import { LapTimeService } from 'services/lap-time.service';
 import { DriverService } from 'services/driver.service';
 import { LapTime } from 'models/lap-time';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import * as moment from 'moment';
+import { StateContainer } from 'src/app/models/state';
+import { LoadLaptimes, StreamLaptimes, StopStreamLaptimes } from 'src/app/store/actions/laptime.actions';
+import { DriverFilterType, LapTimeColumn, LapTimeFilterParams, SortOrder } from 'src/app/models/lap-time-filter-params';
 
 @Component({
   selector: 'app-scoreboard',
@@ -15,11 +26,14 @@ import { Subscription } from 'rxjs';
 /**
  * Component to render the scoreboard table
  */
-export class ScoreboardComponent implements OnInit {
+export class ScoreboardComponent implements OnInit, OnDestroy {
   lapTimes: LapTime[] = [];
   filteredLapTimes: LapTime[] = [];
 
-  newLapTimeStream: Subscription;
+  laptimesState$: Observable<StateContainer<LapTime[]>>;
+  filteredLaptimes$: Observable<LapTime[]>;
+
+  newLapTimeStream: Observable<LapTime>;
 
   showFilter = 'overall';
   timeFilter = 'forever';
@@ -33,37 +47,52 @@ export class ScoreboardComponent implements OnInit {
   error: any;
 
   constructor(
-    private lapTimeService: LapTimeService,
-    private driverService: DriverService
+    private driverService: DriverService,
+    private store: Store<State>
   )
   { }
 
   ngOnInit(): void {
-    // Get laptimes from server
+    // Get laptimes from the API
     this.getLapTimes();
+  }
+
+  ngOnDestroy(): void {
+    // Stop the new laptime stream
+    this.store.dispatch(StopStreamLaptimes());
   }
 
   /**
    * Fetch all lap times from the API
    */
   getLapTimes() {
-    this.lapTimeService.getLapTimes().subscribe(
-      response => {
-        // Success!
-        if (response.length) {
-          this.lapTimes = response;
-          this.filteredLapTimes = this.lapTimes;
-          this.showOverallBestTimes();
-          this.sortScores('setAt', 'desc');
-        }
+    // Get all lap times
+    this.store.dispatch(LoadLaptimes());
 
-        this.loading = false;
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error.message;
-        this.loading = false;
-      }
+    // And subscribe to new ones
+    this.store.dispatch(StreamLaptimes());
+
+    this.laptimesState$ = this.store.pipe(
+      select(
+        selectLaptimesState()
+      )
+    );
+    this.filteredLaptimes$ = this.store.pipe(
+      select(
+        selectFilteredLaptimes({
+          sortParams: {
+            sortBy: LapTimeColumn.SET_AT,
+            sortOrder: SortOrder.DESC
+          },
+          searchParams: [
+            {
+              searchKey: LapTimeColumn.CAR,
+              searchValue: 'car',
+            },
+          ],
+          showForDriverId: 1,
+        }),
+      )
     );
   }
 

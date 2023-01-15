@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
-import * as _ from 'lodash';
 import { APIHelper } from 'helpers/api-helper';
+import { isEmpty, keys } from 'lodash-es';
 
 @Component({
   selector: 'app-raw-data-display',
@@ -36,10 +36,10 @@ export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent imple
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             if (!this.allKeys) {
               // Get all keys from the first data frame
-              this.allKeys = _.keys(data).sort();
+              this.allKeys = keys(data).sort();
             }
 
             // Update the selected key

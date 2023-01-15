@@ -19,54 +19,39 @@
 const StreamArray = require('stream-json/streamers/StreamArray');
 const rateLimit = require('express-rate-limit').default;
 const expressWebSocket = require('express-ws');
+const favicon = require('serve-favicon');
 const express = require('express');
 const process = require('process');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-var wsConnections = [];
-var eventSourceConnections = [];
-var currentFrame = {};
-var stream;
-
-var options = {
+// Default configuration options
+var defaultOptions = {
   selectedFile: "default",
   streamDelay: 30
 };
+var options = defaultOptions;
 
-// Load config options from file
-fs.readFile('config.json', 'utf8', (error, data) => {
-  if (error) {
-    console.log('Using default config options');
-  } else {
-    try {
-      let config = JSON.parse(data);
-      verifyConfig(config);
-      options = config;
+// Lists of all connected clients
+var wsConnections = [];
+var eventSourceConnections = [];
 
-      fs.stat(`./src/data/${options.selectedFile}.json`, (err, stat) => {
-        if(err) {
-          console.error(`Unable to load selected file: ${err}`);
-          console.log('Using default file');
-          options.selectedFile = 'default';
-        }
-        stream = getFileStream(`./src/data/${options.selectedFile}.json`);
-      });
-    } catch (error) {
-      console.error(`There is an error in your configuration file: ${error}`);
-      console.log('Using default config options');
-    }
-  }
-});
+// Latest frame of iRacing data
+var currentFrame = {};
 
+// Used to stream data from a JSON file
+var fileStream;
+
+// Used to stream data to clients
 var jsonStream = StreamArray.withParser();
-const app = express();
 
+// Set up the express server
+const app = express();
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views')); 
-app.use('/css', express.static('node_modules/bootstrap/dist/css'));
-app.use('/js', express.static('node_modules/bootstrap/dist/js'));
+app.use('/css', express.static('node_modules/bootstrap-dark-5/dist/css'));
+app.use('/js', express.static('node_modules/bootstrap-dark-5/dist/js'));
 app.use('/js', express.static('node_modules/jquery/dist'));
 
 // Set up rate limiter: maximum of five requests per second
@@ -80,10 +65,38 @@ const limiter = rateLimit({
 // Apply rate limiter to all requests
 app.use(limiter);
 
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
+
+// Load config options from file
+fs.readFile('config.json', 'utf8', (error, data) => {
+  if (error) {
+    console.error(`Unable to load config options: ${error}`);
+    console.log('Using default config options');
+  } else {
+    try {
+      let config = JSON.parse(data);
+      verifyConfig(config);
+      options = config;
+
+      fs.stat(`./src/data/${options.selectedFile}.json`, (error, stat) => {
+        if(error) {
+          console.error(`Unable to load selected file: ${error}`);
+          console.log('Using default file');
+          options.selectedFile = 'default';
+        }
+        fileStream = getFileStream(`./src/data/${options.selectedFile}.json`);
+      });
+    } catch (error) {
+      console.error(`There is an error in your configuration file: ${error}`);
+      console.log('Using default config options');
+    }
+  }
+});
+
 // Save config options on exit
-process.on("SIGINT", saveConfigOptions);
-process.on("SIGTERM", saveConfigOptions);
-process.on("SIGHUP", saveConfigOptions);
+process.on("SIGINT", saveAndExit);
+process.on("SIGTERM", saveAndExit);
+process.on("SIGHUP", saveAndExit);
 
 /**
  * Root endpoint for the mock API.
@@ -158,8 +171,8 @@ app.get('/files/:file', (req, res) => {
       res.sendStatus(404);
     } else {
       options.selectedFile = sanitizedFile;
-      stream.destroy();
-      stream = getFileStream(filePath);
+      fileStream?.destroy();
+      fileStream = getFileStream(filePath);
       res.sendStatus(200);
     }
   });
@@ -187,20 +200,23 @@ app.ws('/iracing/stream', (ws) => {
 app.get('/iracing/stream', (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
+    'Cache-Control': 'no-store',
+    'Connection': 'keep-alive'
   });
   res.flushHeaders();
+
+  // Tell the client to retry connection every 5 seconds
+  res.write('retry: 5000\n\n');
 
   // Ping every 15 seconds
   setInterval(() => {
     res.write('event: ping\n');
-    res.write(`data: ${new Date().toISOString()}\n\n`);
-  }, 15000);
+    res.write(`data: {"time": ${new Date().toISOString()}}\n\n`);
+  }, 1000);
 
   eventSourceConnections.push(res);
 
-  stream.on('end', () => {
+  res.on('close', () => {
     eventSourceConnections = eventSourceConnections.filter(
       conn => conn !== res
     );
@@ -215,7 +231,16 @@ app.get('/iracing/stream', (req, res) => {
  * @param {integer} delay milliseconds to wait between frames
  */
 app.get('/delay/:delay', (req, res) => {
-  const delay = req.params.delay;
+  let delay = req.params.delay;
+
+  if (delay < 0) {
+    delay = 0;
+  }
+
+  if (delay > 1000) {
+    delay = 1000;
+  }
+
   options.streamDelay = delay;
 
   res.sendStatus(200);
@@ -254,7 +279,7 @@ function getFileStream(file) {
   });
 
   newStream.on('end', () => {
-    stream = getFileStream(file);
+    fileStream = getFileStream(file);
   });
 
   return newStream;
@@ -267,17 +292,30 @@ function getFileStream(file) {
  */
 async function slowDownStream(stream) {
   stream.pause();
-  await sleep(options.streamDelay);
-  stream.resume();
+
+  sleep(options.streamDelay).then(() => {
+    stream.resume();
+  })
+  .catch(error => {
+    console.log(
+      `Invalid delay value: ${error}`
+    );
+  });
 }
 
 /**
  * Blocking function to sleep for a given time
  * 
- * @param {int} ms time in milliseconds
+ * @param {int} ms time in milliseconds (max 1000)
  */
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(function (resolve, reject) {
+    if (ms < 0 || ms > 1000) {
+      reject('Delay value out of bounds (min 0, max 1000)');
+    } else {
+      setTimeout(resolve, ms);
+    }
+  });
 }
 
 /**
@@ -294,9 +332,9 @@ function verifyConfig(config) {
 }
 
 /**
- * Save configuration options to disk
+ * Save configuration options to disk and exit
  */
-function saveConfigOptions() {
+function saveAndExit() {
   try {
     fs.writeFileSync(
       './config.json',

@@ -1,7 +1,7 @@
-import * as QuoteActions from './quote.actions';
+import * as quoteActions from './quote.actions';
 
 describe('Quote', () => {
   it('should create an instance', () => {
-    expect(new QuoteActions.LoadQuote()).toBeTruthy();
+    expect(quoteActions.LoadQuote()).toBeTruthy();
   });
 });

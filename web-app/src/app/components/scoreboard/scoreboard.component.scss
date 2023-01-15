@@ -6,6 +6,10 @@ th {
   width: 350px;
 }
 
+cdk-virtual-scroll-viewport {
+  height: 600px;
+}
+
 @media screen and (min-width: 650px) {
   .reactive-font {
       font-size: 18px;
