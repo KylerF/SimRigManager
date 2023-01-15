@@ -27,10 +27,11 @@ const path = require('path');
 const fs = require('fs');
 
 // Default configuration options
-var options = {
+var defaultOptions = {
   selectedFile: "default",
   streamDelay: 30
 };
+var options = defaultOptions;
 
 // Lists of all connected clients
 var wsConnections = [];
@@ -231,6 +232,15 @@ app.get('/iracing/stream', (req, res) => {
  */
 app.get('/delay/:delay', (req, res) => {
   const delay = req.params.delay;
+
+  if (delay < 0) {
+    delay = 0;
+  }
+
+  if (delay > 1000) {
+    delay = 1000;
+  }
+
   options.streamDelay = delay;
 
   res.sendStatus(200);
@@ -282,8 +292,15 @@ function getFileStream(file) {
  */
 async function slowDownStream(stream) {
   stream.pause();
-  await sleep(options.streamDelay);
-  stream.resume();
+
+  sleep(options.streamDelay).then(() => {
+    stream.resume();
+  })
+  .catch(error => {
+    console.log(
+      `Invalid delay value: ${error}`
+    );
+  });
 }
 
 /**
@@ -293,8 +310,8 @@ async function slowDownStream(stream) {
  */
 function sleep(ms) {
   return new Promise(function (resolve, reject) {
-    if (ms > 1000) {
-      reject('No reason to sleep longer than 1 second');
+    if (ms < 0 || ms > 1000) {
+      reject('Delay value out of bounds (min 0, max 1000)');
     } else {
       setTimeout(resolve, ms);
     }
