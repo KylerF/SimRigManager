@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { isEmpty } from 'lodash-es';
 
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
