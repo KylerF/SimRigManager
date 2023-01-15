@@ -231,7 +231,7 @@ app.get('/iracing/stream', (req, res) => {
  * @param {integer} delay milliseconds to wait between frames
  */
 app.get('/delay/:delay', (req, res) => {
-  const delay = req.params.delay;
+  let delay = req.params.delay;
 
   if (delay < 0) {
     delay = 0;
