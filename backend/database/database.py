@@ -2,7 +2,6 @@
 Database setup via SQLAlchemy and convenience functions to connect and
 interact with it
 """
-
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

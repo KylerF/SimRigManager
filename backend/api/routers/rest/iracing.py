@@ -28,16 +28,29 @@ async def ws_stream_iracing_data(websocket: WebSocket, ws_connection_manager=Dep
     Stream current iRacing data over a websocket connection. 
     TODO Get framerate from user config.
     """
+    data = {}
+    sent_empty = False
+
     await ws_connection_manager.connect(websocket)
 
     try:
         while True:
-            websocket.receive_text()
-            
+            await websocket.receive_text()
+
             data = get_iracing_data(raw=True)
             
             if data:
+                # Only send if new data is available
                 await ws_connection_manager.send_json(data, websocket)
+                sent_empty = False
+            else:
+                # Send one empty frame to update the client
+                if not sent_empty:
+                    await ws_connection_manager.send_json({}, websocket)
+                    sent_empty = True
+
+                await asyncio.sleep(1)
+                continue
 
             await asyncio.sleep(0.03)
     except (

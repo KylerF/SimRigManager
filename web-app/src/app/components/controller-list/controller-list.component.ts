@@ -1,14 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { interval } from "rxjs/internal/observable/interval";
-import { startWith } from "rxjs/operators";
+import { Store } from '@ngrx/store';
+import { State, selectControllers } from 'store/reducers';
 
-import { ControllerSettingsComponent } from '../controller-settings/controller-settings.component';
-import { NewControllerComponent } from '../new-controller/new-controller.component';
+import { ControllerSettingsComponent } from 'components/controller-settings/controller-settings.component';
+import { NewControllerComponent } from 'components/new-controller/new-controller.component';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { Controller } from 'models/controller';
-import { Subscription } from 'rxjs';
+import { first, Observable, take } from 'rxjs';
+import { LoadControllers, DeleteController, StartStream } from 'store/actions/controller.actions';
+import { StateContainer } from 'models/state';
 
 @Component({
   selector: 'app-controller-list',
@@ -20,81 +22,53 @@ import { Subscription } from 'rxjs';
  * Component to list and configure WLED controllers
  */
 export class ControllerListComponent implements OnInit, OnDestroy {
-  controllers: Controller[] = [];
+  controllers$: Observable<StateContainer<Controller[]>>;
   loading: boolean = true;
   error: string;
-
-  wledPoller: Subscription;
-  pollingInterval = 10000; // ms
 
   constructor(
     private controllerService: ControllerService, // Used to query WLED light controllers
     private modalService: NgbModal, // Service to display and interface with modal dialogs
-    private driverService: DriverService
+    private driverService: DriverService,
+    private store: Store<State>
   ) { }
 
   // Poll controllers to update their status
   ngOnInit(): void {
-    this.getControllers()
-
-    this.wledPoller = interval(this.pollingInterval)
-      .pipe(
-        startWith(0)
-      )
-      .subscribe(_ => this.pollControllerStatus())
+    this.controllers$ = this.store.select(selectControllers);
+    this.getControllers();
+    this.startControllerUpdates();
   }
 
   /**
-   * Retrieve configured WLED controllers, along with the connection
-   * status of each
+   * Retrieve configured WLED controllers, and start updating their status
    */
   getControllers() {
-    this.controllerService.getControllers().subscribe(
-      controllers => {
-        // Success!
-        this.controllers = controllers;
-        this.loading = false;
+    this.store.dispatch(LoadControllers());
+  }
 
-        // Try to connect to each controller and get the state
-        controllers.forEach(controller => {
-          this.getControllerState(controller);
+  /**
+   * Connect to WLED controllers and start updating their status
+   */
+  startControllerUpdates() {
+    this.controllers$.pipe(
+      first(
+        controllers => controllers.state.some(
+          controller => controller.isAvailable == undefined
+        )
+      )
+    )
+    .subscribe({
+      next: controllers => {
+        controllers.state.forEach(controller => {
+          if (controller.isAvailable == undefined) {
+            this.controllerService.disconnectController(controller);
+            this.store.dispatch(StartStream({ controller: controller }));
+          }
         });
       },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
-        this.loading = false;
-      }
-    );
-  }
-
-  /**
-   * Poll all available controllers for status
-   */
-  pollControllerStatus() {
-    for(let controller of this.controllers) {
-      this.getControllerState(controller);
-    }
-  }
-
-  /**
-   * Get the state of a controller
-   *
-   * @param controller controller from which to retrieve data
-   */
-  getControllerState(controller: Controller) {
-    this.controllerService.getControllerState(controller).subscribe(
-      response => {
-        // Save the state
-        controller.state = response;
-        controller.isAvailable = true;
-      },
-      error => {
-        // Connection failed
-        controller.state = null;
-        controller.isAvailable = false;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**
@@ -103,68 +77,59 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * @param controller controller to toggle
    */
   togglePowerController(controller: Controller) {
-    this.controllerService.togglePowerController(controller).subscribe(
-      response => {
-        // Success! Update the state.
-        this.getControllerState(controller);
-      },
-      error => {
-        this.error = error.message;
-      }
-    );
+    this.controllerService.togglePowerController(controller);
   }
 
   /**
    * Delete a controller
    */
   deleteController(controller: Controller) {
-    this.controllerService.deleteController(controller).subscribe(
-      response => {
-        // Success! Update the controller list.
-        this.getControllers();
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error;
+    this.store.dispatch(DeleteController({
+      payload: {
+        data: controller
       }
-    );
+    }));
   }
 
   /**
    * Show the modal controller settings dialog
    */
   editController(controller: Controller) {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
-        modalRef.componentInstance.controller = controller;
-        modalRef.componentInstance.activeDriver = response;
+    this.driverService.getSelectedDriver().subscribe({
+      next: driver => {
+        const modalRef = this.modalService.open(
+          ControllerSettingsComponent,
+          { centered: true }
+        );
 
-        // Update controller in table after changes are made
-        modalRef.result.then((updatedController: Controller) => {
-          this.getControllers();
+        modalRef.componentInstance.controller = controller;
+        modalRef.componentInstance.activeDriver = driver;
+
+        modalRef.result.then(() => {
+          // Update controller state
+          this.startControllerUpdates();
         })
         .catch(_ => {
           // Cancelled
           {}
         });
       },
-      error => {
-        this.error = error.message;
-      }
-    )
+      error: error => this.error = error.message
+    });
   }
 
   /**
    * Show the modal add controller dialog
    */
   showAddControllerDialog() {
-    const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
+    const modalRef = this.modalService.open(
+      NewControllerComponent,
+      { centered: true }
+    );
 
-    // Add the new controller after successful creation
-    modalRef.result.then((newController) => {
-      this.controllers.push(newController);
-      this.getControllerState(newController)
+    modalRef.result.then(() => {
+      // Update controller state
+      this.startControllerUpdates();
     })
     .catch(_ => {
       // Cancelled
@@ -173,6 +138,16 @@ export class ControllerListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.wledPoller.unsubscribe();
+    this.controllers$.pipe(
+      take(1)
+    )
+    .subscribe({
+      next: controllers => {
+        controllers?.state.forEach(controller => {
+          this.controllerService.disconnectController(controller);
+        });
+      },
+      error: error => this.error = error.message
+    });
   }
 }

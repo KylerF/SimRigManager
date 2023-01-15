@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -28,7 +28,7 @@ export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent i
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             this.eventType = data.WeekendInfo.EventType;
             this.track = data.WeekendInfo.TrackDisplayName;
             this.config = data.WeekendInfo.TrackConfigName;

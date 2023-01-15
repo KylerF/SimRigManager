@@ -1,4 +1,4 @@
-<div *ngIf="!iracingDataAvailable" id="noData" class="pulse">
+<div *ngIf="!iracingDataAvailable" id="noData" class="center-vh pulse">
   <h1 class="display-3">
     Waiting for telemetry data
   </h1>
@@ -15,6 +15,7 @@
       <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
         <app-speedometer-display [keepAlive]="true"></app-speedometer-display>
       </div>
+    </div>
     <div class="col">
       <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
         <app-gear-indicator-display [keepAlive]="true"></app-gear-indicator-display>
@@ -102,6 +103,14 @@
     <div class="col">
       <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
         <app-car-display [keepAlive]="true"></app-car-display>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+        <app-position-display [keepAlive]="true"></app-position-display>
       </div>
     </div>
   </div>

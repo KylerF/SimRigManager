@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="./css/bootstrap.min.css">
-        <script src="./js/bootstrap.min.js"></script>
+        <meta name="description" content="SimRig Mock API home page">
+        <link rel="stylesheet" href="./css/bootstrap-dark.min.css">
+        <script src="./js/darkmode.min.js"></script>
         <script src="./js/jquery.min.js"></script>
         <title>SimRig Mock API</title>
     </head>
@@ -17,17 +18,17 @@
                     All the fake iRacing data you need to build cool stuff.
                     Provided in real-time via websockets, or over HTTP.
                     <p class="card-text">
-                        <h5>Endpoints</h5>
+                        <h2>Endpoints</h2>
                         <hr/>
                         <ul>
-                            <li>ws://{baseURL}/iracing/stream — websocket connection to stream iRacing data</li>
-                            <li><a href="/iracing/stream">http://{baseURL}/iracing/stream</a> - stream iRacing data via Server Sent Events</li>
-                            <li><a href="/iracing/latest">http://{baseURL}/iracing/latest</a> — returns the latest iRacing data</li>
-                            <li><a href="/files">http://{baseURL}/files</a> — returns a list of available files</li>
-                            <li>http://{baseURL}/files/{fileName} — selects the given file for streaming</li>
+                            <li>ws://{baseURL}/iracing/stream - websocket connection to stream iRacing data</li>
+                            <li><a href="/iracing/stream" target="_blank" rel="noopener">http://{baseURL}/iracing/stream</a> - stream iRacing data via Server Sent Events</li>
+                            <li><a href="/iracing/latest" target="_blank" rel="noopener">http://{baseURL}/iracing/latest</a> - returns the latest iRacing data</li>
+                            <li><a href="/files" target="_blank" rel="noopener">http://{baseURL}/files</a> - returns a list of available files</li>
+                            <li>http://{baseURL}/files/{fileName} - selects the given file for streaming</li>
                             <li>http://{baseURL}/delay/{ms} - sets the streaming delay between frames in milliseconds</li>
                         </ul>
-                        <h5>Controls</h5>
+                        <h2>Controls</h2>
                         <hr/>
                         <div class="form-group">
                             <label for="fileSelect">Data File</label>

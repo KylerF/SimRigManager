@@ -16,29 +16,21 @@ def get_iracing_data(raw=False):
     """
     Helper function to retrieve iRacing data from Redis
     """
-    redis_store = get_redis_store()
+    if raw:
+        return read_redis_key("session_data_raw")
 
-    data = {}
-
-    try:
-        if raw or raw == "true":
-            data = json.loads(redis_store.get("session_data_raw"))
-        else:
-            data = json.loads(redis_store.get("session_data_raw"))
-    except (redis.exceptions.ConnectionError, TypeError):
-        data = {}
-
-    return data
+    return read_redis_key("session_data")
 
 def get_active_driver_from_cache():
     """
     Get the active driver from cache.
     Tries the Redis cache first. If it is empty, check the database.
-    """
+    """    
     redis_store = get_redis_store()
 
     try:
-        active_driver = json.loads(redis_store.get("active_driver"))
+        active_driver_dict = json.loads(redis_store.get("active_driver"))
+        active_driver = schemas.Driver(**active_driver_dict)
     except (redis.exceptions.ConnectionError, TypeError):
         db = next(get_db())
         active_driver_object = crud.get_active_driver(db)
@@ -55,33 +47,62 @@ def update_driver_cache(driver):
     """
     Helper function to update the active driver in the Redis cache
     """
-    redis_store = get_redis_store()
+    return set_redis_key(
+        "active_driver",
+        schemas.Driver(**driver.__dict__).json()
+    )
 
-    try:
-        redis_store.set(
-            "active_driver", 
-            schemas.Driver(**driver.__dict__).json()
-        )
-        return True
-    except redis.exceptions.ConnectionError:
-        print("Could not connect to Redis server")
-        return False
+def get_session_best_lap():
+    """
+    Get the session best lap time from Redis
+    """
+    return read_redis_key("session_best_lap")
 
 def set_session_best_lap(laptime: models.LapTime):
     """
     Update the session best lap time for streaming
     """
+    return set_redis_key(
+        "session_best_lap",
+        schemas.LapTime(**laptime.__dict__).json()
+    )
+
+def read_redis_key(key):
+    """
+    Helper function to read data from Redis
+    """
     redis_store = get_redis_store()
 
     try:
-        redis_store.set(
-            "session_best_lap", 
-            schemas.LapTime(**laptime.__dict__).json()
-        )
+        return json.loads(redis_store.get(key))
+    except (redis.exceptions.ConnectionError):
+        print("Could not connect to Redis server")
+        return None
+    except (TypeError):
+        # Redis key does not exist
+        return None
+
+def subscribe_to_redis_key(key: str, callback):
+    redis_store = get_redis_store()
+    p = redis_store.pubsub()
+    p.psubscribe(key)
+
+    for msg in p.listen():
+        if msg['type'] == 'pmessage':
+            callback(json.loads(msg['data']))
+
+def set_redis_key(key, value):
+    """
+    Helper function to set data in Redis
+    """
+    redis_store = get_redis_store()
+
+    try:
+        redis_store.set(key, value)
+        return True
     except redis.exceptions.ConnectionError:
         print("Could not connect to Redis server")
-
-    return laptime
+        return False
 
 def get_redis_store():
     """

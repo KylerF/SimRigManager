@@ -3,12 +3,14 @@ from os import getenv
 import redis
 import json
 
+from api.utils import get_session_best_lap
+
 class SSEGenerators:
-    """
-    Factory method to get a new SSE generator function for a 
-    specific event
-    """
     def get_generator(request, event_type):
+        """
+        Factory method to get a new SSE generator function for a 
+        specific event
+        """
         if event_type == "laptimes":
             return GeneratorFunctions(request=request).new_lap_time_generator()
         if event_type == "active_driver":
@@ -37,16 +39,13 @@ class GeneratorFunctions:
         Send new lap times as they are set - used for a
         dynamic scoreboard
         """
-        last_time = {}
+        last_time = get_session_best_lap()
 
         while True:
             if await self.request.is_disconnected():
                 break
 
-            try:
-                lap_time = json.loads(self.redis_store.get("session_best_lap")) or {}
-            except (redis.exceptions.ConnectionError, TypeError):
-                lap_time = {}
+            lap_time = get_session_best_lap()
 
             if lap_time:
                 if not last_time or lap_time["id"] != last_time["id"]:
@@ -89,7 +88,7 @@ class GeneratorFunctions:
                 break
 
             try:
-                session_data = json.loads(self.redis_store.get("session_data")) or {}
+                session_data = json.loads(self.redis_store.get("session_data_raw")) or {}
             except (redis.exceptions.ConnectionError, TypeError):
                 session_data = {}
 

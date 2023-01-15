@@ -6,7 +6,7 @@
 #
 
 # Pull the Node.js Docker image
-FROM node:lts-alpine as base
+FROM node:lts-alpine as build
 
 # Install Chrome Headless for testing
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
@@ -26,7 +26,12 @@ WORKDIR /usr/src/web-app
 COPY package.json yarn.lock ./
 
 # Install dependencies from lockfile
-RUN yarn install --frozen-lockfile
+RUN apk add --no-cache --virtual .gyp \
+        python3 \
+        make \
+        g++ \
+    && yarn install --frozen-lockfile \
+    && apk del .gyp
 
 # Copy the generated modules and all other files to the container
 COPY . .
@@ -36,8 +41,8 @@ EXPOSE 4200
 
 # Run linting and tests
 RUN yarn run lint
-RUN yarn test
 RUN yarn run e2e
+RUN yarn test
 
 # Run the app using Angular cli
 CMD [ "yarn", "run", "start_lan" ]

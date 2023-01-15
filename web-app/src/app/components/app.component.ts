@@ -1,30 +1,28 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
-import { DriverService } from 'services/driver.service';
-import { APIHelper } from 'helpers/api-helper';
-import * as fromRoot from 'store/reducers';
-import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
+import { ActiveDriverGQL } from 'services/driver.service';
+import { State } from 'store/reducers';
+import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-
 export class AppComponent implements OnInit {
-  driverChangeSubscription: Subscription;
-
-  activeDriver: Driver;
+  activeDriver$: Observable<Driver>;
   avatarURL: string;
 
   error: string;
 
   constructor(
-    private store: Store<fromRoot.State>,
-    private driverService: DriverService
+    private store: Store<State>,
+    private activeDriverService: ActiveDriverGQL,
+    private notificationService: NotificationService
   ) { }
 
   /**
@@ -32,40 +30,30 @@ export class AppComponent implements OnInit {
    */
   ngOnInit() {
     this.pollAPIAvailable();
-    this.getSelectedDriver();
 
-    this.driverChangeSubscription = this.driverService.selectedDriver$
-       .subscribe(driver => this.updateDriverDisplay(driver));
+    this.activeDriver$ = this.activeDriverService.subscribe().pipe(
+      map(
+        result => result.data.activeDriver
+      )
+    );
+
+    this.activeDriver$.subscribe(
+      driver => {
+        this.notificationService.show(
+          `Signed in as ${driver.name}`,
+          {
+            autohide: true,
+            headertext: 'Notification'
+          }
+        );
+      }
+    )
   }
 
   /**
    * Start polling the API availability status and updating the store
    */
   pollAPIAvailable() {
-    this.store.dispatch(new apiHealthcheckActions.UpdateApiHealthcheck());
-  }
-
-  /**
-   * Update the active driver display in the toolbar when it is changed
-   */
-  updateDriverDisplay(driver) {
-    this.activeDriver = driver;
-    this.avatarURL = this.driverService.getAvatarURLForDriver(this.activeDriver);
-  }
-
-  /**
-   * Get the active driver
-   */
-  getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe(
-      response => {
-        // Success!
-        this.activeDriver = response;
-      },
-      error => {
-        // Failed. Save the response.
-        this.error = error.message;
-      }
-    );
+    this.store.dispatch(UpdateApiHealthcheck());
   }
 }

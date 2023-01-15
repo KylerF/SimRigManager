@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { delay, retryWhen, Subscription, tap } from 'rxjs';
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
-import * as _ from 'lodash';
+import { first, Subscription } from 'rxjs';
+import { isEmpty } from 'lodash-es';
 
 import { IracingDataService } from 'services/iracing-data.service';
 
@@ -16,15 +16,13 @@ import { IracingDataService } from 'services/iracing-data.service';
  */
 export class TelemetryDashboardComponent implements OnInit, OnDestroy {
   iracingDataSubscription: Subscription;
-  connected: boolean;
-
   error: string;
 
   /**
    * Get the current iRacing data status (true if data available, false otherwise)
    */
   get iracingDataAvailable() {
-    return this.connected && !this.error;
+    return this.iracingDataService.getConnectionStatus().pipe(first()) && !this.error;
   }
 
   /**
@@ -61,30 +59,15 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
     this.iracingDataService.startStream();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$
-      .pipe(
-        retryWhen(error => error.pipe(
-          tap(err => {
-            this.connected = false;
-            this.error = err.message;
-          }),
-          delay(3000)
-        ))
-      )
-      .subscribe(
-        response => {
-          this.connected = true;
-
-          if (_.isEmpty(response)) {
+      .subscribe({
+        next: data => {
+          if (isEmpty(data)) {
             this.error = 'No data available';
           } else {
             this.error = null;
           }
-        },
-        error => {
-          this.connected = false;
-          this.error = error.message;
         }
-      );
+      });
   }
 
   /**

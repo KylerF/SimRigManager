@@ -10,12 +10,10 @@ from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser
 import logging
-import atexit
 import sys
 
 from database.database import generate_database, engine
 from workerthreads.iracingworker import IracingWorker
-from messagequeue.queuemanager import QueueManager
 from raceparse.iracingstream import IracingStream
 from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
@@ -44,11 +42,6 @@ def main():
         'rpm_gauge_ip',
         fallback='127.0.0.1'
     )
-    universe = int(config.get(
-        'wled',
-        'rpm_gauge_universe',
-        fallback=1
-    ))
     led_count = int(config.get(
         'wled',
         'rpm_gauge_led_count',
@@ -78,7 +71,7 @@ def main():
     # Set up logging
     file_handler = RotatingFileHandler(
         'simriglights.log',
-        maxBytes=200000,
+        maxBytes=2097152,
         backupCount=5
     )
     stdout_handler = logging.StreamHandler(sys.stdout)
@@ -96,39 +89,22 @@ def main():
     try:
         _ = config['wled']['rpm_gauge_ip']
     except KeyError:
-        log.error('Unable to load config file - reverting to default settings')
+        log.error('Unable to load config file - using default settings')
 
     # Set the color theme for all displays
     color_theme = ColorTheme(primary_color, secondary_color)
 
     # Set up WLED controller, iRacing data stream and displays
     log.info('Connecting to WLED')
-    controller = Wled.connect(ip, universe)
+    controller = Wled.connect(ip, led_count)
 
     log.info('Connecting to iRacing')
     data_stream = IracingStream.get_stream()
 
     rpm_strip = RpmGauge(led_count, color_theme)
 
-    # Initialize communication queues between the API and worker threads
-    queue_manager = QueueManager()
-
-    # API sends updates to worker threads that need it
-    queue_manager.open_channel('active_driver')
-
-    # Pushes latest data from worker thread to REST API
-    queue_manager.open_channel('iracing_data_latest')
-
-    # Pushes a stream of data from worker thread to websocket API
-    queue_manager.open_channel('iracing_data_stream')
-
-    # Used to trigger worker threads to start a specific task
-    queue_manager.open_channel('tasks')
-
     # Kick off the iRacing worker thread
     iracing_worker = IracingWorker(
-        queue_manager,
-        log,
         data_stream,
         controller,
         rpm_strip,
@@ -136,18 +112,14 @@ def main():
     )
     iracing_worker.start()
 
-    # Clean up resources upon exit
-    atexit.register(iracing_worker.stop)
-    atexit.register(data_stream.stop)
-    atexit.register(controller.stop)
-    atexit.register(queue_manager.close_all)
-
     # Start the API on the main thread
-    api = APIServer(queue_manager, log)
+    api = APIServer()
     api.start()
 
     # If we're here, exit everything
     iracing_worker.stop()
+    data_stream.stop()
+    controller.stop()
 
 
 if __name__ == '__main__':

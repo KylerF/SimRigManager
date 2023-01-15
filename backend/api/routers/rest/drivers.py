@@ -61,6 +61,20 @@ async def delete_driver(driver_id: int):
 
     return result
 
+@router.post("/active", response_model=schemas.Driver)
+async def set_active_driver(driver: schemas.ActiveDriverCreate):
+    """
+    Select the active driver
+    """
+    db = next(get_db())
+    crud.delete_active_driver(db)
+    new_active_driver = crud.set_active_driver(db, driver)
+
+    # Update cache for worker threads
+    update_driver_cache(new_active_driver.driver)
+
+    return new_active_driver.driver
+
 @router.get("/active", response_model=schemas.Driver)
 async def get_active_driver():
     """

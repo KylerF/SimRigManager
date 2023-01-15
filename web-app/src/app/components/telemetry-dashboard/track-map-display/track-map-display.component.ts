@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -44,7 +44,7 @@ export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent impl
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             if (!this.startLapPctComplete) {
               // Get the lap percentage at startup - used to
               this.startLapPctComplete = data.LapDistPct;

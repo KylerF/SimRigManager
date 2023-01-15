@@ -1,5 +1,5 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from '../../base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -37,7 +37,7 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
     this.iracingDataSubscription = this.iracingDataService.latestData$
       .subscribe(
         data => {
-          if (!_.isEmpty(data)) {
+          if (!isEmpty(data)) {
             this.driverIndex = data.DriverInfo.DriverCarIdx;
 
             // Check if the car has changed, update the image accordingly
