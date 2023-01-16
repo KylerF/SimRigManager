@@ -10,6 +10,6 @@ module.exports = {
   },
 
   'should check heading contains text SimRig Manager': (browser: NightwatchBrowser) => {
-    browser.assert.containsText('h1', 'SimRig Manager');
+    browser.assert.textContains('h1', 'SimRig Manager');
   },
 };
