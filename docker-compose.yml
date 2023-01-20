@@ -1,12 +1,14 @@
 #
 # ~ Docker Compose Configuration ~
 # 
-# Creates and runs the backend API, web app and Redis server.
+# Creates the development environment with the backend API, mock API, web app
+# and Redis server
 #
 # Services are configured to run on the following ports:
 #   - 4200: Angular frontend application
 #   - 8000: FastAPI backend API
 #   - 8001: Mock API providing only static iRacing data
+#   - 6379: Redis server
 #
 # To run the application: docker-compose up
 #

@@ -138,7 +138,7 @@ class IracingWorker(threading.Thread):
             except ConnectionError:
                 self.log.error('Redis server refused connection')
             except Exception:
-                self.log.exception('Unhandled condition')
+                self.log.exception('Unhandled exception')
                 self.data_stream.stop()
 
     def stop(self):
