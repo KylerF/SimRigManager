@@ -1,6 +1,9 @@
 //
-// Global SASS variables.
+// Custom and Bootstrap SASS variables.
 // To import: @import 'src/variables.scss';
 //
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
 
 $navbar-height: 10;
