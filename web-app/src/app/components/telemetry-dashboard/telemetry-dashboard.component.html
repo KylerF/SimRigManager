@@ -9,6 +9,9 @@
     <div class="col">
       <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
         <app-wheel-display [keepAlive]="true"></app-wheel-display>
+        <div class="example-handle" cdkDragHandle>
+          <i class="drag-handle bi bi-arrows-move"></i>
+        </div>
       </div>
     </div>
     <div class="col">

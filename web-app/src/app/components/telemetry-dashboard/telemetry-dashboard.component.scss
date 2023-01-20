@@ -8,5 +8,14 @@
 .telemetry-component {
   width: fit-content;
   height: fit-content;
-  cursor: move;
+  resize: both;
+  overflow: auto;
+}
+
+.drag-handle {
+  cursor: grab;
+
+  &:hover {
+    color: $primary;
+  }
 }
