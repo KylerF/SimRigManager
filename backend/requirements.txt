@@ -2,7 +2,7 @@ strawberry-graphql[fastapi]==0.142.2
 uvicorn[standard]==0.17.6
 sqlalchemy_utils==0.39.0
 python-multipart==0.0.5
-sse-starlette==0.10.3
+sse-starlette==1.2.1
 sqlalchemy==1.4.46
 starlette==0.17.1
 fastapi==0.75.0
