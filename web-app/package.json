@@ -64,7 +64,7 @@
     "@types/jquery": "^3.5.14",
     "@types/lodash-es": "^4.17.6",
     "@types/nightwatch": "2.3.18",
-    "@types/node": "^17.0.23",
+    "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "chromedriver": "109.0.0",
