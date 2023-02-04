@@ -4,7 +4,9 @@ updates:
     directory: "/web-app"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 0 # Only security updates
   - package-ecosystem: "pip"
     directory: "/backend"
     schedule:
       interval: "daily"
+    open-pull-requests-limit: 0 # Only security updates
