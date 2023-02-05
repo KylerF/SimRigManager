@@ -10,7 +10,12 @@ from sqlalchemy import create_engine
 url = "sqlite:///./simrig.db"
 
 engine = create_engine(
-    url, connect_args={"check_same_thread": False}
+    url,
+    connect_args={
+        "check_same_thread": False
+    },
+    pool_size=10,
+    max_overflow=20
 )
 
 SessionLocal = sessionmaker(

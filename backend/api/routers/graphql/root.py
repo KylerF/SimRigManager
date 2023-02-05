@@ -1,10 +1,10 @@
-import asyncio
+from strawberry.fastapi import GraphQLRouter
 from typing import AsyncGenerator, List
 import strawberry
+import asyncio
 
-from strawberry.fastapi import GraphQLRouter
-
-from database import crud
+from api.utils import get_iracing_data, get_session_best_lap
+from api.helpers.modelhelpers import get_iracing_type
 from database.database import get_db
 from database.modeltypes import (
     DriverType,
@@ -12,8 +12,12 @@ from database.modeltypes import (
     QuoteType,
     IracingFrameType
 )
-from api.helpers.modelhelpers import get_iracing_type
-from api.utils import get_iracing_data, get_session_best_lap
+from database.crud import (
+    get_active_driver,
+    get_random_quote,
+    get_drivers,
+    get_laptimes,
+)
 
 
 @strawberry.type(
@@ -32,7 +36,7 @@ class Query:
     )
     def all_drivers(self) -> List[DriverType]:
         db = next(get_db())
-        all_drivers = crud.get_drivers(db)
+        all_drivers = get_drivers(db)
 
         return [
             DriverType.from_pydantic(driver)
@@ -44,7 +48,7 @@ class Query:
     )
     def active_driver(self) -> DriverType:
         db = next(get_db())
-        active_driver = crud.get_active_driver(db).driver
+        active_driver = get_active_driver(db).driver
 
         return DriverType.from_pydantic(active_driver)
 
@@ -53,7 +57,7 @@ class Query:
     )
     def all_laptimes(self, skip: int = 0, limit: int = -1) -> List[LapTimeType]:
         db = next(get_db())
-        all_laptimes = crud.get_laptimes(db, skip, limit)
+        all_laptimes = get_laptimes(db, skip, limit)
 
         return [
             LapTimeType.from_pydantic(laptime)
@@ -65,7 +69,7 @@ class Query:
     )
     def random_quote(self) -> QuoteType:
         db = next(get_db())
-        quote = crud.get_random_quote(db)
+        quote = get_random_quote(db)
 
         return QuoteType.from_pydantic(quote)
 
@@ -90,7 +94,7 @@ class Subscription:
         last_driver = None
 
         while True:
-            active_driver = crud.get_active_driver(db).driver
+            active_driver = get_active_driver(db).driver
 
             if not last_driver or active_driver.id != last_driver.id:
                 yield DriverType.from_pydantic(active_driver)
@@ -106,7 +110,7 @@ class Subscription:
         db = next(get_db())
 
         while True:
-            quote = crud.get_random_quote(db)
+            quote = get_random_quote(db)
 
             yield QuoteType.from_pydantic(quote)
 
@@ -145,7 +149,7 @@ class Subscription:
                     yield LapTimeType.from_pydantic(lap_time)
                     last_time = lap_time
 
-            await asyncio.sleep(self.update_period)
+            await asyncio.sleep(update_sec)
 
 
 schema = strawberry.Schema(query=Query, subscription=Subscription)
