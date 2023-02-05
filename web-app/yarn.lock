@@ -388,10 +388,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@apollo/client@^3.6.9":
-  version "3.7.5"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.7.5.tgz#d2ab6e284822296c9102ff57ab3a8dcbaa818052"
-  integrity sha512-HEAhX2n2Y8Y2BwRr0UdteT94OTM7pn64K5/rTk/oLIdg/h7R2d83LdsCGDxSH5sBiqDqlv9vou4xdyTxxRWj/g==
+"@apollo/client@^3.7.6":
+  version "3.7.6"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.7.6.tgz#fdc2ce3c440c7edda70fc02b0244a05128fef696"
+  integrity sha512-K0l8+wgcdVDjdgI8O2YuhX1CiQlavGuBp8HR/+PEbc2+jqM/BaVpL0g7YAuXrTW20np/MXHNRDxK20/ujF9hjA==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     "@wry/context" "^0.7.0"
@@ -6179,15 +6179,10 @@ jake@^10.8.5:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-jasmine-core@^4.1.0:
+jasmine-core@^4.1.0, jasmine-core@~4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-4.5.0.tgz#1a6bd0bde3f60996164311c88a0995d67ceda7c3"
   integrity sha512-9PMzyvhtocxb3aXJVOPqBDswdgyAeSB81QnLop4npOpbqnheaTEwPc9ZloQeVswugPManznQBjD8kWDTjlnHuw==
-
-jasmine-core@~4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-4.0.1.tgz#ea4b0495d82155023bd56c25181d9f9b623f61b8"
-  integrity sha512-w+JDABxQCkxbGGxg+a2hUVZyqUS2JKngvIyLGu/xiw2ZwgsoSB0iiecLQsQORSeaKQ6iGrCyWG86RfNDuoA7Lg==
 
 jasmine-spec-reporter@~7.0.0:
   version "7.0.0"
@@ -7141,10 +7136,10 @@ nightwatch-axe-verbose@^2.1.0:
   dependencies:
     axe-core "^4.6.3"
 
-nightwatch@2.6.10:
-  version "2.6.10"
-  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-2.6.10.tgz#eda82a6a0ff0002fdbeb9d160938d3c53a92dd88"
-  integrity sha512-nn5HVEtETLQ8qgu7APAZKg/yXTBkMflwdmzhfywP8mZUfKk0/dRQbeDqY2RawHr/sYsFmZV6eMirlJaaQoQ7Yw==
+nightwatch@2.6.11:
+  version "2.6.11"
+  resolved "https://registry.yarnpkg.com/nightwatch/-/nightwatch-2.6.11.tgz#ba36d13855b003b488b74f64b4ffd8d13a5d1807"
+  integrity sha512-HLi9gTgcxqlDWfgZ/jT1QP8g3SzjBMZlFNdiDm065dopXR95jvyIpjA0Js8MsWRYzSTkRLGZvPVk28dwGaGXcQ==
   dependencies:
     "@nightwatch/chai" "5.0.2"
     "@nightwatch/html-reporter-template" "0.1.4"
