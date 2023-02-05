@@ -4,16 +4,17 @@ from os import path
 import logging
 import json
 
-from database import schemas
+from api.routers.graphql.root import graphql_app
 from api.routers.rest import (
-    controllers, 
-    laptimes, 
-    avatars, 
-    drivers, 
+    controllers,
+    laptimes,
+    avatars,
+    drivers,
     iracing,
     quotes,
 )
-from api.routers.graphql.root import graphql_app
+from database import schemas
+
 
 class SimRigAPI:
     """
@@ -34,7 +35,7 @@ class SimRigAPI:
 
         # Set up the API
         self.api = FastAPI(
-            title="SimRig API", 
+            title="SimRig API",
             openapi_tags=tags_metadata
         )
 
@@ -49,8 +50,8 @@ class SimRigAPI:
 
         # Register root endpoint
         self.api.get(
-            "/", 
-            response_model=schemas.Availability, 
+            "/",
+            response_model=schemas.Availability,
             tags=["availability"]
         )(
             self.get_root
@@ -69,6 +70,6 @@ class SimRigAPI:
 
     async def get_root(self):
         """
-        Availability check 
+        Availability check
         """
         return {"active": True}

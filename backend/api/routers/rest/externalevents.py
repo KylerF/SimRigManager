@@ -12,6 +12,7 @@ router = APIRouter(
     tags=["events"]
 )
 
+
 @router.post("")
 async def notify_of_event(event):
     """

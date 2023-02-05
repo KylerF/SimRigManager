@@ -3,6 +3,7 @@ import uvicorn
 
 from api.simrigapi import SimRigAPI
 
+
 class APIServer:
     """
     Uvicorn server to run the API

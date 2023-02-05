@@ -4,6 +4,7 @@ from colour import Color
 from e131.exceptions import WledMaxPixelsExceeded
 from e131.wled import Wled
 
+
 class TestWled(unittest.TestCase):
     def setUp(self):
         self.wled = None
@@ -101,7 +102,7 @@ class TestWled(unittest.TestCase):
     def tearDown(self):
         if self.wled:
             self.wled.stop()
-        
+
         return super().tearDown()
 
 

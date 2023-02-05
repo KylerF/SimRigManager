@@ -25,8 +25,8 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Run linter
-#RUN pip install pycodestyle
-#RUN pycodestyle .
+RUN pip install pycodestyle
+RUN pycodestyle .
 
 # Run tests
 RUN pip install pytest

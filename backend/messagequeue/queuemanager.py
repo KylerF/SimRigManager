@@ -1,5 +1,6 @@
 from queue import Queue
 
+
 class QueueManager:
     """
     Handles communication channels between the API and worker threads
@@ -21,7 +22,7 @@ class QueueManager:
         """
         try:
             queue = self.channels[channel]
-        except(KeyError):
+        except (KeyError):
             return False
 
         queue.put(message)
@@ -39,12 +40,12 @@ class QueueManager:
         """
         try:
             queue = self.channels[channel]
-        except(KeyError):
+        except (KeyError):
             return None
-        
+
         if queue.empty():
             return None
-        
+
         return queue.get()
 
     def subscribe(self, channel, callback):
@@ -53,10 +54,10 @@ class QueueManager:
         """
         try:
             _ = self.channels[channel]
-        except(KeyError):
+        except (KeyError):
             return False
 
-        if not channel in self.subscribers:
+        if channel not in self.subscribers:
             self.subscribers[channel] = []
 
         self.subscribers[channel].append(callback)
@@ -69,7 +70,7 @@ class QueueManager:
         """
         try:
             queue = self.channels[channel]
-        except(KeyError):
+        except (KeyError):
             return False
 
         queue.queue.clear()
@@ -83,6 +84,6 @@ class QueueManager:
         """
         for channel in self.channels:
             self.channels[channel].queue.clear()
-        
+
         self.subscribers.clear()
         self.channels.clear()

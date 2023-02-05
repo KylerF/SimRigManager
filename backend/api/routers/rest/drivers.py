@@ -2,14 +2,22 @@ from sse_starlette.sse import EventSourceResponse
 from api.ssegenerators import SSEGenerators
 from starlette.responses import Response
 from starlette.status import HTTP_200_OK
+from collections import Counter
 from fastapi import APIRouter
 from fastapi import Request
 from typing import List
 
+
 from api.utils import update_driver_cache, get_active_driver_from_cache
 from database.database import get_db
-from database import crud, schemas
-from collections import Counter
+from database import crud
+from database.schemas import (
+    Driver,
+    DriverCreate,
+    DriverUpdate,
+    DriverStats,
+    ActiveDriverCreate
+)
 
 """
 Router to manage driver profiles, sign in and get driver stats
@@ -19,7 +27,8 @@ router = APIRouter(
     tags=["drivers"]
 )
 
-@router.get("", response_model=List[schemas.Driver])
+
+@router.get("", response_model=List[Driver])
 async def get_drivers(skip: int = 0, limit: int = -1):
     """
     Get all drivers
@@ -29,8 +38,9 @@ async def get_drivers(skip: int = 0, limit: int = -1):
 
     return drivers
 
-@router.post("", response_model=schemas.Driver)
-async def create_driver(driver: schemas.DriverCreate):
+
+@router.post("", response_model=Driver)
+async def create_driver(driver: DriverCreate):
     """
     Create a new driver
     """
@@ -39,8 +49,9 @@ async def create_driver(driver: schemas.DriverCreate):
 
     return new_driver
 
-@router.patch("", response_model=schemas.Driver)
-async def update_driver(driver: schemas.DriverUpdate):
+
+@router.patch("", response_model=Driver)
+async def update_driver(driver: DriverUpdate):
     """
     Update driver information
     """
@@ -51,7 +62,8 @@ async def update_driver(driver: schemas.DriverUpdate):
 
     return updated_driver
 
-@router.delete("/{driver_id}", response_model=schemas.Driver)
+
+@router.delete("/{driver_id}", response_model=Driver)
 async def delete_driver(driver_id: int):
     """
     Delete a driver
@@ -61,8 +73,9 @@ async def delete_driver(driver_id: int):
 
     return result
 
-@router.post("/active", response_model=schemas.Driver)
-async def set_active_driver(driver: schemas.ActiveDriverCreate):
+
+@router.post("/active", response_model=Driver)
+async def set_active_driver(driver: ActiveDriverCreate):
     """
     Select the active driver
     """
@@ -75,7 +88,8 @@ async def set_active_driver(driver: schemas.ActiveDriverCreate):
 
     return new_active_driver.driver
 
-@router.get("/active", response_model=schemas.Driver)
+
+@router.get("/active", response_model=Driver)
 async def get_active_driver():
     """
     Get the active driver, checking for a cached driver in the Redis
@@ -89,6 +103,7 @@ async def get_active_driver():
 
     return active_driver
 
+
 @router.get("/active/stream")
 async def stream_active_driver(request: Request):
     """
@@ -96,6 +111,7 @@ async def stream_active_driver(request: Request):
     """
     event_generator = SSEGenerators.get_generator(request, "active_driver")
     return EventSourceResponse(event_generator)
+
 
 @router.get("/{driver_id}/stats")
 async def get_driver_stats(driver_id: int):
@@ -109,18 +125,18 @@ async def get_driver_stats(driver_id: int):
     db = next(get_db())
     track_time = crud.get_driver_by_id(db, driver_id).trackTime
     laptimes = [
-        time for time in crud.get_laptimes(db) 
+        time for time in crud.get_laptimes(db)
         if time.driverId == driver_id
     ]
     records_held = len(laptimes)
     track_map = Counter(getattr(time, 'trackName') for time in laptimes)
     favorite_track = ""
-    
+
     if track_map:
         favorite_track = max(track_map, key=track_map.get)
 
-    return schemas.DriverStats(**{
-        "trackTime": track_time, 
-        "recordsHeld": records_held, 
+    return DriverStats(**{
+        "trackTime": track_time,
+        "recordsHeld": records_held,
         "favoriteTrack": favorite_track
     })

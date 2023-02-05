@@ -1,5 +1,6 @@
 from colour import Color
 
+
 class RpmGauge:
     """
     A dual LED rpm gauge - maps the car's RPM to a color gradient

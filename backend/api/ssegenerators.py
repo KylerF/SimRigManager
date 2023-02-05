@@ -5,10 +5,11 @@ import json
 
 from api.utils import get_session_best_lap
 
+
 class SSEGenerators:
     def get_generator(request, event_type):
         """
-        Factory method to get a new SSE generator function for a 
+        Factory method to get a new SSE generator function for a
         specific event
         """
         if event_type == "laptimes":
@@ -26,8 +27,8 @@ class GeneratorFunctions:
     def __init__(self, request):
         self.request = request
         self.redis_store = redis.Redis(
-            host=getenv("REDIS_HOST", "127.0.0.1"), 
-            charset="utf-8", 
+            host=getenv("REDIS_HOST", "127.0.0.1"),
+            charset="utf-8",
             decode_responses=True
         )
 

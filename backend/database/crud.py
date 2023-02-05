@@ -9,7 +9,7 @@ from typing import List
 from database import models, schemas
 
 
-#   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   # 
+#   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
 
 def get_driver_by_name(db: Session, name: str):
     """
@@ -69,7 +69,7 @@ def update_driver(db: Session, driver: schemas.DriverUpdate):
     if stored_driver is None:
         return None
 
-    # Update model from provided fields 
+    # Update model from provided fields
     for var, value in vars(driver).items():
         setattr(stored_driver, var, value) if value else None
 
@@ -131,6 +131,7 @@ def set_active_driver(db: Session, driver: schemas.ActiveDriverCreate):
 
     return db_driver
 
+
 def delete_active_driver(db: Session):
     """
     Deactivate the currently active driver
@@ -141,7 +142,9 @@ def delete_active_driver(db: Session):
 
     return stored_driver
 
-#   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   # 
+
+#   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   #
+
 
 def get_laptimes(db: Session, skip: int = 0, limit: int = -1) -> List[models.LapTime]:
     """
@@ -166,17 +169,17 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
         models.LapTime
     ).filter(
         models.LapTime.driverId == laptime.driverId,
-        models.LapTime.car == laptime.car, 
-        models.LapTime.trackName == laptime.trackName, 
-        models.LapTime.trackConfig == laptime.trackConfig, 
+        models.LapTime.car == laptime.car,
+        models.LapTime.trackName == laptime.trackName,
+        models.LapTime.trackConfig == laptime.trackConfig,
         models.LapTime.time <= laptime.time
     ).one_or_none()
 
     worse_time = db.query(models.LapTime).filter(
         models.LapTime.driverId == laptime.driverId,
-        models.LapTime.car == laptime.car, 
-        models.LapTime.trackName == laptime.trackName, 
-        models.LapTime.trackConfig == laptime.trackConfig, 
+        models.LapTime.car == laptime.car,
+        models.LapTime.trackName == laptime.trackName,
+        models.LapTime.trackConfig == laptime.trackConfig,
         models.LapTime.time > laptime.time
     ).one_or_none()
 
@@ -185,7 +188,7 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
         if worse_time:
             db.delete(worse_time)
             db.expire(worse_time)
-        
+
         db.add(db_laptime)
         db.commit()
         db.refresh(db_laptime)
@@ -194,7 +197,9 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
 
     return better_time
 
-#   #   #   #   #   #   #   #   Light Controllers  #   #   #   #   #   #   #   # 
+
+#   #   #   #   #   #   #   #   Light Controllers  #   #   #   #   #   #   #   #
+
 
 def get_light_controllers(db: Session, skip: int = 0, limit: int = -1):
     """
@@ -255,7 +260,7 @@ def update_light_controller(db: Session, controller: schemas.LightControllerUpda
     if stored_controller is None:
         return None
 
-    # Update model from provided fields 
+    # Update model from provided fields
     for var, value in vars(controller).items():
         setattr(stored_controller, var, value) if value else None
 
@@ -290,12 +295,15 @@ def get_controller_settings(db: Session, controller_id: int, driver_id: int):
     return db.query(
         models.LightControllerSettings
     ).filter(
-        models.LightControllerSettings.controllerId == controller_id, 
+        models.LightControllerSettings.controllerId == controller_id,
         models.LightControllerSettings.driverId == driver_id
     ).one_or_none()
 
 
-def create_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsCreate):
+def create_controller_settings(
+    db: Session,
+    controller_settings: schemas.LightControllerSettingsCreate
+):
     """
     Save a driver's settings for a light controller
     """
@@ -309,7 +317,11 @@ def create_controller_settings(db: Session, controller_settings: schemas.LightCo
 
     return db_controller_settings
 
-def update_controller_settings(db: Session, controller_settings: schemas.LightControllerSettingsUpdate):
+
+def update_controller_settings(
+    db: Session,
+    controller_settings: schemas.LightControllerSettingsUpdate
+):
     """
     Update a driver's settings for a light controller
     """
@@ -322,7 +334,7 @@ def update_controller_settings(db: Session, controller_settings: schemas.LightCo
     if stored_settings is None:
         return None
 
-    # Update model from provided fields 
+    # Update model from provided fields
     for var, value in vars(controller_settings).items():
         setattr(stored_settings, var, value) if value else None
 
@@ -331,6 +343,7 @@ def update_controller_settings(db: Session, controller_settings: schemas.LightCo
     db.refresh(stored_settings)
 
     return stored_settings
+
 
 def delete_controller_settings(db: Session, settings: schemas.LightControllerSettingsDelete):
     """
@@ -349,7 +362,9 @@ def delete_controller_settings(db: Session, settings: schemas.LightControllerSet
 
     return stored_settings
 
-#   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   # 
+
+#   #   #   #   #   #   #   #   Quotes  #   #   #   #   #   #   #   #
+
 
 def get_quotes(db: Session, skip: int = 0, limit: int = -1):
     """
@@ -388,11 +403,11 @@ def batch_create_quote(db: Session, quotes):
     """
     for quote in quotes:
         db_quote = models.Quote(
-            text=quote["text"], 
+            text=quote["text"],
             by=quote["by"]
         )
         db.add(db_quote)
-    
+
     db.commit()
 
     return quotes
@@ -412,7 +427,7 @@ def update_quote(db: Session, quote: schemas.QuoteUpdate):
     if stored_quote is None:
         return None
 
-    # Update model from provided fields 
+    # Update model from provided fields
     for var, value in vars(quote).items():
         setattr(stored_quote, var, value) if value else None
 

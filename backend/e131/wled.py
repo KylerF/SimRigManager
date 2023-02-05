@@ -4,6 +4,7 @@ import math
 from e131.sender_info import source
 from e131.exceptions import WledMaxPixelsExceeded
 
+
 class Wled:
     """
     WLED controller object to handle ACN communications and update
@@ -11,7 +12,6 @@ class Wled:
     """
     is_connected = False
     universes = 0
-
 
     @staticmethod
     def connect(ip, pixel_count):
@@ -70,7 +70,8 @@ class Wled:
 
         # Split data into universe chunks
         chunks = [
-            color_list[ i*170: (i*170)+170 ] for i in range(self.universes)
+            color_list[i*170: (i*170)+170]
+            for i in range(self.universes)
         ]
 
         universe = 1

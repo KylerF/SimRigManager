@@ -5,13 +5,14 @@ from database.database import get_db
 from database import crud, schemas
 
 """
-Router for paths related to inspirational driving quotes, providing CRUD 
+Router for paths related to inspirational driving quotes, providing CRUD
 functionality for quotes and an endpoint to get a random quote
 """
 router = APIRouter(
     prefix="/quotes",
     tags=["quotes"]
 )
+
 
 @router.get("", response_model=List[schemas.Quote])
 async def get_quotes(skip: int = 0, limit: int = -1):
@@ -23,6 +24,7 @@ async def get_quotes(skip: int = 0, limit: int = -1):
 
     return quotes
 
+
 @router.get("/random", response_model=schemas.Quote)
 async def get_random_quote():
     """
@@ -32,6 +34,7 @@ async def get_random_quote():
     quote = crud.get_random_quote(db)
 
     return quote
+
 
 @router.post("", response_model=schemas.Quote)
 async def create_quote(quote: schemas.QuoteCreate):
@@ -43,6 +46,7 @@ async def create_quote(quote: schemas.QuoteCreate):
 
     return new_quote
 
+
 @router.put("", response_model=schemas.Quote)
 async def update_quote(quote: schemas.Quote):
     """
@@ -53,6 +57,7 @@ async def update_quote(quote: schemas.Quote):
 
     return updated_quote
 
+
 @router.patch("", response_model=schemas.Quote)
 async def partial_update_quote(quote: schemas.QuoteUpdate):
     """
@@ -62,6 +67,7 @@ async def partial_update_quote(quote: schemas.QuoteUpdate):
     updated_quote = crud.update_quote(db, quote)
 
     return updated_quote
+
 
 @router.delete("", response_model=schemas.Quote)
 async def delete_quote(quote: schemas.QuoteDelete):

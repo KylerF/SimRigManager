@@ -9,6 +9,7 @@ from sqlalchemy.sql.sqltypes import Boolean
 
 from database.database import Base
 
+
 class Driver(Base):
     """
     A driver profile linked to track/lap times
@@ -22,23 +23,23 @@ class Driver(Base):
     profilePic = Column(String)
 
     laptimes = relationship(
-        "LapTime", 
-        back_populates="driver", 
-        cascade="all, delete, delete-orphan", 
+        "LapTime",
+        back_populates="driver",
+        cascade="all, delete, delete-orphan",
         lazy="subquery"
     )
 
     active = relationship(
-        "ActiveDriver", 
-        back_populates="driver", 
-        cascade="all, delete, delete-orphan", 
-        lazy="subquery" 
+        "ActiveDriver",
+        back_populates="driver",
+        cascade="all, delete, delete-orphan",
+        lazy="subquery"
     )
 
     lightControllerSettings = relationship(
-        "LightControllerSettings", 
-        back_populates="driver", 
-        cascade="all, delete, delete-orphan", 
+        "LightControllerSettings",
+        back_populates="driver",
+        cascade="all, delete, delete-orphan",
         lazy="subquery"
     )
 
@@ -55,8 +56,8 @@ class ActiveDriver(Base):
     driverId = Column(Integer, ForeignKey("drivers.id"))
 
     driver = relationship(
-        "Driver", 
-        back_populates="active", 
+        "Driver",
+        back_populates="active",
         lazy="subquery"
     )
 
@@ -64,7 +65,7 @@ class ActiveDriver(Base):
 class LapTime(Base):
     """
     A lap time entry. This is populated by the best_time feature from
-    the iRacing data stream. When a better time with the same track, 
+    the iRacing data stream. When a better time with the same track,
     config and car is entered, it replaces the previous best.
     """
     __tablename__ = "laptimes"
@@ -78,8 +79,8 @@ class LapTime(Base):
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
     driver = relationship(
-        "Driver", 
-        back_populates="laptimes", 
+        "Driver",
+        back_populates="laptimes",
         lazy="subquery"
     )
 
@@ -96,9 +97,9 @@ class LightController(Base):
     universe = Column(Integer, default=1)
 
     lightControllerSettings = relationship(
-        "LightControllerSettings", 
-        back_populates="lightController", 
-        cascade="all, delete, delete-orphan", 
+        "LightControllerSettings",
+        back_populates="lightController",
+        cascade="all, delete, delete-orphan",
         lazy="subquery"
     )
 
@@ -117,20 +118,20 @@ class LightControllerSettings(Base):
     idleEffectId = Column(Integer, default=1)
 
     driver = relationship(
-        "Driver", 
-        back_populates="lightControllerSettings", 
+        "Driver",
+        back_populates="lightControllerSettings",
         lazy="subquery"
     )
 
     lightController = relationship(
-        "LightController", 
-        back_populates="lightControllerSettings", 
+        "LightController",
+        back_populates="lightControllerSettings",
         lazy="subquery"
     )
 
     colorTheme = relationship(
-        "ColorTheme", 
-        back_populates="lightControllerSettings", 
+        "ColorTheme",
+        back_populates="lightControllerSettings",
         lazy="subquery"
     )
 
@@ -151,8 +152,8 @@ class ColorTheme(Base):
     secondaryColorB = Column(Integer)
 
     lightControllerSettings = relationship(
-        "LightControllerSettings", 
-        back_populates="colorTheme", 
+        "LightControllerSettings",
+        back_populates="colorTheme",
         lazy="subquery"
     )
 

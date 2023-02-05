@@ -1,3 +1,7 @@
+"""
+Common utility functions used throughout the API, namely access to the Redis
+cache for real-time iRacing data and active driver changes
+"""
 from os import getenv
 import redis
 import json
@@ -7,10 +11,6 @@ from database.database import get_db
 from database import schemas, crud
 from database import models
 
-"""
-Common utility functions used throughout the API, namely access to the Redis
-cache for real-time iRacing data and active driver changes
-"""
 
 def get_iracing_data(raw=False):
     """
@@ -21,11 +21,12 @@ def get_iracing_data(raw=False):
 
     return read_redis_key("session_data")
 
+
 def get_active_driver_from_cache():
     """
     Get the active driver from cache.
     Tries the Redis cache first. If it is empty, check the database.
-    """    
+    """
     redis_store = get_redis_store()
 
     try:
@@ -43,6 +44,7 @@ def get_active_driver_from_cache():
 
     return active_driver
 
+
 def update_driver_cache(driver):
     """
     Helper function to update the active driver in the Redis cache
@@ -52,11 +54,13 @@ def update_driver_cache(driver):
         schemas.Driver(**driver.__dict__).json()
     )
 
+
 def get_session_best_lap():
     """
     Get the session best lap time from Redis
     """
     return read_redis_key("session_best_lap")
+
 
 def set_session_best_lap(laptime: models.LapTime):
     """
@@ -66,6 +70,7 @@ def set_session_best_lap(laptime: models.LapTime):
         "session_best_lap",
         schemas.LapTime(**laptime.__dict__).json()
     )
+
 
 def read_redis_key(key):
     """
@@ -82,6 +87,7 @@ def read_redis_key(key):
         # Redis key does not exist
         return None
 
+
 def subscribe_to_redis_key(key: str, callback):
     redis_store = get_redis_store()
     p = redis_store.pubsub()
@@ -90,6 +96,7 @@ def subscribe_to_redis_key(key: str, callback):
     for msg in p.listen():
         if msg['type'] == 'pmessage':
             callback(json.loads(msg['data']))
+
 
 def set_redis_key(key, value):
     """
@@ -104,19 +111,21 @@ def set_redis_key(key, value):
         print("Could not connect to Redis server")
         return False
 
+
 def get_redis_store():
     """
     Get a connection to the Redis cache
     """
     return redis.Redis(
-        host=getenv("REDIS_HOST", "127.0.0.1"), 
-        charset="utf-8", 
+        host=getenv("REDIS_HOST", "127.0.0.1"),
+        charset="utf-8",
         decode_responses=True
     )
 
+
 def get_ws_manager():
     """
-    Used to pass a websocket manager object to routers 
+    Used to pass a websocket manager object to routers
     via dependency injection
     """
     return WebsocketConnectionManager()

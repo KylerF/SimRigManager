@@ -14,13 +14,14 @@ engine = create_engine(
 )
 
 SessionLocal = sessionmaker(
-    autocommit=False, 
+    autocommit=False,
     expire_on_commit=False,
-    autoflush=False, 
+    autoflush=False,
     bind=engine
 )
 
 Base = declarative_base()
+
 
 def get_db():
     """
@@ -32,6 +33,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 def generate_database():
     """

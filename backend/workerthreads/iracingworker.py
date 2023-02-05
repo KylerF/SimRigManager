@@ -10,6 +10,7 @@ from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
 from database import crud, schemas
 
+
 class IracingWorker(threading.Thread):
     '''
     Background worker to collect and log iRacing data, and send updates
@@ -65,12 +66,12 @@ class IracingWorker(threading.Thread):
 
                 if not self.data_stream.is_active or not latest['is_on_track']:
                     best_lap_time = 0
-                    
+
                     # Update the driver's track time
                     if active_driver and active_driver.trackTime < math.floor(track_time):
                         self.log.info('Updating track time for ' + active_driver.name)
                         active_driver = crud.update_driver(db, DriverUpdate(
-                            id=active_driver.id, 
+                            id=active_driver.id,
                             trackTime=track_time
                         ))
 
@@ -96,33 +97,38 @@ class IracingWorker(threading.Thread):
                 if self.rpm_strip.idle_rpm != latest['idle_rpm']:
                     self.rpm_strip.set_idle_rpm(latest['idle_rpm'])
                     self.log.debug('Setting idle RPM to new value: ' + str(latest['idle_rpm']))
-                    
+
                 # Get the RPM and update the light controller
                 self.rpm_strip.set_rpm(latest['rpm'])
                 self.controller.update(self.rpm_strip.to_color_list())
 
                 # Log the best lap time
-                if latest['best_lap_time'] > 0 and (best_lap_time == 0 or latest['best_lap_time'] < best_lap_time):
+                if latest['best_lap_time'] > 0 and (
+                    best_lap_time == 0 or latest['best_lap_time'] < best_lap_time
+                ):
                     best_lap_time = latest['best_lap_time']
 
                     if active_driver:
                         self.log.info('Setting new best lap time for ' + active_driver.name)
-                        
+
                         new_record = LapTimeCreate(
-                            car=latest['car_name'], 
-                            trackName=latest['track_name'], 
-                            trackConfig=latest['track_config'] or '', 
-                            time=latest['best_lap_time'], 
+                            car=latest['car_name'],
+                            trackName=latest['track_name'],
+                            trackConfig=latest['track_config'] or '',
+                            time=latest['best_lap_time'],
                             driverId=active_driver.id
                         )
 
                         new_laptime = crud.create_laptime(db, new_record)
 
                         # Update Redis key for streaming
-                        set_redis_key('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
-                        
+                        set_redis_key(
+                            'session_best_lap',
+                            schemas.LapTime(**new_laptime.__dict__).json()
+                        )
+
                 self.log.debug(latest)
-                
+
                 track_time += 1/self.framerate
 
                 sleep(1/self.framerate)

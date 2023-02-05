@@ -3,7 +3,17 @@ from fastapi.exceptions import HTTPException
 from typing import List
 
 from database.database import get_db
-from database import crud, schemas
+from database import crud
+from database.schemas import (
+    LightController,
+    LightControllerCreate,
+    LightControllerUpdate,
+    LightControllerDelete,
+    LightControllerSettings,
+    LightControllerSettingsCreate,
+    LightControllerSettingsUpdate,
+    LightControllerSettingsDelete
+)
 
 """
 Router to WLED light controller management endpoints
@@ -13,7 +23,8 @@ router = APIRouter(
     tags=["controllers"]
 )
 
-@router.get("", response_model=List[schemas.LightController])
+
+@router.get("", response_model=List[LightController])
 async def get_controllers(skip: int = 0, limit: int = -1):
     """
     Get all WLED light controllers
@@ -23,8 +34,9 @@ async def get_controllers(skip: int = 0, limit: int = -1):
 
     return controllers
 
-@router.post("", response_model=schemas.LightController)
-async def create_controller(controller: schemas.LightControllerCreate):
+
+@router.post("", response_model=LightController)
+async def create_controller(controller: LightControllerCreate):
     """
     Create a new WLED light controller
     """
@@ -40,8 +52,9 @@ async def create_controller(controller: schemas.LightControllerCreate):
 
     return new_controller
 
-@router.patch("", response_model=schemas.LightController)
-async def update_controller(controller: schemas.LightControllerUpdate):
+
+@router.patch("", response_model=LightController)
+async def update_controller(controller: LightControllerUpdate):
     """
     Update controller information
     """
@@ -50,8 +63,9 @@ async def update_controller(controller: schemas.LightControllerUpdate):
 
     return updated_controller
 
-@router.delete("", response_model=schemas.LightController)
-async def delete_controller(controller: schemas.LightControllerDelete):
+
+@router.delete("", response_model=LightController)
+async def delete_controller(controller: LightControllerDelete):
     """
     Delete a light controller
     """
@@ -60,7 +74,8 @@ async def delete_controller(controller: schemas.LightControllerDelete):
 
     return result
 
-@router.get("/settings", response_model=schemas.LightControllerSettings)
+
+@router.get("/settings", response_model=LightControllerSettings)
 async def get_controller_settings(controllerId: int, driverId: int):
     """
     Get controller settings linked to a driver profile
@@ -70,34 +85,40 @@ async def get_controller_settings(controllerId: int, driverId: int):
 
     return controller_settings
 
-@router.post("/settings", response_model=schemas.LightControllerSettings)
-async def create_controller_settings(controller_settings: schemas.LightControllerSettingsCreate):
+
+@router.post("/settings", response_model=LightControllerSettings)
+async def create_controller_settings(controller_settings: LightControllerSettingsCreate):
     """
     Create a settings profile for a light controller
     """
     db = next(get_db())
     new_controller_settings = crud.create_controller_settings(
-        db, 
+        db,
         controller_settings
     )
 
     return new_controller_settings
 
-@router.patch("/settings", response_model=schemas.LightControllerSettings)
-async def update_controller_settings(db, controller_settings: schemas.LightControllerSettingsUpdate):
+
+@router.patch("/settings", response_model=LightControllerSettings)
+async def update_controller_settings(
+    db,
+    controller_settings: LightControllerSettingsUpdate
+):
     """
     Update settings profile for a light controller
     """
     db = next(get_db())
     new_controller_settings = crud.update_controller_settings(
-        db, 
+        db,
         controller_settings
     )
 
     return new_controller_settings
 
-@router.delete("/settings", response_model=schemas.LightControllerSettings)
-async def delete_controller(settings: schemas.LightControllerSettingsDelete):
+
+@router.delete("/settings", response_model=LightControllerSettings)
+async def delete_controller(settings: LightControllerSettingsDelete):
     """
     Delete settings for a light controller
     """

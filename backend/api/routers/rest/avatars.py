@@ -20,12 +20,13 @@ router = APIRouter(
     tags=["avatars"]
 )
 
+
 @router.get("/{driver_id}")
-async def get_avatar(driver_id: int, width: Optional[int]=0, height: Optional[int]=0):
+async def get_avatar(driver_id: int, width: Optional[int] = 0, height: Optional[int] = 0):
     """
     Get a driver's profile picture.
     If width is provided, a square image with the width is returned.
-    If width and height are both provided, an image with those dimensions 
+    If width and height are both provided, an image with those dimensions
     is returned.
     If neither width nor height are provided, the original image is returned.
     """
@@ -39,14 +40,15 @@ async def get_avatar(driver_id: int, width: Optional[int]=0, height: Optional[in
 
     if not path.exists(avatar_path):
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
     return __create_image_response(avatar_path, width, height)
 
+
 @router.post("/{driver_id}")
-async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
+async def upload_avatar(driver_id: int, profile_pic: UploadFile = File(...)):
     """
     Upload a new driver profile picture
     """
@@ -54,13 +56,13 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
         file_location = __get_avatar_path(driver_id)
     except SecurityException:
         raise HTTPException(
-            status_code=400, 
+            status_code=400,
             detail=f"Invalid request for driver with id {driver_id}"
         )
 
     # Update driver profile with link to new avatar image
     data = {
-        "id": driver_id, 
+        "id": driver_id,
         "profilePic": f"/avatars/{driver_id}?{int(time()) * 1000}"
     }
     driver = schemas.DriverUpdate(**data)
@@ -70,7 +72,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
 
     if not updated_driver:
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"No driver found with id {driver_id}"
         )
 
@@ -86,6 +88,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile=File(...)):
         "image_url": data["profilePic"]
     }
 
+
 @router.delete("/{driver_id}")
 async def delete_avatar(driver_id: int):
     """
@@ -95,13 +98,13 @@ async def delete_avatar(driver_id: int):
         file_location = __get_avatar_path(driver_id)
     except SecurityException:
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"No avatar found for driver with id {driver_id}"
         )
 
     # Update driver profile to clear image URL
     data = {
-        "id": driver_id, 
+        "id": driver_id,
         "profilePic": ""
     }
     driver = schemas.DriverUpdate(**data)
@@ -111,7 +114,7 @@ async def delete_avatar(driver_id: int):
 
     if not updated_driver:
         raise HTTPException(
-            status_code=404, 
+            status_code=404,
             detail=f"No driver found with id {driver_id}"
         )
 
@@ -122,6 +125,7 @@ async def delete_avatar(driver_id: int):
     remove(file_location)
 
     return {"success": "Avatar image deleted successfully"}
+
 
 def __get_avatar_path(driver_id):
     """
@@ -137,7 +141,7 @@ def __get_avatar_path(driver_id):
         raise SecurityException("Unsafe file path requested")
 
     avatar_directory = path.join(
-        current_path, 
+        current_path,
         "userdata", "images"
     )
 
@@ -152,6 +156,7 @@ def __get_avatar_path(driver_id):
         f"{driver_id}-avatar.png"
     )
 
+
 def __create_image_response(image_path, width: Optional[int], height: Optional[int]):
     """
     Resize the given image and return either:
@@ -165,6 +170,7 @@ def __create_image_response(image_path, width: Optional[int], height: Optional[i
         )
 
     return FileResponse(image_path)
+
 
 def __resize_image_file(image_path, width: Optional[int], height: Optional[int]):
     """
@@ -193,6 +199,7 @@ def __resize_image_file(image_path, width: Optional[int], height: Optional[int])
         image.thumbnail((height, height), Image.ANTIALIAS)
 
     return __image_to_bytes(image, format)
+
 
 def __image_to_bytes(image, format="PNG"):
     """

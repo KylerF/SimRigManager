@@ -2,6 +2,7 @@ import unittest
 
 from database.models import *
 
+
 class TestModels(unittest.TestCase):
     """
     Unit tests for the QueueManager, used for communication between

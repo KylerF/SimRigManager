@@ -5,6 +5,7 @@ from database.database import get_db
 from database.models import Quote
 from database import crud
 
+
 def init_quotes():
     """
     Initialize the quotes table with JSON data

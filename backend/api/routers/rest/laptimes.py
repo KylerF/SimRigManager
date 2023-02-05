@@ -15,6 +15,7 @@ router = APIRouter(
     tags=["laptimes"]
 )
 
+
 @router.get("", response_model=List[schemas.LapTime])
 async def get_scores(skip: int = 0, limit: int = -1):
     """
@@ -24,6 +25,7 @@ async def get_scores(skip: int = 0, limit: int = -1):
     laptimes = crud.get_laptimes(db, skip=skip, limit=limit)
 
     return laptimes
+
 
 @router.post("", response_model=schemas.LapTime)
 async def create_score(laptime: schemas.LapTimeCreate):
@@ -37,6 +39,7 @@ async def create_score(laptime: schemas.LapTimeCreate):
     set_session_best_lap(new_laptime)
 
     return new_laptime
+
 
 @router.get("/stream", response_model=schemas.LapTime)
 async def stream_lap_times(request: Request):

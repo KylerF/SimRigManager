@@ -49,6 +49,7 @@ class DriverStats(BaseModel):
     recordsHeld: int
     favoriteTrack: str
 
+
 class ActiveDriverBase(BaseModel):
     driverId: int
 
