@@ -1,7 +1,7 @@
 #
 # Docker container configuration for the backend SimRig API.
 #
-# Pulls the Ubuntu base image, copies source files into the container, 
+# Pulls the base image, copies source files into the container, 
 # installs dependencies and runs the application.
 #
 
