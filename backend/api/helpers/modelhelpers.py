@@ -1,4 +1,4 @@
-from api.routers.graphql import modeltypes
+from database import modeltypes
 
 
 def get_iracing_type(frame: dict):

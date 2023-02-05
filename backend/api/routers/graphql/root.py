@@ -5,13 +5,8 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 
 from database import crud
-from database.models import (
-    Driver,
-    LapTime,
-    Quote
-)
 from database.database import get_db
-from api.routers.graphql.modeltypes import (
+from database.modeltypes import (
     DriverType,
     LapTimeType,
     QuoteType,
