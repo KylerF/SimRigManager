@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Request
 from sse_starlette.sse import EventSourceResponse
+from fastapi import APIRouter, Request
 from typing import List
 
 from api.ssegenerators import SSEGenerators
