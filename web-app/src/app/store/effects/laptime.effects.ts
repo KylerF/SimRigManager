@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { LapTimeService } from 'src/app/services/lap-time.service';
+import { LapTimeGQL, LapTimeService } from 'src/app/services/lap-time.service';
 import * as laptimeActions from 'store/actions/laptime.actions';
 import { catchError, map, mergeMap, of, takeUntil } from 'rxjs';
 
@@ -9,18 +9,19 @@ import { catchError, map, mergeMap, of, takeUntil } from 'rxjs';
 export class LaptimeEffects {
   constructor(
     private actions$: Actions,
-    private lapTimeService: LapTimeService
+    private lapTimeService: LapTimeService,
+    private lapTimeGQL: LapTimeGQL
   ) { }
 
   // Get all lap times
   loadLaptimes$ = createEffect(() => this.actions$.pipe(
     ofType(laptimeActions.LoadLaptimes),
-    mergeMap(() => this.lapTimeService.getLapTimes()
+    mergeMap(() => this.lapTimeGQL.fetch()
       .pipe(
         map(
-          laptimes => laptimeActions.LoadLaptimesSuccess({
+          response => laptimeActions.LoadLaptimesSuccess({
             payload: {
-              data: laptimes
+              data: response.data.allLaptimes
             }
           })
         ),

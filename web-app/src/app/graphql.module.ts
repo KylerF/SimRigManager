@@ -36,7 +36,9 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
 
   return {
     link,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      addTypename: false
+    }),
   }
 }
 

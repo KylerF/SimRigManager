@@ -18,7 +18,7 @@ interface Response {
   providedIn: 'root'
 })
 export class ActiveDriverGQL extends Subscription<Response> {
-  document = SUBSCRIBE_TO_ACTIVE_DRIVER
+  document = SUBSCRIBE_TO_ACTIVE_DRIVER;
 }
 
 /**

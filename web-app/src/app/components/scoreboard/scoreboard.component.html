@@ -79,7 +79,7 @@
           <div *ngIf="filteredLaptimes.length else noFiltered">
             <cdk-virtual-scroll-viewport [itemSize]="50">
               <table class="table table-bordered reactive-font">
-                <thead>
+                <thead id="scoreboardHeader">
                   <tr>
                     <th class="col-md-1" (click)="sortScores('driver', 'toggle')">
                       <div class="d-flex flex-nowrap">

@@ -5,7 +5,8 @@ import {
   selectLaptimesSince,
   selectLaptimesState,
   selectSortedLaptimes,
-  selectFilteredLaptimes
+  selectFilteredLaptimes,
+  selectAllLaptimes
 } from 'store/reducers';
 
 import { DriverService } from 'services/driver.service';
@@ -79,19 +80,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     );
     this.filteredLaptimes$ = this.store.pipe(
       select(
-        selectFilteredLaptimes({
-          sortParams: {
-            sortBy: LapTimeColumn.SET_AT,
-            sortOrder: SortOrder.DESC
-          },
-          searchParams: [
-            {
-              searchKey: LapTimeColumn.CAR,
-              searchValue: 'car',
-            },
-          ],
-          showForDriverId: 1,
-        }),
+        selectAllLaptimes()
       )
     );
   }

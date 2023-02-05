@@ -82,6 +82,13 @@ export const selectLaptimesState = () =>
       laptimeState
   );
 
+export const selectAllLaptimes = () =>
+  createSelector(
+    selectLaptimes,
+    (laptimeState: StateContainer<LapTime[]>) =>
+      laptimeState.state
+  );
+
 export const selectLaptimesForDriver = (driverId: number) =>
   createSelector(
     selectLaptimes,

@@ -13,7 +13,7 @@ from database.modeltypes import (
     IracingFrameType
 )
 from api.helpers.modelhelpers import get_iracing_type
-from api.utils import get_iracing_data
+from api.utils import get_iracing_data, get_session_best_lap
 
 
 @strawberry.type(
@@ -127,6 +127,25 @@ class Subscription:
                 await asyncio.sleep(1 / fps)
             else:
                 await asyncio.sleep(1)
+
+    @strawberry.subscription(
+        description="Subscribe to lap times"
+    )
+    async def laptime(self, update_sec: int = 5) -> AsyncGenerator[LapTimeType, None]:
+        last_time = get_session_best_lap()
+
+        while True:
+            if await self.request.is_disconnected():
+                break
+
+            lap_time = get_session_best_lap()
+
+            if lap_time:
+                if not last_time or lap_time["id"] != last_time["id"]:
+                    yield LapTimeType.from_pydantic(lap_time)
+                    last_time = lap_time
+
+            await asyncio.sleep(self.update_period)
 
 
 schema = strawberry.Schema(query=Query, subscription=Subscription)
