@@ -56,7 +56,7 @@ export const metaReducers: MetaReducer<State>[] = !environment.production ? [] :
 // Top-level state selectors
 export const selectAPIActive =
   (state: State) =>
-    state[fromApiHealthcheck.apiHealthcheckFeatureKey].state.active;
+    state[fromApiHealthcheck.apiHealthcheckFeatureKey].state.apiActive;
 
 export const selectQuote =
   (state: State) =>

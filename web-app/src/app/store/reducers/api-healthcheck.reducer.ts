@@ -8,7 +8,7 @@ export const apiHealthcheckFeatureKey = 'apiHealthcheck';
 
 export const initialState: StateContainer<AvailabilityCheck> = {
   state: {
-    active: false
+    apiActive: false
   },
   error: null,
   loading: false,

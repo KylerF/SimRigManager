@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 class Availability(BaseModel):
-    active: bool
+    apiActive: bool
 
 
 class DriverBase(BaseModel):

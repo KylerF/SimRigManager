@@ -5,13 +5,13 @@ import { catchError } from 'rxjs/operators';
 import { AvailabilityCheck } from 'models/availability-check';
 import { APIHelper } from 'helpers/api-helper';
 
-@Injectable({
-  providedIn: 'root'
-})
 
 /**
  * Service to check whether the API is available
  */
+@Injectable({
+  providedIn: 'root'
+})
 export class AvailabilityService {
   private endpoint = '';
 

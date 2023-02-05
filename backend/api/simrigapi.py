@@ -72,4 +72,6 @@ class SimRigAPI:
         """
         Availability check
         """
-        return {"active": True}
+        return {
+            "apiActive": True
+        }
