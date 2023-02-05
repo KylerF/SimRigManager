@@ -17,7 +17,7 @@ from api.routers.graphql.modeltypes import (
     QuoteType,
     IracingFrameType
 )
-from api.helpers.modelhelpers import get_valid_data, get_iracing_type
+from api.helpers.modelhelpers import get_iracing_type
 from api.utils import get_iracing_data
 
 
@@ -40,9 +40,8 @@ class Query:
         all_drivers = crud.get_drivers(db)
 
         return [
-            DriverType(
-                **get_valid_data(driver, Driver)
-            ) for driver in all_drivers
+            DriverType.from_pydantic(driver)
+            for driver in all_drivers
         ]
 
     @strawberry.field(
@@ -52,9 +51,7 @@ class Query:
         db = next(get_db())
         active_driver = crud.get_active_driver(db).driver
 
-        return DriverType(
-            **get_valid_data(active_driver, Driver)
-        )
+        return DriverType.from_pydantic(active_driver)
 
     @strawberry.field(
         description="Get all lap times"
@@ -64,9 +61,8 @@ class Query:
         all_laptimes = crud.get_laptimes(db)
 
         return [
-            LapTimeType(
-                **get_valid_data(laptime, LapTime)
-            ) for laptime in all_laptimes
+            LapTimeType.from_pydantic(laptime)
+            for laptime in all_laptimes
         ]
 
     @strawberry.field(
@@ -76,9 +72,7 @@ class Query:
         db = next(get_db())
         quote = crud.get_random_quote(db)
 
-        return QuoteType(
-            **get_valid_data(quote, Quote)
-        )
+        return QuoteType.from_pydantic(quote)
 
     @strawberry.field(
         description="Get the latest frame of iRacing data"
@@ -104,9 +98,7 @@ class Subscription:
             active_driver = crud.get_active_driver(db).driver
 
             if not last_driver or active_driver.id != last_driver.id:
-                yield DriverType(
-                    **get_valid_data(active_driver, Driver)
-                )
+                yield DriverType.from_pydantic(active_driver)
 
                 last_driver = active_driver
 
@@ -121,9 +113,7 @@ class Subscription:
         while True:
             quote = crud.get_random_quote(db)
 
-            yield QuoteType(
-                **get_valid_data(quote, Quote)
-            )
+            yield QuoteType.from_pydantic(quote)
 
             await asyncio.sleep(update_sec)
 
