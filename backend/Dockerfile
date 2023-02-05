@@ -6,7 +6,7 @@
 #
 
 # Pull the Python image
-FROM python:3.8-slim-buster
+FROM python:3.11.1-slim-buster
 
 # Create the source directory inside the container
 RUN mkdir -p /usr/src/backend
