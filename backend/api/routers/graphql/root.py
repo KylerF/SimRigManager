@@ -51,9 +51,9 @@ class Query:
     @strawberry.field(
         description="Get all lap times"
     )
-    def all_laptimes(self) -> List[LapTimeType]:
+    def all_laptimes(self, skip: int = 0, limit: int = -1) -> List[LapTimeType]:
         db = next(get_db())
-        all_laptimes = crud.get_laptimes(db)
+        all_laptimes = crud.get_laptimes(db, skip, limit)
 
         return [
             LapTimeType.from_pydantic(laptime)
