@@ -77,8 +77,8 @@ class Query:
         description="Get the latest frame of iRacing data"
     )
     def iracing(self) -> IracingFrameType:
-        frame = get_iracing_data(raw=True)
-        return get_iracing_type(frame)
+        frame = get_iracing_data()
+        return IracingFrameType.from_pydantic(frame)
 
 
 @strawberry.type(
@@ -124,10 +124,10 @@ class Subscription:
             raise ValueError("fps must be between 1 and 30")
 
         while True:
-            frame = get_iracing_data(raw=True)
+            frame = get_iracing_data()
 
             if frame:
-                yield get_iracing_type(frame)
+                yield IracingFrameType.from_pydantic(frame)
                 await asyncio.sleep(1 / fps)
             else:
                 await asyncio.sleep(1)
