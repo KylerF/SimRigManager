@@ -4,7 +4,6 @@ import strawberry
 import asyncio
 
 from api.utils import get_iracing_data, get_session_best_lap
-from api.helpers.modelhelpers import get_iracing_type
 from database.database import get_db
 from database.modeltypes import (
     DriverType,
