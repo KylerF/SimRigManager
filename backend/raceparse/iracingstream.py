@@ -3,6 +3,7 @@ import math
 
 from raceparse.yamlheaders import iracing_yaml_headers
 
+
 class IracingStream:
     """
     Collects and organizes data from iRacing
@@ -94,7 +95,7 @@ class IracingStream:
                 return
 
             try:
-                self.state.update ({
+                self.state.update({
                     "speed": math.floor(self.ir["Speed"]*2.236936),
                     "rpm": math.floor(self.ir["RPM"] if self.ir["RPM"] != 300.0 else 0),
                     "gear": self.ir["Gear"],
