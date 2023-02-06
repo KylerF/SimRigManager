@@ -18,7 +18,10 @@ def get_iracing_data():
     """
     session_data = read_redis_key("session_data")
 
-    return iracingschemas.IracingFrame(**session_data)
+    if session_data.get('SessionTime'):
+        return iracingschemas.IracingFrame(**session_data)
+
+    return {}
 
 
 def get_active_driver_from_cache():

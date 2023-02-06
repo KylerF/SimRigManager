@@ -1,21 +1,11 @@
 .profile-pic {
     cursor: pointer;
-    position:relative;
-    overflow:hidden;
-    padding-bottom:100%;
 
     &:hover {
         .upload-button {
             display: block;
         }
     }
-}
-
-.profile-pic img, svg{
-    position:absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 #profile-card {
@@ -29,8 +19,8 @@
 }
 
 .upload-button {
-    top: 76%;
-    left: 0%;
+    top: 50%;
+    left: 5%;
     position: absolute;
     display: none;
 }

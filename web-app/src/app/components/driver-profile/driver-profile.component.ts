@@ -20,7 +20,6 @@ import { Driver } from 'models/driver';
 export class DriverProfileComponent implements OnInit {
   driver: Driver;
   driverStats: DriverStats
-  avatarURL: string;
   editingProfile: boolean;
   profileUpdated: boolean;
   error: string;
@@ -43,7 +42,6 @@ export class DriverProfileComponent implements OnInit {
     this.driverService.getSelectedDriver().subscribe (
       response => {
         this.driver = response;
-        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.getDriverStats(this.driver.id);
       },
       error => {
@@ -86,7 +84,6 @@ export class DriverProfileComponent implements OnInit {
       next: response => {
         this.driver.profilePic = response.image_url;
         this.driverService.setCachedDriver(this.driver);
-        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
       error: error => this.error = error.message
@@ -108,7 +105,6 @@ export class DriverProfileComponent implements OnInit {
       next: response => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
-        this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
         this.profileUpdated = true;
       },
       error: error => this.error = error.message

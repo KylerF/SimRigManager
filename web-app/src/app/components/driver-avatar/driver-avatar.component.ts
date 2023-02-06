@@ -13,8 +13,11 @@ import { Driver } from 'models/driver';
  * Component to display a driver's avatar
  */
 export class DriverAvatarComponent implements OnInit, OnChanges {
+  // Driver to display the avatar for
   @Input() driver: Driver;
-  @Input() maxWidth;
+
+  // Size of the avatar (small, medium, large)
+  @Input() size: string;
 
   avatarURL: string;
 
@@ -30,7 +33,11 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
    * Update the avatar URL when the driver changes
    */
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.driver.currentValue !== changes.driver.previousValue) {
+    const driverChange = changes.driver;
+    const currentProfilePic = driverChange.currentValue?.profilePic;
+    const previousProfilePic = driverChange.previousValue?.profilePic;
+
+    if (currentProfilePic && currentProfilePic !== previousProfilePic) {
       this.setAvatarURL();
     }
   }
@@ -41,6 +48,7 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
   setAvatarURL() {
     if (this.driver) {
       this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
+      console.log(this.avatarURL)
     }
   }
 }

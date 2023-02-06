@@ -1,5 +1,24 @@
 #avatar {
-    max-width: 19px;
+  display: inline-block;
+
+  .small {
+    width: 19px;
     height: 19px;
-    background-color: white;
+  }
+
+  .medium {
+    width: 150px;
+    height: 150px;
+  }
+
+  .large {
+    width: 350px;
+    height: 350px;
+  }
+
+  img, svg{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }

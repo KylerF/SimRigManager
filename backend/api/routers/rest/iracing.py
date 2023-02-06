@@ -44,7 +44,7 @@ async def ws_stream_iracing_data(
 
             data = get_iracing_data()
 
-            if data:
+            if data.SessionTime:
                 # Only send if new data is available
                 await ws_connection_manager.send_json(data, websocket)
                 sent_empty = False
