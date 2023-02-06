@@ -16,7 +16,7 @@ from database.crud import (
     get_random_quote,
     get_drivers,
     get_laptimes,
-)
+ )
 
 
 @strawberry.type(
