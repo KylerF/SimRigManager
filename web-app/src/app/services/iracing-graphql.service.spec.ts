@@ -17,9 +17,14 @@ describe('IracingDataGQLWeekendInfo', () => {
     controller = TestBed.inject(ApolloTestingController);
   });
 
-  it('should be created', inject([IracingDataGQLWeekendInfo], (service: IracingDataGQLWeekendInfo) => {
-    expect(service).toBeTruthy();
-  }));
+  it(
+    'should be created',
+    inject([IracingDataGQLWeekendInfo],
+      (service: IracingDataGQLWeekendInfo) => {
+        expect(service).toBeTruthy();
+      }
+    )
+  );
 
   afterEach(() => {
     controller.verify();

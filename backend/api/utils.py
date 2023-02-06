@@ -8,18 +8,17 @@ import json
 
 from api.wsconnectionmanager import WebsocketConnectionManager
 from database.database import get_db
-from database import schemas, crud
+from database import schemas, iracingschemas, crud
 from database import models
 
 
-def get_iracing_data(raw=False):
+def get_iracing_data():
     """
     Helper function to retrieve iRacing data from Redis
     """
-    if raw:
-        return read_redis_key("session_data_raw")
+    session_data = read_redis_key("session_data")
 
-    return read_redis_key("session_data")
+    return iracingschemas.IracingFrame(**session_data)
 
 
 def get_active_driver_from_cache():

@@ -3,7 +3,7 @@ from os import getenv
 import redis
 import json
 
-from api.utils import get_session_best_lap
+from api.utils import get_iracing_data, get_session_best_lap
 
 
 class SSEGenerators:
@@ -89,12 +89,12 @@ class GeneratorFunctions:
                 break
 
             try:
-                session_data = json.loads(self.redis_store.get("session_data_raw")) or {}
+                session_data = get_iracing_data()
             except (redis.exceptions.ConnectionError, TypeError):
                 session_data = {}
 
             if session_data or not started:
-                yield json.dumps(session_data)
+                yield session_data
                 started = True
 
             await sleep(self.update_period)

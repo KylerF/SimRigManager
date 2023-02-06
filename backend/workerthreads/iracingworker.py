@@ -10,7 +10,6 @@ from database.schemas import DriverUpdate, LapTimeCreate
 from database.database import get_db
 from database import crud, schemas
 
-
 class IracingWorker(threading.Thread):
     '''
     Background worker to collect and log iRacing data, and send updates
@@ -52,8 +51,7 @@ class IracingWorker(threading.Thread):
                 latest_raw = self.data_stream.latest(raw=True)
 
                 # Update Redis keys
-                set_redis_key('session_data', json.dumps(latest))
-                set_redis_key('session_data_raw', json.dumps(latest_raw))
+                set_redis_key('session_data', json.dumps(latest_raw))
 
                 # Check for updates from the API
                 updated_driver = get_active_driver_from_cache()
@@ -103,9 +101,7 @@ class IracingWorker(threading.Thread):
                 self.controller.update(self.rpm_strip.to_color_list())
 
                 # Log the best lap time
-                if latest['best_lap_time'] > 0 and (
-                    best_lap_time == 0 or latest['best_lap_time'] < best_lap_time
-                ):
+                if latest['best_lap_time'] > 0 and (best_lap_time == 0 or latest['best_lap_time'] < best_lap_time):
                     best_lap_time = latest['best_lap_time']
 
                     if active_driver:
@@ -122,10 +118,7 @@ class IracingWorker(threading.Thread):
                         new_laptime = crud.create_laptime(db, new_record)
 
                         # Update Redis key for streaming
-                        set_redis_key(
-                            'session_best_lap',
-                            schemas.LapTime(**new_laptime.__dict__).json()
-                        )
+                        set_redis_key('session_best_lap', schemas.LapTime(**new_laptime.__dict__).json())
 
                 self.log.debug(latest)
 

@@ -16,11 +16,11 @@ router = APIRouter(
 
 
 @router.get("/latest")
-async def get_latest(raw=False):
+async def get_latest():
     """
     Get a snapshot of the latest iRacing data
     """
-    return get_iracing_data(raw=raw)
+    return get_iracing_data()
 
 
 # Websockets do not pick up the prefix for some reason
@@ -42,7 +42,7 @@ async def ws_stream_iracing_data(
         while True:
             await websocket.receive_text()
 
-            data = get_iracing_data(raw=True)
+            data = get_iracing_data()
 
             if data:
                 # Only send if new data is available
