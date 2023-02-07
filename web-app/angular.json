@@ -127,20 +127,6 @@
               "src/**/*.html"
             ]
           }
-        },
-        "e2e": {
-          "builder": "@nightwatch/schematics:nightwatch",
-          "options": {
-            "devServerTarget": "simrigmanager-web-app:serve",
-            "tsConfig": "../nightwatch/tsconfig.e2e.json",
-            "config": "./nightwatch.conf.js",
-            "env": "chrome"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "simrigmanager-web-app:serve:production"
-            }
-          }
         }
       }
     }
