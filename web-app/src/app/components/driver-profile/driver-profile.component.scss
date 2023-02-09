@@ -1,30 +1,30 @@
 .profile-pic {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover {
-        .upload-button {
-            display: block;
-        }
+  &:hover {
+    .upload-button {
+        display: block;
     }
+  }
 }
 
 #profile-card {
-    min-width: 350px;
-    max-width: 400px;
+  min-width: 350px;
+  max-width: 400px;
 }
 
 #stats {
-    flex-grow: 1;
-    min-width: 350px;
+  flex-grow: 1;
+  min-width: 350px;
 }
 
 .upload-button {
-    top: 50%;
-    left: 5%;
-    position: absolute;
-    display: none;
+  top: 50%;
+  left: 5%;
+  position: absolute;
+  display: none;
 }
 
 .file-input {
-    display: none;
+  display: none;
 }

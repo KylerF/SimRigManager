@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 import { DriverService } from 'src/app/services/driver.service';
 import { Driver } from 'models/driver';
@@ -22,8 +22,8 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
   avatarURL: string;
 
   constructor(
-    private driverService: DriverService
-  ) { }
+    private driverService: DriverService,
+  ) {}
 
   ngOnInit(): void {
     this.setAvatarURL();
@@ -32,14 +32,8 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
   /**
    * Update the avatar URL when the driver changes
    */
-  ngOnChanges(changes: SimpleChanges) {
-    const driverChange = changes.driver;
-    const currentProfilePic = driverChange.currentValue?.profilePic;
-    const previousProfilePic = driverChange.previousValue?.profilePic;
-
-    if (currentProfilePic && currentProfilePic !== previousProfilePic) {
-      this.setAvatarURL();
-    }
+  ngOnChanges() {
+    this.setAvatarURL();
   }
 
   /**
@@ -48,7 +42,6 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
   setAvatarURL() {
     if (this.driver) {
       this.avatarURL = this.driverService.getAvatarURLForDriver(this.driver);
-      console.log(this.avatarURL)
     }
   }
 }

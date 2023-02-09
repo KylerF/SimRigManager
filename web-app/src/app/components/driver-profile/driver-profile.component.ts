@@ -82,7 +82,9 @@ export class DriverProfileComponent implements OnInit {
 
     this.driverService.uploadProfilePic(this.driver.id, file).subscribe({
       next: response => {
-        this.driver.profilePic = response.image_url;
+        let updatedDriver = this.driver;
+        updatedDriver.profilePic = response.image_url;
+        this.driver = {...updatedDriver};
         this.driverService.setCachedDriver(this.driver);
         this.profileUpdated = true;
       },
