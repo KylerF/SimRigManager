@@ -23,3 +23,15 @@ export const GET_ACTIVE_DRIVER = gql`
     }
   }
 `
+
+export const GET_ALL_DRIVERS = gql`
+  query allDrivers {
+    allDrivers {
+      id
+      name
+      nickname
+      trackTime
+      profilePic
+    }
+  }
+`

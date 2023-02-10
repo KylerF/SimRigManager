@@ -7,10 +7,24 @@ export const loadActiveDriver = createAction(
 
 export const loadActiveDriverSuccess = createAction(
   '[LoadActiveDriver] Load Active Driver Success',
-  props<{ data: any }>()
+  props<{ data: Driver }>()
 );
 
 export const loadActiveDriverFailure = createAction(
+  '[LoadActiveDriver] Load Active Driver Failure',
+  props<{ error: any }>()
+);
+
+export const loadAllDrivers = createAction(
+  '[LoadDrivers] Load All Drivers'
+);
+
+export const loadAllDriversSuccess = createAction(
+  '[LoadDrivers] Load All Drivers Success',
+  props<{ data: Driver[] }>()
+);
+
+export const loadAllDriversFailure = createAction(
   '[LoadActiveDriver] Load Active Driver Failure',
   props<{ error: any }>()
 );
