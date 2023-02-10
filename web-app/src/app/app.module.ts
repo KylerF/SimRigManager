@@ -60,6 +60,7 @@ import { PositionDisplayComponent } from 'components/telemetry-dashboard/positio
 import { FuelLevelDisplayComponent } from 'components/telemetry-dashboard/fuel-level-display/fuel-level-display.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NotificationComponent } from 'components/notification/notification.component';
+import { DriverEffects } from './store/effects/driver.effects';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -131,7 +132,8 @@ const routes: Routes = [
       ApiHealthcheckEffects,
       QuoteEffects,
       ControllerEffects,
-      LaptimeEffects
+      LaptimeEffects,
+      DriverEffects
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

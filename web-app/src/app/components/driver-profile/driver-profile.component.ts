@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 
 import { DeleteDriverComponent } from 'components/delete-driver/delete-driver.component';
 import { DriverService } from 'services/driver.service';
 import { DriverStats } from 'models/driver-stats';
 import { Driver } from 'models/driver';
+import { selectActiveDriver, State } from 'store/reducers';
+import * as driverActions from 'store/actions/driver.actions';
 
 @Component({
   selector: 'app-driver-profile',
@@ -27,7 +30,8 @@ export class DriverProfileComponent implements OnInit {
   constructor(
     private driverService: DriverService,
     private modalService: NgbModal,
-    private router: Router
+    private store: Store<State>,
+    private router: Router,
   )
   { }
 
@@ -39,15 +43,16 @@ export class DriverProfileComponent implements OnInit {
    * Get the active driver to show their profile details
    */
   getActiveDriver() {
-    this.driverService.getSelectedDriver().subscribe (
-      response => {
-        this.driver = response;
-        this.getDriverStats(this.driver.id);
-      },
-      error => {
-        this.error = error.message;
+    this.store.select(selectActiveDriver).subscribe({
+      next: driver => {
+        if (driver == null) {
+          return;
+        }
+
+        this.driver = {...driver};
+        this.getDriverStats(driver?.id);
       }
-    )
+    });
   }
 
   /**
@@ -80,16 +85,10 @@ export class DriverProfileComponent implements OnInit {
       return;
     }
 
-    this.driverService.uploadProfilePic(this.driver.id, file).subscribe({
-      next: response => {
-        let updatedDriver = this.driver;
-        updatedDriver.profilePic = response.image_url;
-        this.driver = {...updatedDriver};
-        this.driverService.setCachedDriver(this.driver);
-        this.profileUpdated = true;
-      },
-      error: error => this.error = error.message
-    });
+    this.store.dispatch(driverActions.uploadDriverAvatar({
+      driver: this.driver,
+      file: file
+    }));
   }
 
   /**

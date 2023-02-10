@@ -5,19 +5,19 @@ import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
 import { SUBSCRIBE_TO_ACTIVE_DRIVER } from 'graphql/queries/drivers';
+import { Driver, DriverAvatar } from 'models/driver';
 import { DriverStats } from 'models/driver-stats';
 import { APIHelper } from 'helpers/api-helper';
 import { NewDriver } from 'models/new-driver';
-import { Driver } from 'models/driver';
 
-interface Response {
+interface ActiveDriverResponse {
   activeDriver: Driver
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class ActiveDriverGQL extends Subscription<Response> {
+export class ActiveDriverGQL extends Subscription<ActiveDriverResponse> {
   document = SUBSCRIBE_TO_ACTIVE_DRIVER;
 }
 
@@ -196,13 +196,13 @@ export class DriverService {
    *
    * @param driverId unique ID for the driver being updated
    * @param profilePic the new profile pic
-   * @returns status of the upload
+   * @returns result of the upload
    */
-  uploadProfilePic(driverId: number, profilePic: File): Observable<any> {
-    var formData: any = new FormData();
+  uploadProfilePic(driverId: number, profilePic: File): Observable<DriverAvatar> {
+    var formData: FormData = new FormData();
     formData.append("profile_pic", profilePic);
 
-    return this.http.post<any>(
+    return this.http.post<DriverAvatar>(
       `${APIHelper.getBaseUrl()}/${this.profilePicEndpoint}/${driverId}`,
       formData
     )

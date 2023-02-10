@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { Driver } from 'models/driver';
-import { ActiveDriverGQL } from 'services/driver.service';
-import { State } from 'store/reducers';
+import { selectActiveDriver, State } from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 import { NotificationService } from 'services/notification.service';
+import { loadActiveDriver } from '../store/actions/driver.actions';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +15,11 @@ import { NotificationService } from 'services/notification.service';
 })
 export class AppComponent implements OnInit {
   activeDriver$: Observable<Driver>;
-  avatarURL: string;
 
   error: string;
 
   constructor(
     private store: Store<State>,
-    private activeDriverService: ActiveDriverGQL,
     private notificationService: NotificationService
   ) { }
 
@@ -30,15 +28,16 @@ export class AppComponent implements OnInit {
    */
   ngOnInit() {
     this.pollAPIAvailable();
+    this.subscribeToActiveDriver();
 
-    this.activeDriver$ = this.activeDriverService.subscribe().pipe(
-      map(
-        result => result.data.activeDriver
-      )
-    );
+    this.activeDriver$ = this.store.select(selectActiveDriver);
 
     this.activeDriver$.subscribe(
       driver => {
+        if (driver == null) {
+          return;
+        }
+
         this.notificationService.show(
           `Signed in as ${driver.name}`,
           {
@@ -48,6 +47,13 @@ export class AppComponent implements OnInit {
         );
       }
     )
+  }
+
+  /*
+   * Subscribe to the active driver
+   */
+  subscribeToActiveDriver() {
+    this.store.dispatch(loadActiveDriver());
   }
 
   /**

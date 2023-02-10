@@ -8,3 +8,7 @@ export interface Driver {
   trackTime: number;
   profilePic: string;
 }
+
+export interface DriverAvatar {
+  image_url: string;
+}

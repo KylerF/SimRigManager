@@ -7,12 +7,13 @@ import {
 
 import { environment } from 'environments/environment';
 
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep } from 'lodash-es';
 
 import * as fromApiHealthcheck from './api-healthcheck.reducer';
 import * as fromIracing from './iracing.reducer';
 import * as fromQuote from './quote.reducer';
 import * as fromController from './controller.reducer';
+import * as fromDriver from './driver.reducer';
 
 import { AvailabilityCheck } from 'models/availability-check';
 import { Quote } from 'models/quote';
@@ -27,7 +28,13 @@ import {
   LapTimeSearchParams,
   LaptimeSortParams,
   SortOrder
-} from 'src/app/models/lap-time-filter-params';
+} from 'models/lap-time-filter-params';
+import { Driver } from 'models/driver';
+
+type DriverState = {
+  drivers: Driver[];
+  activeDriver: Driver;
+}
 
 /**
  * The complete state of the application (combined from all reducers)
@@ -38,6 +45,7 @@ export interface State {
   [fromQuote.quoteFeatureKey]: StateContainer<Quote>;
   [fromController.controllerFeatureKey]: StateContainer<Controller[]>;
   [fromLaptime.laptimeFeatureKey]: StateContainer<LapTime[]>;
+  [fromDriver.driverFeatureKey]: StateContainer<DriverState>;
 }
 
 /**
@@ -48,7 +56,8 @@ export const reducers: ActionReducerMap<State> = {
   [fromApiHealthcheck.apiHealthcheckFeatureKey]: fromApiHealthcheck.reducer,
   [fromQuote.quoteFeatureKey]: fromQuote.reducer,
   [fromController.controllerFeatureKey]: fromController.reducer,
-  [fromLaptime.laptimeFeatureKey]: fromLaptime.reducer
+  [fromLaptime.laptimeFeatureKey]: fromLaptime.reducer,
+  [fromDriver.driverFeatureKey]: fromDriver.reducer,
 };
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
@@ -57,6 +66,22 @@ export const metaReducers: MetaReducer<State>[] = !environment.production ? [] :
 export const selectAPIActive =
   (state: State) =>
     state[fromApiHealthcheck.apiHealthcheckFeatureKey].state.apiActive;
+
+export const selectActiveDriver =
+  (state: State) =>
+    state[fromDriver.driverFeatureKey].state.activeDriver;
+
+export const selectDrivers =
+  (state: State) =>
+    state[fromDriver.driverFeatureKey].state.drivers;
+
+export const selectDriverById =
+  (id: number) =>
+    createSelector(
+      selectDrivers,
+      (drivers: Driver[]) =>
+        drivers.find(driver => driver.id === id)
+    );
 
 export const selectQuote =
   (state: State) =>
