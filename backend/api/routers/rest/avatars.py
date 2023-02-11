@@ -127,7 +127,7 @@ async def delete_avatar(driver_id: int):
     return {"success": "Avatar image deleted successfully"}
 
 
-def __get_avatar_path(driver_id):
+def __get_avatar_path(driver_id: int):
     """
     Retrieve the file path to a driver's avatar image. If the file structure
     does not exist, it will be created.
