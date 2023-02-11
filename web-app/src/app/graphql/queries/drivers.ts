@@ -35,3 +35,15 @@ export const GET_ALL_DRIVERS = gql`
     }
   }
 `
+
+export const SELECT_DRIVER = gql`
+  mutation setActiveDriver($driverId: Int!) {
+    setActiveDriver(driverId: $driverId) {
+      id
+      name
+      nickname
+      trackTime
+      profilePic
+    }
+  }
+`

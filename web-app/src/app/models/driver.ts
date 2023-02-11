@@ -12,3 +12,8 @@ export interface Driver {
 export interface DriverAvatar {
   image_url: string;
 }
+
+export interface DriverState {
+  drivers: Driver[];
+  activeDriver: Driver;
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, switchMap, of } from 'rxjs';
 
-import { ActiveDriverGQL, DriversGQL, DriverService } from 'services/driver.service';
+import { ActiveDriverGQL, DriversGQL, DriverService, SelectDriverGQL } from 'services/driver.service';
 import * as driverActions from 'store/actions/driver.actions';
 
 
@@ -12,6 +12,7 @@ export class DriverEffects {
     private actions$: Actions,
     private activeDriverService: ActiveDriverGQL,
     private allDriversService: DriversGQL,
+    private setActiveDriverService: SelectDriverGQL,
     private driverService: DriverService,
   ) {}
 
@@ -24,6 +25,20 @@ export class DriverEffects {
         ),
         catchError(
           error => of(driverActions.loadActiveDriverFailure({ error: error.message }))
+        )
+      ))
+    )
+  );
+
+  setActiveDriver$ = createEffect(() => this.actions$.pipe(
+    ofType(driverActions.setActiveDriver),
+    mergeMap(action => this.setActiveDriverService.mutate({ driverId: action.driver.id })
+      .pipe(
+        map(
+          result => driverActions.setActiveDriverSuccess({ data: result.data.setActiveDriver })
+        ),
+        catchError(
+          error => of(driverActions.setActiveDriverFailure({ error: error.message }))
         )
       ))
     )

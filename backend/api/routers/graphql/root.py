@@ -3,20 +3,23 @@ from typing import AsyncGenerator, List
 import strawberry
 import asyncio
 
-from api.utils import get_iracing_data, get_session_best_lap
+from api.utils import get_iracing_data, get_session_best_lap, update_driver_cache
 from database.database import get_db
 from database.modeltypes import (
     DriverType,
     LapTimeType,
     QuoteType,
-    IracingFrameType
+    IracingFrameType,
 )
 from database.crud import (
     get_active_driver,
     get_random_quote,
     get_drivers,
     get_laptimes,
+    delete_active_driver,
+    set_active_driver,
  )
+from database.schemas import ActiveDriverCreate
 
 
 @strawberry.type(
@@ -151,5 +154,29 @@ class Subscription:
             await asyncio.sleep(update_sec)
 
 
-schema = strawberry.Schema(query=Query, subscription=Subscription)
+@strawberry.type(
+    description="Mutation to make changes in the API",
+    name="Mutation",
+)
+class Mutation:
+    @strawberry.mutation(
+        description="Set the active driver"
+    )
+    def set_active_driver(self, driverId: int) -> DriverType:
+        db = next(get_db())
+        driver = ActiveDriverCreate(driverId=driverId)
+        delete_active_driver(db)
+        new_active_driver = set_active_driver(db, driver)
+
+        # Update cache for worker threads
+        update_driver_cache(new_active_driver.driver)
+
+        return DriverType.from_pydantic(new_active_driver.driver)
+
+
+schema = strawberry.Schema(
+    query=Query,
+    subscription=Subscription,
+    mutation=Mutation
+)
 graphql_app = GraphQLRouter(schema=schema)

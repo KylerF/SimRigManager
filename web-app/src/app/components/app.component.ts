@@ -31,22 +31,6 @@ export class AppComponent implements OnInit {
     this.subscribeToActiveDriver();
 
     this.activeDriver$ = this.store.select(selectActiveDriver);
-
-    this.activeDriver$.subscribe(
-      driver => {
-        if (driver == null) {
-          return;
-        }
-
-        this.notificationService.show(
-          `Signed in as ${driver.name}`,
-          {
-            autohide: true,
-            headertext: 'Notification'
-          }
-        );
-      }
-    )
   }
 
   /*

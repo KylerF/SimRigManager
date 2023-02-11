@@ -1,45 +1,60 @@
 <h1>Drivers</h1>
 
-<div *ngIf="!loading && !error && drivers.length">
-    <table class="table table-hover table-clickable">
-        <thead>
-            <tr>
-                <th>
+<div *ngIf="(drivers$ | async) as driverState">
+  <div *ngIf="!driverState.error; else error"></div>
+    <div *ngIf="!driverState.loading; else loading">
+      <div *ngIf="driverState.state.drivers as drivers; else nodrivers">
+        <table class="table table-hover table-clickable">
+          <thead>
+              <tr>
+                  <th>
 
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Nickname
-                </th>
-                <th>
-                    Track Time
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let driver of drivers" [ngClass]="{'table-success': selectedDriver && driver.id === selectedDriver.id}" (click)="selectDriver(driver)" style="cursor:pointer">
-                <td>
-                    <span *ngIf="selectedDriver && driver.id === selectedDriver.id" class="bi bi-check2-circle" style="color: green"></span>
-                </td>
-                <td>
-                    {{ driver.name }}
-                </td>
-                <td>
-                    {{ driver.nickname }}
-                </td>
-                <td>
-                    {{ driver.trackTime | hoursMinutesSeconds}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div *ngIf="selectedDriver && driverChanged">
+                  </th>
+                  <th>
+                      Name
+                  </th>
+                  <th>
+                      Nickname
+                  </th>
+                  <th>
+                      Track Time
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr
+                *ngFor="let driver of drivers"
+                [ngClass]="{
+                  'table-success': driverState.state.activeDriver && driver.id === driverState.state.activeDriver.id
+                }"
+                (click)="selectDriver(driver)"
+                style="cursor:pointer"
+              >
+                  <td>
+                      <span
+                        *ngIf="driverState.state.activeDriver && driver.id === driverState.state.activeDriver.id"
+                        class="bi bi-check2-circle"
+                        style="color: green"
+                      >
+                      </span>
+                  </td>
+                  <td>
+                      {{ driver.name }}
+                  </td>
+                  <td>
+                      {{ driver.nickname }}
+                  </td>
+                  <td>
+                      {{ driver.trackTime | hoursMinutesSeconds}}
+                  </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="driverChanged">
         <div class="alert alert-success">
             <div class="column">
-                Welcome, <b>{{ selectedDriver.nickname }}</b>! Your lap times are being recorded.
+                Welcome, <b>{{ driverState.state.activeDriver.nickname }}</b>! Your lap times are being recorded.
             </div>
             <div class="column">
                 <span class="bi bi-arrow-right"></span>
@@ -48,13 +63,29 @@
                 </a>
             </div>
         </div>
+      </div>
     </div>
 </div>
 
-<div *ngIf="!error" class="py-2">
-    <button class="btn btn-primary" (click)="showAddDriverDialog()">
-        <span class="bi bi-plus-circle-fill"></span> New driver
-    </button>
-</div>
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>
 
-<app-error-message *ngIf="error" title="Error" message="Unable to access drivers"></app-error-message>
+<ng-template #nodrivers>
+  <div class="alert alert-warning">
+    <div class="column">
+      <span class="bi bi-exclamation-triangle"></span>
+      No drivers found.
+    </div>
+    <div class="column">
+      <span class="bi bi-arrow-right"></span>
+      <a href="https://members.iracing.com/" target="_blank">
+        Go to iRacing
+      </a>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #error>
+  <app-error-message title="Error" message="Unable to access drivers"></app-error-message>
+</ng-template>

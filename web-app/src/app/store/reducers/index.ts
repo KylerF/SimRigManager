@@ -29,12 +29,7 @@ import {
   LaptimeSortParams,
   SortOrder
 } from 'models/lap-time-filter-params';
-import { Driver } from 'models/driver';
-
-type DriverState = {
-  drivers: Driver[];
-  activeDriver: Driver;
-}
+import { Driver, DriverState } from 'models/driver';
 
 /**
  * The complete state of the application (combined from all reducers)
@@ -66,6 +61,10 @@ export const metaReducers: MetaReducer<State>[] = !environment.production ? [] :
 export const selectAPIActive =
   (state: State) =>
     state[fromApiHealthcheck.apiHealthcheckFeatureKey].state.apiActive;
+
+export const selectDriverState =
+  (state: State) =>
+    state[fromDriver.driverFeatureKey];
 
 export const selectActiveDriver =
   (state: State) =>

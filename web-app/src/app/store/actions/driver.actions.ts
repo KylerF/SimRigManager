@@ -2,16 +2,31 @@ import { createAction, props } from '@ngrx/store';
 import { Driver } from 'models/driver';
 
 export const loadActiveDriver = createAction(
-  '[LoadActiveDriver] Load Active Driver'
+  '[ActiveDriver] Load Active Driver'
 );
 
 export const loadActiveDriverSuccess = createAction(
-  '[LoadActiveDriver] Load Active Driver Success',
+  '[ActiveDriver] Load Active Driver Success',
   props<{ data: Driver }>()
 );
 
 export const loadActiveDriverFailure = createAction(
-  '[LoadActiveDriver] Load Active Driver Failure',
+  '[ActiveDriver] Load Active Driver Failure',
+  props<{ error: any }>()
+);
+
+export const setActiveDriver = createAction(
+  '[ActiveDriver] Set Active Driver',
+  props<{ driver: Driver }>()
+);
+
+export const setActiveDriverSuccess = createAction(
+  '[ActiveDriver] Set Active Driver Success',
+  props<{ data: Driver }>()
+);
+
+export const setActiveDriverFailure = createAction(
+  '[ActiveDriver] Set Active Driver Failure',
   props<{ error: any }>()
 );
 

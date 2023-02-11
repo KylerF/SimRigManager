@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
 
 import { NewDriverComponent } from 'components/new-driver/new-driver.component';
-import { DriverService } from 'services/driver.service';
-import { Driver } from 'models/driver';
+import { Driver, DriverState } from 'models/driver';
+import { loadActiveDriver, loadAllDrivers, setActiveDriver } from 'store/actions/driver.actions';
+import { selectDriverState } from 'store/reducers';
+import { Observable } from 'rxjs';
+import { StateContainer } from 'models/state';
 
 @Component({
   selector: 'app-select-driver',
@@ -15,48 +19,30 @@ import { Driver } from 'models/driver';
  * Component to show the driver selection table
  */
 export class SelectDriverComponent implements OnInit {
+  drivers$: Observable<StateContainer<DriverState>>;
   drivers: Driver[] = [];
-  selectedDriver: Driver;
   driverChanged: boolean;
 
   loading: boolean = true;
   error: any;
 
   constructor(
-    private driverService: DriverService, // Used to query drivers and active driver
-    private modalService: NgbModal // Service to display and interface with modal dialogs
+    private modalService: NgbModal, // Service to display and interface with modal dialogs
+    private store: Store
   )
   { }
 
   ngOnInit(): void {
     this.getDrivers();
-    this.getSelectedDriver();
   }
 
   /**
-   * Get all available drivers
+   * Get all available drivers and subscribe to the active driver
    */
   getDrivers() {
-    this.driverService.getDrivers().subscribe({
-      next: drivers => {
-        this.drivers = drivers;
-        this.loading = false;
-      },
-      error: error => {
-        this.error = error;
-        this.loading = false;
-      }
-    });
-  }
-
-  /**
-   * Get the currently selected driver
-   */
-  getSelectedDriver() {
-    this.driverService.getSelectedDriver().subscribe({
-      next: driver => this.selectedDriver = driver,
-      error: error => this.error = error
-    });
+    this.store.dispatch(loadAllDrivers());
+    this.store.dispatch(loadActiveDriver());
+    this.drivers$ = this.store.select(selectDriverState)
   }
 
   /**
@@ -65,17 +51,8 @@ export class SelectDriverComponent implements OnInit {
    * @param driver the selected driver profile
    */
   selectDriver(driver: Driver) {
-    if(this.selectedDriver && driver.id === this.selectedDriver.id) {
-      return;
-    }
-
-    this.driverService.selectDriver(driver).subscribe({
-      next: () => {
-        this.selectedDriver = driver;
-        this.driverChanged = true;
-      },
-      error: error => this.error = error
-    });
+    this.store.dispatch(setActiveDriver({ driver: driver }));
+    this.driverChanged = true;
   }
 
   /**

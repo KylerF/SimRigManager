@@ -7,7 +7,7 @@
     "start_lan": "ng serve --host 0.0.0.0",
     "dev": "docker-compose up -d",
     "build": "ng build --configuration=production",
-    "prod": "ng build --configuration=production && serve -s dist/simrigmanager-web-app -l 4200",
+    "prod": "ng build --configuration=production && serve -s dist/simrigmanager-web-app -l 4201",
     "test": "ng test",
     "e2e": "playwright test",
     "lint": "ng lint",

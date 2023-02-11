@@ -1,10 +1,14 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Query, Subscription } from 'apollo-angular';
+import { Mutation, Query, Subscription } from 'apollo-angular';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
-import { SUBSCRIBE_TO_ACTIVE_DRIVER, GET_ALL_DRIVERS } from 'graphql/queries/drivers';
+import {
+  SUBSCRIBE_TO_ACTIVE_DRIVER,
+  GET_ALL_DRIVERS,
+  SELECT_DRIVER
+} from 'graphql/queries/drivers';
 import { Driver, DriverAvatar } from 'models/driver';
 import { DriverStats } from 'models/driver-stats';
 import { APIHelper } from 'helpers/api-helper';
@@ -16,6 +20,10 @@ interface ActiveDriverResponse {
 
 interface AllDriversResponse {
   allDrivers: Driver[]
+}
+
+interface SetActiveDriverResponse {
+  setActiveDriver: Driver
 }
 
 @Injectable({
@@ -30,6 +38,13 @@ export class ActiveDriverGQL extends Subscription<ActiveDriverResponse> {
 })
 export class DriversGQL extends Query<AllDriversResponse> {
   document = GET_ALL_DRIVERS;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SelectDriverGQL extends Mutation<SetActiveDriverResponse> {
+  document = SELECT_DRIVER;
 }
 
 /**

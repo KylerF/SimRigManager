@@ -42,9 +42,39 @@ export const reducer = createReducer(
     loading: false,
     lastUpdated: new Date()
   })),
+  on(driverActions.setActiveDriverSuccess, (state, action) => ({
+    ...state,
+    state: {
+      ...state.state,
+      activeDriver: action.data
+    },
+    error: null,
+    loading: false,
+    lastUpdated: new Date()
+  })),
+  on(driverActions.setActiveDriverFailure, (state, action) => ({
+    ...state,
+    error: action.error,
+    loading: false,
+    lastUpdated: new Date()
+  })),
   on(driverActions.uploadDriverAvatar, state => ({
     ...state,
     loading: true
+  })),
+  on(driverActions.loadAllDrivers, state => ({
+    ...state,
+    loading: true
+  })),
+  on(driverActions.loadAllDriversSuccess, (state, action) => ({
+    ...state,
+    state: {
+      ...state.state,
+      drivers: action.data
+    },
+    error: null,
+    loading: false,
+    lastUpdated: new Date()
   })),
   on(driverActions.uploadDriverAvatarSuccess, (state, action) => ({
     ...state,
