@@ -10,7 +10,7 @@ class APIServer:
     """
     def __init__(self):
         self.app = SimRigAPI()
-        self.port = getenv("PORT", 8000)
+        self.port = int(getenv("PORT", 8000))
 
     def start(self):
         self.start_server_process(self.app)
