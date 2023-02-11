@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { DriverService } from 'services/driver.service';
 import { NewDriver } from 'models/new-driver';
@@ -14,23 +14,28 @@ import { NewDriver } from 'models/new-driver';
 /**
  * Modal component to show the driver creation form
  */
-export class NewDriverComponent {
+export class NewDriverComponent implements OnInit {
   newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
   submitted = false;
   error: string;
 
-  // Create the reactive driver form with validation
-  newDriverForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    nickname: ['', Validators.required],
-  });
+  newDriverForm: FormGroup;
 
   constructor(
     private driverService: DriverService, // Used to add a new driver
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: UntypedFormBuilder // Used to build the new driver form
+    private formBuilder: FormBuilder // Used to build the new driver form
   )
   { }
+
+  ngOnInit() {
+    // Create the reactive driver form with validation
+    // Create the reactive driver form with validation
+    this.newDriverForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      nickname: ['', Validators.required],
+    });
+  }
 
   /**
    * Called when the new driver form is submitted. If valid, the

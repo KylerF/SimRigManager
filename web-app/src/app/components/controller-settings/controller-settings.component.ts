@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ipAddressValidatorFunction } from 'directives/validators/ip-address-validator-function';
@@ -31,20 +31,12 @@ export class ControllerSettingsComponent implements OnInit {
   submitted = false;
   error: any;
 
-  // Create the reactive controller form with validation
-  controllerSettingsForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
-    universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]],
-    colorTheme: [''],
-    idleEffect: [''],
-    autoOn: [false]
-  });
+  controllerSettingsForm: FormGroup;
 
   constructor(
     private controllerService: ControllerService, // Used to edit controller settings
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: UntypedFormBuilder, // Used to build the controller settings form
+    private formBuilder: FormBuilder, // Used to build the controller settings form
     private store: Store<State>
   )
   { }
@@ -53,6 +45,16 @@ export class ControllerSettingsComponent implements OnInit {
    * Populate the settings form with controller details
    */
   ngOnInit(): void {
+    // Create the reactive controller form with validation
+    this.controllerSettingsForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
+      universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]],
+      colorTheme: [''],
+      idleEffect: [''],
+      autoOn: [false]
+    });
+
     this.controllerSettingsForm.get('name').setValue(this.controller.name);
     this.controllerSettingsForm.get('ipAddress').setValue(this.controller.ipAddress);
     this.controllerSettingsForm.get('universe').setValue(this.controller.universe);

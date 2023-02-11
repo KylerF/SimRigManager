@@ -1,4 +1,4 @@
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { selectControllers, State } from 'store/reducers';
@@ -26,21 +26,23 @@ export class NewControllerComponent implements OnInit {
   loading = false;
   error: string;
 
-  // Create the reactive controller form with validation
-  newControllerForm = this.formBuilder.group({
-    name: ['', Validators.required],
-    ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
-    universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]]
-  });
+  newControllerForm: FormGroup;
 
   constructor(
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
-    private formBuilder: UntypedFormBuilder, // Used to build the new driver form
+    private formBuilder: FormBuilder, // Used to build the new driver form
     private store: Store<State>
   )
   { }
 
   ngOnInit() {
+    // Create the reactive controller form with validation
+    this.newControllerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
+      universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]]
+    });
+
     // Keep track of current controllers
     this.store.select(selectControllers)
       .subscribe((controllers: StateContainer<Controller[]>) => {
