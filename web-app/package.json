@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --hmr",
     "start_lan": "ng serve --host 0.0.0.0",
     "dev": "docker-compose up -d",
     "build": "ng build --configuration=production",
