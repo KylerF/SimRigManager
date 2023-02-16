@@ -5,6 +5,7 @@ import asyncio
 from database.modeltypes import IracingFrameType
 from api.utils import get_iracing_data
 
+
 @strawberry.type(
     description="Subscription to iracing data",
     name="Subscription",

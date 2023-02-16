@@ -6,6 +6,7 @@ from database.database import get_db
 from database.modeltypes import DriverType
 from database.crud import get_active_driver
 
+
 @strawberry.type(
     description="Subscription to changes to driver data",
     name="DriverSubscription",

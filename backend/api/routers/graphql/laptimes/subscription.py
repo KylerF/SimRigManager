@@ -6,6 +6,7 @@ from database.database import get_db
 from database.modeltypes import LapTimeType
 from api.utils import get_session_best_lap
 
+
 @strawberry.type(
     description="Subscription to new lap times",
     name="LaptimeSubscription",

@@ -6,6 +6,7 @@ from database.database import get_db
 from database.modeltypes import QuoteType
 from database.crud import get_random_quote
 
+
 @strawberry.type(
     description="Subscription to inspirational driving quotes",
     name="QuoteSubscription",
