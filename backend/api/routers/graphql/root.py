@@ -1,7 +1,12 @@
 from strawberry.fastapi import GraphQLRouter
-from typing import AsyncGenerator, List
+from typing import AsyncGenerator
 import strawberry
 import asyncio
+
+from api.routers.graphql.healthcheck.query import HealthcheckQuery
+from api.routers.graphql.drivers.query import DriverQuery
+from api.routers.graphql.iracing.query import IracingQuery
+from api.routers.graphql.laptimes.query import LaptimeQuery
 
 from api.utils import get_iracing_data, get_session_best_lap, update_driver_cache
 from database.database import get_db
@@ -14,8 +19,6 @@ from database.modeltypes import (
 from database.crud import (
     get_active_driver,
     get_random_quote,
-    get_drivers,
-    get_laptimes,
     delete_active_driver,
     set_active_driver,
  )
@@ -26,61 +29,17 @@ from database.schemas import ActiveDriverCreate
     description="Used to query the API",
     name="Query",
 )
-class Query:
-    @strawberry.field(
-        description="True if the API is active and running"
-    )
-    def api_active(self) -> bool:
-        return True
-
-    @strawberry.field(
-        description="Get all drivers"
-    )
-    def all_drivers(self) -> List[DriverType]:
-        db = next(get_db())
-        all_drivers = get_drivers(db)
-
-        return [
-            DriverType.from_pydantic(driver)
-            for driver in all_drivers
-        ]
-
-    @strawberry.field(
-        description="Get the active driver"
-    )
-    def active_driver(self) -> DriverType:
-        db = next(get_db())
-        active_driver = get_active_driver(db).driver
-
-        return DriverType.from_pydantic(active_driver)
-
-    @strawberry.field(
-        description="Get all lap times"
-    )
-    def all_laptimes(self, skip: int = 0, limit: int = -1) -> List[LapTimeType]:
-        db = next(get_db())
-        all_laptimes = get_laptimes(db, skip, limit)
-
-        return [
-            LapTimeType.from_pydantic(laptime)
-            for laptime in all_laptimes
-        ]
-
-    @strawberry.field(
-        description="Get a random inspirational racing quote"
-    )
-    def random_quote(self) -> QuoteType:
-        db = next(get_db())
-        quote = get_random_quote(db)
-
-        return QuoteType.from_pydantic(quote)
-
-    @strawberry.field(
-        description="Get the latest frame of iRacing data"
-    )
-    def iracing(self) -> IracingFrameType:
-        frame = get_iracing_data()
-        return IracingFrameType.from_pydantic(frame)
+class Query(
+    HealthcheckQuery,
+    DriverQuery,
+    LaptimeQuery,
+    IracingQuery,
+):
+    """
+    Root query type
+    Register all other query types here
+    """
+    pass
 
 
 @strawberry.type(
@@ -96,12 +55,13 @@ class Subscription:
         last_driver = None
 
         while True:
-            active_driver = get_active_driver(db).driver
+            active_driver = get_active_driver(db)
 
-            if not last_driver or active_driver.id != last_driver.id:
-                yield DriverType.from_pydantic(active_driver)
+            if active_driver:
+                if not last_driver or active_driver.driver.id != last_driver.id:
+                    yield DriverType.from_pydantic(active_driver.driver)
 
-                last_driver = active_driver
+                    last_driver = active_driver.driver
 
             await asyncio.sleep(1)
 
