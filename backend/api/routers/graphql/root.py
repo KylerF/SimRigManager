@@ -8,7 +8,9 @@ from api.routers.graphql.drivers.query import DriverQuery
 from api.routers.graphql.iracing.query import IracingQuery
 from api.routers.graphql.laptimes.query import LaptimeQuery
 
-from api.utils import get_iracing_data, get_session_best_lap, update_driver_cache
+from api.routers.graphql.drivers.mutation import DriverMutation
+
+from api.utils import get_iracing_data, get_session_best_lap
 from database.database import get_db
 from database.modeltypes import (
     DriverType,
@@ -19,10 +21,7 @@ from database.modeltypes import (
 from database.crud import (
     get_active_driver,
     get_random_quote,
-    delete_active_driver,
-    set_active_driver,
  )
-from database.schemas import ActiveDriverCreate
 
 
 @strawberry.type(
@@ -118,20 +117,12 @@ class Subscription:
     description="Mutation to make changes in the API",
     name="Mutation",
 )
-class Mutation:
-    @strawberry.mutation(
-        description="Set the active driver"
-    )
-    def set_active_driver(self, driverId: int) -> DriverType:
-        db = next(get_db())
-        driver = ActiveDriverCreate(driverId=driverId)
-        delete_active_driver(db)
-        new_active_driver = set_active_driver(db, driver)
-
-        # Update cache for worker threads
-        update_driver_cache(new_active_driver.driver)
-
-        return DriverType.from_pydantic(new_active_driver.driver)
+class Mutation(DriverMutation):
+    """
+    Root mutation type
+    Register all other mutation types here
+    """
+    pass
 
 
 schema = strawberry.Schema(
