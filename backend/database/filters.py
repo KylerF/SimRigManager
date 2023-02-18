@@ -14,7 +14,9 @@ class NumberFilter:
 @strawberry.input
 class StringFilter:
     eq: Optional[str] = None
+    ieq: Optional[str] = None
     contains: Optional[str] = None
+    icontains: Optional[str] = None
 
 
 @strawberry.input
