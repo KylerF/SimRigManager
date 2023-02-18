@@ -1,9 +1,10 @@
 from typing import List
 import strawberry
 
-from database.database import get_db
+from api.routers.graphql.filters import LaptimeFilter
 from database.modeltypes import LapTimeType
 from database.crud import get_laptimes
+from database.database import get_db
 
 
 @strawberry.type(
@@ -14,11 +15,20 @@ class LaptimeQuery:
     @strawberry.field(
         description="Get all lap times"
     )
-    def all_laptimes(self, skip: int = 0, limit: int = -1) -> List[LapTimeType]:
+    def laptimes(
+        self,
+        skip: int = 0,
+        limit: int = -1,
+        where: LaptimeFilter = None
+    ) -> List[LapTimeType]:
         db = next(get_db())
-        all_laptimes = get_laptimes(db, skip, limit)
+
+        if where:
+            laptimes = get_laptimes(db, skip, limit, where)
+        else:
+            laptimes = get_laptimes(db, skip, limit)
 
         return [
             LapTimeType.from_pydantic(laptime)
-            for laptime in all_laptimes
+            for laptime in laptimes
         ]
