@@ -7,6 +7,7 @@ from sqlalchemy import func
 from typing import List
 
 from database import models, schemas
+from database.filters import LaptimeFilter
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
@@ -146,10 +147,25 @@ def delete_active_driver(db: Session):
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   #
 
 
-def get_laptimes(db: Session, skip: int = 0, limit: int = -1) -> List[models.LapTime]:
+def get_laptimes(
+    db: Session,
+    skip: int = 0,
+    limit: int = -1,
+    where: LaptimeFilter = None
+) -> List[models.LapTime]:
     """
-    Get all lap times
+    Get all lap times - optionally with a limit, offset and filtered by given
+    parameters
     """
+    if where:
+        return db.query(
+            models.LapTime
+        ).filter(
+            models.LapTime.car == where.car.eq,
+        ).order_by(
+            models.LapTime.setAt.desc()
+        ).offset(skip).limit(limit).all()
+
     return db.query(
         models.LapTime
     ).order_by(
