@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import strawberry
 
 from database.modeltypes import LapTimeType
@@ -19,7 +19,7 @@ class LaptimeQuery:
         self,
         skip: int = 0,
         limit: int = -1,
-        where: LaptimeFilter = None
+        where: Optional[LaptimeFilter] = None
     ) -> List[LapTimeType]:
         db = next(get_db())
 

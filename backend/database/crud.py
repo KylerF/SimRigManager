@@ -157,20 +157,18 @@ def get_laptimes(
     Get all lap times - optionally with a limit, offset and filtered by given
     parameters
     """
-    if where:
-        return db.query(
-            models.LapTime
-        ).filter(
-            models.LapTime.car == where.car.eq,
-        ).order_by(
-            models.LapTime.setAt.desc()
-        ).offset(skip).limit(limit).all()
+    query = db.query(models.LapTime)
 
-    return db.query(
-        models.LapTime
-    ).order_by(
+    if where:
+        query = query.filter(models.LapTime.car == where.car.eq)
+
+    return query.order_by(
         models.LapTime.setAt.desc()
-    ).offset(skip).limit(limit).all()
+    ).offset(
+        skip
+    ).limit(
+        limit
+    )
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
