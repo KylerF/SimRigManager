@@ -160,7 +160,9 @@ def get_laptimes(
     query = db.query(models.LapTime)
 
     if where:
-        query = query.filter(models.LapTime.car == where.car.eq)
+        query = query.filter(
+            models.LapTime.car == where.car.eq
+        )
 
     return query.order_by(
         models.LapTime.setAt.desc()
