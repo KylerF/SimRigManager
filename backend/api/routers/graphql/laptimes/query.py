@@ -5,6 +5,7 @@ from api.routers.graphql.filters import LaptimeFilter
 from database.modeltypes import LapTimeType
 from database.crud import get_laptimes
 from database.database import get_db
+from database.models import LapTime
 
 
 @strawberry.type(
@@ -24,7 +25,17 @@ class LaptimeQuery:
         db = next(get_db())
 
         if where:
-            laptimes = get_laptimes(db, skip, limit, where)
+            laptimes = db.query(
+                LapTime
+            ).filter(
+                LapTime.car == where.car.eq,
+            ).order_by(
+                LapTime.setAt.desc()
+            ).offset(
+                skip
+            ).limit(
+                limit
+            )
         else:
             laptimes = get_laptimes(db, skip, limit)
 

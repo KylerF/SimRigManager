@@ -19,7 +19,7 @@ class StringFilter(Generic[T]):
 @strawberry.input
 class LaptimeFilter:
     driver: Optional[StringFilter[str]] = None
-    car: Optional[StringFilter[int]] = None
+    car: Optional[StringFilter[str]] = None
     track: Optional[StringFilter[str]] = None
     config: Optional[StringFilter[str]] = None
     time: Optional[NumberFilter[float]] = None
