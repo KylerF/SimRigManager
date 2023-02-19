@@ -160,9 +160,10 @@ def get_laptimes(
     query = db.query(models.LapTime)
 
     if where:
-        query = query.filter(
-            models.LapTime.car == where.car.eq
-        )
+        # Use the filter to add where clauses to the query
+        filters = where.to_sqlalchemy()
+        for filter in filters:
+            query = query.filter(filter)
 
     return query.order_by(
         models.LapTime.setAt.desc()

@@ -3,6 +3,7 @@ Database table schemas (SQLAlchemy models)
 """
 
 from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from sqlalchemy.sql.sqltypes import Boolean
@@ -83,6 +84,8 @@ class LapTime(Base):
         back_populates="laptimes",
         lazy="subquery"
     )
+
+    driverName = association_proxy("driver", "name")
 
 
 class LightController(Base):
