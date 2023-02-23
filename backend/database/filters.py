@@ -126,8 +126,10 @@ class LaptimeFilter:
     time: Optional[NumberFilter] = None
     set_at: Optional[DateFilter] = None
 
-    # Methods to convert to SQLAlchemy filters
     def to_sqlalchemy(self):
+        """
+        Combine all filters ANDed together into a list of SQLAlchemy filters
+        """
         filters = []
 
         if self.driver_name is not None:

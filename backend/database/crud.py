@@ -157,7 +157,11 @@ def get_laptimes(
     Get all lap times - optionally with a limit, offset and filtered by given
     parameters
     """
-    query = db.query(models.LapTime)
+    query = db.query(
+        models.LapTime
+    ).order_by(
+        models.LapTime.setAt.desc()
+    )
 
     if where:
         # Add where clauses to the query
@@ -165,9 +169,7 @@ def get_laptimes(
         for filter in filters:
             query = query.filter(filter)
 
-        return query.order_by(
-            models.LapTime.setAt.desc()
-        ).offset(
+        return query.offset(
             skip
         ).limit(
             limit
