@@ -160,18 +160,21 @@ def get_laptimes(
     query = db.query(models.LapTime)
 
     if where:
-        # Use the filter to add where clauses to the query
+        # Add where clauses to the query
         filters = where.to_sqlalchemy()
         for filter in filters:
             query = query.filter(filter)
 
-    return query.order_by(
-        models.LapTime.setAt.desc()
-    ).offset(
-        skip
-    ).limit(
-        limit
-    )
+        return query.order_by(
+            models.LapTime.setAt.desc()
+        ).offset(
+            skip
+        ).limit(
+            limit
+        )
+
+    # Return everything if no filter was specified
+    return query.all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):

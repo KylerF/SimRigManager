@@ -1,82 +1,86 @@
 [
-    {
-        "text": "If you ain't first, you're last.", 
-        "by": "Ricky Bobby"
-    }, 
-    {
-        "text": "What's behind you doesn't matter.", 
-        "by": "Enzo Ferrari"
-    }, 
-    {
-        "text": "If you can leave two black stripes from the exit of one corner to the braking zone of the next, you have enough horsepower.", 
-        "by": "Mark Donohue"
-    }, 
-    {
-        "text": "Auto racing, bull fighting, and mountain climbing are the only real sports...all the others are games.", 
-        "by": "Ernest Hemingway"
-    }, 
-    {
-        "text": "Faster, faster, until the thrill of speed overcomes the fear of death.", 
-        "by": "Hunter S. Thompson"
-    }, 
-    {
-        "text": "Speed has never killed anyone. Suddenly becoming stationary, that's what gets you.", 
-        "by": "Jeremy Clarkson"
-    }, 
-    {
-        "text": "It is amazing how many drivers think that the brakes are for slowing the car down.", 
-        "by": "Mario Andretti"
-    }, 
-    {
-        "text": "Aerodynamics are for people who can't build engines.", 
-        "by": "Enzo Ferrari"
-    }, 
-    {
-        "text": "You win some, you lose some, you wreck some.", 
-        "by": "Dale Ernhardt Sr."
-    }, 
-    {
-        "text": "If you think the last 4 words of the national anthem are gentlemen, start your engines, you might be a redneck.", 
-        "by": "Jeff Foxworthy"
-    }, 
-    {
-        "text": "The winner ain't the one with the fastest car, it's the one who refuses to lose.", 
-        "by": "Dale Earnhardt"
-    }, 
-    {
-        "text": "Nobody remembers the guy who finished second but the guy who finished second.", 
-        "by": "Bobby Unser"
-    }, 
-    {
-        "text": "No, I don't drive her to win, I just drive her as fast as she will go.", 
-        "by": "Juan Fangio"
-    }, 
-    {
-        "text": "To finish first, you must first finish.", 
-        "by": "Rick Mears"
-    }, 
-    {
-        "text": "I drive way too fast to worry about cholesterol.", 
-        "by": "Steven Wright"
-    }, 
-    {
-        "text": "If everything seems under control, you're just not going fast enough.", 
-        "by": "Mario Andretti"
-    }, 
-    {
-        "text": "Straight roads are for fast cars, turns are for fast drivers.", 
-        "by": "Colin McRae"
-    },
-    {
-        "text": "When in doubt, flat out.", 
-        "by": "Colin McRae"
-    }, 
-    {
-        "text": "Auto racing began 5 minutes after the second car was built.", 
-        "by": "Henry Ford"
-    }, 
-    {
-        "text": "We broke something, I think it was traction.", 
-        "by": "Carl Edwards"
-    }
+  {
+    "text": "If you ain't first, you're last.",
+    "by": "Ricky Bobby"
+  },
+  {
+    "text": "What's behind you doesn't matter.",
+    "by": "Enzo Ferrari"
+  },
+  {
+    "text": "If you can leave two black stripes from the exit of one corner to the braking zone of the next, you have enough horsepower.",
+    "by": "Mark Donohue"
+  },
+  {
+    "text": "Auto racing, bull fighting, and mountain climbing are the only real sports...all the others are games.",
+    "by": "Ernest Hemingway"
+  },
+  {
+    "text": "Faster, faster, until the thrill of speed overcomes the fear of death.",
+    "by": "Hunter S. Thompson"
+  },
+  {
+    "text": "Speed has never killed anyone. Suddenly becoming stationary, that's what gets you.",
+    "by": "Jeremy Clarkson"
+  },
+  {
+    "text": "It is amazing how many drivers think that the brakes are for slowing the car down.",
+    "by": "Mario Andretti"
+  },
+  {
+    "text": "Aerodynamics are for people who can't build engines.",
+    "by": "Enzo Ferrari"
+  },
+  {
+    "text": "You win some, you lose some, you wreck some.",
+    "by": "Dale Ernhardt Sr."
+  },
+  {
+    "text": "If you think the last 4 words of the national anthem are gentlemen, start your engines, you might be a redneck.",
+    "by": "Jeff Foxworthy"
+  },
+  {
+    "text": "The winner ain't the one with the fastest car, it's the one who refuses to lose.",
+    "by": "Dale Earnhardt"
+  },
+  {
+    "text": "Nobody remembers the guy who finished second but the guy who finished second.",
+    "by": "Bobby Unser"
+  },
+  {
+    "text": "No, I don't drive her to win, I just drive her as fast as she will go.",
+    "by": "Juan Fangio"
+  },
+  {
+    "text": "To finish first, you must first finish.",
+    "by": "Rick Mears"
+  },
+  {
+    "text": "I drive way too fast to worry about cholesterol.",
+    "by": "Steven Wright"
+  },
+  {
+    "text": "If everything seems under control, you're just not going fast enough.",
+    "by": "Mario Andretti"
+  },
+  {
+    "text": "Straight roads are for fast cars, turns are for fast drivers.",
+    "by": "Colin McRae"
+  },
+  {
+    "text": "When in doubt, flat out.",
+    "by": "Colin McRae"
+  },
+  {
+    "text": "Auto racing began 5 minutes after the second car was built.",
+    "by": "Henry Ford"
+  },
+  {
+    "text": "We broke something, I think it was traction.",
+    "by": "Carl Edwards"
+  },
+  {
+    "text": "If you're not scared, you're not going fast enough.",
+    "by": "Ken Block"
+  }
 ]

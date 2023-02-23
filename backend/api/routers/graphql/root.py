@@ -25,8 +25,8 @@ class Query(
     IracingQuery,
 ):
     """
-    Root query type
-    Register all other query types here
+    Root query type.
+    Register all other query types here.
     """
     pass
 
@@ -42,8 +42,8 @@ class Subscription(
     LaptimeSubscription
 ):
     """
-    Root subscription type
-    Register all other subscription types here
+    Root subscription type.
+    Register all other subscription types here.
     """
     pass
 
@@ -54,8 +54,8 @@ class Subscription(
 )
 class Mutation(DriverMutation):
     """
-    Root mutation type
-    Register all other mutation types here
+    Root mutation type.
+    Register all other mutation types here.
     """
     pass
 

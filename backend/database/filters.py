@@ -1,3 +1,4 @@
+from sqlalchemy import Column
 from typing import Optional
 import strawberry
 
@@ -17,7 +18,7 @@ class NumberFilter:
     lte: Optional[float] = None
 
     # Methods to convert to SQLAlchemy filters
-    def to_sqlalchemy(self, field):
+    def to_sqlalchemy(self, field: Column):
         if self.eq is not None:
             return field == self.eq
         elif self.ne is not None:
@@ -48,9 +49,9 @@ class DateFilter:
     after: Optional[str] = None
 
     # Methods to convert to SQLAlchemy filters
-    def to_sqlalchemy(self, field):
+    def to_sqlalchemy(self, field: Column):
         if self.eq is not None:
-            return field == self.on
+            return field == self.eq
         elif self.before is not None:
             return field < self.before
         elif self.after is not None:
@@ -66,6 +67,17 @@ class DateFilter:
     name="StringFilter"
 )
 class StringFilter:
+    """
+    Filtering for strings
+    - eq: Equals
+    - ne: Not equal
+    - ieq: Case insensitive equal
+    - ieq: Case insensitive not equal
+    - starts_with: Starts with provided string
+    - ends_with: Ends with provided string
+    - like: Matches provided regular expression
+    - contains: Contains provided string
+    """
     eq: Optional[str] = None
     ne: Optional[str] = None
     ieq: Optional[str] = None
@@ -73,11 +85,10 @@ class StringFilter:
     starts_with: Optional[str] = None
     ends_with: Optional[str] = None
     like: Optional[str] = None
-    ilike: Optional[str] = None
     contains: Optional[str] = None
 
     # Methods to convert to SQLAlchemy filters
-    def to_sqlalchemy(self, field):
+    def to_sqlalchemy(self, field: Column):
         if self.eq is not None:
             return field == self.eq
         elif self.ne is not None:
@@ -92,8 +103,6 @@ class StringFilter:
             return field.endswith(self.ends_with)
         elif self.like is not None:
             return field.like(self.like)
-        elif self.ilike is not None:
-            return field.ilike(self.ilike)
         elif self.contains is not None:
             return field.contains(self.contains)
         else:
@@ -105,6 +114,10 @@ class StringFilter:
     name="LaptimeFilter"
 )
 class LaptimeFilter:
+    """
+    Wrapper for filterable lap time fields. All fields are optional, and if
+    multiple are provided, the result will be lap times matching all conditions.
+    """
     driver_name: Optional[StringFilter] = None
     driver_id: Optional[NumberFilter] = None
     car: Optional[StringFilter] = None
