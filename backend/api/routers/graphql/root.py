@@ -1,177 +1,63 @@
-from strawberry.fastapi import GraphQLRouter
-from typing import AsyncGenerator, List
 import strawberry
-import asyncio
+from strawberry.fastapi import GraphQLRouter
 
-from api.utils import get_iracing_data, get_session_best_lap, update_driver_cache
-from database.database import get_db
-from database.modeltypes import (
-    DriverType,
-    LapTimeType,
-    QuoteType,
-    IracingFrameType,
-)
-from database.crud import (
-    get_active_driver,
-    get_random_quote,
-    get_drivers,
-    get_laptimes,
-    delete_active_driver,
-    set_active_driver,
- )
-from database.schemas import ActiveDriverCreate
+from api.routers.graphql.healthcheck.query import HealthcheckQuery
+from api.routers.graphql.drivers.query import DriverQuery
+from api.routers.graphql.iracing.query import IracingQuery
+from api.routers.graphql.laptimes.query import LaptimeQuery
+
+from api.routers.graphql.drivers.subscription import DriverSubscription
+from api.routers.graphql.laptimes.subscription import LaptimeSubscription
+from api.routers.graphql.quotes.subscription import QuoteSubscription
+from api.routers.graphql.iracing.subscription import IracingSubscription
+
+from api.routers.graphql.drivers.mutation import DriverMutation
 
 
 @strawberry.type(
     description="Used to query the API",
     name="Query",
 )
-class Query:
-    @strawberry.field(
-        description="True if the API is active and running"
-    )
-    def api_active(self) -> bool:
-        return True
-
-    @strawberry.field(
-        description="Get all drivers"
-    )
-    def all_drivers(self) -> List[DriverType]:
-        db = next(get_db())
-        all_drivers = get_drivers(db)
-
-        return [
-            DriverType.from_pydantic(driver)
-            for driver in all_drivers
-        ]
-
-    @strawberry.field(
-        description="Get the active driver"
-    )
-    def active_driver(self) -> DriverType:
-        db = next(get_db())
-        active_driver = get_active_driver(db).driver
-
-        return DriverType.from_pydantic(active_driver)
-
-    @strawberry.field(
-        description="Get all lap times"
-    )
-    def all_laptimes(self, skip: int = 0, limit: int = -1) -> List[LapTimeType]:
-        db = next(get_db())
-        all_laptimes = get_laptimes(db, skip, limit)
-
-        return [
-            LapTimeType.from_pydantic(laptime)
-            for laptime in all_laptimes
-        ]
-
-    @strawberry.field(
-        description="Get a random inspirational racing quote"
-    )
-    def random_quote(self) -> QuoteType:
-        db = next(get_db())
-        quote = get_random_quote(db)
-
-        return QuoteType.from_pydantic(quote)
-
-    @strawberry.field(
-        description="Get the latest frame of iRacing data"
-    )
-    def iracing(self) -> IracingFrameType:
-        frame = get_iracing_data()
-        return IracingFrameType.from_pydantic(frame)
+class Query(
+    HealthcheckQuery,
+    DriverQuery,
+    LaptimeQuery,
+    IracingQuery,
+):
+    """
+    Root query type.
+    Register all other query types here.
+    """
+    pass
 
 
 @strawberry.type(
     description="Subscription to changes in the API",
     name="Subscription",
 )
-class Subscription:
-    @strawberry.subscription(
-        description="Subscribe to active driver changes"
-    )
-    async def active_driver(self) -> AsyncGenerator[DriverType, None]:
-        db = next(get_db())
-        last_driver = None
-
-        while True:
-            active_driver = get_active_driver(db).driver
-
-            if not last_driver or active_driver.id != last_driver.id:
-                yield DriverType.from_pydantic(active_driver)
-
-                last_driver = active_driver
-
-            await asyncio.sleep(1)
-
-    @strawberry.subscription(
-        description="Subscribe to random inspirational racing quotes at a given frequency"
-    )
-    async def random_quote(self, update_sec: int = 10) -> AsyncGenerator[QuoteType, None]:
-        db = next(get_db())
-
-        while True:
-            quote = get_random_quote(db)
-
-            yield QuoteType.from_pydantic(quote)
-
-            await asyncio.sleep(update_sec)
-
-    @strawberry.subscription(
-        description="Subscribe to real-time iRacing data"
-    )
-    async def iracing(self, fps: int = 30) -> AsyncGenerator[IracingFrameType, None]:
-        if fps <= 0 or fps > 30:
-            raise ValueError("fps must be between 1 and 30")
-
-        while True:
-            frame = get_iracing_data()
-
-            if frame:
-                yield IracingFrameType.from_pydantic(frame)
-                await asyncio.sleep(1 / fps)
-            else:
-                await asyncio.sleep(1)
-
-    @strawberry.subscription(
-        description="Subscribe to lap times"
-    )
-    async def laptime(self, update_sec: int = 5) -> AsyncGenerator[LapTimeType, None]:
-        last_time = get_session_best_lap()
-
-        while True:
-            if await self.request.is_disconnected():
-                break
-
-            lap_time = get_session_best_lap()
-
-            if lap_time:
-                if not last_time or lap_time["id"] != last_time["id"]:
-                    yield LapTimeType.from_pydantic(lap_time)
-                    last_time = lap_time
-
-            await asyncio.sleep(update_sec)
+class Subscription(
+    DriverSubscription,
+    QuoteSubscription,
+    IracingSubscription,
+    LaptimeSubscription
+):
+    """
+    Root subscription type.
+    Register all other subscription types here.
+    """
+    pass
 
 
 @strawberry.type(
     description="Mutation to make changes in the API",
     name="Mutation",
 )
-class Mutation:
-    @strawberry.mutation(
-        description="Set the active driver"
-    )
-    def set_active_driver(self, driverId: int) -> DriverType:
-        db = next(get_db())
-        driver = ActiveDriverCreate(driverId=driverId)
-        delete_active_driver(db)
-        new_active_driver = set_active_driver(db, driver)
-
-        # Update cache for worker threads
-        update_driver_cache(new_active_driver.driver)
-
-        return DriverType.from_pydantic(new_active_driver.driver)
+class Mutation(DriverMutation):
+    """
+    Root mutation type.
+    Register all other mutation types here.
+    """
+    pass
 
 
 schema = strawberry.Schema(

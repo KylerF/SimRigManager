@@ -25,7 +25,7 @@ export class BestLapTimeDisplayComponent extends BaseTelemetryDisplayComponent i
   /**
    * Subscribe to iRacing data and start updating the best lap time.
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     super.ngOnInit();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$

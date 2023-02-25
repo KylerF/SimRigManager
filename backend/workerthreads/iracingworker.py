@@ -57,7 +57,7 @@ class IracingWorker(threading.Thread):
                 # Check for updates from the API
                 updated_driver = get_active_driver_from_cache()
 
-                if updated_driver and updated_driver.id != active_driver.id:
+                if updated_driver and updated_driver != active_driver:
                     active_driver = updated_driver
                     track_time = updated_driver.trackTime
 

@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { selectControllers, State } from 'store/reducers';
@@ -55,7 +55,7 @@ export class NewControllerComponent implements OnInit {
    * Called when the new controller form is submitted. If valid, the
    * controller is added.
    */
-   onSubmit() {
+  onSubmit() {
     this.submitted = true;
 
     if(this.newControllerForm.valid) {

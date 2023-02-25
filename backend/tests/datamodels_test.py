@@ -5,8 +5,7 @@ from database.models import *
 
 class TestModels(unittest.TestCase):
     """
-    Unit tests for the QueueManager, used for communication between
-    execution threads.
+    Unit tests for the data models
     """
     def setUp(self) -> None:
         pass

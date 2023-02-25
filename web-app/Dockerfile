@@ -45,4 +45,4 @@ RUN yarn run lint
 RUN yarn test
 
 # Run the app using Angular cli
-CMD [ "yarn", "run", "start_lan" ]
+CMD [ "yarn", "run", "start" ]

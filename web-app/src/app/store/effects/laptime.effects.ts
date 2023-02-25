@@ -21,7 +21,7 @@ export class LaptimeEffects {
         map(
           response => laptimeActions.LoadLaptimesSuccess({
             payload: {
-              data: response.data.allLaptimes
+              data: response.data.laptimes
             }
           })
         ),

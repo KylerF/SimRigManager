@@ -7,6 +7,7 @@ from sqlalchemy import func
 from typing import List
 
 from database import models, schemas
+from database.filters import LaptimeFilter, LaptimeOrder
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
@@ -146,15 +147,39 @@ def delete_active_driver(db: Session):
 #   #   #   #   #   #   #   #   Lap Times  #   #   #   #   #   #   #   #
 
 
-def get_laptimes(db: Session, skip: int = 0, limit: int = -1) -> List[models.LapTime]:
+def get_laptimes(
+    db: Session,
+    skip: int = 0,
+    limit: int = -1,
+    where: LaptimeFilter = None,
+    order: LaptimeOrder = None
+) -> List[models.LapTime]:
     """
-    Get all lap times
+    Get all lap times - optionally with a limit, offset, filtered by given
+    parameters and ordered (default: descending by set_at)
     """
-    return db.query(
-        models.LapTime
-    ).order_by(
-        models.LapTime.setAt.desc()
-    ).offset(skip).limit(limit).all()
+    query = db.query(models.LapTime)
+
+    # Set default order
+    order = order or LaptimeOrder(set_at='desc')
+    orders = order.to_sqlalchemy()
+
+    # Add order clauses to the query
+    for order in orders:
+        query = query.order_by(order)
+
+    if where:
+        # Add where clauses to the query
+        filters = where.to_sqlalchemy()
+        for filter in filters:
+            query = query.filter(filter)
+
+    # Return with requested limit and offset
+    return query.offset(
+        skip
+    ).limit(
+        limit
+    ).all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):

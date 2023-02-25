@@ -25,7 +25,7 @@ export class CurrentLapTimeDisplayComponent extends BaseTelemetryDisplayComponen
   /**
    * Subscribe to iRacing data and start updating the lap time.
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     super.ngOnInit();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$

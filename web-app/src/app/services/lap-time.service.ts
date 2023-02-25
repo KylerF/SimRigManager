@@ -9,7 +9,7 @@ import { LapTime } from 'models/lap-time';
 import { GET_LAPTIMES, SUBSCRIBE_TO_LAPTIMES } from '../graphql/queries/laptimes';
 
 interface AllLapTimesResponse {
-  allLaptimes: LapTime[]
+  laptimes: LapTime[]
 }
 
 interface NewLapTimeResponse {

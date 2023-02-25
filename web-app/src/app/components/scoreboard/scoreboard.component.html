@@ -77,7 +77,7 @@
 
         <div *ngIf="(filteredLaptimes$ | async) as filteredLaptimes">
           <div *ngIf="filteredLaptimes.length else noFiltered">
-            <cdk-virtual-scroll-viewport [itemSize]="50">
+            <cdk-virtual-scroll-viewport class="table-container" [itemSize]="50">
               <table class="table table-bordered reactive-font">
                 <thead id="scoreboardHeader">
                   <tr>

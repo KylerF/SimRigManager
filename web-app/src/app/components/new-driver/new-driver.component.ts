@@ -15,7 +15,12 @@ import { NewDriver } from 'models/new-driver';
  * Modal component to show the driver creation form
  */
 export class NewDriverComponent implements OnInit {
-  newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
+  newDriver: NewDriver = {
+    name: '',
+    nickname: '',
+    profilePic: ''
+  };
+
   submitted = false;
   error: string;
 
@@ -30,7 +35,6 @@ export class NewDriverComponent implements OnInit {
 
   ngOnInit() {
     // Create the reactive driver form with validation
-    // Create the reactive driver form with validation
     this.newDriverForm = this.formBuilder.group({
       name: ['', Validators.required],
       nickname: ['', Validators.required],
@@ -41,7 +45,7 @@ export class NewDriverComponent implements OnInit {
    * Called when the new driver form is submitted. If valid, the
    * driver is added.
    */
-   onSubmit() {
+  onSubmit() {
     this.submitted = true;
 
     if(this.newDriverForm.valid) {
@@ -63,7 +67,7 @@ export class NewDriverComponent implements OnInit {
   /**
    * Helper function to get the list of form controls
    */
-   get formControls() {
+  get formControls() {
     return this.newDriverForm.controls;
   }
 }

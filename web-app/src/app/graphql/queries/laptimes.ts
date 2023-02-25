@@ -2,7 +2,7 @@ import { gql } from 'apollo-angular';
 
 export const GET_LAPTIMES = gql`
   query lapTimes {
-    allLaptimes {
+    laptimes {
       driver {
         id
         name
