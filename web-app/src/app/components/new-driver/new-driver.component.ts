@@ -35,7 +35,6 @@ export class NewDriverComponent implements OnInit {
 
   ngOnInit() {
     // Create the reactive driver form with validation
-    // Create the reactive driver form with validation
     this.newDriverForm = this.formBuilder.group({
       name: ['', Validators.required],
       nickname: ['', Validators.required],
