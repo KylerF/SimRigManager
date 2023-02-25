@@ -156,12 +156,12 @@ def get_laptimes(
 ) -> List[models.LapTime]:
     """
     Get all lap times - optionally with a limit, offset, filtered by given
-    parameters and ordered (default: ascending by set_at)
+    parameters and ordered (default: descending by set_at)
     """
     query = db.query(models.LapTime)
 
     # Set default order
-    order = order or LaptimeOrder(set_at='asc')
+    order = order or LaptimeOrder(set_at='desc')
     orders = order.to_sqlalchemy()
 
     # Add order clauses to the query
