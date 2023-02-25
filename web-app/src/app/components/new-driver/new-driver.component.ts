@@ -15,7 +15,12 @@ import { NewDriver } from 'models/new-driver';
  * Modal component to show the driver creation form
  */
 export class NewDriverComponent implements OnInit {
-  newDriver: NewDriver = { 'name': '', 'nickname': '', 'profilePic': '' };
+  newDriver: NewDriver = {
+    name: '',
+    nickname: '',
+    profilePic: ''
+  };
+
   submitted = false;
   error: string;
 
@@ -63,7 +68,7 @@ export class NewDriverComponent implements OnInit {
   /**
    * Helper function to get the list of form controls
    */
-   get formControls() {
+  get formControls() {
     return this.newDriverForm.controls;
   }
 }

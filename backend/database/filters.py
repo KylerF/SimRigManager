@@ -128,7 +128,8 @@ class LaptimeFilter:
 
     def to_sqlalchemy(self):
         """
-        Combine all filters ANDed together into a list of SQLAlchemy filters
+        Combine all filters ANDed together into a list of SQLAlchemy filters.
+        The resulting list can be passed to a query.filter() call.
         """
         filters = []
 
@@ -152,7 +153,8 @@ class LaptimeFilter:
 
 @strawberry.input(
     description="""
-    Order by lap time fields. Set fields to asc or desc to specify order.
+    Order by lap time fields. Set fields to
+    asc or desc to specify order.
     Default is desc.
     """,
     name="LaptimeOrder"
