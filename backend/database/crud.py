@@ -158,8 +158,10 @@ def get_laptimes(
     Get all lap times - optionally with a limit, offset, filtered by given
     parameters and ordered (default: ascending by set_at)
     """
-    order = order or LaptimeOrder(set_at='asc')
     query = db.query(models.LapTime)
+
+    # Set default order
+    order = order or LaptimeOrder(set_at='asc')
     orders = order.to_sqlalchemy()
 
     # Add order clauses to the query
@@ -177,7 +179,7 @@ def get_laptimes(
         skip
     ).limit(
         limit
-    )
+    ).all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
