@@ -15,7 +15,6 @@ import { ipAddressValidatorFunction } from './ip-address-validator-function';
  * Custom validator for IP address fields in a reactive form
  */
 export class IpAddressValidator implements Validator {
-
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors | null {

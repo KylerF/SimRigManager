@@ -25,7 +25,7 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
   /**
    * Subscribe to iRacing data and start updating the speed.
    */
-   ngOnInit(): void {
+  ngOnInit(): void {
     super.ngOnInit();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$

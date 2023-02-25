@@ -45,7 +45,7 @@ export class NewDriverComponent implements OnInit {
    * Called when the new driver form is submitted. If valid, the
    * driver is added.
    */
-   onSubmit() {
+  onSubmit() {
     this.submitted = true;
 
     if(this.newDriverForm.valid) {

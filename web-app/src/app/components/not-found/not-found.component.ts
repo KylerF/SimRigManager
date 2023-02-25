@@ -12,6 +12,5 @@ import { Component } from '@angular/core';
  * Redirect here when a 404 is encountered
  */
 export class NotFoundComponent {
-
   constructor() { }
 }

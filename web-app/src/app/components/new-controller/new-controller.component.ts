@@ -55,7 +55,7 @@ export class NewControllerComponent implements OnInit {
    * Called when the new controller form is submitted. If valid, the
    * controller is added.
    */
-   onSubmit() {
+  onSubmit() {
     this.submitted = true;
 
     if(this.newControllerForm.valid) {
