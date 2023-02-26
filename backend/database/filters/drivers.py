@@ -21,6 +21,7 @@ class DriverFilter:
     name: Optional[StringFilter] = None
     nickname: Optional[StringFilter] = None
     profile_pic: Optional[StringFilter] = None
+    track_time: Optional[NumberFilter] = None
 
     def __init__(
         self,
@@ -28,11 +29,13 @@ class DriverFilter:
         name: Optional[StringFilter] = None,
         nickname: Optional[StringFilter] = None,
         profile_pic: Optional[StringFilter] = None,
+        track_time: Optional[NumberFilter] = None,
     ):
         self.id = id
         self.name = name
         self.nickname = nickname
         self.profile_pic = profile_pic
+        self.track_time = track_time
 
     def to_sqlalchemy(self):
         """
@@ -49,5 +52,7 @@ class DriverFilter:
             filters.append(self.nickname.to_sqlalchemy(Driver.nickname))
         if self.profile_pic is not None:
             filters.append(self.profile_pic.to_sqlalchemy(Driver.profilePic))
+        if self.track_time is not None:
+            filters.append(self.track_time.to_sqlalchemy(Driver.trackTime))
 
         return filters

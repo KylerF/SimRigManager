@@ -8,6 +8,7 @@ from database.crud import (
     get_active_driver,
     get_drivers,
  )
+from database.ordering.drivers import DriverOrder
 
 
 @strawberry.type(
@@ -23,9 +24,10 @@ class DriverQuery:
         skip: int = 0,
         limit: int = -1,
         where: Optional[DriverFilter] = None,
+        order: Optional[DriverOrder] = None,
     ) -> List[DriverType]:
         db = next(get_db())
-        drivers = get_drivers(db, skip, limit, where)
+        drivers = get_drivers(db, skip, limit, where, order)
 
         return [
             DriverType.from_pydantic(driver)

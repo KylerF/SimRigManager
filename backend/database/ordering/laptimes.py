@@ -1,17 +1,8 @@
 from typing import Optional
-from enum import Enum
 import strawberry
 
+from database.ordering.generics import OrderDirection
 from database.models import LapTime
-
-
-@strawberry.enum(
-    description="Ordering direction",
-    name="OrderDirection"
-)
-class OrderDirection(Enum):
-    ASC = "ASC"
-    DESC = "DESC"
 
 
 @strawberry.input(

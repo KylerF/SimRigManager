@@ -5,6 +5,7 @@ Functions to perform CRUD operations on the database
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
+from database.ordering.drivers import DriverOrder
 
 from database.ordering.laptimes import LaptimeOrder, OrderDirection
 from database.filters.laptimes import LaptimeFilter
@@ -41,12 +42,21 @@ def get_drivers(
     db: Session,
     skip: int = 0,
     limit: int = -1,
-    where: DriverFilter = None
+    where: DriverFilter = None,
+    order: DriverOrder = None,
 ) -> List[models.Driver]:
     """
     Get all drivers
     """
     query = db.query(models.Driver)
+
+    # Set default order
+    order = order or DriverOrder(set_at=OrderDirection.DESC)
+    orders = order.to_sqlalchemy()
+
+    # Add order clauses to the query
+    for order in orders:
+        query = query.order_by(order)
 
     if where:
         # Add where clauses to the query
