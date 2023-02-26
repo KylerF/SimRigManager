@@ -51,7 +51,7 @@ def get_drivers(
     query = db.query(models.Driver)
 
     # Set default order
-    order = order or DriverOrder(set_at=OrderDirection.DESC)
+    order = order or DriverOrder(id=OrderDirection.ASC)
     orders = order.to_sqlalchemy()
 
     # Add order clauses to the query

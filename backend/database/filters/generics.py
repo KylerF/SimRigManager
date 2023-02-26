@@ -89,18 +89,21 @@ class DateFilter:
 
 
 @strawberry.input(
-    description="""Filter string using equality, starts with,
+    description="""
+    Filter string using equality, starts with,
     ends with, or contains
     """,
     name="StringFilter"
 )
 class StringFilter:
     """
-    Filtering for strings
+    Filtering for strings. All fields are optional, and if multiple are
+    provided, the result will be filtered by the first field, then the second,
+    etc.
     - eq: Equals
     - ne: Not equal
     - ieq: Case insensitive equal
-    - ieq: Case insensitive not equal
+    - ine: Case insensitive not equal
     - starts_with: Starts with provided string
     - ends_with: Ends with provided string
     - like: Matches provided regular expression
