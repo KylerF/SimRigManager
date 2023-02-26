@@ -132,7 +132,7 @@ export const CreateControllerFailure = createAction(
  * Action dispatched by components to update a light controller
  * @param controller The controller to update
  */
- export const UpdateControllerSettings = createAction(
+export const UpdateControllerSettings = createAction(
   ControllerActionTypes.UpdateControllerSettings,
   props<{ controller: Controller }>()
 );

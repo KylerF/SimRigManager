@@ -7,7 +7,8 @@ from sqlalchemy import func
 from typing import List
 
 from database import models, schemas
-from database.filters import LaptimeFilter, LaptimeOrder
+from database.filters.laptimes import LaptimeFilter
+from database.ordering.laptimes import LaptimeOrder
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
