@@ -68,7 +68,7 @@ export class DriverEffects {
     switchMap(() => this.allDriversService.fetch()
       .pipe(
         map(
-          result => driverActions.loadAllDriversSuccess({ data: result.data.allDrivers })
+          result => driverActions.loadAllDriversSuccess({ data: result.data.drivers })
         ),
         catchError(
           error => of(driverActions.loadAllDriversFailure({ error: error.message }))

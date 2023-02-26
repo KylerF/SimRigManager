@@ -6,9 +6,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
 
-from database import models, schemas
+from database.ordering.laptimes import LaptimeOrder, OrderDirection
 from database.filters.laptimes import LaptimeFilter
-from database.ordering.laptimes import LaptimeOrder
+from database.filters.drivers import DriverFilter
+from database import models, schemas
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
@@ -36,13 +37,29 @@ def get_driver_by_id(db: Session, id: int):
     ).first()
 
 
-def get_drivers(db: Session, skip: int = 0, limit: int = -1) -> List[models.Driver]:
+def get_drivers(
+    db: Session,
+    skip: int = 0,
+    limit: int = -1,
+    where: DriverFilter = None
+) -> List[models.Driver]:
     """
     Get all drivers
     """
-    return db.query(
-        models.Driver
-    ).offset(skip).limit(limit).all()
+    query = db.query(models.Driver)
+
+    if where:
+        # Add where clauses to the query
+        filters = where.to_sqlalchemy()
+        for filter in filters:
+            query = query.filter(filter)
+
+    # Return with requested limit and offset
+    return query.offset(
+        skip
+    ).limit(
+        limit
+    ).all()
 
 
 def create_driver(db: Session, driver: schemas.DriverCreate):
@@ -162,7 +179,7 @@ def get_laptimes(
     query = db.query(models.LapTime)
 
     # Set default order
-    order = order or LaptimeOrder(set_at='desc')
+    order = order or LaptimeOrder(set_at=OrderDirection.DESC)
     orders = order.to_sqlalchemy()
 
     # Add order clauses to the query

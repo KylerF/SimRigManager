@@ -19,7 +19,7 @@ interface ActiveDriverResponse {
 }
 
 interface AllDriversResponse {
-  allDrivers: Driver[]
+  drivers: Driver[]
 }
 
 interface SetActiveDriverResponse {
