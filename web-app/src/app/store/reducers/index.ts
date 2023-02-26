@@ -23,12 +23,6 @@ import { Controller } from 'models/controller';
 import * as fromLaptime from './laptime.reducer';
 import { LapTime } from 'models/lap-time';
 import * as moment from 'moment';
-import {
-  LapTimeFilterParams,
-  LapTimeSearchParams,
-  LaptimeSortParams,
-  SortOrder
-} from 'models/lap-time-filter-params';
 import { Driver, DriverState } from 'models/driver';
 
 /**
@@ -149,53 +143,4 @@ export const selectLaptimesSince = (since: moment.Moment) =>
     (laptimeState: StateContainer<LapTime[]>) => laptimeState.state.filter(
       (laptime: LapTime) => moment(laptime.setAt).isAfter(since)
     )
-  );
-
-export const selectLaptimesBySearchParams = (searchParams: LapTimeSearchParams[]) =>
-  createSelector(
-    selectLaptimes,
-    (laptimeState: StateContainer<LapTime[]>) => {
-      return searchParams.reduce((acc, searchParam) => {
-        return acc.filter(
-          (laptime: LapTime) =>
-            laptime[searchParam.searchKey] === searchParam.searchValue
-        );
-      }
-      , laptimeState.state);
-    }
-  );
-
-export const selectSortedLaptimes = (sortParams: LaptimeSortParams) =>
-  createSelector(
-    selectLaptimes,
-    (laptimeState: StateContainer<LapTime[]>) => {
-      let sortedState = cloneDeep(laptimeState);
-      sortedState.state = [...laptimeState.state].sort((lapTime1, lapTime2) => {
-        return sortParams.sortOrder == SortOrder.DESC ?
-          (lapTime2[sortParams.sortBy] > lapTime1[sortParams.sortBy] ?
-            1 : lapTime2[sortParams.sortBy] < lapTime1[sortParams.sortBy] ? -1 : 0) :
-          (lapTime1[sortParams.sortBy] > lapTime2[sortParams.sortBy] ?
-            1 : lapTime1[sortParams.sortBy] < lapTime2[sortParams.sortBy] ? -1 : 0);
-      });
-
-      return sortedState;
-    }
-  );
-
-export const selectFilteredLaptimes = (filterParams: LapTimeFilterParams) =>
-  createSelector(
-    selectLaptimes,
-    selectSortedLaptimes(filterParams.sortParams),
-    selectLaptimesForDriver(filterParams.showForDriverId),
-    selectLaptimesBySearchParams(filterParams.searchParams),
-    (_, sorted, driver, searched) => {
-      let laptimeIds = new Set();
-      let combined = driver.state.filter(laptime => !laptimeIds.has(laptime.id) && laptimeIds.add(laptime.id));
-      combined.concat(searched.filter(laptime => !laptimeIds.has(laptime.id) && laptimeIds.add(laptime.id)));
-
-      return combined.sort(
-        (lapTime1, lapTime2) =>
-          sorted.state.indexOf(lapTime1) - sorted.state.indexOf(lapTime2)
-      );
-    }
   );

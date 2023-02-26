@@ -1,22 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   State,
-  selectLaptimesForDriver,
-  selectLaptimesSince,
   selectLaptimesState,
-  selectSortedLaptimes,
-  selectFilteredLaptimes,
   selectAllLaptimes
 } from 'store/reducers';
 
+import { LoadLaptimes, StreamLaptimes, StopStreamLaptimes } from 'src/app/store/actions/laptime.actions';
 import { DriverService } from 'services/driver.service';
+import { StateContainer } from 'src/app/models/state';
+import { select, Store } from '@ngrx/store';
 import { LapTime } from 'models/lap-time';
 import { Observable } from 'rxjs';
-import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
-import { StateContainer } from 'src/app/models/state';
-import { LoadLaptimes, StreamLaptimes, StopStreamLaptimes } from 'src/app/store/actions/laptime.actions';
-import { DriverFilterType, LapTimeColumn, LapTimeFilterParams, SortOrder } from 'src/app/models/lap-time-filter-params';
 
 @Component({
   selector: 'app-scoreboard',
@@ -68,7 +63,11 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
    */
   getLapTimes() {
     // Get all lap times
-    this.store.dispatch(LoadLaptimes());
+    this.store.dispatch(LoadLaptimes({
+      params: {
+        limit: 1000
+      }
+    }));
 
     // And subscribe to new ones
     this.store.dispatch(StreamLaptimes());

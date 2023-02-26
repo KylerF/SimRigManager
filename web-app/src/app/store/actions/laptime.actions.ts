@@ -1,3 +1,4 @@
+import { LapTimeQueryParams } from 'src/app/models/lap-time-filter-params';
 import { createAction, props } from '@ngrx/store';
 import { LapTime } from 'src/app/models/lap-time';
 
@@ -11,7 +12,8 @@ export enum LaptimeActionTypes {
 }
 
 export const LoadLaptimes = createAction(
-  LaptimeActionTypes.LoadLaptimes
+  LaptimeActionTypes.LoadLaptimes,
+  props<{ params?: LapTimeQueryParams }>()
 );
 
 export const LoadLaptimesSuccess = createAction(

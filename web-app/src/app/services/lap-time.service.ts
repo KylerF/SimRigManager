@@ -4,11 +4,12 @@ import { Injectable } from '@angular/core';
 import { Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
+import { GET_LAPTIMES, SUBSCRIBE_TO_LAPTIMES } from '../graphql/queries/laptimes';
+import { LapTimeQueryParams } from '../models/lap-time-filter-params';
 import { APIHelper } from 'helpers/api-helper';
 import { LapTime } from 'models/lap-time';
-import { GET_LAPTIMES, SUBSCRIBE_TO_LAPTIMES } from '../graphql/queries/laptimes';
 
-interface AllLapTimesResponse {
+interface LapTimesResponse {
   laptimes: LapTime[]
 }
 
@@ -18,7 +19,7 @@ interface NewLapTimeResponse {
 @Injectable({
   providedIn: 'root'
 })
-export class LapTimeGQL extends Query<AllLapTimesResponse> {
+export class LapTimeGQL extends Query<LapTimesResponse, LapTimeQueryParams> {
   document = GET_LAPTIMES;
 }
 

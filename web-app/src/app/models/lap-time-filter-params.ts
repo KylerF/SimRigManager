@@ -1,17 +1,42 @@
 /**
  * Models used to filter lap times displayed on the scoreboard
  */
+export interface LapTimeQueryParams {
+  where?: LapTimeFilterParams;
+  order?: LaptimeSortParams;
+  skip?: number;
+  limit?: number;
+}
+
 export interface LapTimeFilterParams {
-  sortParams?: LaptimeSortParams;
-  searchParams?: LapTimeSearchParams[];
-  show?: DriverFilterType;
-  showForDriverId?: number;
-  since?: moment.Moment;
+  driverName?: {
+    contains?: string;
+  };
+  car?: {
+    contains?: string;
+  };
+  trackName?: {
+    contains?: string;
+  };
+  trackConfig?: {
+    contains?: string;
+  };
+  time?: {
+    gt?: number;
+    lt?: number;
+  };
+  setAt?: {
+    after?: string;
+  };
 }
 
 export interface LaptimeSortParams {
-  sortBy: LapTimeColumn;
-  sortOrder: SortOrder;
+  driverName?: SortOrder;
+  car?: SortOrder;
+  trackName?: SortOrder;
+  trackConfig?: SortOrder;
+  time?: SortOrder;
+  setAt?: SortOrder;
 }
 
 export interface LapTimeSearchParams {
@@ -25,8 +50,8 @@ export enum DriverFilterType {
 }
 
 export enum SortOrder {
-  ASC = 'asc',
-  DESC = 'desc',
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
 
 export enum LapTimeColumn {
