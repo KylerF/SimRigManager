@@ -1,8 +1,8 @@
 from typing import List
 import strawberry
 
-from database.database import get_db
 from database.modeltypes import DriverType
+from database.database import get_db
 from database.crud import (
     get_active_driver,
     get_drivers,

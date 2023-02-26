@@ -1,8 +1,7 @@
-import strawberry
 from typing import AsyncGenerator
+import strawberry
 import asyncio
 
-from database.database import get_db
 from database.modeltypes import LapTimeType
 from api.utils import get_session_best_lap
 
