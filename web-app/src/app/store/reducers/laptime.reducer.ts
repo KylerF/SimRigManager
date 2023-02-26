@@ -11,30 +11,30 @@ export const initialState: StateContainer<LapTime[]> = {
   state: [],
   error: null,
   loading: false,
-  lastUpdated: null
+  lastUpdated: null,
 };
 
 export const reducer = createReducer(
   initialState,
-  on(laptimeActions.LoadLaptimes, state => ({
+  on(laptimeActions.LoadLaptimes, (state) => ({
     ...state,
-    loading: true
+    loading: true,
   })),
   on(laptimeActions.LoadLaptimesSuccess, (state, action) => ({
     state: action.payload.data,
     error: null,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   })),
   on(laptimeActions.LoadLaptimesFailure, (state, action) => ({
     ...state,
     error: action.payload.error,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   })),
   on(laptimeActions.AddLaptime, (state, action) => ({
     ...state,
     state: [...state.state, action.payload.data],
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   }))
 );

@@ -9,10 +9,9 @@ describe('TelemetryDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TelemetryDashboardComponent ] ,
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [TelemetryDashboardComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

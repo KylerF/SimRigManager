@@ -15,7 +15,7 @@ import { StateContainer } from 'models/state';
 @Component({
   selector: 'app-controller-list',
   templateUrl: './controller-list.component.html',
-  styleUrls: ['./controller-list.component.scss']
+  styleUrls: ['./controller-list.component.scss'],
 })
 
 /**
@@ -31,7 +31,7 @@ export class ControllerListComponent implements OnInit, OnDestroy {
     private modalService: NgbModal, // Service to display and interface with modal dialogs
     private driverService: DriverService,
     private store: Store<State>
-  ) { }
+  ) {}
 
   // Poll controllers to update their status
   ngOnInit(): void {
@@ -51,24 +51,23 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Connect to WLED controllers and start updating their status
    */
   startControllerUpdates() {
-    this.controllers$.pipe(
-      first(
-        controllers => controllers.state.some(
-          controller => controller.isAvailable == undefined
+    this.controllers$
+      .pipe(
+        first((controllers) =>
+          controllers.state.some((controller) => controller.isAvailable == undefined)
         )
       )
-    )
-    .subscribe({
-      next: controllers => {
-        controllers.state.forEach(controller => {
-          if (controller.isAvailable == undefined) {
-            this.controllerService.disconnectController(controller);
-            this.store.dispatch(StartStream({ controller: controller }));
-          }
-        });
-      },
-      error: error => this.error = error.message
-    });
+      .subscribe({
+        next: (controllers) => {
+          controllers.state.forEach((controller) => {
+            if (controller.isAvailable == undefined) {
+              this.controllerService.disconnectController(controller);
+              this.store.dispatch(StartStream({ controller: controller }));
+            }
+          });
+        },
+        error: (error) => (this.error = error.message),
+      });
   }
 
   /**
@@ -84,11 +83,13 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Delete a controller
    */
   deleteController(controller: Controller) {
-    this.store.dispatch(DeleteController({
-      payload: {
-        data: controller
-      }
-    }));
+    this.store.dispatch(
+      DeleteController({
+        payload: {
+          data: controller,
+        },
+      })
+    );
   }
 
   /**
@@ -96,25 +97,24 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    */
   editController(controller: Controller) {
     this.driverService.getSelectedDriver().subscribe({
-      next: driver => {
-        const modalRef = this.modalService.open(
-          ControllerSettingsComponent,
-          { centered: true }
-        );
+      next: (driver) => {
+        const modalRef = this.modalService.open(ControllerSettingsComponent, { centered: true });
 
         modalRef.componentInstance.controller = controller;
         modalRef.componentInstance.activeDriver = driver;
 
-        modalRef.result.then(() => {
-          // Update controller state
-          this.startControllerUpdates();
-        })
-        .catch(_ => {
-          // Cancelled
-          {}
-        });
+        modalRef.result
+          .then(() => {
+            // Update controller state
+            this.startControllerUpdates();
+          })
+          .catch((_) => {
+            // Cancelled
+            {
+            }
+          });
       },
-      error: error => this.error = error.message
+      error: (error) => (this.error = error.message),
     });
   }
 
@@ -122,32 +122,28 @@ export class ControllerListComponent implements OnInit, OnDestroy {
    * Show the modal add controller dialog
    */
   showAddControllerDialog() {
-    const modalRef = this.modalService.open(
-      NewControllerComponent,
-      { centered: true }
-    );
+    const modalRef = this.modalService.open(NewControllerComponent, { centered: true });
 
-    modalRef.result.then(() => {
-      // Update controller state
-      this.startControllerUpdates();
-    })
-    .catch(_ => {
-      // Cancelled
-      {}
-    });
+    modalRef.result
+      .then(() => {
+        // Update controller state
+        this.startControllerUpdates();
+      })
+      .catch((_) => {
+        // Cancelled
+        {
+        }
+      });
   }
 
   ngOnDestroy() {
-    this.controllers$.pipe(
-      take(1)
-    )
-    .subscribe({
-      next: controllers => {
-        controllers?.state.forEach(controller => {
+    this.controllers$.pipe(take(1)).subscribe({
+      next: (controllers) => {
+        controllers?.state.forEach((controller) => {
           this.controllerService.disconnectController(controller);
         });
       },
-      error: error => this.error = error.message
+      error: (error) => (this.error = error.message),
     });
   }
 }

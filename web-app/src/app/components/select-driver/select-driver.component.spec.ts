@@ -10,13 +10,9 @@ describe('SelectDriverComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelectDriverComponent ],
-      imports: [
-        HttpClientModule,
-        StoreModule.forRoot({})
-      ]
-    })
-    .compileComponents();
+      declarations: [SelectDriverComponent],
+      imports: [HttpClientModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

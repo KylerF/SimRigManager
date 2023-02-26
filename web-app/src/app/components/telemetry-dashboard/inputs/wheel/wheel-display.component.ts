@@ -8,7 +8,7 @@ import { CarImageHelper } from 'helpers/car-image-helper';
 @Component({
   selector: 'app-wheel-display',
   templateUrl: './wheel-display.component.html',
-  styleUrls: ['./wheel-display.component.scss']
+  styleUrls: ['./wheel-display.component.scss'],
 })
 
 /**
@@ -19,11 +19,8 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
   car: string;
   wheelImage: string;
 
-  constructor (
-    iracingDataService: IracingDataService,
-    private renderer: Renderer2
-  ) {
-    super(iracingDataService)
+  constructor(iracingDataService: IracingDataService, private renderer: Renderer2) {
+    super(iracingDataService);
   }
 
   /**
@@ -34,23 +31,20 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.driverIndex = data.DriverInfo.DriverCarIdx;
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.driverIndex = data.DriverInfo.DriverCarIdx;
 
-            // Check if the car has changed, update the image accordingly
-            let lastCar = this.car;
-            this.car = data.DriverInfo.Drivers[this.driverIndex].CarScreenName;
-            if ( lastCar !== this.car ) {
-              this.wheelImage = CarImageHelper.getImageForCar(this.car);
-            }
-
-            this.rotateWheel(data.SteeringWheelAngle)
-          }
+        // Check if the car has changed, update the image accordingly
+        let lastCar = this.car;
+        this.car = data.DriverInfo.Drivers[this.driverIndex].CarScreenName;
+        if (lastCar !== this.car) {
+          this.wheelImage = CarImageHelper.getImageForCar(this.car);
         }
-      );
+
+        this.rotateWheel(data.SteeringWheelAngle);
+      }
+    });
   }
 
   /**
@@ -63,11 +57,7 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
     const image = document.getElementById('wheel');
 
     if (image) {
-      this.renderer.setStyle(
-        image,
-        'transform',
-        `rotate(${-radians}rad)`
-      );
+      this.renderer.setStyle(image, 'transform', `rotate(${-radians}rad)`);
     }
   }
 }

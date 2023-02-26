@@ -10,6 +10,4 @@ export const SetConnectionStatus = createAction(
   props<{ connected: boolean }>()
 );
 
-export const GetConnectionStatus = createAction(
-  IracingActionTypes.GetConnectionStatus,
-);
+export const GetConnectionStatus = createAction(IracingActionTypes.GetConnectionStatus);

@@ -8,9 +8,7 @@ export enum QuoteActionTypes {
   LoadQuoteFailure = '[Quote] Load Quote Failure',
 }
 
-export const LoadQuote = createAction(
-  QuoteActionTypes.LoadQuote
-);
+export const LoadQuote = createAction(QuoteActionTypes.LoadQuote);
 
 export const LoadQuoteSuccess = createAction(
   QuoteActionTypes.LoadQuoteSuccess,

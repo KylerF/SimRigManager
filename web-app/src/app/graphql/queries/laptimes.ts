@@ -15,7 +15,7 @@ export const GET_LAPTIMES = gql`
       setAt
     }
   }
-`
+`;
 
 export const SUBSCRIBE_TO_LAPTIMES = gql`
   subscription lapTimes {
@@ -30,4 +30,4 @@ export const SUBSCRIBE_TO_LAPTIMES = gql`
     time
     setAt
   }
-`
+`;

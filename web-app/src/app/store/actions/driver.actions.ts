@@ -1,9 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Driver } from 'models/driver';
 
-export const loadActiveDriver = createAction(
-  '[ActiveDriver] Load Active Driver'
-);
+export const loadActiveDriver = createAction('[ActiveDriver] Load Active Driver');
 
 export const loadActiveDriverSuccess = createAction(
   '[ActiveDriver] Load Active Driver Success',
@@ -30,9 +28,7 @@ export const setActiveDriverFailure = createAction(
   props<{ error: any }>()
 );
 
-export const loadAllDrivers = createAction(
-  '[LoadDrivers] Load All Drivers'
-);
+export const loadAllDrivers = createAction('[LoadDrivers] Load All Drivers');
 
 export const loadAllDriversSuccess = createAction(
   '[LoadDrivers] Load All Drivers Success',
@@ -46,12 +42,12 @@ export const loadAllDriversFailure = createAction(
 
 export const uploadDriverAvatar = createAction(
   '[UpdateDriverProfile] Upload Driver Avatar',
-  props<{ driver: Driver, file: File }>()
+  props<{ driver: Driver; file: File }>()
 );
 
 export const uploadDriverAvatarSuccess = createAction(
   '[UpdateDriverProfile] Upload Driver Avatar Success',
-  props<{ driver: Driver, image_url: string }>()
+  props<{ driver: Driver; image_url: string }>()
 );
 
 export const uploadDriverAvatarFailure = createAction(

@@ -13,7 +13,7 @@ import * as driverActions from 'store/actions/driver.actions';
 @Component({
   selector: 'app-driver-profile',
   templateUrl: './driver-profile.component.html',
-  styleUrls: ['./driver-profile.component.scss']
+  styleUrls: ['./driver-profile.component.scss'],
 })
 
 /**
@@ -22,7 +22,7 @@ import * as driverActions from 'store/actions/driver.actions';
  */
 export class DriverProfileComponent implements OnInit {
   driver: Driver;
-  driverStats: DriverStats
+  driverStats: DriverStats;
   editingProfile: boolean;
   profileUpdated: boolean;
   error: string;
@@ -31,9 +31,8 @@ export class DriverProfileComponent implements OnInit {
     private driverService: DriverService,
     private modalService: NgbModal,
     private store: Store<State>,
-    private router: Router,
-  )
-  { }
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getActiveDriver();
@@ -44,14 +43,14 @@ export class DriverProfileComponent implements OnInit {
    */
   getActiveDriver() {
     this.store.select(selectActiveDriver).subscribe({
-      next: driver => {
+      next: (driver) => {
         if (driver == null) {
           return;
         }
 
-        this.driver = {...driver};
+        this.driver = { ...driver };
         this.getDriverStats(driver?.id);
-      }
+      },
     });
   }
 
@@ -60,8 +59,8 @@ export class DriverProfileComponent implements OnInit {
    */
   getDriverStats(driverId) {
     this.driverService.getDriverStats(driverId).subscribe({
-      next: stats => this.driverStats = stats,
-      error: error => this.error = error.message
+      next: (stats) => (this.driverStats = stats),
+      error: (error) => (this.error = error.message),
     });
   }
 
@@ -85,10 +84,12 @@ export class DriverProfileComponent implements OnInit {
       return;
     }
 
-    this.store.dispatch(driverActions.uploadDriverAvatar({
-      driver: this.driver,
-      file: file
-    }));
+    this.store.dispatch(
+      driverActions.uploadDriverAvatar({
+        driver: this.driver,
+        file: file,
+      })
+    );
   }
 
   /**
@@ -103,12 +104,12 @@ export class DriverProfileComponent implements OnInit {
    */
   saveProfile() {
     this.driverService.updateDriver(this.driver).subscribe({
-      next: response => {
+      next: (response) => {
         this.driverService.setCachedDriver(response);
         this.driver = response;
         this.profileUpdated = true;
       },
-      error: error => this.error = error.message
+      error: (error) => (this.error = error.message),
     });
 
     this.editingProfile = false;
@@ -122,13 +123,15 @@ export class DriverProfileComponent implements OnInit {
     modalRef.componentInstance.driver = this.driver;
 
     // Add the new driver after successful creation
-    modalRef.result.then(_ => {
-      // Redirect to sign in
-      this.router.navigate(["selectdriver"]);
-    })
-    .catch(_ => {
-      // Cancelled
-      {}
-    });
+    modalRef.result
+      .then((_) => {
+        // Redirect to sign in
+        this.router.navigate(['selectdriver']);
+      })
+      .catch((_) => {
+        // Cancelled
+        {
+        }
+      });
   }
 }

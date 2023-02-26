@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 import {
   SUBSCRIBE_TO_ACTIVE_DRIVER,
   GET_ALL_DRIVERS,
-  SELECT_DRIVER
+  SELECT_DRIVER,
 } from 'graphql/queries/drivers';
 import { Driver, DriverAvatar } from 'models/driver';
 import { DriverStats } from 'models/driver-stats';
@@ -15,33 +15,33 @@ import { APIHelper } from 'helpers/api-helper';
 import { NewDriver } from 'models/new-driver';
 
 interface ActiveDriverResponse {
-  activeDriver: Driver
+  activeDriver: Driver;
 }
 
 interface AllDriversResponse {
-  drivers: Driver[]
+  drivers: Driver[];
 }
 
 interface SetActiveDriverResponse {
-  setActiveDriver: Driver
+  setActiveDriver: Driver;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActiveDriverGQL extends Subscription<ActiveDriverResponse> {
   document = SUBSCRIBE_TO_ACTIVE_DRIVER;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DriversGQL extends Query<AllDriversResponse> {
   document = GET_ALL_DRIVERS;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SelectDriverGQL extends Mutation<SetActiveDriverResponse> {
   document = SELECT_DRIVER;
@@ -52,7 +52,7 @@ export class SelectDriverGQL extends Mutation<SetActiveDriverResponse> {
  * and caching functionality for driver profiles
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DriverService {
   private _selectedDriver = new BehaviorSubject<Driver>(null);
@@ -68,7 +68,7 @@ export class DriverService {
   private statsEndpoint = 'stats';
 
   constructor(private http: HttpClient) {
-    if(this.checkLocalStorageSupported()) {
+    if (this.checkLocalStorageSupported()) {
       this.localStorage = window.localStorage;
       this._selectedDriver.next(this.getFromLocalStorage() || null);
     }
@@ -80,12 +80,9 @@ export class DriverService {
    * @returns array of drivers
    */
   getDrivers(): Observable<Driver[]> {
-    return this.http.get<Driver[]>(
-     `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<Driver[]>(`${APIHelper.getBaseUrl()}/${this.driversEndpoint}`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -94,21 +91,16 @@ export class DriverService {
    * @returns the active driver
    */
   getSelectedDriver(): Observable<Driver> {
-    return this.http.get<Driver>(
-      `${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<Driver>(`${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
    * Stream lap times via an EventSource
    */
   streamSelectedDriver(): EventSource {
-    this.eventSource = new EventSource(
-      `${APIHelper.getBaseUrl()}/${this.streamEndpoint}`
-    );
+    this.eventSource = new EventSource(`${APIHelper.getBaseUrl()}/${this.streamEndpoint}`);
 
     this.eventSource.addEventListener('message', (event) => {
       this._selectedDriver.next(JSON.parse(event.data));
@@ -128,12 +120,11 @@ export class DriverService {
    * @returns the active driver
    */
   getDriverStats(driverId: number): Observable<DriverStats> {
-    return this.http.get<DriverStats>(
-      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driverId}/${this.statsEndpoint}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<DriverStats>(
+        `${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driverId}/${this.statsEndpoint}`
+      )
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -156,15 +147,11 @@ export class DriverService {
   selectDriver(driver: Driver) {
     this.setCachedDriver(driver);
 
-    return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`,
-      {
-        'driverId': driver.id
-      }
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .post<Driver>(`${APIHelper.getBaseUrl()}/${this.activeDriverEndpoint}`, {
+        driverId: driver.id,
+      })
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -174,13 +161,9 @@ export class DriverService {
    * @returns the new driver, if added successfully
    */
   addDriver(driver: NewDriver): Observable<Driver> {
-    return this.http.post<Driver>(
-      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`,
-      driver
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .post<Driver>(`${APIHelper.getBaseUrl()}/${this.driversEndpoint}`, driver)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -190,13 +173,9 @@ export class DriverService {
    * @returns the updated driver
    */
   updateDriver(driver: Driver): Observable<Driver> {
-    return this.http.patch<Driver>(
-      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}`,
-      driver
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    )
+    return this.http
+      .patch<Driver>(`${APIHelper.getBaseUrl()}/${this.driversEndpoint}`, driver)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -209,12 +188,9 @@ export class DriverService {
    * @returns the driver's data, for the last time ever
    */
   deleteDriver(driver: Driver): Observable<Driver> {
-    return this.http.delete<Driver>(
-      `${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driver.id}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .delete<Driver>(`${APIHelper.getBaseUrl()}/${this.driversEndpoint}/${driver.id}`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -226,15 +202,14 @@ export class DriverService {
    */
   uploadProfilePic(driverId: number, profilePic: File): Observable<DriverAvatar> {
     var formData: FormData = new FormData();
-    formData.append("profile_pic", profilePic);
+    formData.append('profile_pic', profilePic);
 
-    return this.http.post<DriverAvatar>(
-      `${APIHelper.getBaseUrl()}/${this.profilePicEndpoint}/${driverId}`,
-      formData
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    )
+    return this.http
+      .post<DriverAvatar>(
+        `${APIHelper.getBaseUrl()}/${this.profilePicEndpoint}/${driverId}`,
+        formData
+      )
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -258,7 +233,7 @@ export class DriverService {
    * @returns true if supported, false otherwise
    */
   private checkLocalStorageSupported() {
-    return (typeof(Storage) !== void(0));
+    return typeof Storage !== void 0;
   }
 
   /**
@@ -282,10 +257,7 @@ export class DriverService {
    */
   private saveToLocalStorage(): boolean {
     if (this.checkLocalStorageSupported()) {
-      this.localStorage.setItem(
-        'activeDriver',
-        JSON.stringify(this._selectedDriver.getValue())
-      );
+      this.localStorage.setItem('activeDriver', JSON.stringify(this._selectedDriver.getValue()));
 
       return true;
     }

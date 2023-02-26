@@ -5,12 +5,12 @@ import { Component } from '@angular/core';
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
-  animations: [ longDelayedFadeIn ]
+  animations: [longDelayedFadeIn],
 })
 
 /**
  * Redirect here when a 404 is encountered
  */
 export class NotFoundComponent {
-  constructor() { }
+  constructor() {}
 }

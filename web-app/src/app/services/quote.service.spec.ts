@@ -9,8 +9,8 @@ describe('QuoteService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule, RouterModule ],
-      providers: [ QuoteService ]
+      imports: [HttpClientModule, RouterModule],
+      providers: [QuoteService],
     });
     service = TestBed.inject(QuoteService);
   });

@@ -18,23 +18,19 @@ export const LoadLaptimes = createAction(
 
 export const LoadLaptimesSuccess = createAction(
   LaptimeActionTypes.LoadLaptimesSuccess,
-  props<{ payload: { data: LapTime[] }}>()
+  props<{ payload: { data: LapTime[] } }>()
 );
 
 export const LoadLaptimesFailure = createAction(
   LaptimeActionTypes.LoadLaptimesFailure,
-  props<{ payload: { error: any }}>()
+  props<{ payload: { error: any } }>()
 );
 
-export const StreamLaptimes = createAction(
-  LaptimeActionTypes.StreamLaptimes,
-);
+export const StreamLaptimes = createAction(LaptimeActionTypes.StreamLaptimes);
 
-export const StopStreamLaptimes = createAction(
-  LaptimeActionTypes.StopStreamLaptimes,
-);
+export const StopStreamLaptimes = createAction(LaptimeActionTypes.StopStreamLaptimes);
 
 export const AddLaptime = createAction(
   LaptimeActionTypes.AddLaptime,
-  props<{ payload: { data: LapTime }}>()
+  props<{ payload: { data: LapTime } }>()
 );

@@ -1,5 +1,5 @@
-import { Info } from "./info";
-import { State } from "./state";
+import { Info } from './info';
+import { State } from './state';
 
 /**
  * Model interface for WLED message sent to or received from the controller

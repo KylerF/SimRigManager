@@ -8,7 +8,7 @@ import { Constants } from 'helpers/constants';
 @Component({
   selector: 'app-speedometer-display',
   templateUrl: './speedometer.component.html',
-  styleUrls: ['./speedometer.component.scss']
+  styleUrls: ['./speedometer.component.scss'],
 })
 
 /**
@@ -17,7 +17,7 @@ import { Constants } from 'helpers/constants';
 export class SpeedometerComponent extends BaseTelemetryDisplayComponent implements OnInit {
   speed: number;
 
-  constructor (iracingDataService: IracingDataService) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -36,13 +36,10 @@ export class SpeedometerComponent extends BaseTelemetryDisplayComponent implemen
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.speed = data.Speed;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.speed = data.Speed;
+      }
+    });
   }
 }

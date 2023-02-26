@@ -9,10 +9,9 @@ describe('LapCountDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LapCountDisplayComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [LapCountDisplayComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

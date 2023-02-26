@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'dateAgo',
-  pure: true
+  pure: true,
 })
 
 /**
@@ -16,17 +16,18 @@ export class DateAgoPipe implements PipeTransform {
       const dateUTC = new Date(date.getTime() - timezoneOffset);
 
       const seconds = Math.floor((+new Date() - +dateUTC) / 1000);
-      if (seconds < 30) // less than 30 seconds ago will show as 'Just now'
+      if (seconds < 30)
+        // less than 30 seconds ago will show as 'Just now'
         return 'Just now';
 
       const intervals = {
-        'year': 31536000,
-        'month': 2592000,
-        'week': 604800,
-        'day': 86400,
-        'hour': 3600,
-        'minute': 60,
-        'second': 1
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60,
+        second: 1,
       };
 
       let counter;

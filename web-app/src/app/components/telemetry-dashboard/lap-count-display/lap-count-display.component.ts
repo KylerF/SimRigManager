@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-lap-count-display',
   templateUrl: './lap-count-display.component.html',
-  styleUrls: ['./lap-count-display.component.scss']
+  styleUrls: ['./lap-count-display.component.scss'],
 })
 /**
  * Component to show the current session lap count
@@ -26,13 +26,10 @@ export class LapCountDisplayComponent extends BaseTelemetryDisplayComponent impl
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.lapCount = data.Lap;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.lapCount = data.Lap;
+      }
+    });
   }
 }

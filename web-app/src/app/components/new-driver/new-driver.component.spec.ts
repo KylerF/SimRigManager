@@ -11,11 +11,10 @@ describe('NewDriverComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewDriverComponent ],
-      imports: [ HttpClientModule ],
-      providers: [ NgbActiveModal, UntypedFormBuilder ]
-    })
-    .compileComponents();
+      declarations: [NewDriverComponent],
+      imports: [HttpClientModule],
+      providers: [NgbActiveModal, UntypedFormBuilder],
+    }).compileComponents();
   });
 
   beforeEach(() => {

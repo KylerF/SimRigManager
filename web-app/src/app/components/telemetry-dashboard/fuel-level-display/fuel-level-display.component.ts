@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-fuel-level-display',
   templateUrl: './fuel-level-display.component.html',
-  styleUrls: ['./fuel-level-display.component.scss']
+  styleUrls: ['./fuel-level-display.component.scss'],
 })
 
 /**
@@ -16,7 +16,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 export class FuelLevelDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   fuelLevel: number;
 
-  constructor (iracingDataService: IracingDataService) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -26,13 +26,10 @@ export class FuelLevelDisplayComponent extends BaseTelemetryDisplayComponent imp
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.fuelLevel = data.FuelLevel;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.fuelLevel = data.FuelLevel;
+      }
+    });
   }
 }

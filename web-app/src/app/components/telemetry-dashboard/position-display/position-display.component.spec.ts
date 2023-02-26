@@ -9,10 +9,9 @@ describe('PositionDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PositionDisplayComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [PositionDisplayComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

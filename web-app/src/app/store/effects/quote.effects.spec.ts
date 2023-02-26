@@ -11,11 +11,8 @@ describe('QuoteEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        QuoteEffects,
-        provideMockActions(() => actions$)
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [QuoteEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(QuoteEffects);

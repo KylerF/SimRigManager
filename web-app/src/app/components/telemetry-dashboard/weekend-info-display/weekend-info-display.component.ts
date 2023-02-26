@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-weekend-info-display',
   templateUrl: './weekend-info-display.component.html',
-  styleUrls: ['./weekend-info-display.component.scss']
+  styleUrls: ['./weekend-info-display.component.scss'],
 })
 
 /**
@@ -18,22 +18,19 @@ export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent i
   track: string;
   config: string;
 
-  constructor (iracingDataService: IracingDataService){
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.eventType = data.WeekendInfo.EventType;
-            this.track = data.WeekendInfo.TrackDisplayName;
-            this.config = data.WeekendInfo.TrackConfigName;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.eventType = data.WeekendInfo.EventType;
+        this.track = data.WeekendInfo.TrackDisplayName;
+        this.config = data.WeekendInfo.TrackConfigName;
+      }
+    });
   }
 }

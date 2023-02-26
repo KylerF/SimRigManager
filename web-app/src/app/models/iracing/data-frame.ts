@@ -1,5 +1,5 @@
-import { DriverInfo } from "./driver-info";
-import { WeekendInfo } from "./weekend-info";
+import { DriverInfo } from './driver-info';
+import { WeekendInfo } from './weekend-info';
 
 /**
  * Model interface for a single frame of iRacing data streamed from the API

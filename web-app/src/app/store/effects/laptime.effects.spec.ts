@@ -12,14 +12,8 @@ describe('LaptimeEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        ApolloTestingModule
-      ],
-      providers: [
-        LaptimeEffects,
-        provideMockActions(() => actions$)
-      ]
+      imports: [HttpClientTestingModule, ApolloTestingModule],
+      providers: [LaptimeEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(LaptimeEffects);

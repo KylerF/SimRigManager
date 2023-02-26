@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-delta-display',
   templateUrl: './delta-display.component.html',
-  styleUrls: ['./delta-display.component.scss']
+  styleUrls: ['./delta-display.component.scss'],
 })
 export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   delta: number;
@@ -19,13 +19,10 @@ export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent impleme
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.delta = data.LapDeltaToSessionBestLap;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.delta = data.LapDeltaToSessionBestLap;
+      }
+    });
   }
 }

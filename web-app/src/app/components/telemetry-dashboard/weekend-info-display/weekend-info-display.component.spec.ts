@@ -9,10 +9,9 @@ describe('WeekendInfoDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ WeekendInfoDisplayComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [WeekendInfoDisplayComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

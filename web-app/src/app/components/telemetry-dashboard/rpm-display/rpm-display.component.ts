@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-rpm-display',
   templateUrl: './rpm-display.component.html',
-  styleUrls: ['./rpm-display.component.scss']
+  styleUrls: ['./rpm-display.component.scss'],
 })
 
 /**
@@ -27,19 +27,16 @@ export class RpmDisplayComponent extends BaseTelemetryDisplayComponent implement
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.rpm = data.RPM;
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.rpm = data.RPM;
 
-            let newShiftRpm = data.DriverInfo.DriverCarSLShiftRPM;
+        let newShiftRpm = data.DriverInfo.DriverCarSLShiftRPM;
 
-            if (newShiftRpm > this.shiftRpm) {
-              this.shiftRpm = newShiftRpm;
-            }
-          }
+        if (newShiftRpm > this.shiftRpm) {
+          this.shiftRpm = newShiftRpm;
         }
-      );
+      }
+    });
   }
 }

@@ -10,21 +10,21 @@ import { APIHelper } from 'helpers/api-helper';
 import { LapTime } from 'models/lap-time';
 
 interface LapTimesResponse {
-  laptimes: LapTime[]
+  laptimes: LapTime[];
 }
 
 interface NewLapTimeResponse {
-  lapTime: LapTime
+  lapTime: LapTime;
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LapTimeGQL extends Query<LapTimesResponse, LapTimeQueryParams> {
   document = GET_LAPTIMES;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LapTimeStreamGQL extends Query<NewLapTimeResponse> {
   document = SUBSCRIBE_TO_LAPTIMES;
@@ -34,15 +34,13 @@ export class LapTimeStreamGQL extends Query<NewLapTimeResponse> {
  * Service to retrieve best lap times from the API
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LapTimeService {
   private endpoint = 'laptimes';
   private streamEndpoint = 'laptimes/stream';
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Fetch all lap times from the database
@@ -50,33 +48,28 @@ export class LapTimeService {
    * @returns observable expected to return array of LapTimes
    */
   getLapTimes(): Observable<LapTime[]> {
-    return this.http.get<LapTime[]>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<LapTime[]>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
    * Stream lap times via Server Sent Events
    */
   streamLapTimes(): Observable<LapTime> {
-    return new Observable<LapTime>(obs => {
-      const eventSource = new EventSource(
-        `${APIHelper.getBaseUrl()}/${this.streamEndpoint}`
-      );
+    return new Observable<LapTime>((obs) => {
+      const eventSource = new EventSource(`${APIHelper.getBaseUrl()}/${this.streamEndpoint}`);
 
-      eventSource.addEventListener('message', event => {
+      eventSource.addEventListener('message', (event) => {
         let newLapTime: LapTime = JSON.parse(event.data);
         obs.next(newLapTime);
       });
 
-      eventSource.addEventListener('error', event => {
+      eventSource.addEventListener('error', (event) => {
         obs.error(event);
       });
 
-      eventSource.addEventListener('close', event => {
+      eventSource.addEventListener('close', (event) => {
         obs.complete();
       });
 

@@ -8,9 +8,8 @@ describe('ApiStatusBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ApiStatusBannerComponent ]
-    })
-    .compileComponents();
+      declarations: [ApiStatusBannerComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

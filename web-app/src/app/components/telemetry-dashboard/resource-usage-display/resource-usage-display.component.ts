@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-resource-usage-display',
   templateUrl: './resource-usage-display.component.html',
-  styleUrls: ['./resource-usage-display.component.scss']
+  styleUrls: ['./resource-usage-display.component.scss'],
 })
 
 /**
@@ -18,7 +18,7 @@ export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent
   cpuUsage: number;
   gpuUsage: number;
 
-  constructor (iracingDataService: IracingDataService) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -30,15 +30,12 @@ export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent
   ngOnInit(): void {
     this.iracingDataService.startStream();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!_.isEmpty(data)) {
-            this.fps = data.FrameRate;
-            this.cpuUsage = data.CpuUsageFG;
-            this.gpuUsage = data.GpuUsage;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!_.isEmpty(data)) {
+        this.fps = data.FrameRate;
+        this.cpuUsage = data.CpuUsageFG;
+        this.gpuUsage = data.GpuUsage;
+      }
+    });
   }
 }

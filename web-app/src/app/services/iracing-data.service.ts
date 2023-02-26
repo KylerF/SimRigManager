@@ -9,7 +9,7 @@ import { APIHelper } from 'helpers/api-helper';
 import { IracingDataFrame } from 'models/iracing/data-frame';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 /**
@@ -52,15 +52,14 @@ export class IracingDataService {
       url = `${APIHelper.getMockBaseUrl()}/${this.wsEndpoint}`;
     }
 
-    return this.http.get<any>(`${url}/${this.endpoint}`)
-      .pipe(catchError(APIHelper.handleError));
+    return this.http.get<any>(`${url}/${this.endpoint}`).pipe(catchError(APIHelper.handleError));
   }
 
   /**
    * Get the current iRacing connection status
    */
   getConnectionStatus(): Observable<boolean> {
-    return this.connected$
+    return this.connected$;
   }
 
   /**
@@ -83,22 +82,23 @@ export class IracingDataService {
       url = `${APIHelper.getMockBaseUrl('ws')}/${this.wsEndpoint}`;
     }
 
-    this.wsSubscription = webSocket(url).pipe(
-      retryWhen(error => error.pipe(
-        // Retry connection every 3 seconds on error
-        tap(err => {
-          this._connected.next(false);
-          this._latestData.next(null);
-        }),
-        delay(3000)
-      ))
-    )
-    .subscribe(
-      (response: IracingDataFrame) => {
+    this.wsSubscription = webSocket(url)
+      .pipe(
+        retryWhen((error) =>
+          error.pipe(
+            // Retry connection every 3 seconds on error
+            tap((err) => {
+              this._connected.next(false);
+              this._latestData.next(null);
+            }),
+            delay(3000)
+          )
+        )
+      )
+      .subscribe((response: IracingDataFrame) => {
         this._connected.next(true);
         this._latestData.next(response);
-      }
-    );
+      });
   }
 
   /**

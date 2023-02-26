@@ -1,11 +1,11 @@
-import { Fs } from "./fs";
-import { Leds } from "./leds";
-import { Wifi } from "./wifi";
+import { Fs } from './fs';
+import { Leds } from './leds';
+import { Wifi } from './wifi';
 
 /**
  * Model interface for WLED info returned from controller API
  */
- export interface Info {
+export interface Info {
   ver: string;
   vid: number;
   leds: Leds;

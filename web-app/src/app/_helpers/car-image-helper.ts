@@ -20,7 +20,7 @@ export class CarImageHelper {
     'Subaru WRX STI': 'sti_wheel.png',
     'Ford Fiesta RS WRC': 'fiesta_wheel.png',
     'Mercedes W12': 'f1_wheel.png',
-  }
+  };
 
   /**
    * Get the path to a wheel image for the given car

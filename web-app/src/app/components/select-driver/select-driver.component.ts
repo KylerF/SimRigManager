@@ -12,7 +12,7 @@ import { StateContainer } from 'models/state';
 @Component({
   selector: 'app-select-driver',
   templateUrl: './select-driver.component.html',
-  styleUrls: ['./select-driver.component.scss']
+  styleUrls: ['./select-driver.component.scss'],
 })
 
 /**
@@ -29,8 +29,7 @@ export class SelectDriverComponent implements OnInit {
   constructor(
     private modalService: NgbModal, // Service to display and interface with modal dialogs
     private store: Store
-  )
-  { }
+  ) {}
 
   ngOnInit(): void {
     this.getDrivers();
@@ -42,7 +41,7 @@ export class SelectDriverComponent implements OnInit {
   getDrivers() {
     this.store.dispatch(loadAllDrivers());
     this.store.dispatch(loadActiveDriver());
-    this.drivers$ = this.store.select(selectDriverState)
+    this.drivers$ = this.store.select(selectDriverState);
   }
 
   /**
@@ -62,12 +61,14 @@ export class SelectDriverComponent implements OnInit {
     const modalRef = this.modalService.open(NewDriverComponent, { centered: true });
 
     // Add the new driver after successful creation
-    modalRef.result.then((newDriver) => {
-      this.drivers.push(newDriver);
-    })
-    .catch(_ => {
-      // Cancelled
-      {}
-    });
+    modalRef.result
+      .then((newDriver) => {
+        this.drivers.push(newDriver);
+      })
+      .catch((_) => {
+        // Cancelled
+        {
+        }
+      });
   }
 }

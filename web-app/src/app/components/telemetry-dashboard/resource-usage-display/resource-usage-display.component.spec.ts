@@ -9,10 +9,9 @@ describe('ResourceUsageDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResourceUsageDisplayComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [ResourceUsageDisplayComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

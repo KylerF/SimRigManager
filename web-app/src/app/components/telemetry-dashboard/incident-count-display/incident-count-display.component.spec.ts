@@ -9,10 +9,9 @@ describe('IncidentCountDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IncidentCountDisplayComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [IncidentCountDisplayComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

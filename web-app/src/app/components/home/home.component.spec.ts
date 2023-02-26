@@ -11,14 +11,9 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ],
-      imports: [
-        HttpClientModule,
-        ApolloTestingModule,
-        StoreModule.forRoot({})
-      ]
-    })
-    .compileComponents();
+      declarations: [HomeComponent],
+      imports: [HttpClientModule, ApolloTestingModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

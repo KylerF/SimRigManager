@@ -8,9 +8,8 @@ describe('HourglassIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HourglassIconComponent ]
-    })
-    .compileComponents();
+      declarations: [HourglassIconComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

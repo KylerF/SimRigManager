@@ -13,7 +13,7 @@ import { GetControllerSettings, UpdateControllerSettings } from 'store/actions/c
 @Component({
   selector: 'app-controller-settings',
   templateUrl: './controller-settings.component.html',
-  styleUrls: ['./controller-settings.component.scss']
+  styleUrls: ['./controller-settings.component.scss'],
 })
 
 /**
@@ -38,8 +38,7 @@ export class ControllerSettingsComponent implements OnInit {
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
     private formBuilder: FormBuilder, // Used to build the controller settings form
     private store: Store<State>
-  )
-  { }
+  ) {}
 
   /**
    * Populate the settings form with controller details
@@ -49,10 +48,10 @@ export class ControllerSettingsComponent implements OnInit {
     this.controllerSettingsForm = this.formBuilder.group({
       name: ['', Validators.required],
       ipAddress: ['', [Validators.required, ipAddressValidatorFunction()]],
-      universe: ['', [Validators.required, Validators.pattern('^[1-9]\d*$')]],
+      universe: ['', [Validators.required, Validators.pattern('^[1-9]d*$')]],
       colorTheme: [''],
       idleEffect: [''],
-      autoOn: [false]
+      autoOn: [false],
     });
 
     this.controllerSettingsForm.get('name').setValue(this.controller.name);
@@ -70,14 +69,16 @@ export class ControllerSettingsComponent implements OnInit {
    * Query current user settings for the controller
    */
   getControllerSettings() {
-    this.store.dispatch(GetControllerSettings({
-      payload: {
-        data: {
-          controller: this.controller,
-          driver: this.activeDriver
-        }
-      }
-    }));
+    this.store.dispatch(
+      GetControllerSettings({
+        payload: {
+          data: {
+            controller: this.controller,
+            driver: this.activeDriver,
+          },
+        },
+      })
+    );
   }
 
   /**
@@ -85,8 +86,8 @@ export class ControllerSettingsComponent implements OnInit {
    */
   getAvailableEffects() {
     this.controllerService.getControllerState(this.controller).subscribe({
-      next: state => this.availableEffects = state.effects.sort(),
-      error: error => this.error = error.message
+      next: (state) => (this.availableEffects = state.effects.sort()),
+      error: (error) => (this.error = error.message),
     });
   }
 
@@ -100,14 +101,14 @@ export class ControllerSettingsComponent implements OnInit {
     this.ipValid = null;
 
     this.controllerService.testIp(this.controllerSettingsForm.get('ipAddress').value).subscribe({
-      next: controller => {
+      next: (controller) => {
         this.connecting = false;
         this.ipValid = true;
       },
-      error: error => {
+      error: (error) => {
         this.connecting = false;
         this.ipValid = false;
-      }
+      },
     });
   }
 
@@ -138,12 +139,14 @@ export class ControllerSettingsComponent implements OnInit {
       id: this.controller.id,
       name: this.controllerSettingsForm.get('name').value,
       ipAddress: this.controllerSettingsForm.get('ipAddress').value,
-      universe: this.controllerSettingsForm.get('universe').value
+      universe: this.controllerSettingsForm.get('universe').value,
     };
 
-    this.store.dispatch(UpdateControllerSettings({
-      controller: updatedController
-    }));
+    this.store.dispatch(
+      UpdateControllerSettings({
+        controller: updatedController,
+      })
+    );
   }
 
   /**

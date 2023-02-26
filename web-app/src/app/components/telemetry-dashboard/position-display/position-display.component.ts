@@ -7,7 +7,7 @@ import { IracingDataService } from 'src/app/services/iracing-data.service';
 @Component({
   selector: 'app-position-display',
   templateUrl: './position-display.component.html',
-  styleUrls: ['./position-display.component.scss']
+  styleUrls: ['./position-display.component.scss'],
 })
 /**
  * Component to show the driver's position
@@ -22,13 +22,10 @@ export class PositionDisplayComponent extends BaseTelemetryDisplayComponent impl
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.position = data.PlayerCarPosition;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.position = data.PlayerCarPosition;
+      }
+    });
   }
 }
