@@ -149,3 +149,28 @@ class StringFilter:
             return field.contains(self.contains)
         else:
             return None
+
+
+@strawberry.input(
+    description="Filter by boolean field",
+    name="BooleanFilter"
+)
+class BooleanFilter:
+    eq: Optional[bool] = None
+    neq: Optional[bool] = None
+
+    def __init__(
+        self,
+        eq: Optional[bool] = None,
+        neq: Optional[bool] = None
+    ):
+        self.eq = eq
+        self.neq = neq
+
+    def to_sqlalchemy(self, field: Column):
+        if self.eq is not None:
+            return field == self.eq
+        elif self.neq is not None:
+            return field != self.neq
+        else:
+            return None
