@@ -52,18 +52,18 @@ class LaptimeFilter:
         filters = []
 
         if self.driver_name is not None:
-            filters.append(self.driver_name.to_sqlalchemy(LapTime.driverName))
+            filters.extend(self.driver_name.to_sqlalchemy(LapTime.driverName))
         if self.driver_id is not None:
-            filters.append(self.driver_id.to_sqlalchemy(LapTime.driverId))
+            filters.extend(self.driver_id.to_sqlalchemy(LapTime.driverId))
         if self.car is not None:
-            filters.append(self.car.to_sqlalchemy(LapTime.car))
+            filters.extend(self.car.to_sqlalchemy(LapTime.car))
         if self.track_name is not None:
-            filters.append(self.track_name.to_sqlalchemy(LapTime.trackName))
+            filters.extend(self.track_name.to_sqlalchemy(LapTime.trackName))
         if self.track_config is not None:
-            filters.append(self.track_config.to_sqlalchemy(LapTime.trackConfig))
+            filters.extend(self.track_config.to_sqlalchemy(LapTime.trackConfig))
         if self.time is not None:
-            filters.append(self.time.to_sqlalchemy(LapTime.time))
+            filters.extend(self.time.to_sqlalchemy(LapTime.time))
         if self.set_at is not None:
-            filters.append(self.set_at.to_sqlalchemy(LapTime.setAt))
+            filters.extend(self.set_at.to_sqlalchemy(LapTime.setAt))
 
         return filters

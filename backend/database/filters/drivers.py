@@ -45,14 +45,14 @@ class DriverFilter:
         filters = []
 
         if self.id is not None:
-            filters.append(self.id.to_sqlalchemy(Driver.id))
+            filters.extend(self.id.to_sqlalchemy(Driver.id))
         if self.name is not None:
-            filters.append(self.name.to_sqlalchemy(Driver.name))
+            filters.extend(self.name.to_sqlalchemy(Driver.name))
         if self.nickname is not None:
-            filters.append(self.nickname.to_sqlalchemy(Driver.nickname))
+            filters.extend(self.nickname.to_sqlalchemy(Driver.nickname))
         if self.profile_pic is not None:
-            filters.append(self.profile_pic.to_sqlalchemy(Driver.profilePic))
+            filters.extend(self.profile_pic.to_sqlalchemy(Driver.profilePic))
         if self.track_time is not None:
-            filters.append(self.track_time.to_sqlalchemy(Driver.trackTime))
+            filters.extend(self.track_time.to_sqlalchemy(Driver.trackTime))
 
         return filters

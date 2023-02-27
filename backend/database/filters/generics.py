@@ -36,21 +36,23 @@ class NumberFilter:
         self.lt = lt
         self.lte = lte
 
-    def to_sqlalchemy(self, field: Column):
+    def to_sqlalchemy(self, field: Column) -> list:
+        filters = []
+
         if self.eq is not None:
-            return field == self.eq
-        elif self.ne is not None:
-            return field != self.ne
-        elif self.gt is not None:
-            return field > self.gt
-        elif self.gte is not None:
-            return field >= self.gte
-        elif self.lt is not None:
-            return field < self.lt
-        elif self.lte is not None:
-            return field <= self.lte
-        else:
-            return None
+            filters.append(field == self.eq)
+        if self.ne is not None:
+            filters.append(field != self.ne)
+        if self.gt is not None:
+            filters.append(field > self.gt)
+        if self.gte is not None:
+            filters.append(field >= self.gte)
+        if self.lt is not None:
+            filters.append(field < self.lt)
+        if self.lte is not None:
+            filters.append(field <= self.lte)
+
+        return filters
 
 
 @strawberry.input(
@@ -77,15 +79,17 @@ class DateFilter:
         self.after = after
 
     # Methods to convert to SQLAlchemy filters
-    def to_sqlalchemy(self, field: Column):
+    def to_sqlalchemy(self, field: Column) -> list:
+        filters = []
+
         if self.eq is not None:
-            return field == self.eq
-        elif self.before is not None:
-            return field < self.before
-        elif self.after is not None:
-            return field > self.after
-        else:
-            return None
+            filters.append(field == self.eq)
+        if self.before is not None:
+            filters.append(field < self.before)
+        if self.after is not None:
+            filters.append(field > self.after)
+
+        return filters
 
 
 @strawberry.input(
@@ -138,25 +142,27 @@ class StringFilter:
         self.like = like
         self.contains = contains
 
-    def to_sqlalchemy(self, field: Column):
+    def to_sqlalchemy(self, field: Column) -> list:
+        filters = []
+
         if self.eq is not None:
-            return field == self.eq
-        elif self.ne is not None:
-            return field != self.ne
-        elif self.ieq is not None:
-            return field.ilike(self.ieq)
-        elif self.ine is not None:
-            return field.notilike(self.ine)
-        elif self.starts_with is not None:
-            return field.startswith(self.starts_with)
-        elif self.ends_with is not None:
-            return field.endswith(self.ends_with)
-        elif self.like is not None:
-            return field.like(self.like)
-        elif self.contains is not None:
-            return field.contains(self.contains)
-        else:
-            return None
+            filters.append(field == self.eq)
+        if self.ne is not None:
+            filters.append(field != self.ne)
+        if self.ieq is not None:
+            filters.append(field.ilike(self.ieq))
+        if self.ine is not None:
+            filters.append(field.notilike(self.ine))
+        if self.starts_with is not None:
+            filters.append(field.startswith(self.starts_with))
+        if self.ends_with is not None:
+            filters.append(field.endswith(self.ends_with))
+        if self.like is not None:
+            filters.append(field.like(self.like))
+        if self.contains is not None:
+            filters.append(field.contains(self.contains))
+
+        return filters
 
 
 @strawberry.input(
