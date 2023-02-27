@@ -50,19 +50,17 @@ def get_drivers(
     """
     query = db.query(models.Driver)
 
-    # Set default order
-    order = order or DriverOrder(id=OrderDirection.ASC)
-    orders = order.to_sqlalchemy()
-
-    # Add order clauses to the query
-    for order in orders:
-        query = query.order_by(order)
-
+    # Add where clauses to the query
     if where:
-        # Add where clauses to the query
         filters = where.to_sqlalchemy()
         for filter in filters:
             query = query.filter(filter)
+
+    # Add order clauses to the query
+    order = order or DriverOrder(id=OrderDirection.ASC)
+    orders = order.to_sqlalchemy()
+    for order in orders:
+        query = query.order_by(order)
 
     # Return with requested limit and offset
     return query.offset(
@@ -188,19 +186,17 @@ def get_laptimes(
     """
     query = db.query(models.LapTime)
 
-    # Set default order
-    order = order or LaptimeOrder(set_at=OrderDirection.DESC)
-    orders = order.to_sqlalchemy()
-
-    # Add order clauses to the query
-    for order in orders:
-        query = query.order_by(order)
-
+    # Add where clauses to the query
     if where:
-        # Add where clauses to the query
         filters = where.to_sqlalchemy()
         for filter in filters:
             query = query.filter(filter)
+
+    # Add order clauses to the query
+    order = order or LaptimeOrder(set_at=OrderDirection.DESC)
+    orders = order.to_sqlalchemy()
+    for order in orders:
+        query = query.order_by(order)
 
     # Return with requested limit and offset
     return query.offset(
