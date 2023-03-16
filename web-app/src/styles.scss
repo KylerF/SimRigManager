@@ -32,14 +32,22 @@
   animation: pulse 3s infinite;
 }
 @-webkit-keyframes pulse {
-  50% { color: rgb(129, 129, 129); }
+  50% {
+    color: rgb(129, 129, 129);
+  }
 }
 @-moz-keyframes pulse {
-  50% { color: rgb(129, 129, 129); }
+  50% {
+    color: rgb(129, 129, 129);
+  }
 }
 @-o-keyframes pulse {
-  50% { color: rgb(129, 129, 129); }
+  50% {
+    color: rgb(129, 129, 129);
+  }
 }
 @keyframes pulse {
-  50% { color: rgb(129, 129, 129); }
+  50% {
+    color: rgb(129, 129, 129);
+  }
 }
