@@ -15,6 +15,7 @@ from database import models, schemas
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
 
+
 def get_driver_by_name(db: Session, name: str):
     """
     Get a driver by name
