@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-flag-display',
   templateUrl: './flag-display.component.html',
-  styleUrls: ['./flag-display.component.scss']
+  styleUrls: ['./flag-display.component.scss'],
 })
 
 /**
@@ -16,16 +16,16 @@ import { IracingDataService } from 'services/iracing-data.service';
  */
 export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   private flagColorMap = new Map([
-    [ Constants.iracing.flags.noFlag, 0 ],
-    [ Constants.iracing.flags.greenFlag, 10 ],
-    [ Constants.iracing.flags.blackFlag, 20 ],
-    [ Constants.iracing.flags.cautionFlag, 30 ],
-    [ Constants.iracing.flags.redFlag, 40 ],
+    [Constants.iracing.flags.noFlag, 0],
+    [Constants.iracing.flags.greenFlag, 10],
+    [Constants.iracing.flags.blackFlag, 20],
+    [Constants.iracing.flags.cautionFlag, 30],
+    [Constants.iracing.flags.redFlag, 40],
   ]);
 
   flag: number;
 
-  constructor (iracingDataService: IracingDataService) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -35,13 +35,10 @@ export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implemen
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.flag = data.SessionFlags;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.flag = data.SessionFlags;
+      }
+    });
   }
 }

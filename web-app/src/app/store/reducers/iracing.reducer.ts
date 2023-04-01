@@ -6,11 +6,11 @@ export const iracingFeatureKey = 'iracing';
 
 export const initialState = {
   state: {
-    connected: false
+    connected: false,
   },
   error: null,
   loading: false,
-  lastUpdated: null
+  lastUpdated: null,
 };
 
 export const reducer = createReducer(
@@ -19,8 +19,8 @@ export const reducer = createReducer(
     ...state,
     lastUpdated: moment().toDate(),
     state: {
-      connected: action.connected
-    }
+      connected: action.connected,
+    },
   })),
   on(iracingActions.GetConnectionStatus, (state, action) => ({
     ...state,

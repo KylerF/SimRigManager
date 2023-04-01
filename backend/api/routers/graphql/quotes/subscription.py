@@ -1,10 +1,10 @@
+from typing import AsyncGenerator
 import strawberry
 import asyncio
-from typing import AsyncGenerator
 
-from database.database import get_db
-from database.modeltypes import QuoteType
 from database.crud import get_random_quote
+from database.modeltypes import QuoteType
+from database.database import get_db
 
 
 @strawberry.type(
@@ -20,7 +20,5 @@ class QuoteSubscription:
 
         while True:
             quote = get_random_quote(db)
-
             yield QuoteType.from_pydantic(quote)
-
             await asyncio.sleep(update_sec)

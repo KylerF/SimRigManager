@@ -9,10 +9,9 @@ describe('SpeedometerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SpeedometerComponent ],
-      imports: [ HttpClientModule ]
-    })
-    .compileComponents();
+      declarations: [SpeedometerComponent],
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

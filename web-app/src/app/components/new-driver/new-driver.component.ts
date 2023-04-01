@@ -8,7 +8,7 @@ import { NewDriver } from 'models/new-driver';
 @Component({
   selector: 'app-new-driver',
   templateUrl: './new-driver.component.html',
-  styleUrls: ['./new-driver.component.scss']
+  styleUrls: ['./new-driver.component.scss'],
 })
 
 /**
@@ -18,7 +18,7 @@ export class NewDriverComponent implements OnInit {
   newDriver: NewDriver = {
     name: '',
     nickname: '',
-    profilePic: ''
+    profilePic: '',
   };
 
   submitted = false;
@@ -30,8 +30,7 @@ export class NewDriverComponent implements OnInit {
     private driverService: DriverService, // Used to add a new driver
     private activeModal: NgbActiveModal, // Used to reference the modal in which this component is displayed
     private formBuilder: FormBuilder // Used to build the new driver form
-  )
-  { }
+  ) {}
 
   ngOnInit() {
     // Create the reactive driver form with validation
@@ -48,15 +47,15 @@ export class NewDriverComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    if(this.newDriverForm.valid) {
+    if (this.newDriverForm.valid) {
       this.addDriver();
     }
   }
 
   addDriver() {
     this.driverService.addDriver(this.newDriver).subscribe({
-      next: driver => this.activeModal.close(driver),
-      error: error => this.error = error
+      next: (driver) => this.activeModal.close(driver),
+      error: (error) => (this.error = error),
     });
   }
 

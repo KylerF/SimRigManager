@@ -7,21 +7,20 @@ import { Driver } from 'models/driver';
 @Component({
   selector: 'app-delete-driver',
   templateUrl: './delete-driver.component.html',
-  styleUrls: ['./delete-driver.component.scss']
+  styleUrls: ['./delete-driver.component.scss'],
 })
 
 /**
  * Modal component to confirm driver profile deletion
  */
 export class DeleteDriverComponent {
-  @Input() driver: Driver
+  @Input() driver: Driver;
   error: string;
 
   constructor(
     private driverService: DriverService, // Used to delete the driver profile
     private activeModal: NgbActiveModal // Used to reference the modal in which this component is displayed
-  )
-  { }
+  ) {}
 
   /**
    * Submit the request to delete a driver profile.
@@ -30,8 +29,8 @@ export class DeleteDriverComponent {
    */
   deleteDriver() {
     this.driverService.deleteDriver(this.driver).subscribe({
-      next: driver => this.activeModal.close(driver),
-      error: error => this.error = error.message
+      next: (driver) => this.activeModal.close(driver),
+      error: (error) => (this.error = error.message),
     });
   }
 

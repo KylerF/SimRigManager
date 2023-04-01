@@ -6,11 +6,16 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
 
+from database.ordering.laptimes import LaptimeOrder, OrderDirection
 from database import models, schemas
-from database.filters import LaptimeFilter, LaptimeOrder
+from database.filters.laptimes import LaptimeFilter
+from database.filters.drivers import DriverFilter
+from database.ordering.laptimes import LaptimeOrder
+from database.ordering.drivers import DriverOrder
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
+
 
 def get_driver_by_name(db: Session, name: str):
     """
@@ -35,13 +40,36 @@ def get_driver_by_id(db: Session, id: int):
     ).first()
 
 
-def get_drivers(db: Session, skip: int = 0, limit: int = -1) -> List[models.Driver]:
+def get_drivers(
+    db: Session,
+    skip: int = 0,
+    limit: int = -1,
+    where: DriverFilter = None,
+    order: DriverOrder = None,
+) -> List[models.Driver]:
     """
     Get all drivers
     """
-    return db.query(
-        models.Driver
-    ).offset(skip).limit(limit).all()
+    query = db.query(models.Driver)
+
+    # Add where clauses to the query
+    if where:
+        filters = where.to_sqlalchemy()
+        for filter in filters:
+            query = query.filter(filter)
+
+    # Add order clauses to the query
+    order = order or DriverOrder(id=OrderDirection.ASC)
+    orders = order.to_sqlalchemy()
+    for order in orders:
+        query = query.order_by(order)
+
+    # Return with requested limit and offset
+    return query.offset(
+        skip
+    ).limit(
+        limit
+    ).all()
 
 
 def create_driver(db: Session, driver: schemas.DriverCreate):
@@ -160,19 +188,17 @@ def get_laptimes(
     """
     query = db.query(models.LapTime)
 
-    # Set default order
-    order = order or LaptimeOrder(set_at='desc')
-    orders = order.to_sqlalchemy()
-
-    # Add order clauses to the query
-    for order in orders:
-        query = query.order_by(order)
-
+    # Add where clauses to the query
     if where:
-        # Add where clauses to the query
         filters = where.to_sqlalchemy()
         for filter in filters:
             query = query.filter(filter)
+
+    # Add order clauses to the query
+    order = order or LaptimeOrder(set_at=OrderDirection.DESC)
+    orders = order.to_sqlalchemy()
+    for order in orders:
+        query = query.order_by(order)
 
     # Return with requested limit and offset
     return query.offset(

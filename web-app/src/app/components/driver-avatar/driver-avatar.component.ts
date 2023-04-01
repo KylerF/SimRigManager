@@ -6,7 +6,7 @@ import { Driver } from 'models/driver';
 @Component({
   selector: 'app-driver-avatar',
   templateUrl: './driver-avatar.component.html',
-  styleUrls: ['./driver-avatar.component.scss']
+  styleUrls: ['./driver-avatar.component.scss'],
 })
 
 /**
@@ -21,9 +21,7 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
 
   avatarURL: string;
 
-  constructor(
-    private driverService: DriverService,
-  ) {}
+  constructor(private driverService: DriverService) {}
 
   ngOnInit(): void {
     this.setAvatarURL();

@@ -11,44 +11,39 @@ export class ApiHealthcheckEffects {
   private readonly POLL_INTERVAL = 5000;
   private stopPolling$ = new Observable<void>();
 
-  constructor(
-    private actions$: Actions,
-    private availabilityService: AvailabilityService
-  )
-  { }
+  constructor(private actions$: Actions, private availabilityService: AvailabilityService) {}
 
   /**
    * Check the backend API status periodically and update the store
    */
   startHealthcheckPolling$ = createEffect(
-    () => ({ scheduler = asyncScheduler, stopTimer = this.stopPolling$ } = {}) =>
-    this.actions$.pipe(
-      ofType(apiHealthcheckActions.UpdateApiHealthcheck),
-      mergeMap(() => (
-        timer(0, this.POLL_INTERVAL, scheduler).pipe(
-          takeUntil(stopTimer),
-          mergeMap(() => (
-            this.availabilityService.getAPIAvailability()
-              .pipe(
-                map(
-                  availability => ({
-                    type: apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckSuccess,
+    () =>
+      ({ scheduler = asyncScheduler, stopTimer = this.stopPolling$ } = {}) =>
+        this.actions$.pipe(
+          ofType(apiHealthcheckActions.UpdateApiHealthcheck),
+          mergeMap(() =>
+            timer(0, this.POLL_INTERVAL, scheduler).pipe(
+              takeUntil(stopTimer),
+              mergeMap(() =>
+                this.availabilityService.getAPIAvailability().pipe(
+                  map((availability) => ({
+                    type: apiHealthcheckActions.ApiHealthcheckActionTypes
+                      .UpdateApiHealthcheckSuccess,
                     payload: {
                       data: availability,
-                    }
-                  })
-                ),
-                catchError(
-                  error => [{
-                    type: apiHealthcheckActions.ApiHealthcheckActionTypes.UpdateApiHealthcheckFailure,
-                    payload: { error: error.message }
-                  }]
+                    },
+                  })),
+                  catchError((error) => [
+                    {
+                      type: apiHealthcheckActions.ApiHealthcheckActionTypes
+                        .UpdateApiHealthcheckFailure,
+                      payload: { error: error.message },
+                    },
+                  ])
                 )
               )
             )
           )
         )
-      ))
-    )
   );
 }

@@ -6,7 +6,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-base-telemetry-display',
   templateUrl: './base-telemetry-display.component.html',
-  styleUrls: ['./base-telemetry-display.component.scss']
+  styleUrls: ['./base-telemetry-display.component.scss'],
 })
 
 /**
@@ -25,9 +25,7 @@ export class BaseTelemetryDisplayComponent implements OnInit, OnDestroy {
 
   protected iracingDataSubscription: Subscription;
 
-  constructor(
-    public iracingDataService: IracingDataService
-  ) { }
+  constructor(public iracingDataService: IracingDataService) {}
 
   /**
    * The component will attempt to start the stream if it is not

@@ -11,14 +11,9 @@ describe('DriverProfileComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DriverProfileComponent ],
-      imports: [
-        HttpClientModule,
-        RouterTestingModule,
-        StoreModule.forRoot({})
-      ]
-    })
-    .compileComponents();
+      declarations: [DriverProfileComponent],
+      imports: [HttpClientModule, RouterTestingModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

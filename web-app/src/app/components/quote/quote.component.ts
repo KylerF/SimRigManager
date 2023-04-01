@@ -12,7 +12,7 @@ import { Quote } from 'models/quote';
   selector: 'app-quote',
   templateUrl: './quote.component.html',
   styleUrls: ['./quote.component.scss'],
-  animations: [ shortFadeIn ]
+  animations: [shortFadeIn],
 })
 
 /**
@@ -22,7 +22,7 @@ import { Quote } from 'models/quote';
 export class QuoteComponent implements OnInit {
   quote$: Observable<StateContainer<Quote>>;
 
-  constructor(private store: Store<State>) { }
+  constructor(private store: Store<State>) {}
 
   ngOnInit(): void {
     this.quote$ = this.store.select(selectQuote);

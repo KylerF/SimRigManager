@@ -70,8 +70,8 @@ const routes: Routes = [
   { path: 'controllers', component: ControllerListComponent },
   { path: 'telemetry', component: TelemetryDashboardComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', component: NotFoundComponent }
-]
+  { path: '**', component: NotFoundComponent },
+];
 
 @NgModule({
   declarations: [
@@ -133,7 +133,7 @@ const routes: Routes = [
       QuoteEffects,
       ControllerEffects,
       LaptimeEffects,
-      DriverEffects
+      DriverEffects,
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -143,11 +143,10 @@ const routes: Routes = [
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-
-export class AppModule { }
+export class AppModule {}

@@ -8,14 +8,8 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-      imports: [
-        HttpClientModule,
-        ApolloTestingModule,
-        StoreModule.forRoot({})
-      ]
+      declarations: [AppComponent],
+      imports: [HttpClientModule, ApolloTestingModule, StoreModule.forRoot({})],
     }).compileComponents();
   });
 

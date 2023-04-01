@@ -1,5 +1,5 @@
-import strawberry
 from typing import AsyncGenerator
+import strawberry
 import asyncio
 
 from database.modeltypes import IracingFrameType

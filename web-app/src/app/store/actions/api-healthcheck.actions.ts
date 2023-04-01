@@ -12,9 +12,7 @@ export enum ApiHealthcheckActionTypes {
  * Main action dispatched by components to update the API healthcheck
  * status in the store
  */
-export const UpdateApiHealthcheck = createAction(
-  ApiHealthcheckActionTypes.UpdateApiHealthcheck
-);
+export const UpdateApiHealthcheck = createAction(ApiHealthcheckActionTypes.UpdateApiHealthcheck);
 
 /**
  * Triggered when response from the API was received

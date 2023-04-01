@@ -1,4 +1,4 @@
-import { Driver } from './driver'
+import { Driver } from './driver';
 
 /**
  * Model interface for iRacing driver info data

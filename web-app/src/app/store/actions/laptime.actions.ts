@@ -1,3 +1,4 @@
+import { LapTimeQueryParams } from 'src/app/models/lap-time-filter-params';
 import { createAction, props } from '@ngrx/store';
 import { LapTime } from 'src/app/models/lap-time';
 
@@ -11,28 +12,25 @@ export enum LaptimeActionTypes {
 }
 
 export const LoadLaptimes = createAction(
-  LaptimeActionTypes.LoadLaptimes
+  LaptimeActionTypes.LoadLaptimes,
+  props<{ params?: LapTimeQueryParams }>()
 );
 
 export const LoadLaptimesSuccess = createAction(
   LaptimeActionTypes.LoadLaptimesSuccess,
-  props<{ payload: { data: LapTime[] }}>()
+  props<{ payload: { data: LapTime[] } }>()
 );
 
 export const LoadLaptimesFailure = createAction(
   LaptimeActionTypes.LoadLaptimesFailure,
-  props<{ payload: { error: any }}>()
+  props<{ payload: { error: any } }>()
 );
 
-export const StreamLaptimes = createAction(
-  LaptimeActionTypes.StreamLaptimes,
-);
+export const StreamLaptimes = createAction(LaptimeActionTypes.StreamLaptimes);
 
-export const StopStreamLaptimes = createAction(
-  LaptimeActionTypes.StopStreamLaptimes,
-);
+export const StopStreamLaptimes = createAction(LaptimeActionTypes.StopStreamLaptimes);
 
 export const AddLaptime = createAction(
   LaptimeActionTypes.AddLaptime,
-  props<{ payload: { data: LapTime }}>()
+  props<{ payload: { data: LapTime } }>()
 );

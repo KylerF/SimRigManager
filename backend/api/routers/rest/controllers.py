@@ -1,5 +1,5 @@
-from fastapi import APIRouter
 from fastapi.exceptions import HTTPException
+from fastapi import APIRouter
 from typing import List
 
 from database.database import get_db

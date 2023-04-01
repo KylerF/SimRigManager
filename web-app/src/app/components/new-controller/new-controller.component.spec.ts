@@ -12,17 +12,10 @@ describe('NewControllerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NewControllerComponent ],
-      imports: [
-        HttpClientModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [
-        NgbActiveModal,
-        UntypedFormBuilder
-      ]
-    })
-    .compileComponents();
+      declarations: [NewControllerComponent],
+      imports: [HttpClientModule, StoreModule.forRoot({})],
+      providers: [NgbActiveModal, UntypedFormBuilder],
+    }).compileComponents();
   });
 
   beforeEach(() => {

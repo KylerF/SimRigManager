@@ -11,11 +11,8 @@ describe('ApiHealthcheckEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        ApiHealthcheckEffects,
-        provideMockActions(() => actions$)
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [ApiHealthcheckEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(ApiHealthcheckEffects);
