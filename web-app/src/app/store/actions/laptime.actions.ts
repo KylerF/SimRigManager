@@ -1,5 +1,6 @@
-import { LapTimeQueryParams } from 'src/app/models/lap-time-filter-params';
 import { createAction, props } from '@ngrx/store';
+
+import { LapTimeQueryParams } from 'models/lap-time-filter-params';
 import { LapTime } from 'src/app/models/lap-time';
 
 export enum LaptimeActionTypes {

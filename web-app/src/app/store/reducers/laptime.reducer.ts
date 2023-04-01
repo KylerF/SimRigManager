@@ -1,9 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import * as moment from 'moment';
-import { LapTime } from 'src/app/models/lap-time';
-import { StateContainer } from 'src/app/models/state';
 
 import * as laptimeActions from 'store/actions/laptime.actions';
+import { StateContainer } from 'src/app/models/state';
+import { LapTime } from 'src/app/models/lap-time';
 
 export const laptimeFeatureKey = 'laptimes';
 

@@ -1,8 +1,9 @@
+import { createReducer, on } from '@ngrx/store';
+import * as moment from 'moment';
+
 import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 import { AvailabilityCheck } from 'models/availability-check';
 import { StateContainer } from 'models/state';
-import * as moment from 'moment';
-import { createReducer, on } from '@ngrx/store';
 
 export const apiHealthcheckFeatureKey = 'apiHealthcheck';
 

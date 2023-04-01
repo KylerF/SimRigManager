@@ -1,24 +1,22 @@
 import { ActionReducerMap, createFeatureSelector, createSelector, MetaReducer } from '@ngrx/store';
-
 import { environment } from 'environments/environment';
-
 import { cloneDeep } from 'lodash-es';
+import * as moment from 'moment';
+
+import { IracingConnectionStatus } from 'models/iracing/connection-status';
+import { AvailabilityCheck } from 'models/availability-check';
+import { Driver, DriverState } from 'models/driver';
+import * as fromLaptime from './laptime.reducer';
+import { Controller } from 'models/controller';
+import { StateContainer } from 'models/state';
+import { LapTime } from 'models/lap-time';
+import { Quote } from 'models/quote';
 
 import * as fromApiHealthcheck from './api-healthcheck.reducer';
-import * as fromIracing from './iracing.reducer';
-import * as fromQuote from './quote.reducer';
 import * as fromController from './controller.reducer';
+import * as fromIracing from './iracing.reducer';
 import * as fromDriver from './driver.reducer';
-
-import { AvailabilityCheck } from 'models/availability-check';
-import { Quote } from 'models/quote';
-import { StateContainer } from 'models/state';
-import { IracingConnectionStatus } from 'models/iracing/connection-status';
-import { Controller } from 'models/controller';
-import * as fromLaptime from './laptime.reducer';
-import { LapTime } from 'models/lap-time';
-import * as moment from 'moment';
-import { Driver, DriverState } from 'models/driver';
+import * as fromQuote from './quote.reducer';
 
 /**
  * The complete state of the application (combined from all reducers)
