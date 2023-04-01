@@ -1,9 +1,9 @@
 from typing import List, Optional
 import strawberry
 
+from database.modeltypes import LapTimeType
 from database.filters.laptimes import LaptimeFilter
 from database.ordering.laptimes import LaptimeOrder
-from database.modeltypes import LapTimeType
 from database.crud import get_laptimes
 from database.database import get_db
 

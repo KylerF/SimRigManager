@@ -5,12 +5,13 @@ Functions to perform CRUD operations on the database
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
-from database.ordering.drivers import DriverOrder
 
 from database.ordering.laptimes import LaptimeOrder, OrderDirection
+from database import models, schemas
 from database.filters.laptimes import LaptimeFilter
 from database.filters.drivers import DriverFilter
-from database import models, schemas
+from database.ordering.laptimes import LaptimeOrder
+from database.ordering.drivers import DriverOrder
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
