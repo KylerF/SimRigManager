@@ -12,17 +12,10 @@ describe('ControllerSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerSettingsComponent ],
-      imports: [
-        HttpClientModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [
-        NgbActiveModal,
-        UntypedFormBuilder
-      ]
-    })
-    .compileComponents();
+      declarations: [ControllerSettingsComponent],
+      imports: [HttpClientModule, StoreModule.forRoot({})],
+      providers: [NgbActiveModal, UntypedFormBuilder],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -34,14 +27,14 @@ describe('ControllerSettingsComponent', () => {
       ipAddress: '127.0.0.1',
       universe: 1,
       isAvailable: false,
-      state: null
+      state: null,
     };
     component.activeDriver = {
       id: 1,
       name: 'TestDriver',
       nickname: 'test',
       trackTime: 60,
-      profilePic: ''
+      profilePic: '',
     };
     fixture.detectChanges();
   });

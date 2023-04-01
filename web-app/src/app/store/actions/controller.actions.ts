@@ -48,9 +48,7 @@ export enum ControllerActionTypes {
 /**
  * Action dispatched to get the list of controllers
  */
-export const LoadControllers = createAction(
-  ControllerActionTypes.LoadControllers
-);
+export const LoadControllers = createAction(ControllerActionTypes.LoadControllers);
 
 export const LoadControllersSuccess = createAction(
   ControllerActionTypes.LoadControllersSuccess,
@@ -67,7 +65,7 @@ export const LoadControllersFailure = createAction(
  */
 export const GetControllerSettings = createAction(
   ControllerActionTypes.GetControllerSettings,
-  props<{ payload: { data: { controller: Controller, driver: Driver } } }>()
+  props<{ payload: { data: { controller: Controller; driver: Driver } } }>()
 );
 
 export const GetControllerSettingsSuccess = createAction(
@@ -91,12 +89,12 @@ export const UpdateControllerState = createAction(
 
 export const UpdateControllerStateSuccess = createAction(
   ControllerActionTypes.UpdateControllerStateSuccess,
-  props<{ payload: { controller: Controller, data: WledMessage } }>()
+  props<{ payload: { controller: Controller; data: WledMessage } }>()
 );
 
 export const UpdateControllerStateFailure = createAction(
   ControllerActionTypes.UpdateControllerStateFailure,
-  props<{ payload: { controller: Controller, error: any } }>()
+  props<{ payload: { controller: Controller; error: any } }>()
 );
 
 /**
@@ -132,7 +130,7 @@ export const CreateControllerFailure = createAction(
  * Action dispatched by components to update a light controller
  * @param controller The controller to update
  */
- export const UpdateControllerSettings = createAction(
+export const UpdateControllerSettings = createAction(
   ControllerActionTypes.UpdateControllerSettings,
   props<{ controller: Controller }>()
 );

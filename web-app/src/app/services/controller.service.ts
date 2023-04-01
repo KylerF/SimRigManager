@@ -11,7 +11,7 @@ import { APIHelper } from 'helpers/api-helper';
 import { State } from 'models/wled/state';
 import { Driver } from 'models/driver';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 /**
@@ -23,14 +23,12 @@ export class ControllerService {
   private settingsEndpoint = 'controllersettings';
 
   // All active websocket connections to controllers
-  private connections:
-    Map <
-      number, WebSocketSubject<WledMessage>
-    > = new Map <
-      number, WebSocketSubject<WledMessage>
-    > ();
+  private connections: Map<number, WebSocketSubject<WledMessage>> = new Map<
+    number,
+    WebSocketSubject<WledMessage>
+  >();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Get all configured WLED controllers
@@ -38,12 +36,9 @@ export class ControllerService {
    * @returns observable wrapping returned controller objects
    */
   getControllers(): Observable<Controller[]> {
-    return this.http.get<Controller[]>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<Controller[]>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -54,12 +49,13 @@ export class ControllerService {
    * @returns observable expected to return the controller settings
    */
   getControllerSettings(controller: Controller, driver: Driver): Observable<ControllerSettings> {
-    return this.http.get<ControllerSettings>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}?controllerId=${controller.id}&driverId=${driver.id}`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<ControllerSettings>(
+        `${APIHelper.getBaseUrl()}/${this.endpoint}?controllerId=${controller.id}&driverId=${
+          driver.id
+        }`
+      )
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -70,13 +66,9 @@ export class ControllerService {
    * @returns promise expected to resolve as a WledState object
    */
   testIp(ipAddress: string): Observable<State> {
-    return this.http.get<State>(
-      `http://${ipAddress}/json/state`
-    )
-    .pipe(
-      timeout(2000),
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<State>(`http://${ipAddress}/json/state`)
+      .pipe(timeout(2000), catchError(APIHelper.handleError));
   }
 
   /**
@@ -88,12 +80,9 @@ export class ControllerService {
    * @returns observable expected to return a WledState object
    */
   getControllerState(controller: Controller): Observable<WledMessage> {
-    return this.http.get<WledMessage>(
-      `http://${controller.ipAddress}/json`
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .get<WledMessage>(`http://${controller.ipAddress}/json`)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   getConnection(controller: Controller): WebSocketSubject<WledMessage> {
@@ -145,13 +134,10 @@ export class ControllerService {
 
     connection.next({
       on: !controller.state.on,
-      v: true
-    })
+      v: true,
+    });
 
-    return connection.pipe(
-      take(1),
-      catchError(APIHelper.handleError)
-    );
+    return connection.pipe(take(1), catchError(APIHelper.handleError));
   }
 
   /**
@@ -161,13 +147,9 @@ export class ControllerService {
    * @returns observable expected to return the added controller object
    */
   addController(controller: Controller): Observable<Controller> {
-    return this.http.post<Controller>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}`,
-      controller
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .post<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, controller)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -177,13 +159,9 @@ export class ControllerService {
    * @returns observable expected to return the updated controller object
    */
   updateController(controller: any): Observable<Controller> {
-    return this.http.patch<Controller>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}`,
-      controller
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .patch<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, controller)
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -193,13 +171,12 @@ export class ControllerService {
    * @returns observable expected to return the updated controller settings
    */
   updateControllerSettings(controllerSettings: any): Observable<ControllerSettings> {
-    return this.http.patch<ControllerSettings>(
-      `${APIHelper.getBaseUrl()}/${this.settingsEndpoint}`,
-      controllerSettings
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .patch<ControllerSettings>(
+        `${APIHelper.getBaseUrl()}/${this.settingsEndpoint}`,
+        controllerSettings
+      )
+      .pipe(catchError(APIHelper.handleError));
   }
 
   /**
@@ -213,17 +190,13 @@ export class ControllerService {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-      body: controller
+      body: controller,
     };
 
     this.disconnectController(controller);
 
-    return this.http.delete<Controller>(
-      `${APIHelper.getBaseUrl()}/${this.endpoint}`,
-      options
-    )
-    .pipe(
-      catchError(APIHelper.handleError)
-    );
+    return this.http
+      .delete<Controller>(`${APIHelper.getBaseUrl()}/${this.endpoint}`, options)
+      .pipe(catchError(APIHelper.handleError));
   }
 }

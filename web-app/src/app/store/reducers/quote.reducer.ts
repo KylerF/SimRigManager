@@ -10,29 +10,29 @@ export const initialState: StateContainer<Quote> = {
   state: {
     id: 0,
     text: '',
-    by: ''
+    by: '',
   },
   error: null,
   loading: false,
-  lastUpdated: null
+  lastUpdated: null,
 };
 
 export const reducer = createReducer(
   initialState,
-  on(quoteActions.LoadQuote, state => ({
+  on(quoteActions.LoadQuote, (state) => ({
     ...state,
-    loading: true
+    loading: true,
   })),
   on(quoteActions.LoadQuoteSuccess, (state, action) => ({
     state: action.payload.data,
     error: null,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   })),
   on(quoteActions.LoadQuoteFailure, (state, action) => ({
     ...state,
     error: action.payload.error,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   }))
 );

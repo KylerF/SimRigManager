@@ -7,7 +7,7 @@ import { APIHelper } from 'helpers/api-helper';
 import { Quote } from 'models/quote';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 /**
@@ -15,10 +15,11 @@ import { Quote } from 'models/quote';
  */
 export class QuoteService {
   endpoint = 'quotes/random';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getRandomQuote(): Observable<Quote> {
-    return this.http.get<Quote>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
+    return this.http
+      .get<Quote>(`${APIHelper.getBaseUrl()}/${this.endpoint}`)
       .pipe(catchError(APIHelper.handleError));
   }
 }

@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-car-display',
   templateUrl: './car-display.component.html',
-  styleUrls: ['./car-display.component.scss']
+  styleUrls: ['./car-display.component.scss'],
 })
 
 /**
@@ -26,14 +26,11 @@ export class CarDisplayComponent extends BaseTelemetryDisplayComponent implement
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!_.isEmpty(data)) {
-            let driverIndex = data.DriverInfo.DriverCarIdx;
-            this.carName = data.DriverInfo.Drivers[driverIndex].CarScreenName;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!_.isEmpty(data)) {
+        let driverIndex = data.DriverInfo.DriverCarIdx;
+        this.carName = data.DriverInfo.Drivers[driverIndex].CarScreenName;
+      }
+    });
   }
 }

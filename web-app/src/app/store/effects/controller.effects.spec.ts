@@ -11,11 +11,8 @@ describe('ControllerEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        ControllerEffects,
-        provideMockActions(() => actions$)
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [ControllerEffects, provideMockActions(() => actions$)],
     });
 
     effects = TestBed.inject(ControllerEffects);

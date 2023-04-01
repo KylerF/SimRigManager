@@ -10,13 +10,9 @@ describe('QuoteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuoteComponent ],
-      imports: [
-        HttpClientModule,
-        StoreModule.forRoot({})
-      ]
-    })
-    .compileComponents();
+      declarations: [QuoteComponent],
+      imports: [HttpClientModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

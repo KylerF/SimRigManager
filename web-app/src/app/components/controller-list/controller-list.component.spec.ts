@@ -10,13 +10,9 @@ describe('ControllerListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ControllerListComponent ],
-      imports: [
-        HttpClientModule,
-        StoreModule.forRoot({})
-      ]
-    })
-    .compileComponents();
+      declarations: [ControllerListComponent],
+      imports: [HttpClientModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

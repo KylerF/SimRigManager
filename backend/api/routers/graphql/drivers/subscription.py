@@ -1,10 +1,10 @@
-import strawberry
 from typing import AsyncGenerator
+import strawberry
 import asyncio
 
-from database.database import get_db
-from database.modeltypes import DriverType
 from database.crud import get_active_driver
+from database.modeltypes import DriverType
+from database.database import get_db
 
 
 @strawberry.type(

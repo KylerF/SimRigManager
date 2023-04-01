@@ -1,18 +1,18 @@
 /* If the screen size is 425px wide or more, set the font-size to 80px */
 @media screen and (min-width: 425px) {
-    .reactive-font {
-        font-size: 18px;
-    }
+  .reactive-font {
+    font-size: 18px;
+  }
 }
 
 /* If the screen size is 425px wide or less, set the font-size to 30px */
 @media screen and (max-width: 425px) {
-    .reactive-font {
-        font-size: 12px;
-    }
+  .reactive-font {
+    font-size: 12px;
+  }
 }
 
 .spinner-border-tiny {
-    width: 18px;
-    height: 18px;
+  width: 18px;
+  height: 18px;
 }

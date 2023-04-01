@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-best-lap-time-display',
   templateUrl: './best-lap-time-display.component.html',
-  styleUrls: ['./best-lap-time-display.component.scss']
+  styleUrls: ['./best-lap-time-display.component.scss'],
 })
 
 /**
@@ -16,9 +16,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 export class BestLapTimeDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   bestLapTime: number;
 
-  constructor(
-    iracingDataService: IracingDataService
-  ) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -28,13 +26,10 @@ export class BestLapTimeDisplayComponent extends BaseTelemetryDisplayComponent i
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.bestLapTime = data.LapBestLapTime;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.bestLapTime = data.LapBestLapTime;
+      }
+    });
   }
 }

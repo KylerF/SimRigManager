@@ -7,18 +7,19 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-current-lap-time-display',
   templateUrl: './current-lap-time-display.component.html',
-  styleUrls: ['./current-lap-time-display.component.scss']
+  styleUrls: ['./current-lap-time-display.component.scss'],
 })
 
 /**
  * Component to show the current lap time
  */
-export class CurrentLapTimeDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
+export class CurrentLapTimeDisplayComponent
+  extends BaseTelemetryDisplayComponent
+  implements OnInit
+{
   currentLapTime: number;
 
-  constructor(
-    iracingDataService: IracingDataService
-  ) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -28,13 +29,10 @@ export class CurrentLapTimeDisplayComponent extends BaseTelemetryDisplayComponen
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.currentLapTime = data.LapCurrentLapTime;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.currentLapTime = data.LapCurrentLapTime;
+      }
+    });
   }
 }

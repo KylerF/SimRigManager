@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-incident-count-display',
   templateUrl: './incident-count-display.component.html',
-  styleUrls: ['./incident-count-display.component.scss']
+  styleUrls: ['./incident-count-display.component.scss'],
 })
 
 /**
@@ -18,7 +18,7 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
   incidentCount: number;
   incidentLimit: string;
 
-  constructor (iracingDataService: IracingDataService) {
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -28,16 +28,13 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.incidentCount = data.PlayerCarMyIncidentCount;
-            let incidentLimit = data.WeekendInfo.WeekendOptions.IncidentLimit;
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.incidentCount = data.PlayerCarMyIncidentCount;
+        let incidentLimit = data.WeekendInfo.WeekendOptions.IncidentLimit;
 
-            this.incidentLimit = (incidentLimit == 'unlimited' ? '∞' : incidentLimit);
-          }
-        }
-      );
+        this.incidentLimit = incidentLimit == 'unlimited' ? '∞' : incidentLimit;
+      }
+    });
   }
 }

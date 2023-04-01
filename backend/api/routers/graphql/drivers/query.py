@@ -1,12 +1,14 @@
-from typing import List
+from typing import List, Optional
 import strawberry
 
-from database.database import get_db
+from database.filters.drivers import DriverFilter
 from database.modeltypes import DriverType
+from database.database import get_db
 from database.crud import (
     get_active_driver,
     get_drivers,
  )
+from database.ordering.drivers import DriverOrder
 
 
 @strawberry.type(
@@ -17,13 +19,19 @@ class DriverQuery:
     @strawberry.field(
         description="Get all drivers"
     )
-    def all_drivers(self) -> List[DriverType]:
+    def drivers(
+        self,
+        skip: int = 0,
+        limit: int = -1,
+        where: Optional[DriverFilter] = None,
+        order: Optional[DriverOrder] = None,
+    ) -> List[DriverType]:
         db = next(get_db())
-        all_drivers = get_drivers(db)
+        drivers = get_drivers(db, skip, limit, where, order)
 
         return [
             DriverType.from_pydantic(driver)
-            for driver in all_drivers
+            for driver in drivers
         ]
 
     @strawberry.field(

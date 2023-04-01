@@ -1,5 +1,5 @@
-import { Info } from "./wled/info";
-import { State } from "./wled/state";
+import { Info } from './wled/info';
+import { State } from './wled/state';
 
 /**
  * Model interface for a WLED controller

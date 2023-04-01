@@ -8,7 +8,7 @@ describe('LapTimeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule ]
+      imports: [HttpClientModule],
     });
     service = TestBed.inject(LapTimeService);
   });

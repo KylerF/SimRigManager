@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-gear-indicator-display',
   templateUrl: './gear-indicator-display.component.html',
-  styleUrls: ['./gear-indicator-display.component.scss']
+  styleUrls: ['./gear-indicator-display.component.scss'],
 })
 
 /**
@@ -23,24 +23,21 @@ export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            let newGear: number = data.Gear;
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        let newGear: number = data.Gear;
 
-            switch (newGear) {
-              case 0:
-                this.gear = 'N';
-                break;
-              case -1:
-                this.gear = 'R';
-                break;
-              default:
-                this.gear = newGear;
-            }
-          }
+        switch (newGear) {
+          case 0:
+            this.gear = 'N';
+            break;
+          case -1:
+            this.gear = 'R';
+            break;
+          default:
+            this.gear = newGear;
         }
-      );
+      }
+    });
   }
 }

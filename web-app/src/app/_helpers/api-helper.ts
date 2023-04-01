@@ -1,5 +1,5 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { throwError } from "rxjs";
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
 
 /**
  * A simple helper class to provide the API base URL

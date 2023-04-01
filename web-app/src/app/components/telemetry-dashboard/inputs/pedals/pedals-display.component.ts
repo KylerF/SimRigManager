@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-pedals-display',
   templateUrl: './pedals-display.component.html',
-  styleUrls: ['./pedals-display.component.scss']
+  styleUrls: ['./pedals-display.component.scss'],
 })
 
 /**
@@ -19,7 +19,7 @@ export class PedalsDisplayComponent extends BaseTelemetryDisplayComponent implem
   handBrake: number;
   clutch: number;
 
-  constructor (iracingDataService: IracingDataService){
+  constructor(iracingDataService: IracingDataService) {
     super(iracingDataService);
   }
 
@@ -29,16 +29,13 @@ export class PedalsDisplayComponent extends BaseTelemetryDisplayComponent implem
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            this.throttle = data.Throttle;
-            this.brake = data.Brake;
-            this.handBrake = data.HandbrakeRaw;
-            this.clutch = 1 - data.Clutch;
-          }
-        }
-      );
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        this.throttle = data.Throttle;
+        this.brake = data.Brake;
+        this.handBrake = data.HandbrakeRaw;
+        this.clutch = 1 - data.Clutch;
+      }
+    });
   }
 }

@@ -1,3 +1,4 @@
 # These files are not copied into containers
 *.rdb
 *.log.*
+.pytest_cache/

@@ -1,13 +1,13 @@
 import strawberry
 
-from database.database import get_db
+from database.schemas import ActiveDriverCreate
 from database.modeltypes import DriverType
+from api.utils import update_driver_cache
+from database.database import get_db
 from database.crud import (
     set_active_driver,
     delete_active_driver,
 )
-from database.schemas import ActiveDriverCreate
-from api.utils import update_driver_cache
 
 
 @strawberry.type(

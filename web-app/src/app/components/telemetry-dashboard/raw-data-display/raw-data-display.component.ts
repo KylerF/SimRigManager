@@ -8,7 +8,7 @@ import { isEmpty, keys } from 'lodash-es';
 @Component({
   selector: 'app-raw-data-display',
   templateUrl: './raw-data-display.component.html',
-  styleUrls: ['./raw-data-display.component.scss']
+  styleUrls: ['./raw-data-display.component.scss'],
 })
 
 /**
@@ -33,24 +33,19 @@ export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent imple
   ngOnInit(): void {
     super.ngOnInit();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            if (!this.allKeys) {
-              // Get all keys from the first data frame
-              this.allKeys = keys(data).sort();
-            }
-
-            // Update the selected key
-            this.rawValue = JSON.stringify(
-              data[this.selectedKey]
-            );
-
-            // Update the docs URL
-            this.docsURL = APIHelper.getSdkDocLink(this.selectedKey);
-          }
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        if (!this.allKeys) {
+          // Get all keys from the first data frame
+          this.allKeys = keys(data).sort();
         }
-      );
+
+        // Update the selected key
+        this.rawValue = JSON.stringify(data[this.selectedKey]);
+
+        // Update the docs URL
+        this.docsURL = APIHelper.getSdkDocLink(this.selectedKey);
+      }
+    });
   }
 }

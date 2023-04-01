@@ -7,26 +7,22 @@ import { QuoteService } from 'services/quote.service';
 
 @Injectable()
 export class QuoteEffects {
-  constructor(
-    private actions$: Actions,
-    private quoteService: QuoteService
-  )
-  { }
+  constructor(private actions$: Actions, private quoteService: QuoteService) {}
 
   /**
    * Retrieve a random quote from the API
    */
-  loadQuote$ = createEffect(() => this.actions$.pipe(
-    ofType(quoteActions.LoadQuote),
-    mergeMap(() => this.quoteService.getRandomQuote()
-      .pipe(
-        map(
-          controllers => quoteActions.LoadQuoteSuccess({ payload: { data: controllers } })
-        ),
-        catchError(
-          error => of(quoteActions.LoadQuoteFailure({ payload: { error: error.message } }))
+  loadQuote$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(quoteActions.LoadQuote),
+      mergeMap(() =>
+        this.quoteService.getRandomQuote().pipe(
+          map((controllers) => quoteActions.LoadQuoteSuccess({ payload: { data: controllers } })),
+          catchError((error) =>
+            of(quoteActions.LoadQuoteFailure({ payload: { error: error.message } }))
+          )
         )
-      ))
+      )
     )
   );
 }

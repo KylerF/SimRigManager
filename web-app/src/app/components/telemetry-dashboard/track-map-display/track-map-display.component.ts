@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-track-map-display',
   templateUrl: './track-map-display.component.html',
-  styleUrls: ['./track-map-display.component.scss']
+  styleUrls: ['./track-map-display.component.scss'],
 })
 
 /**
@@ -41,24 +41,21 @@ export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent impl
     this.canvas = document.getElementById('trackMap') as HTMLCanvasElement;
     this.canvasContext = this.canvas.getContext('2d');
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe(
-        data => {
-          if (!isEmpty(data)) {
-            if (!this.startLapPctComplete) {
-              // Get the lap percentage at startup - used to
-              this.startLapPctComplete = data.LapDistPct;
-            }
-
-            this.xVelocity = data.VelocityX;
-            this.yVelocity = data.VelocityY;
-            this.lapPctComplete = data.LapDistPct;
-            this.isOnTrack = data.IsOnTrack;
-
-            this.drawTrackMap();
-          }
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
+      if (!isEmpty(data)) {
+        if (!this.startLapPctComplete) {
+          // Get the lap percentage at startup - used to
+          this.startLapPctComplete = data.LapDistPct;
         }
-      );
+
+        this.xVelocity = data.VelocityX;
+        this.yVelocity = data.VelocityY;
+        this.lapPctComplete = data.LapDistPct;
+        this.isOnTrack = data.IsOnTrack;
+
+        this.drawTrackMap();
+      }
+    });
   }
 
   /**
@@ -81,7 +78,7 @@ export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent impl
     this.canvasContext.strokeStyle = '#000000';
     this.canvasContext.lineWidth = 2;
 
-    this.trackMapPoints.forEach(point => {
+    this.trackMapPoints.forEach((point) => {
       this.canvasContext.moveTo(point.x, point.y);
       this.canvasContext.lineTo(point.x, point.y);
     });
@@ -92,9 +89,7 @@ export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent impl
   /**
    * Generate the track map points from the driver's position on the track
    */
-  generateTrackMapPoints() {
-
-  }
+  generateTrackMapPoints() {}
 }
 
 /**
@@ -103,4 +98,4 @@ export class TrackMapDisplayComponent extends BaseTelemetryDisplayComponent impl
 type Position = {
   x: number;
   y: number;
-}
+};

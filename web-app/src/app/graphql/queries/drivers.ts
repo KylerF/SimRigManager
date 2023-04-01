@@ -1,4 +1,4 @@
-import { gql } from 'apollo-angular'
+import { gql } from 'apollo-angular';
 
 export const SUBSCRIBE_TO_ACTIVE_DRIVER = gql`
   subscription activeDriver {
@@ -10,7 +10,7 @@ export const SUBSCRIBE_TO_ACTIVE_DRIVER = gql`
       profilePic
     }
   }
-`
+`;
 
 export const GET_ACTIVE_DRIVER = gql`
   query activeDriver {
@@ -22,11 +22,11 @@ export const GET_ACTIVE_DRIVER = gql`
       profilePic
     }
   }
-`
+`;
 
 export const GET_ALL_DRIVERS = gql`
   query allDrivers {
-    allDrivers {
+    drivers {
       id
       name
       nickname
@@ -34,7 +34,7 @@ export const GET_ALL_DRIVERS = gql`
       profilePic
     }
   }
-`
+`;
 
 export const SELECT_DRIVER = gql`
   mutation setActiveDriver($driverId: Int!) {
@@ -46,4 +46,4 @@ export const SELECT_DRIVER = gql`
       profilePic
     }
   }
-`
+`;

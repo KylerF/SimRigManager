@@ -1,5 +1,5 @@
-import { TelemetryOptions } from "./telemetry-options";
-import { WeekendOptions } from "./weekend-options";
+import { TelemetryOptions } from './telemetry-options';
+import { WeekendOptions } from './weekend-options';
 
 /**
  * Model interface for iRacing weekend info data

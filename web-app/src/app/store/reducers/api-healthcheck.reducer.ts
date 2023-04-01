@@ -8,11 +8,11 @@ export const apiHealthcheckFeatureKey = 'apiHealthcheck';
 
 export const initialState: StateContainer<AvailabilityCheck> = {
   state: {
-    apiActive: false
+    apiActive: false,
   },
   error: null,
   loading: false,
-  lastUpdated: null
+  lastUpdated: null,
 };
 
 /**
@@ -24,20 +24,20 @@ export const initialState: StateContainer<AvailabilityCheck> = {
  */
 export const reducer = createReducer(
   initialState,
-  on(apiHealthcheckActions.UpdateApiHealthcheck, state => ({
+  on(apiHealthcheckActions.UpdateApiHealthcheck, (state) => ({
     ...state,
-    loading: true
+    loading: true,
   })),
   on(apiHealthcheckActions.UpdateApiHealthcheckSuccess, (state, action) => ({
     state: action.payload.data,
     error: null,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   })),
   on(apiHealthcheckActions.UpdateApiHealthcheckFailure, (state, action) => ({
     state: initialState.state,
     error: action.payload.error,
     loading: false,
-    lastUpdated: moment().toDate()
+    lastUpdated: moment().toDate(),
   }))
 );

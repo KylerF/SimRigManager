@@ -1,15 +1,15 @@
-import strawberry
 from strawberry.fastapi import GraphQLRouter
+import strawberry
 
 from api.routers.graphql.healthcheck.query import HealthcheckQuery
-from api.routers.graphql.drivers.query import DriverQuery
-from api.routers.graphql.iracing.query import IracingQuery
 from api.routers.graphql.laptimes.query import LaptimeQuery
+from api.routers.graphql.iracing.query import IracingQuery
+from api.routers.graphql.drivers.query import DriverQuery
 
-from api.routers.graphql.drivers.subscription import DriverSubscription
 from api.routers.graphql.laptimes.subscription import LaptimeSubscription
-from api.routers.graphql.quotes.subscription import QuoteSubscription
 from api.routers.graphql.iracing.subscription import IracingSubscription
+from api.routers.graphql.drivers.subscription import DriverSubscription
+from api.routers.graphql.quotes.subscription import QuoteSubscription
 
 from api.routers.graphql.drivers.mutation import DriverMutation
 

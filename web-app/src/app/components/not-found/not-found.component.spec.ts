@@ -9,10 +9,9 @@ describe('NotFoundComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NotFoundComponent ],
-      imports: [ BrowserAnimationsModule ]
-    })
-    .compileComponents();
+      declarations: [NotFoundComponent],
+      imports: [BrowserAnimationsModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

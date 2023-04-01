@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
 @Component({
   selector: 'app-telemtry-display',
   templateUrl: './telemetry-dashboard.component.html',
-  styleUrls: ['./telemetry-dashboard.component.scss']
+  styleUrls: ['./telemetry-dashboard.component.scss'],
 })
 
 /**
@@ -32,10 +32,7 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
    * @param iracingDataService service to stream iRacing data
    * @param renderer render graphics in response to changes
    */
-  constructor(
-    private iracingDataService: IracingDataService,
-  )
-  { }
+  constructor(private iracingDataService: IracingDataService) {}
 
   /**
    * Start updating the dashboard with the latest iRacing data
@@ -58,16 +55,15 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
   subscribeToIracingData() {
     this.iracingDataService.startStream();
 
-    this.iracingDataSubscription = this.iracingDataService.latestData$
-      .subscribe({
-        next: data => {
-          if (isEmpty(data)) {
-            this.error = 'No data available';
-          } else {
-            this.error = null;
-          }
+    this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe({
+      next: (data) => {
+        if (isEmpty(data)) {
+          this.error = 'No data available';
+        } else {
+          this.error = null;
         }
-      });
+      },
+    });
   }
 
   /**

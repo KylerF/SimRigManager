@@ -8,7 +8,7 @@ describe('AvailabilityService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule ]
+      imports: [HttpClientModule],
     });
     service = TestBed.inject(AvailabilityService);
   });
