@@ -9,19 +9,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh - $navbar-height;
+  height: calc(100vh - $navbar-height);
 }
 .center-vh-15 {
   @extend .center-vh;
-  height: 100vh - $navbar-height - 15;
+  height: calc(100vh - $navbar-height - 15px);
 }
 .center-vh-20 {
   @extend .center-vh;
-  height: 100vh - $navbar-height - 20;
+  height: calc(100vh - $navbar-height - 20px);
 }
 .center-vh-40 {
   @extend .center-vh;
-  height: 100vh - $navbar-height - 40;
+  height: calc(100vh - $navbar-height - 40px);
 }
 
 // Pulse contents at a 3 second interval
