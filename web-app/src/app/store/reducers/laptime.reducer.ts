@@ -25,7 +25,8 @@ export const reducer = createReducer(
   })),
   on(laptimeActions.LoadLaptimesSuccess, (state, action) => {
     // To cache all laptimes, we need to merge the new laptimes with the existing ones.
-    // This is done only when the filtering parameters are the same.
+    // This is done only when the filtering parameters are the same, and limited
+    // to 1000 laptimes.
     if (
       state.state.filterParams &&
       action.params &&
@@ -34,7 +35,7 @@ export const reducer = createReducer(
     ) {
       const newLaptimes = action.payload.data;
       const existingLaptimes = state.state.laptimes;
-      const mergedLaptimes = [...existingLaptimes, ...newLaptimes];
+      const mergedLaptimes = [...existingLaptimes.slice(-1000), ...newLaptimes];
 
       return {
         state: {
