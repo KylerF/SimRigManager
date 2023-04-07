@@ -19,7 +19,7 @@ export const LoadLaptimes = createAction(
 
 export const LoadLaptimesSuccess = createAction(
   LaptimeActionTypes.LoadLaptimesSuccess,
-  props<{ payload: { data: LapTime[] } }>()
+  props<{ params?: LapTimeQueryParams; payload: { data: LapTime[] } }>()
 );
 
 export const LoadLaptimesFailure = createAction(

@@ -21,6 +21,7 @@ export class LaptimeEffects {
         this.lapTimeGQL.fetch(action.params).pipe(
           map((response) =>
             laptimeActions.LoadLaptimesSuccess({
+              params: action.params,
               payload: {
                 data: response.data.laptimes,
               },
