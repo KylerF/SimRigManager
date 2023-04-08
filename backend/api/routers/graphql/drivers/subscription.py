@@ -16,10 +16,10 @@ class DriverSubscription:
         description="Subscribe to active driver changes"
     )
     async def active_driver(self) -> AsyncGenerator[DriverType, None]:
-        db = next(get_db())
         last_driver = None
 
         while True:
+            db = next(get_db())
             active_driver = get_active_driver(db)
 
             if active_driver:
