@@ -1,15 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Pipe to convert a unix date to 'x seconds/minutes/hours/days... ago' statement
+ */
 @Pipe({
   name: 'dateAgo',
   pure: true,
 })
-
-/**
- * Pipe to convert a unix date to 'x seconds/minutes/hours/days... ago' statement
- */
 export class DateAgoPipe implements PipeTransform {
-  transform(value: any, args?: any): any {
+  transform(value: number, args?: any): any {
     if (value) {
       const date = new Date(value);
       const timezoneOffset = date.getTimezoneOffset() * 60000;
