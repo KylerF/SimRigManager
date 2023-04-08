@@ -35,7 +35,7 @@ export const reducer = createReducer(
     ) {
       const newLaptimes = action.payload.data;
       const existingLaptimes = state.state.laptimes;
-      const mergedLaptimes = [...existingLaptimes.slice(-1000), ...newLaptimes];
+      const mergedLaptimes = [...existingLaptimes, ...newLaptimes];
 
       return {
         state: {

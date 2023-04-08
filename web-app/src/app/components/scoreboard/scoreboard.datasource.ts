@@ -18,9 +18,8 @@ import { Injectable } from '@angular/core';
 })
 export class LaptimeDataSource extends DataSource<LapTime | undefined> {
   private pageSize = 100;
-  private cachedData = Array.from<LapTime>({ length: this.pageSize });
   private fetchedPages = new Set<number>();
-  private dataStream = new BehaviorSubject<(LapTime | undefined)[]>(this.cachedData);
+  private dataStream = new BehaviorSubject<(LapTime | undefined)[]>([]);
   private scrollSubscription = new Subscription();
 
   public state$: Observable<StateContainer<LapTimeState>>;
@@ -28,22 +27,20 @@ export class LaptimeDataSource extends DataSource<LapTime | undefined> {
   constructor(private store: Store<State>, private filterParams: LapTimeQueryParams) {
     super();
 
-    this.store.dispatch(LoadLaptimes({ params: this.filterParams }));
     this.state$ = this.store.pipe(select(selectLaptimesState()));
 
     this.state$.subscribe((state) => {
-      if (state.state.laptimes.length > 0) {
-        this.cachedData = state.state.laptimes;
-      }
-      this.dataStream.next(this.cachedData);
+      this.dataStream.next(state.state.laptimes);
     });
+
+    this.fetchPage(0);
   }
 
   connect(collectionViewer: CollectionViewer): Observable<LapTime[] | undefined> {
     this.scrollSubscription.add(
       collectionViewer.viewChange.subscribe((range) => {
         const startPage = this.getPageForIndex(range.start);
-        const endPage = this.getPageForIndex(range.end - 1);
+        const endPage = this.getPageForIndex(range.end);
 
         for (let i = startPage; i <= endPage; i++) {
           this.fetchPage(i);
