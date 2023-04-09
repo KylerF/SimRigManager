@@ -7,5 +7,11 @@ import strawberry
     name="OrderDirection"
 )
 class OrderDirection(Enum):
-    ASC = "ASC"
-    DESC = "DESC"
+    ASC = strawberry.enum_value(
+        value="ASC",
+        description="Ascending"
+    )
+    DESC = strawberry.enum_value(
+        value="DESC",
+        description="Descending"
+    )

@@ -6,11 +6,7 @@ from database.models import LapTime
 
 
 @strawberry.input(
-    description="""
-    Order by lap time fields. Set fields to
-    ASC or DESC to specify order.
-    Default is DESC.
-    """,
+    description="Order by lap time fields. Set fields to ASC or DESC to specify order. Default is DESC.",
     name="LaptimeOrder"
 )
 class LaptimeOrder:
@@ -19,13 +15,27 @@ class LaptimeOrder:
     multiple are provided, the result will be ordered by the first field, then
     the second, etc.
     """
-    driver_name: Optional[OrderDirection] = None
-    driver_id: Optional[OrderDirection] = None
-    car: Optional[OrderDirection] = None
-    track_name: Optional[OrderDirection] = None
-    track_config: Optional[OrderDirection] = None
-    time: Optional[OrderDirection] = None
-    set_at: Optional[OrderDirection] = None
+    driver_name: Optional[OrderDirection] = strawberry.field(
+        description="The driver's name",
+    )
+    driver_id: Optional[OrderDirection] = strawberry.field(
+        description="The driver's ID",
+    )
+    car: Optional[OrderDirection] = strawberry.field(
+        description="The car used for the lap",
+    )
+    track_name: Optional[OrderDirection] = strawberry.field(
+        description="The track name",
+    )
+    track_config: Optional[OrderDirection] = strawberry.field(
+        description="The track configuration",
+    )
+    time: Optional[OrderDirection] = strawberry.field(
+        description="The lap time in seconds",
+    )
+    set_at: Optional[OrderDirection] = strawberry.field(
+        description="The time the lap time was set at",
+    )
 
     def __init__(
         self,
