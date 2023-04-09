@@ -68,11 +68,8 @@ class NumberFilter:
 
 
 @strawberry.input(
-    description="""
-    Filter by date. The date must be in
-    ISO 8601 format.
-    For example: 2021-01-01T00:00:00.000Z
-    """,
+    description="Filter by date. The date must be in ISO 8601 format. \
+    For example: 2021-01-01T00:00:00.000Z",
     name="DateFilter"
 )
 class DateFilter:
@@ -111,10 +108,7 @@ class DateFilter:
 
 
 @strawberry.input(
-    description="""
-    Filter string using equality, starts with,
-    ends with, or contains
-    """,
+    description="Filter string using equality, starts with, ends with, or contains",
     name="StringFilter"
 )
 class StringFilter:

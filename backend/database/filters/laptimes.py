@@ -1,5 +1,5 @@
-from typing import Optional
 from sqlalchemy import func, select
+from typing import Optional
 import strawberry
 
 from database.filters.generics import (
@@ -23,6 +23,7 @@ class LaptimeFilter:
     """
     Wrapper for filterable lap time fields. All fields are optional, and if
     multiple are provided, the result will be lap times matching all conditions.
+    TODO: Add fields for combining filters with OR
     """
     driver_name: Optional[StringFilter] = strawberry.field(
         description="The driver name (e.g. 'John Doe')",
