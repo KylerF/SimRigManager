@@ -12,12 +12,12 @@ from database.crud import (
 
 
 @strawberry.type(
-    description="Used to query for driver data",
+    description="Used to query driver data",
     name="DriverQuery",
 )
 class DriverQuery:
     @strawberry.field(
-        description="Get all drivers",
+        description="Query for drivers",
     )
     def drivers(
         self,

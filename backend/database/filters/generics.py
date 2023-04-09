@@ -198,8 +198,12 @@ class StringFilter:
     name="BooleanFilter"
 )
 class BooleanFilter:
-    eq: Optional[bool] = None
-    neq: Optional[bool] = None
+    eq: Optional[bool] = strawberry.field(
+        description="Equals"
+    )
+    neq: Optional[bool] = strawberry.field(
+        description="Not equal"
+    )
 
     def __init__(
         self,

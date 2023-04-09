@@ -13,7 +13,7 @@ export class LaptimeEffects {
     private lapTimeGQL: LapTimeGQL
   ) {}
 
-  // Get all lap times
+  // Query lap times using the provided params
   loadLaptimes$ = createEffect(() =>
     this.actions$.pipe(
       ofType(laptimeActions.LoadLaptimes),
