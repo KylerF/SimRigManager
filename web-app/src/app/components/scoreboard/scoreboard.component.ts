@@ -66,9 +66,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   /**
    * Filter scores with a given condition
    */
-  filterScores() {
-    // Switch view based on overall/personal best selection
-  }
+  filterScores() {}
 
   /**
    * Sort scores by the given column
