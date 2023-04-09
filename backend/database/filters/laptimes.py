@@ -11,7 +11,8 @@ from database.models import LapTime
 
 
 @strawberry.input(
-    description="Filter lap times",
+    description="Filter lap times. All fields are optional, and if multiple are provided, \
+    the result will be lap times matching all conditions.",
     name="LaptimeFilter",
     directives={
         "filterable": True,
@@ -45,7 +46,8 @@ class LaptimeFilter:
         description="The date and time the lap time was set",
     )
     overall_best_only: Optional[bool] = strawberry.field(
-        description="Only return the overall best lap time for each car/track/trackConfig combination",
+        description="Only return the overall best lap time for each car/track/trackConfig \
+        combination",
     )
 
     def __init__(

@@ -6,7 +6,8 @@ from database.models import LapTime
 
 
 @strawberry.input(
-    description="Order by lap time fields. Set fields to ASC or DESC to specify order. Default is DESC.",
+    description="Order by lap time fields. Set fields to ASC or DESC to specify order. \
+    Default is DESC.",
     name="LaptimeOrder"
 )
 class LaptimeOrder:
