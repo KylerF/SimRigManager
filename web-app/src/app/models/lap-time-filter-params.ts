@@ -28,6 +28,7 @@ export interface LapTimeFilterParams {
   setAt?: {
     after?: string;
   };
+  overallBestOnly?: boolean;
 }
 
 export interface LaptimeSortParams {

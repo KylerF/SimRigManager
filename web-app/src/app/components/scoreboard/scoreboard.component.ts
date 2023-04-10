@@ -22,10 +22,12 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   newLapTimeStream: Observable<LapTime>;
 
   filterParams: LapTimeQueryParams = {
+    where: {
+      overallBestOnly: true,
+    },
     order: {
       setAt: SortOrder.DESC,
     },
-    skip: 0,
     limit: 100,
   };
 
