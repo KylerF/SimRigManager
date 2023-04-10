@@ -96,8 +96,8 @@ class LaptimeFilter:
         if self.overall_best_only:
             # Needs to filter by the minimum time for each car/track/trackConfig
             # combination. There is no field to do this, so we need to use a
-            # subquery to get the minimum time for each combination, then join
-            # that to the main query.
+            # join to get the minimum time for each combination, and then
+            # filter by that.
             subquery = (
                 select(
                     LapTime.car,
@@ -105,16 +105,15 @@ class LaptimeFilter:
                     LapTime.trackConfig,
                     func.min(LapTime.time).label("min_time")
                 )
-                .group_by(
-                    LapTime.car,
-                    LapTime.trackName,
-                    LapTime.trackConfig
-                )
+                .group_by(LapTime.car, LapTime.trackName, LapTime.trackConfig)
                 .alias()
             )
 
-            filters.append(
+            filters.extend([
+                LapTime.car == subquery.c.car,
+                LapTime.trackName == subquery.c.trackName,
+                LapTime.trackConfig == subquery.c.trackConfig,
                 LapTime.time == subquery.c.min_time
-            )
+            ])
 
         return filters
