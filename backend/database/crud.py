@@ -7,11 +7,11 @@ from sqlalchemy import func
 from typing import List
 
 from database.ordering.laptimes import LaptimeOrder, OrderDirection
-from database import models, schemas
 from database.filters.laptimes import LaptimeFilter
-from database.filters.drivers import DriverFilter
 from database.ordering.laptimes import LaptimeOrder
+from database.filters.drivers import DriverFilter
 from database.ordering.drivers import DriverOrder
+from database import models, schemas
 
 
 #   #   #   #   #   #   #   #   Drivers  #   #   #   #   #   #   #   #
