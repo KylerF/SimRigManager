@@ -2,6 +2,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Request
 from websockets.exceptions import ConnectionClosedError, ConnectionClosedOK
 from sse_starlette.sse import EventSourceResponse
 import asyncio
+import json
 
 from api.utils import get_iracing_data, get_ws_manager
 from api.ssegenerators import SSEGenerators
@@ -23,8 +24,7 @@ async def get_latest():
     return get_iracing_data()
 
 
-# Websockets do not pick up the prefix for some reason
-@router.websocket("/iracing/stream")
+@router.websocket("/stream")
 async def ws_stream_iracing_data(
     websocket: WebSocket,
     ws_connection_manager=Depends(get_ws_manager)
@@ -40,13 +40,11 @@ async def ws_stream_iracing_data(
 
     try:
         while True:
-            await websocket.receive_text()
-
             data = get_iracing_data()
 
             if data.SessionTime:
                 # Only send if new data is available
-                await ws_connection_manager.send_json(data, websocket)
+                await ws_connection_manager.send_json(json.loads(data.json()), websocket)
                 sent_empty = False
             else:
                 # Send one empty frame to update the client
