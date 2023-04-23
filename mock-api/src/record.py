@@ -26,7 +26,7 @@ def save_data():
 
 def on_message(ws, message):
     """
-    Append the message to the iracing_data list, and give a 
+    Append the message to the iracing_data list, and give a
     status update every 30 seconds
     """
     frame_count = len(iracing_data)
@@ -52,13 +52,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="iRacing data recorder")
     parser.add_argument("file", help="output file name")
     parser.add_argument(
-        "--host", 
-        default="localhost", 
+        "--host",
+        default="localhost",
         help="hostname of iracing server"
     )
     parser.add_argument(
-        "--port", 
-        default=8000, 
+        "--port",
+        default=8000,
         help="port of iracing server"
     )
     args = parser.parse_args()
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
-        f"ws://{args.host}:{args.port}/stream",
+        f"ws://{args.host}:{args.port}/iracing/stream",
         on_open = on_open,
         on_message=on_message,
         on_error=on_error,

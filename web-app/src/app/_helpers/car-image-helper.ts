@@ -6,6 +6,7 @@ export class CarImageHelper {
 
   private static wheelImageMap = {
     'Corvette C7 Daytona Prototype': 'corvette_wheel.png',
+    'Chevrolet Corvette C8.R': 'corvette_wheel.png',
     'Mazda MX-5 Cup': 'mx5_wheel.png',
     'Porsche 911 GT3 Cup (991)': 'porsche_wheel.png',
     'Cadillac CTS-V Racecar': 'ctsv_wheel.png',
@@ -36,3 +37,4 @@ export class CarImageHelper {
     }
   }
 }
+
