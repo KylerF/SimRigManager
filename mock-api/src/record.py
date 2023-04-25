@@ -7,7 +7,7 @@ from os import path, getcwd
 import websocket
 import argparse
 import atexit
-import json
+import ujson
 
 
 iracing_data = []
@@ -21,8 +21,8 @@ def save_data():
         return
 
     print(f"Saving data to {output_file}")
-    with open(output_file,"w") as file:
-        json.dump(iracing_data, file, indent = 4)
+    with open(output_file, "w") as file:
+        ujson.dump(iracing_data, file, indent = 4)
 
 def on_message(ws, message):
     """
@@ -33,7 +33,7 @@ def on_message(ws, message):
     if frame_count > 0 and frame_count % 900 == 0:
         print(f"Recorded {frame_count} frames ({frame_count*0.049} MB)")
 
-    iracing_data.append(json.loads(message))
+    iracing_data.append(ujson.loads(message))
 
 def on_open(ws):
     print("Press CTRL+C to stop recording")
