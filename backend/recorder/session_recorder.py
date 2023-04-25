@@ -23,13 +23,13 @@ class IracingSessionRecorder():
 
         self.log = logging.getLogger(__name__)
 
-    async def start(self, fps: int = 30):
+    def start(self, fps: int = 30):
         """
         Start the session recording
         """
+        self.fps = fps
         self.log.debug("Starting session recorder")
         asyncio.run(self.__record())
-        asyncio.run(self.__write_to_file())
 
     def stop(self):
         """
@@ -50,11 +50,7 @@ class IracingSessionRecorder():
 
             if iracing_data:
                 # Append the data to the session-recorder key
-                redis.rpush(f"session-recorder-{self.session_id}", ujson.dumps(iracing_data))
+                redis.rpush(f"session-recorder-{self.session_id}", ujson.dumps(iracing_data.dict()))
 
             # Capture 30 frames per second
             await asyncio.sleep(1/30)
-
-if __name__ == "__main__":
-    recorder = IracingSessionRecorder()
-    recorder.start()
