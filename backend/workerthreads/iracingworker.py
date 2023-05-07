@@ -27,20 +27,26 @@ class IracingWorker(threading.Thread):
         self.rpm_strip = rpm_strip
         self.framerate = framerate
 
+        self.db = None
+        self.active_driver = None
+        self.latest = None
+        self.track_name = None
+        self.best_lap_time = 0
+        self.session_id = None
+
         self.log = logging.getLogger(__name__)
 
     def run(self):
         # Get the active driver and their track time
-        db = next(get_db())
-        active_driver_object = crud.get_active_driver(db)
-        active_driver = None
-        best_lap_time = 0
+        self.db = next(get_db())
+        active_driver_object = crud.get_active_driver(self.db)
+        self.active_driver = None
         track_time = 0
 
         if active_driver_object:
-            active_driver = active_driver_object.driver
-            track_time = active_driver.trackTime
-            self.log.info('Logging data for ' + active_driver.name)
+            self.active_driver = active_driver_object.driver
+            track_time = self.active_driver.trackTime
+            self.log.info('Logging data for ' + self.active_driver.name)
         else:
             self.log.info('No driver selected. Lap times will not be recorded.')
 
@@ -48,7 +54,7 @@ class IracingWorker(threading.Thread):
         while self.active:
             try:
                 # Get data from the stream
-                latest = self.data_stream.latest()
+                self.latest = self.data_stream.latest()
                 latest_raw = self.data_stream.latest(raw=True)
 
                 # Update Redis keys
@@ -57,20 +63,18 @@ class IracingWorker(threading.Thread):
                 # Check for updates from the API
                 updated_driver = get_active_driver_from_cache()
 
-                if updated_driver and updated_driver != active_driver:
-                    active_driver = updated_driver
+                if updated_driver and updated_driver != self.active_driver:
+                    self.active_driver = updated_driver
                     track_time = updated_driver.trackTime
 
-                    self.log.info('Setting active driver to ' + active_driver.name)
+                    self.log.info('Setting active driver to ' + self.active_driver.name)
 
-                if not self.data_stream.is_active or not latest['is_on_track']:
-                    best_lap_time = 0
-
+                if not self.data_stream.is_active or not self.latest['is_on_track']:
                     # Update the driver's track time
-                    if active_driver and active_driver.trackTime < math.floor(track_time):
-                        self.log.info('Updating track time for ' + active_driver.name)
-                        active_driver = crud.update_driver(db, DriverUpdate(
-                            id=active_driver.id,
+                    if self.active_driver and self.active_driver.trackTime < math.floor(track_time):
+                        self.log.info('Updating track time for ' + self.active_driver.name)
+                        self.active_driver = crud.update_driver(self.db, DriverUpdate(
+                            id=self.active_driver.id,
                             trackTime=track_time
                         ))
 
@@ -90,43 +94,27 @@ class IracingWorker(threading.Thread):
                         self.controller.reconnect()
 
                 # Check for car swaps
-                if self.rpm_strip.redline != latest['redline']:
-                    self.rpm_strip.set_redline(latest['redline'])
-                    self.log.debug('Setting redline to new value: ' + str(latest['redline']))
-                if self.rpm_strip.idle_rpm != latest['idle_rpm']:
-                    self.rpm_strip.set_idle_rpm(latest['idle_rpm'])
-                    self.log.debug('Setting idle RPM to new value: ' + str(latest['idle_rpm']))
+                if self.rpm_strip.redline != self.latest['redline']:
+                    self.rpm_strip.set_redline(self.latest['redline'])
+                    self.log.debug('Setting redline to new value: ' + str(self.latest['redline']))
+                if self.rpm_strip.idle_rpm != self.latest['idle_rpm']:
+                    self.rpm_strip.set_idle_rpm(self.latest['idle_rpm'])
+                    self.log.debug('Setting idle RPM to new value: ' + str(self.latest['idle_rpm']))
 
                 # Get the RPM and update the light controller
-                self.rpm_strip.set_rpm(latest['rpm'])
+                self.rpm_strip.set_rpm(self.latest['rpm'])
                 self.controller.update(self.rpm_strip.to_color_list())
 
+                # Check for a new session
+                session_id = self.latest['session_id']
+                if session_id != session_id:
+                    self.best_lap_time = 0
+                self.session_id = session_id
+
                 # Log the best lap time
-                if latest['best_lap_time'] > 0 and (
-                    best_lap_time == 0 or latest['best_lap_time'] < best_lap_time
-                ):
-                    best_lap_time = latest['best_lap_time']
+                self.__set_best_time()
 
-                    if active_driver:
-                        self.log.info('Setting new best lap time for ' + active_driver.name)
-
-                        new_record = LapTimeCreate(
-                            car=latest['car_name'],
-                            trackName=latest['track_name'],
-                            trackConfig=latest['track_config'] or '',
-                            time=latest['best_lap_time'],
-                            driverId=active_driver.id
-                        )
-
-                        new_laptime = crud.create_laptime(db, new_record)
-
-                        # Update Redis key for streaming
-                        set_redis_key(
-                            'session_best_lap',
-                            schemas.LapTime(**new_laptime.__dict__).json()
-                        )
-
-                self.log.debug(latest)
+                self.log.debug(self.latest)
 
                 track_time += 1/self.framerate
 
@@ -145,9 +133,37 @@ class IracingWorker(threading.Thread):
             except Exception:
                 self.log.exception('Unhandled exception')
                 self.data_stream.stop()
+                self.db.close()
+
+        self.db.close()
 
     def stop(self):
         '''
         Disconnect from iRacing and stop this thread
         '''
         self.active = False
+
+    def __set_best_time(self):
+        if self.latest['best_lap_time'] > 0 and (
+            self.best_lap_time == 0 or self.latest['best_lap_time'] < self.best_lap_time
+        ):
+            self.best_lap_time = self.latest['best_lap_time']
+
+            if self.active_driver:
+                self.log.info('Setting new best lap time for ' + self.active_driver.name)
+
+                new_record = LapTimeCreate(
+                    car=self.latest['car_name'],
+                    trackName=self.latest['track_name'],
+                    trackConfig=self.latest['track_config'] or '',
+                    time=self.latest['best_lap_time'],
+                    driverId=self.active_driver.id
+                )
+
+                new_laptime = crud.create_laptime(self.db, new_record)
+
+                # Update Redis key for streaming
+                set_redis_key(
+                    'session_best_lap',
+                    schemas.LapTime(**new_laptime.__dict__).json()
+                )
