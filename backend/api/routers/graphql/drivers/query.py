@@ -9,6 +9,7 @@ from database.crud import (
     get_active_driver,
     get_drivers,
  )
+from database.ordering.drivers import DriverOrder
 
 
 @strawberry.type(
