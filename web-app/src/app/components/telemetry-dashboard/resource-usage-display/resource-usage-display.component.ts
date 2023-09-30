@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/base-telemetry-display/base-telemetry-display.component';
 import { IracingDataService } from 'services/iracing-data.service';
@@ -31,7 +31,7 @@ export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent
     this.iracingDataService.startStream();
 
     this.iracingDataSubscription = this.iracingDataService.latestData$.subscribe((data) => {
-      if (!_.isEmpty(data)) {
+      if (!isEmpty(data)) {
         this.fps = data.FrameRate;
         this.cpuUsage = data.CpuUsageFG;
         this.gpuUsage = data.GpuUsage;
