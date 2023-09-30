@@ -39,7 +39,7 @@ To keep this running all the time, you can configure a [NSSM service](https://ns
 ### Web App
 Browse to http://localhost:4200, add some drivers and light controllers, then start racing!
 ## API Documentation
-Check out http://localhost:8000/docs for Swagger UI documentation, or the ReDoc documentation at http://localhost:8000/docs
+Check out http://localhost:8000/docs for Swagger UI documentation, or the ReDoc documentation at http://localhost:8000/redoc
 
 ## Testing
 ```
