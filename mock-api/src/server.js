@@ -1,12 +1,12 @@
 /**
  * Simulate a real-time stream of iRacing data.
- * The stream begins immediately so that all connnections will 
+ * The stream begins immediately so that all connnections will
  * receive the same data at any given time.
- * 
+ *
  * To create a JSON file with test data, run record.py and point it
  * to your SimRigAPI instance with an iRacing session running. This will
  * record all session data to a JSON file in ./data.
- * 
+ *
  * Endpoints:
  *  ws://{baseURL}/iracing/stream - websocket connection to stream iRacing data
  *  http://{baseURL}/iracing/stream - stream iRacing data via Server Sent Events
@@ -28,8 +28,8 @@ const fs = require('fs');
 
 // Default configuration options
 var defaultOptions = {
-  selectedFile: "default",
-  streamDelay: 30
+  selectedFile: 'default',
+  streamDelay: 30,
 };
 var options = defaultOptions;
 
@@ -48,8 +48,8 @@ var jsonStream = StreamArray.withParser();
 
 // Set up the express server
 const app = express();
-app.set("view engine", "ejs");
-app.set('views', path.join(__dirname, 'views')); 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use('/css', express.static('node_modules/bootstrap-dark-5/dist/css'));
 app.use('/js', express.static('node_modules/bootstrap-dark-5/dist/js'));
 app.use('/js', express.static('node_modules/jquery/dist'));
@@ -58,7 +58,8 @@ app.use('/js', express.static('node_modules/jquery/dist'));
 const limiter = rateLimit({
   windowMs: 1000, // 1 second
   max: 5,
-  message: 'Whoa there partner, slow down! Only 5 requests per second.\
+  message:
+    'Whoa there partner, slow down! Only 5 requests per second.\
             Try a websocket connection if you need real-time data.',
 });
 
@@ -79,7 +80,7 @@ fs.readFile('config.json', 'utf8', (error, data) => {
       options = config;
 
       fs.stat(`./src/data/${options.selectedFile}.json`, (error, stat) => {
-        if(error) {
+        if (error) {
           console.error(`Unable to load selected file: ${error}`);
           console.log('Using default file');
           options.selectedFile = 'default';
@@ -94,13 +95,13 @@ fs.readFile('config.json', 'utf8', (error, data) => {
 });
 
 // Save config options on exit
-process.on("SIGINT", saveAndExit);
-process.on("SIGTERM", saveAndExit);
-process.on("SIGHUP", saveAndExit);
+process.on('SIGINT', saveAndExit);
+process.on('SIGTERM', saveAndExit);
+process.on('SIGHUP', saveAndExit);
 
 /**
  * Root endpoint for the mock API.
- * Returns all available endpoints with their descriptions in a 
+ * Returns all available endpoints with their descriptions in a
  * fancy card using bootstrap.
  */
 app.get('/', (req, res) => {
@@ -109,15 +110,14 @@ app.get('/', (req, res) => {
       console.error(err);
       res.sendStatus(500);
     } else {
-      let fileNames = files.filter(file => 
-        file.endsWith('.json')
-      )
-      .map(file => file.split('.')[0]);
+      let fileNames = files
+        .filter((file) => file.endsWith('.json'))
+        .map((file) => file.split('.')[0]);
 
       res.render('index', {
         files: fileNames,
         selectedFile: options.selectedFile,
-        delay: options.streamDelay
+        delay: options.streamDelay,
       });
     }
   });
@@ -131,9 +131,9 @@ app.get('/iracing/latest', cors(), (req, res) => {
 });
 
 /**
- * Lists the available JSON data files and returns a list 
+ * Lists the available JSON data files and returns a list
  * of files without the file extensions
- * 
+ *
  * @returns {array} list of files without file extensions
  * @example ['default', 'test']
  */
@@ -143,12 +143,7 @@ app.get('/files', (req, res) => {
       console.error(err);
       res.sendStatus(500);
     } else {
-      res.send(
-        files.filter(file => 
-          file.endsWith('.json')
-        )
-        .map(file => file.split('.')[0])
-      );
+      res.send(files.filter((file) => file.endsWith('.json')).map((file) => file.split('.')[0]));
     }
   });
 });
@@ -157,7 +152,7 @@ app.get('/files', (req, res) => {
  * Express endpoint to select a JSON file to stream.
  * If the file does not exist in the data directory,
  * a 404 is returned.
- * 
+ *
  * @param {string} file name of the file to stream
  */
 app.get('/files/:file', (req, res) => {
@@ -190,7 +185,7 @@ app.ws('/iracing/stream', (ws) => {
   wsConnections.push(ws);
 
   ws.on('close', () => {
-    wsConnections = wsConnections.filter(conn => conn !== ws);
+    wsConnections = wsConnections.filter((conn) => conn !== ws);
   });
 });
 
@@ -201,7 +196,7 @@ app.get('/iracing/stream', (req, res) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-store',
-    'Connection': 'keep-alive'
+    Connection: 'keep-alive',
   });
   res.flushHeaders();
 
@@ -217,9 +212,7 @@ app.get('/iracing/stream', (req, res) => {
   eventSourceConnections.push(res);
 
   res.on('close', () => {
-    eventSourceConnections = eventSourceConnections.filter(
-      conn => conn !== res
-    );
+    eventSourceConnections = eventSourceConnections.filter((conn) => conn !== res);
 
     res.end();
   });
@@ -227,7 +220,7 @@ app.get('/iracing/stream', (req, res) => {
 
 /**
  * Endpoint used to set the delay between frames
- * 
+ *
  * @param {integer} delay milliseconds to wait between frames
  */
 app.get('/delay/:delay', (req, res) => {
@@ -252,22 +245,21 @@ app.listen(8001, () => {
 
 /**
  * Open the mock data file and return a readstream
- * 
+ *
  * @param {string} file name of the file to open
  * @returns {stream} readstream of JSON file
  */
 function getFileStream(file) {
   jsonStream = StreamArray.withParser();
-  let newStream = fs.createReadStream(file)
-    .pipe(jsonStream.input);
+  let newStream = fs.createReadStream(file).pipe(jsonStream.input);
 
-  jsonStream.on('data', ({_, value}) => {
+  jsonStream.on('data', ({ _, value }) => {
     // Update all connected clients with the latest data
-    wsConnections.forEach(ws => {
+    wsConnections.forEach((ws) => {
       ws.send(JSON.stringify(value));
     });
 
-    eventSourceConnections.forEach(conn => {
+    eventSourceConnections.forEach((conn) => {
       conn.write(`data: ${JSON.stringify(value)}\n\n`);
     });
 
@@ -287,25 +279,24 @@ function getFileStream(file) {
 
 /**
  * Slows down a JSON file stream to simulate a real-time stream
- * 
+ *
  * @param {stream} stream readstream to be paused
  */
 async function slowDownStream(stream) {
   stream.pause();
 
-  sleep(options.streamDelay).then(() => {
-    stream.resume();
-  })
-  .catch(error => {
-    console.log(
-      `Invalid delay value: ${error}`
-    );
-  });
+  sleep(options.streamDelay)
+    .then(() => {
+      stream.resume();
+    })
+    .catch((error) => {
+      console.log(`Invalid delay value: ${error}`);
+    });
 }
 
 /**
  * Blocking function to sleep for a given time
- * 
+ *
  * @param {int} ms time in milliseconds (max 1000)
  */
 function sleep(ms) {
@@ -320,13 +311,13 @@ function sleep(ms) {
 
 /**
  * Check that loaded configuration options include the expected keys
- * 
+ *
  * @param {object} config object to verify
  */
 function verifyConfig(config) {
   for (let key in options) {
     if (!config[key]) {
-      throw Error(`"${key}" option missing`)
+      throw Error(`"${key}" option missing`);
     }
   }
 }
@@ -336,11 +327,8 @@ function verifyConfig(config) {
  */
 function saveAndExit() {
   try {
-    fs.writeFileSync(
-      './config.json',
-      JSON.stringify(options)
-    );
-  } catch(error) {
+    fs.writeFileSync('./config.json', JSON.stringify(options));
+  } catch (error) {
     console.error(`Unable to save config options: ${error}`);
   } finally {
     process.exit(0);
