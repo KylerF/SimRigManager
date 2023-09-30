@@ -250,9 +250,8 @@ export class DriverService {
   }
 
   /**
-   * Save the active driver in local storage
+   * Save the active driver to local storage
    *
-   * @param driver the driver to save
    * @returns true if successful, false otherwise
    */
   private saveToLocalStorage(): boolean {
