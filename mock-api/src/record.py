@@ -7,7 +7,7 @@ from os import path, getcwd
 import websocket
 import argparse
 import atexit
-import json
+import ujson
 
 
 iracing_data = []
@@ -21,19 +21,19 @@ def save_data():
         return
 
     print(f"Saving data to {output_file}")
-    with open(output_file,"w") as file:
-        json.dump(iracing_data, file, indent = 4)
+    with open(output_file, "w") as file:
+        ujson.dump(iracing_data, file, indent = 4)
 
 def on_message(ws, message):
     """
-    Append the message to the iracing_data list, and give a 
+    Append the message to the iracing_data list, and give a
     status update every 30 seconds
     """
     frame_count = len(iracing_data)
     if frame_count > 0 and frame_count % 900 == 0:
         print(f"Recorded {frame_count} frames ({frame_count*0.049} MB)")
 
-    iracing_data.append(json.loads(message))
+    iracing_data.append(ujson.loads(message))
 
 def on_open(ws):
     print("Press CTRL+C to stop recording")
@@ -52,13 +52,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="iRacing data recorder")
     parser.add_argument("file", help="output file name")
     parser.add_argument(
-        "--host", 
-        default="localhost", 
+        "--host",
+        default="localhost",
         help="hostname of iracing server"
     )
     parser.add_argument(
-        "--port", 
-        default=8000, 
+        "--port",
+        default=8000,
         help="port of iracing server"
     )
     args = parser.parse_args()
@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
-        f"ws://{args.host}:{args.port}/stream",
+        f"ws://{args.host}:{args.port}/iracing/stream",
         on_open = on_open,
         on_message=on_message,
         on_error=on_error,

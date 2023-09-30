@@ -1,12 +1,12 @@
 #
 # Docker container configuration for the backend SimRig API.
 #
-# Pulls the base image, copies source files into the container, 
+# Pulls the base image, copies source files into the container,
 # installs dependencies and runs the application.
 #
 
 # Pull the Python image
-FROM python:3.11.1-slim-buster
+FROM python:alpine
 
 # Create the source directory inside the container
 RUN mkdir -p /usr/src/backend

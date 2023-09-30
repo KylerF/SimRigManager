@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { mergeMap, map, catchError, of } from 'rxjs';
+import { Injectable } from '@angular/core';
 
 import * as quoteActions from 'store/actions/quote.actions';
 import { QuoteService } from 'services/quote.service';

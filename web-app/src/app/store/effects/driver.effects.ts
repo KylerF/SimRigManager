@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, switchMap, of } from 'rxjs';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Injectable } from '@angular/core';
 
+import * as driverActions from 'store/actions/driver.actions';
 import {
   ActiveDriverGQL,
   DriversGQL,
   DriverService,
   SelectDriverGQL,
 } from 'services/driver.service';
-import * as driverActions from 'store/actions/driver.actions';
 
 @Injectable()
 export class DriverEffects {

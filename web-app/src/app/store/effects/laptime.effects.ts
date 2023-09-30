@@ -13,7 +13,7 @@ export class LaptimeEffects {
     private lapTimeGQL: LapTimeGQL
   ) {}
 
-  // Get all lap times
+  // Query lap times using the provided params
   loadLaptimes$ = createEffect(() =>
     this.actions$.pipe(
       ofType(laptimeActions.LoadLaptimes),
@@ -21,6 +21,7 @@ export class LaptimeEffects {
         this.lapTimeGQL.fetch(action.params).pipe(
           map((response) =>
             laptimeActions.LoadLaptimesSuccess({
+              params: action.params,
               payload: {
                 data: response.data.laptimes,
               },

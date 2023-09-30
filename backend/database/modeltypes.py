@@ -89,7 +89,7 @@ class DriverInfoType:
 
 
 @strawberry.experimental.pydantic.type(
-    description="A frame of iRacing data",
+    description="A frame of iRacing data (https://sajax.github.io/irsdkdocs/telemetry/)",
     model=iracingschemas.IracingFrame,
     all_fields=True
 )

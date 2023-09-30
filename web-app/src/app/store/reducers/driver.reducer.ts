@@ -1,7 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { Driver } from 'models/driver';
-import { StateContainer } from 'models/state';
+
 import * as driverActions from 'store/actions/driver.actions';
+import { StateContainer } from 'models/state';
+import { Driver } from 'models/driver';
 
 export const driverFeatureKey = 'driver';
 

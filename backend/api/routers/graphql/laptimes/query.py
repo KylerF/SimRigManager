@@ -14,7 +14,7 @@ from database.database import get_db
 )
 class LaptimeQuery:
     @strawberry.field(
-        description="Get all lap times"
+        description="Query for lap times",
     )
     def laptimes(
         self,

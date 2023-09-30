@@ -16,12 +16,23 @@ class DriverFilter:
     """
     Wrapper for filterable driver fields. All fields are optional, and if
     multiple are provided, the result will be drivers matching all conditions.
+    TODO: Add fields for combining filters with OR
     """
-    id: Optional[NumberFilter] = None
-    name: Optional[StringFilter] = None
-    nickname: Optional[StringFilter] = None
-    profile_pic: Optional[StringFilter] = None
-    track_time: Optional[NumberFilter] = None
+    id: Optional[NumberFilter] = strawberry.field(
+        description="The driver ID (e.g. 1)",
+    )
+    name: Optional[StringFilter] = strawberry.field(
+        description="The driver name (e.g. 'John Doe')",
+    )
+    nickname: Optional[StringFilter] = strawberry.field(
+        description="The driver nickname (e.g. 'JD')",
+    )
+    profile_pic: Optional[StringFilter] = strawberry.field(
+        description="The driver profile picture URL",
+    )
+    track_time: Optional[NumberFilter] = strawberry.field(
+        description="The driver's track time in seconds",
+    )
 
     def __init__(
         self,

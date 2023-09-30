@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+
 import { Driver } from 'models/driver';
 
 export const loadActiveDriver = createAction('[ActiveDriver] Load Active Driver');
