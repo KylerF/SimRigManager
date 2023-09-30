@@ -12,16 +12,13 @@ from database.schemas import (
     LightControllerSettings,
     LightControllerSettingsCreate,
     LightControllerSettingsUpdate,
-    LightControllerSettingsDelete
+    LightControllerSettingsDelete,
 )
 
 """
 Router to WLED light controller management endpoints
 """
-router = APIRouter(
-    prefix="/controllers",
-    tags=["controllers"]
-)
+router = APIRouter(prefix="/controllers", tags=["controllers"])
 
 
 @router.get("", response_model=List[LightController])
@@ -87,32 +84,27 @@ async def get_controller_settings(controllerId: int, driverId: int):
 
 
 @router.post("/settings", response_model=LightControllerSettings)
-async def create_controller_settings(controller_settings: LightControllerSettingsCreate):
+async def create_controller_settings(
+    controller_settings: LightControllerSettingsCreate,
+):
     """
     Create a settings profile for a light controller
     """
     db = next(get_db())
-    new_controller_settings = crud.create_controller_settings(
-        db,
-        controller_settings
-    )
+    new_controller_settings = crud.create_controller_settings(db, controller_settings)
 
     return new_controller_settings
 
 
 @router.patch("/settings", response_model=LightControllerSettings)
 async def update_controller_settings(
-    db,
-    controller_settings: LightControllerSettingsUpdate
+    db, controller_settings: LightControllerSettingsUpdate
 ):
     """
     Update settings profile for a light controller
     """
     db = next(get_db())
-    new_controller_settings = crud.update_controller_settings(
-        db,
-        controller_settings
-    )
+    new_controller_settings = crud.update_controller_settings(db, controller_settings)
 
     return new_controller_settings
 

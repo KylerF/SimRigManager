@@ -11,7 +11,7 @@ from database.models import Driver
     ASC or DESC to specify order.
     Default is DESC.
     """,
-    name="DriverOrder"
+    name="DriverOrder",
 )
 class DriverOrder:
     """
@@ -19,6 +19,7 @@ class DriverOrder:
     multiple are provided, the result will be ordered by the first field, then
     the second, etc.
     """
+
     id: Optional[OrderDirection] = strawberry.field(
         description="The driver ID (e.g. 1)",
     )

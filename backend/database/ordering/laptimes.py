@@ -8,7 +8,7 @@ from database.models import LapTime
 @strawberry.input(
     description="Order by lap time fields. Set fields to ASC or DESC to specify order. \
     Default is DESC.",
-    name="LaptimeOrder"
+    name="LaptimeOrder",
 )
 class LaptimeOrder:
     """
@@ -16,6 +16,7 @@ class LaptimeOrder:
     multiple are provided, the result will be ordered by the first field, then
     the second, etc.
     """
+
     driver_name: Optional[OrderDirection] = strawberry.field(
         description="The driver's name",
     )

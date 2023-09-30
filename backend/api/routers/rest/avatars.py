@@ -15,14 +15,13 @@ from database import crud, schemas
 """
 Router for paths related to managing driver avatar images
 """
-router = APIRouter(
-    prefix="/avatars",
-    tags=["avatars"]
-)
+router = APIRouter(prefix="/avatars", tags=["avatars"])
 
 
 @router.get("/{driver_id}")
-async def get_avatar(driver_id: int, width: Optional[int] = 0, height: Optional[int] = 0):
+async def get_avatar(
+    driver_id: int, width: Optional[int] = 0, height: Optional[int] = 0
+):
     """
     Get a driver's profile picture.
     If width is provided, a square image with the width is returned.
@@ -34,14 +33,12 @@ async def get_avatar(driver_id: int, width: Optional[int] = 0, height: Optional[
         avatar_path = __get_avatar_path(driver_id)
     except SecurityException:
         raise HTTPException(
-            status_code=400,
-            detail=f"Invalid request for driver with id {driver_id}"
+            status_code=400, detail=f"Invalid request for driver with id {driver_id}"
         )
 
     if not path.exists(avatar_path):
         raise HTTPException(
-            status_code=404,
-            detail=f"No avatar found for driver with id {driver_id}"
+            status_code=404, detail=f"No avatar found for driver with id {driver_id}"
         )
 
     return __create_image_response(avatar_path, width, height)
@@ -56,15 +53,11 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile = File(...)):
         file_location = __get_avatar_path(driver_id)
     except SecurityException:
         raise HTTPException(
-            status_code=400,
-            detail=f"Invalid request for driver with id {driver_id}"
+            status_code=400, detail=f"Invalid request for driver with id {driver_id}"
         )
 
     # Update driver profile with link to new avatar image
-    data = {
-        "id": driver_id,
-        "profilePic": f"/avatars/{driver_id}?{int(time()) * 1000}"
-    }
+    data = {"id": driver_id, "profilePic": f"/avatars/{driver_id}?{int(time()) * 1000}"}
     driver = schemas.DriverUpdate(**data)
 
     db = next(get_db())
@@ -72,8 +65,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile = File(...)):
 
     if not updated_driver:
         raise HTTPException(
-            status_code=404,
-            detail=f"No driver found with id {driver_id}"
+            status_code=404, detail=f"No driver found with id {driver_id}"
         )
 
     # Update active driver cache
@@ -85,7 +77,7 @@ async def upload_avatar(driver_id: int, profile_pic: UploadFile = File(...)):
 
     return {
         "success": "Avatar image uploaded successfully",
-        "image_url": data["profilePic"]
+        "image_url": data["profilePic"],
     }
 
 
@@ -98,15 +90,11 @@ async def delete_avatar(driver_id: int):
         file_location = __get_avatar_path(driver_id)
     except SecurityException:
         raise HTTPException(
-            status_code=404,
-            detail=f"No avatar found for driver with id {driver_id}"
+            status_code=404, detail=f"No avatar found for driver with id {driver_id}"
         )
 
     # Update driver profile to clear image URL
-    data = {
-        "id": driver_id,
-        "profilePic": ""
-    }
+    data = {"id": driver_id, "profilePic": ""}
     driver = schemas.DriverUpdate(**data)
 
     db = next(get_db())
@@ -114,8 +102,7 @@ async def delete_avatar(driver_id: int):
 
     if not updated_driver:
         raise HTTPException(
-            status_code=404,
-            detail=f"No driver found with id {driver_id}"
+            status_code=404, detail=f"No driver found with id {driver_id}"
         )
 
     # Update active driver cache
@@ -140,10 +127,7 @@ def __get_avatar_path(driver_id: int):
     if not safe_avatar_path.startswith(current_path):
         raise SecurityException("Unsafe file path requested")
 
-    avatar_directory = path.join(
-        current_path,
-        "userdata", "images"
-    )
+    avatar_directory = path.join(current_path, "userdata", "images")
 
     # Create the file structure if it does not exist
     try:
@@ -151,10 +135,7 @@ def __get_avatar_path(driver_id: int):
     except FileExistsError:
         pass
 
-    return path.join(
-        avatar_directory,
-        f"{driver_id}-avatar.png"
-    )
+    return path.join(avatar_directory, f"{driver_id}-avatar.png")
 
 
 def __create_image_response(image_path, width: Optional[int], height: Optional[int]):
@@ -165,8 +146,7 @@ def __create_image_response(image_path, width: Optional[int], height: Optional[i
     """
     if width or height:
         return StreamingResponse(
-            __resize_image_file(image_path, width, height),
-            media_type="image/png"
+            __resize_image_file(image_path, width, height), media_type="image/png"
         )
 
     return FileResponse(image_path)

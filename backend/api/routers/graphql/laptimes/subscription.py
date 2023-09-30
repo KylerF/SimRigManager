@@ -11,9 +11,7 @@ from api.utils import get_session_best_lap
     name="LaptimeSubscription",
 )
 class LaptimeSubscription:
-    @strawberry.subscription(
-        description="Subscribe to lap times"
-    )
+    @strawberry.subscription(description="Subscribe to lap times")
     async def laptime(self, update_sec: int = 5) -> AsyncGenerator[LapTimeType, None]:
         last_time = get_session_best_lap()
 

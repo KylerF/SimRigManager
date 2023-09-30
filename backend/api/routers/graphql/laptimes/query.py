@@ -27,7 +27,4 @@ class LaptimeQuery:
 
         laptimes = get_laptimes(db, skip, limit, where, order)
 
-        return [
-            LapTimeType.from_pydantic(laptime)
-            for laptime in laptimes
-        ]
+        return [LapTimeType.from_pydantic(laptime) for laptime in laptimes]

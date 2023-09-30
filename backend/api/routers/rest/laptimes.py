@@ -10,10 +10,7 @@ from database import crud, schemas
 """
 Router to the lap times endpoint to get and set high scores
 """
-router = APIRouter(
-    prefix="/laptimes",
-    tags=["laptimes"]
-)
+router = APIRouter(prefix="/laptimes", tags=["laptimes"])
 
 
 @router.get("", response_model=List[schemas.LapTime])

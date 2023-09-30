@@ -21,15 +21,16 @@ class SSEGenerators:
 
 
 class GeneratorFunctions:
-    """"
+    """ "
     Server Sent Event generator functions
     """
+
     def __init__(self, request):
         self.request = request
         self.redis_store = redis.Redis(
             host=getenv("REDIS_HOST", "127.0.0.1"),
             charset="utf-8",
-            decode_responses=True
+            decode_responses=True,
         )
 
         # How often to update subscribers (seconds)

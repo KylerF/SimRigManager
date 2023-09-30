@@ -8,10 +8,7 @@ from database import crud, schemas
 Router for paths related to inspirational driving quotes, providing CRUD
 functionality for quotes and an endpoint to get a random quote
 """
-router = APIRouter(
-    prefix="/quotes",
-    tags=["quotes"]
-)
+router = APIRouter(prefix="/quotes", tags=["quotes"])
 
 
 @router.get("", response_model=List[schemas.Quote])

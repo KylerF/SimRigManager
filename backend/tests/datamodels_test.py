@@ -7,6 +7,7 @@ class TestModels(unittest.TestCase):
     """
     Unit tests for the data models
     """
+
     def setUp(self) -> None:
         pass
 

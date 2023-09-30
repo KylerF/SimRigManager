@@ -11,9 +11,7 @@ from api.utils import get_iracing_data
     name="Subscription",
 )
 class IracingSubscription:
-    @strawberry.subscription(
-        description="Subscribe to real-time iRacing data"
-    )
+    @strawberry.subscription(description="Subscribe to real-time iRacing data")
     async def iracing(self, fps: int = 30) -> AsyncGenerator[IracingFrameType, None]:
         if fps <= 0 or fps > 30:
             raise ValueError("fps must be between 1 and 30")

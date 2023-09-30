@@ -15,6 +15,7 @@ class Driver(Base):
     """
     A driver profile linked to track/lap times
     """
+
     __tablename__ = "drivers"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -27,21 +28,21 @@ class Driver(Base):
         "LapTime",
         back_populates="driver",
         cascade="all, delete, delete-orphan",
-        lazy="subquery"
+        lazy="subquery",
     )
 
     active = relationship(
         "ActiveDriver",
         back_populates="driver",
         cascade="all, delete, delete-orphan",
-        lazy="subquery"
+        lazy="subquery",
     )
 
     lightControllerSettings = relationship(
         "LightControllerSettings",
         back_populates="driver",
         cascade="all, delete, delete-orphan",
-        lazy="subquery"
+        lazy="subquery",
     )
 
 
@@ -51,16 +52,13 @@ class ActiveDriver(Base):
     seperate table to efficiently switch drivers. When a new driver
     is selected, the current ActiveDriver is replaced with the new one.
     """
+
     __tablename__ = "activedriver"
 
     id = Column(Integer, primary_key=True, index=True)
     driverId = Column(Integer, ForeignKey("drivers.id"))
 
-    driver = relationship(
-        "Driver",
-        back_populates="active",
-        lazy="subquery"
-    )
+    driver = relationship("Driver", back_populates="active", lazy="subquery")
 
 
 class LapTime(Base):
@@ -69,6 +67,7 @@ class LapTime(Base):
     the iRacing data stream. When a better time with the same track,
     config and car is entered, it replaces the previous best.
     """
+
     __tablename__ = "laptimes"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -79,11 +78,7 @@ class LapTime(Base):
     time = Column(Float)
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
-    driver = relationship(
-        "Driver",
-        back_populates="laptimes",
-        lazy="subquery"
-    )
+    driver = relationship("Driver", back_populates="laptimes", lazy="subquery")
 
     driverName = association_proxy("driver", "name")
 
@@ -92,6 +87,7 @@ class LightController(Base):
     """
     A WLED light controller fixture of a given type
     """
+
     __tablename__ = "controllers"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -103,7 +99,7 @@ class LightController(Base):
         "LightControllerSettings",
         back_populates="lightController",
         cascade="all, delete, delete-orphan",
-        lazy="subquery"
+        lazy="subquery",
     )
 
 
@@ -111,6 +107,7 @@ class LightControllerSettings(Base):
     """
     Light controller settings tied to a driver profile
     """
+
     __tablename__ = "controllersettings"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -121,21 +118,15 @@ class LightControllerSettings(Base):
     idleEffectId = Column(Integer, default=1)
 
     driver = relationship(
-        "Driver",
-        back_populates="lightControllerSettings",
-        lazy="subquery"
+        "Driver", back_populates="lightControllerSettings", lazy="subquery"
     )
 
     lightController = relationship(
-        "LightController",
-        back_populates="lightControllerSettings",
-        lazy="subquery"
+        "LightController", back_populates="lightControllerSettings", lazy="subquery"
     )
 
     colorTheme = relationship(
-        "ColorTheme",
-        back_populates="lightControllerSettings",
-        lazy="subquery"
+        "ColorTheme", back_populates="lightControllerSettings", lazy="subquery"
     )
 
 
@@ -143,6 +134,7 @@ class ColorTheme(Base):
     """
     A color theme applied to all light controllers
     """
+
     __tablename__ = "colorthemes"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -155,9 +147,7 @@ class ColorTheme(Base):
     secondaryColorB = Column(Integer)
 
     lightControllerSettings = relationship(
-        "LightControllerSettings",
-        back_populates="colorTheme",
-        lazy="subquery"
+        "LightControllerSettings", back_populates="colorTheme", lazy="subquery"
     )
 
 
@@ -165,6 +155,7 @@ class Quote(Base):
     """
     A racing quote, randomly selected and placed on the scoreboard
     """
+
     __tablename__ = "quotes"
 
     id = Column(Integer, primary_key=True, index=True)

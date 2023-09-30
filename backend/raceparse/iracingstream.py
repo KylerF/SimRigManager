@@ -8,6 +8,7 @@ class IracingStream:
     """
     Collects and organizes data from iRacing
     """
+
     driver_index = 0
     last_session_time = 0
     is_active = False
@@ -72,15 +73,19 @@ class IracingStream:
         try:
             self.driver_index = self.ir["DriverInfo"]["DriverCarIdx"]
 
-            self.state.update({
-                "driver_index": self.driver_index,
-                "idle_rpm": math.floor(self.ir["DriverInfo"]["DriverCarIdleRPM"]),
-                "redline": math.floor(self.ir["DriverInfo"]["DriverCarRedLine"]),
-                "event_type": self.ir["WeekendInfo"]["EventType"],
-                "car_name": self.ir["DriverInfo"]["Drivers"][self.driver_index]["CarScreenName"],
-                "track_name": self.ir["WeekendInfo"]["TrackDisplayName"],
-                "track_config": self.ir["WeekendInfo"]["TrackConfigName"]
-            })
+            self.state.update(
+                {
+                    "driver_index": self.driver_index,
+                    "idle_rpm": math.floor(self.ir["DriverInfo"]["DriverCarIdleRPM"]),
+                    "redline": math.floor(self.ir["DriverInfo"]["DriverCarRedLine"]),
+                    "event_type": self.ir["WeekendInfo"]["EventType"],
+                    "car_name": self.ir["DriverInfo"]["Drivers"][self.driver_index][
+                        "CarScreenName"
+                    ],
+                    "track_name": self.ir["WeekendInfo"]["TrackDisplayName"],
+                    "track_config": self.ir["WeekendInfo"]["TrackConfigName"],
+                }
+            )
         except (KeyError, AttributeError, TypeError):
             self.stop()
             return
@@ -95,16 +100,20 @@ class IracingStream:
                 return
 
             try:
-                self.state.update({
-                    "speed": math.floor(self.ir["Speed"]*2.236936),
-                    "rpm": math.floor(self.ir["RPM"] if self.ir["RPM"] != 300.0 else 0),
-                    "gear": self.ir["Gear"],
-                    "is_on_track": self.ir["IsOnTrack"],
-                    "incident_count": self.ir["PlayerCarMyIncidentCount"],
-                    "best_lap_time": self.ir["LapBestLapTime"],
-                    "session_time": self.ir["SessionTime"],
-                    "session_id": self.ir["SessionUniqueID"],
-                })
+                self.state.update(
+                    {
+                        "speed": math.floor(self.ir["Speed"] * 2.236936),
+                        "rpm": math.floor(
+                            self.ir["RPM"] if self.ir["RPM"] != 300.0 else 0
+                        ),
+                        "gear": self.ir["Gear"],
+                        "is_on_track": self.ir["IsOnTrack"],
+                        "incident_count": self.ir["PlayerCarMyIncidentCount"],
+                        "best_lap_time": self.ir["LapBestLapTime"],
+                        "session_time": self.ir["SessionTime"],
+                        "session_id": self.ir["SessionUniqueID"],
+                    }
+                )
 
                 # Fix redline RPM if needed
                 if self.state["redline"] < self.state["rpm"]:

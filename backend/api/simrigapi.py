@@ -20,24 +20,16 @@ class SimRigAPI:
     """
     Provides the API routes and methods to interact with the entire application
     """
+
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
         # Load the metadata for documentation tags
         meta_path = path.dirname(path.realpath(__file__))
-        tags_metadata = json.load(
-            open(
-                path.join(
-                    meta_path, "tags_metadata.json"
-                )
-            )
-        )
+        tags_metadata = json.load(open(path.join(meta_path, "tags_metadata.json")))
 
         # Set up the API
-        self.api = FastAPI(
-            title="SimRig API",
-            openapi_tags=tags_metadata
-        )
+        self.api = FastAPI(title="SimRig API", openapi_tags=tags_metadata)
 
         # Configure CORS
         self.api.add_middleware(
@@ -49,11 +41,7 @@ class SimRigAPI:
         )
 
         # Register root endpoint
-        self.api.get(
-            "/",
-            response_model=schemas.Availability,
-            tags=["availability"]
-        )(
+        self.api.get("/", response_model=schemas.Availability, tags=["availability"])(
             self.get_root
         )
 
@@ -72,6 +60,4 @@ class SimRigAPI:
         """
         Availability check
         """
-        return {
-            "apiActive": True
-        }
+        return {"apiActive": True}

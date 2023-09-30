@@ -2,9 +2,7 @@ import strawberry
 
 from database.database import get_db
 from database.modeltypes import QuoteType
-from database.crud import (
-    get_random_quote
- )
+from database.crud import get_random_quote
 
 
 @strawberry.type(
@@ -12,9 +10,7 @@ from database.crud import (
     name="QuoteQuery",
 )
 class QuoteQuery:
-    @strawberry.field(
-        description="Get a random inspirational racing quote"
-    )
+    @strawberry.field(description="Get a random inspirational racing quote")
     def random_quote(self) -> QuoteType:
         db = next(get_db())
         quote = get_random_quote(db)

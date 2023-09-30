@@ -18,7 +18,7 @@ def get_iracing_data():
     """
     session_data = read_redis_key("session_data")
 
-    if session_data.get('SessionTime'):
+    if session_data.get("SessionTime"):
         return iracingschemas.IracingFrame(**session_data)
 
     return {}
@@ -51,10 +51,7 @@ def update_driver_cache(driver):
     """
     Helper function to update the active driver in the Redis cache
     """
-    return set_redis_key(
-        "active_driver",
-        schemas.Driver(**driver.__dict__).json()
-    )
+    return set_redis_key("active_driver", schemas.Driver(**driver.__dict__).json())
 
 
 def get_session_best_lap():
@@ -68,10 +65,7 @@ def set_session_best_lap(laptime: models.LapTime):
     """
     Update the session best lap time for streaming
     """
-    return set_redis_key(
-        "session_best_lap",
-        schemas.LapTime(**laptime.__dict__).json()
-    )
+    return set_redis_key("session_best_lap", schemas.LapTime(**laptime.__dict__).json())
 
 
 def read_redis_key(key):
@@ -82,10 +76,10 @@ def read_redis_key(key):
 
     try:
         return json.loads(redis_store.get(key))
-    except (redis.exceptions.ConnectionError):
+    except redis.exceptions.ConnectionError:
         print("Could not connect to Redis server")
         return None
-    except (TypeError):
+    except TypeError:
         # Redis key does not exist
         return None
 
@@ -96,8 +90,8 @@ def subscribe_to_redis_key(key: str, callback):
     p.psubscribe(key)
 
     for msg in p.listen():
-        if msg['type'] == 'pmessage':
-            callback(json.loads(msg['data']))
+        if msg["type"] == "pmessage":
+            callback(json.loads(msg["data"]))
 
 
 def set_redis_key(key, value):
@@ -119,9 +113,7 @@ def get_redis_store():
     Get a connection to the Redis cache
     """
     return redis.Redis(
-        host=getenv("REDIS_HOST", "127.0.0.1"),
-        charset="utf-8",
-        decode_responses=True
+        host=getenv("REDIS_HOST", "127.0.0.1"), charset="utf-8", decode_responses=True
     )
 
 

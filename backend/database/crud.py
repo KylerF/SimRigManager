@@ -22,22 +22,14 @@ def get_driver_by_name(db: Session, name: str):
     Get a driver by name
     Names are unique, so this will always return 1
     """
-    return db.query(
-        models.Driver
-    ).filter(
-        models.Driver.name == name
-    ).first()
+    return db.query(models.Driver).filter(models.Driver.name == name).first()
 
 
 def get_driver_by_id(db: Session, id: int):
     """
     Get a driver by ID
     """
-    return db.query(
-        models.Driver
-    ).filter(
-        models.Driver.id == id
-    ).first()
+    return db.query(models.Driver).filter(models.Driver.id == id).first()
 
 
 def get_drivers(
@@ -65,11 +57,7 @@ def get_drivers(
         query = query.order_by(order)
 
     # Return with requested limit and offset
-    return query.offset(
-        skip
-    ).limit(
-        limit
-    ).all()
+    return query.offset(skip).limit(limit).all()
 
 
 def create_driver(db: Session, driver: schemas.DriverCreate):
@@ -89,11 +77,9 @@ def update_driver(db: Session, driver: schemas.DriverUpdate):
     Update a driver
     All fields except ID are optional
     """
-    stored_driver = db.query(
-        models.Driver
-    ).filter(
-        models.Driver.id == driver.id
-    ).one_or_none()
+    stored_driver = (
+        db.query(models.Driver).filter(models.Driver.id == driver.id).one_or_none()
+    )
 
     if stored_driver is None:
         return None
@@ -114,11 +100,9 @@ def delete_driver(db: Session, driver: schemas.DriverDelete):
     Delete a driver
     All fields except ID are optional
     """
-    stored_driver = db.query(
-        models.Driver
-    ).filter(
-        models.Driver.id == driver.id
-    ).one_or_none()
+    stored_driver = (
+        db.query(models.Driver).filter(models.Driver.id == driver.id).one_or_none()
+    )
 
     db.delete(stored_driver)
     db.commit()
@@ -130,11 +114,9 @@ def delete_driver_by_id(db: Session, driver_id: int):
     """
     Delete a driver by their ID
     """
-    stored_driver = db.query(
-        models.Driver
-    ).filter(
-        models.Driver.id == driver_id
-    ).one_or_none()
+    stored_driver = (
+        db.query(models.Driver).filter(models.Driver.id == driver_id).one_or_none()
+    )
 
     db.delete(stored_driver)
     db.commit()
@@ -180,7 +162,7 @@ def get_laptimes(
     skip: int = 0,
     limit: int = -1,
     where: LaptimeFilter = None,
-    order: LaptimeOrder = None
+    order: LaptimeOrder = None,
 ) -> List[models.LapTime]:
     """
     Get all lap times - optionally with a limit, offset, filtered by given
@@ -201,11 +183,7 @@ def get_laptimes(
         query = query.order_by(order)
 
     # Return with requested limit and offset
-    return query.offset(
-        skip
-    ).limit(
-        limit
-    ).all()
+    return query.offset(skip).limit(limit).all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
@@ -216,23 +194,29 @@ def create_laptime(db: Session, laptime: schemas.LapTimeCreate):
     db_laptime = models.LapTime(**laptime.dict())
 
     # Check for times with same driver, car, track and config
-    better_time = db.query(
-        models.LapTime
-    ).filter(
-        models.LapTime.driverId == laptime.driverId,
-        models.LapTime.car == laptime.car,
-        models.LapTime.trackName == laptime.trackName,
-        models.LapTime.trackConfig == laptime.trackConfig,
-        models.LapTime.time <= laptime.time
-    ).one_or_none()
+    better_time = (
+        db.query(models.LapTime)
+        .filter(
+            models.LapTime.driverId == laptime.driverId,
+            models.LapTime.car == laptime.car,
+            models.LapTime.trackName == laptime.trackName,
+            models.LapTime.trackConfig == laptime.trackConfig,
+            models.LapTime.time <= laptime.time,
+        )
+        .one_or_none()
+    )
 
-    worse_time = db.query(models.LapTime).filter(
-        models.LapTime.driverId == laptime.driverId,
-        models.LapTime.car == laptime.car,
-        models.LapTime.trackName == laptime.trackName,
-        models.LapTime.trackConfig == laptime.trackConfig,
-        models.LapTime.time > laptime.time
-    ).one_or_none()
+    worse_time = (
+        db.query(models.LapTime)
+        .filter(
+            models.LapTime.driverId == laptime.driverId,
+            models.LapTime.car == laptime.car,
+            models.LapTime.trackName == laptime.trackName,
+            models.LapTime.trackConfig == laptime.trackConfig,
+            models.LapTime.time > laptime.time,
+        )
+        .one_or_none()
+    )
 
     if not better_time:
         # Replace the old with the new
@@ -256,9 +240,7 @@ def get_light_controllers(db: Session, skip: int = 0, limit: int = -1):
     """
     Get all WLED light controllers
     """
-    return db.query(
-        models.LightController
-    ).offset(skip).limit(limit).all()
+    return db.query(models.LightController).offset(skip).limit(limit).all()
 
 
 def get_light_controller_by_name(db: Session, name: str):
@@ -266,11 +248,11 @@ def get_light_controller_by_name(db: Session, name: str):
     Get a WLED light controller by name
     Names are unique, so this will always return 1 or 0
     """
-    return db.query(
-        models.LightController
-    ).filter(
-        models.LightController.name == name
-    ).one_or_none()
+    return (
+        db.query(models.LightController)
+        .filter(models.LightController.name == name)
+        .one_or_none()
+    )
 
 
 def get_light_controller_by_ip(db: Session, ip: str):
@@ -278,11 +260,11 @@ def get_light_controller_by_ip(db: Session, ip: str):
     Get a WLED light controller by IP
     IPs are unique, so this will always return 1 or 0
     """
-    return db.query(
-        models.LightController
-    ).filter(
-        models.LightController.ipAddress == ip
-    ).one_or_none()
+    return (
+        db.query(models.LightController)
+        .filter(models.LightController.ipAddress == ip)
+        .one_or_none()
+    )
 
 
 def create_light_controller(db: Session, controller: schemas.LightControllerCreate):
@@ -302,11 +284,11 @@ def update_light_controller(db: Session, controller: schemas.LightControllerUpda
     Update a WLED light controller
     All fields except ID are optional
     """
-    stored_controller = db.query(
-        models.LightController
-    ).filter(
-        models.LightController.id == controller.id
-    ).one_or_none()
+    stored_controller = (
+        db.query(models.LightController)
+        .filter(models.LightController.id == controller.id)
+        .one_or_none()
+    )
 
     if stored_controller is None:
         return None
@@ -327,11 +309,11 @@ def delete_light_controller(db: Session, controller: schemas.LightControllerDele
     Delete a light controller
     All fields except ID are optional
     """
-    stored_controller = db.query(
-        models.LightController
-    ).filter(
-        models.LightController.id == controller.id
-    ).one_or_none()
+    stored_controller = (
+        db.query(models.LightController)
+        .filter(models.LightController.id == controller.id)
+        .one_or_none()
+    )
 
     db.delete(stored_controller)
     db.commit()
@@ -343,17 +325,18 @@ def get_controller_settings(db: Session, controller_id: int, driver_id: int):
     """
     Get a driver's settings for a light controller
     """
-    return db.query(
-        models.LightControllerSettings
-    ).filter(
-        models.LightControllerSettings.controllerId == controller_id,
-        models.LightControllerSettings.driverId == driver_id
-    ).one_or_none()
+    return (
+        db.query(models.LightControllerSettings)
+        .filter(
+            models.LightControllerSettings.controllerId == controller_id,
+            models.LightControllerSettings.driverId == driver_id,
+        )
+        .one_or_none()
+    )
 
 
 def create_controller_settings(
-    db: Session,
-    controller_settings: schemas.LightControllerSettingsCreate
+    db: Session, controller_settings: schemas.LightControllerSettingsCreate
 ):
     """
     Save a driver's settings for a light controller
@@ -370,17 +353,16 @@ def create_controller_settings(
 
 
 def update_controller_settings(
-    db: Session,
-    controller_settings: schemas.LightControllerSettingsUpdate
+    db: Session, controller_settings: schemas.LightControllerSettingsUpdate
 ):
     """
     Update a driver's settings for a light controller
     """
-    stored_settings = db.query(
-        models.LightControllerSettings
-    ).filter(
-        models.LightControllerSettings.id == controller_settings.id
-    ).one_or_none()
+    stored_settings = (
+        db.query(models.LightControllerSettings)
+        .filter(models.LightControllerSettings.id == controller_settings.id)
+        .one_or_none()
+    )
 
     if stored_settings is None:
         return None
@@ -396,17 +378,21 @@ def update_controller_settings(
     return stored_settings
 
 
-def delete_controller_settings(db: Session, settings: schemas.LightControllerSettingsDelete):
+def delete_controller_settings(
+    db: Session, settings: schemas.LightControllerSettingsDelete
+):
     """
     Delete a settings for a light controller, effectively resetting to default
     All fields except ID are optional
     """
-    stored_settings = db.query(
-        models.LightControllerSettings
-    ).filter(
-        models.LightControllerSettings.id == settings.id
-        and models.LightControllerSettings.driverId == settings.driverId
-    ).one_or_none()
+    stored_settings = (
+        db.query(models.LightControllerSettings)
+        .filter(
+            models.LightControllerSettings.id == settings.id
+            and models.LightControllerSettings.driverId == settings.driverId
+        )
+        .one_or_none()
+    )
 
     db.delete(stored_settings)
     db.commit()
@@ -428,11 +414,7 @@ def get_random_quote(db: Session) -> models.Quote:
     """
     Get a random inspirational racing quote
     """
-    return db.query(
-        models.Quote
-    ).order_by(
-        func.random()
-    ).limit(1).one()
+    return db.query(models.Quote).order_by(func.random()).limit(1).one()
 
 
 def create_quote(db: Session, quote: schemas.QuoteCreate):
@@ -453,10 +435,7 @@ def batch_create_quote(db: Session, quotes):
     This is used upon first run to create the default quotes
     """
     for quote in quotes:
-        db_quote = models.Quote(
-            text=quote["text"],
-            by=quote["by"]
-        )
+        db_quote = models.Quote(text=quote["text"], by=quote["by"])
         db.add(db_quote)
 
     db.commit()
@@ -469,11 +448,9 @@ def update_quote(db: Session, quote: schemas.QuoteUpdate):
     Update an inspirational racing quote
     All fields except ID are optional
     """
-    stored_quote = db.query(
-        models.Quote
-    ).filter(
-        models.Quote.id == quote.id
-    ).one_or_none()
+    stored_quote = (
+        db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+    )
 
     if stored_quote is None:
         return None
@@ -493,11 +470,9 @@ def delete_quote(db: Session, quote: schemas.QuoteDelete):
     """
     Delete an inspirational racing quote
     """
-    stored_quote = db.query(
-        models.Quote
-    ).filter(
-        models.Quote.id == quote.id
-    ).one_or_none()
+    stored_quote = (
+        db.query(models.Quote).filter(models.Quote.id == quote.id).one_or_none()
+    )
 
     if stored_quote:
         db.delete(stored_quote)
@@ -510,9 +485,7 @@ def get_count(query):
     """
     Helper function to count the rows returned by a given query
     """
-    count_query = query.statement.with_only_columns(
-        [func.count()]
-    ).order_by(None)
+    count_query = query.statement.with_only_columns([func.count()]).order_by(None)
 
     count = query.session.execute(count_query).scalar()
 

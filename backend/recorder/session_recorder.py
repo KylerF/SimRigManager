@@ -1,7 +1,4 @@
-from api.utils import (
-    get_iracing_data,
-    get_redis_store
-)
+from api.utils import get_iracing_data, get_redis_store
 
 import logging
 import asyncio
@@ -9,7 +6,7 @@ import ujson
 import uuid
 
 
-class IracingSessionRecorder():
+class IracingSessionRecorder:
     """
     Module for recording iRacing session data.
     Since the iRacing worker thread is constantly updating the session data in Redis,
@@ -50,7 +47,10 @@ class IracingSessionRecorder():
 
             if iracing_data:
                 # Append the data to the session-recorder key
-                redis.rpush(f"session-recorder-{self.session_id}", ujson.dumps(iracing_data.dict()))
+                redis.rpush(
+                    f"session-recorder-{self.session_id}",
+                    ujson.dumps(iracing_data.dict()),
+                )
 
             # Capture 30 frames per second
-            await asyncio.sleep(1/30)
+            await asyncio.sleep(1 / 30)

@@ -1,23 +1,18 @@
 from typing import Optional
 import strawberry
 
-from database.filters.generics import (
-    NumberFilter,
-    StringFilter
-)
+from database.filters.generics import NumberFilter, StringFilter
 from database.models import Driver
 
 
-@strawberry.input(
-    description="Filter drivers",
-    name="DriverFilter"
-)
+@strawberry.input(description="Filter drivers", name="DriverFilter")
 class DriverFilter:
     """
     Wrapper for filterable driver fields. All fields are optional, and if
     multiple are provided, the result will be drivers matching all conditions.
     TODO: Add fields for combining filters with OR
     """
+
     id: Optional[NumberFilter] = strawberry.field(
         description="The driver ID (e.g. 1)",
     )

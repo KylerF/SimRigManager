@@ -8,7 +8,7 @@ from database.database import get_db
 from database.crud import (
     get_active_driver,
     get_drivers,
- )
+)
 from database.ordering.drivers import DriverOrder
 
 
@@ -30,14 +30,9 @@ class DriverQuery:
         db = next(get_db())
         drivers = get_drivers(db, skip, limit, where, order)
 
-        return [
-            DriverType.from_pydantic(driver)
-            for driver in drivers
-        ]
+        return [DriverType.from_pydantic(driver) for driver in drivers]
 
-    @strawberry.field(
-        description="Get the active driver"
-    )
+    @strawberry.field(description="Get the active driver")
     def active_driver(self) -> DriverType:
         db = next(get_db())
         active_driver = get_active_driver(db).driver

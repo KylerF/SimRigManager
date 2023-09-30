@@ -10,6 +10,7 @@ class Wled:
     WLED controller object to handle ACN communications and update
     the color of the connected LEDs
     """
+
     is_connected = False
     universes = 0
 
@@ -48,15 +49,15 @@ class Wled:
         Recreate and set up the sender
         """
         self.sender = sacn.sACNsender(
-            bind_port=source['bind_port'],
-            source_name=source['name'],
-            cid=source['cid'],
-            fps=source['fps']
+            bind_port=source["bind_port"],
+            source_name=source["name"],
+            cid=source["cid"],
+            fps=source["fps"],
         )
         self.sender.start()
 
         # Configure universes needed for all pixels (one per 170 pixels)
-        for universe in range(1, self.universes+1):
+        for universe in range(1, self.universes + 1):
             self.sender.activate_output(universe)
             self.sender[universe].destination = self.ip
 
@@ -69,10 +70,7 @@ class Wled:
         self.sender.manual_flush = True
 
         # Split data into universe chunks
-        chunks = [
-            color_list[i*170: (i*170)+170]
-            for i in range(self.universes)
-        ]
+        chunks = [color_list[i * 170 : (i * 170) + 170] for i in range(self.universes)]
 
         universe = 1
         for colors in chunks:

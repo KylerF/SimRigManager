@@ -28,6 +28,7 @@ class Query(
     Root query type.
     Register all other query types here.
     """
+
     pass
 
 
@@ -36,15 +37,13 @@ class Query(
     name="Subscription",
 )
 class Subscription(
-    DriverSubscription,
-    QuoteSubscription,
-    IracingSubscription,
-    LaptimeSubscription
+    DriverSubscription, QuoteSubscription, IracingSubscription, LaptimeSubscription
 ):
     """
     Root subscription type.
     Register all other subscription types here.
     """
+
     pass
 
 
@@ -57,12 +56,9 @@ class Mutation(DriverMutation):
     Root mutation type.
     Register all other mutation types here.
     """
+
     pass
 
 
-schema = strawberry.Schema(
-    query=Query,
-    subscription=Subscription,
-    mutation=Mutation
-)
+schema = strawberry.Schema(query=Query, subscription=Subscription, mutation=Mutation)
 graphql_app = GraphQLRouter(schema=schema)

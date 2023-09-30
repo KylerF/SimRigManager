@@ -10,10 +10,7 @@ from api.ssegenerators import SSEGenerators
 """
 Router to get iRacing data
 """
-router = APIRouter(
-    prefix="/iracing",
-    tags=["iracing data"]
-)
+router = APIRouter(prefix="/iracing", tags=["iracing data"])
 
 
 @router.get("/latest")
@@ -26,8 +23,7 @@ async def get_latest():
 
 @router.websocket("/stream")
 async def ws_stream_iracing_data(
-    websocket: WebSocket,
-    ws_connection_manager=Depends(get_ws_manager)
+    websocket: WebSocket, ws_connection_manager=Depends(get_ws_manager)
 ):
     """
     Stream current iRacing data over a websocket connection.
@@ -44,7 +40,9 @@ async def ws_stream_iracing_data(
 
             if data.SessionTime:
                 # Only send if new data is available
-                await ws_connection_manager.send_json(json.loads(data.json()), websocket)
+                await ws_connection_manager.send_json(
+                    json.loads(data.json()), websocket
+                )
                 sent_empty = False
             else:
                 # Send one empty frame to update the client
@@ -60,7 +58,7 @@ async def ws_stream_iracing_data(
         WebSocketDisconnect,
         ConnectionClosedError,
         ConnectionClosedOK,
-        RuntimeError
+        RuntimeError,
     ):
         await ws_connection_manager.disconnect(websocket)
         return

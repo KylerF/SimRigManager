@@ -16,16 +16,13 @@ from database.schemas import (
     DriverCreate,
     DriverUpdate,
     DriverStats,
-    ActiveDriverCreate
+    ActiveDriverCreate,
 )
 
 """
 Router to manage driver profiles, sign in and get driver stats
 """
-router = APIRouter(
-    prefix="/drivers",
-    tags=["drivers"]
-)
+router = APIRouter(prefix="/drivers", tags=["drivers"])
 
 
 @router.get("", response_model=List[Driver])
@@ -124,19 +121,18 @@ async def get_driver_stats(driver_id: int):
     """
     db = next(get_db())
     track_time = crud.get_driver_by_id(db, driver_id).trackTime
-    laptimes = [
-        time for time in crud.get_laptimes(db)
-        if time.driverId == driver_id
-    ]
+    laptimes = [time for time in crud.get_laptimes(db) if time.driverId == driver_id]
     records_held = len(laptimes)
-    track_map = Counter(getattr(time, 'trackName') for time in laptimes)
+    track_map = Counter(getattr(time, "trackName") for time in laptimes)
     favorite_track = ""
 
     if track_map:
         favorite_track = max(track_map, key=track_map.get)
 
-    return DriverStats(**{
-        "trackTime": track_time,
-        "recordsHeld": records_held,
-        "favoriteTrack": favorite_track
-    })
+    return DriverStats(
+        **{
+            "trackTime": track_time,
+            "recordsHeld": records_held,
+            "favoriteTrack": favorite_track,
+        }
+    )

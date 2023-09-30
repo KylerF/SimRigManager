@@ -16,9 +16,7 @@ from database.crud import (
     name="DriverMutation",
 )
 class DriverMutation:
-    @strawberry.mutation(
-        description="Set the active driver"
-    )
+    @strawberry.mutation(description="Set the active driver")
     def set_active_driver(self, driverId: int) -> DriverType:
         db = next(get_db())
         driver = ActiveDriverCreate(driverId=driverId)

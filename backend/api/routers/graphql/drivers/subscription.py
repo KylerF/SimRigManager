@@ -12,9 +12,7 @@ from database.database import get_db
     name="DriverSubscription",
 )
 class DriverSubscription:
-    @strawberry.subscription(
-        description="Subscribe to active driver changes"
-    )
+    @strawberry.subscription(description="Subscribe to active driver changes")
     async def active_driver(self) -> AsyncGenerator[DriverType, None]:
         last_driver = None
 

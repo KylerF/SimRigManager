@@ -2,11 +2,7 @@ from sqlalchemy import func, select
 from typing import Optional
 import strawberry
 
-from database.filters.generics import (
-    NumberFilter,
-    StringFilter,
-    DateFilter
-)
+from database.filters.generics import NumberFilter, StringFilter, DateFilter
 from database.models import LapTime
 
 
@@ -17,7 +13,7 @@ from database.models import LapTime
     directives={
         "filterable": True,
         "orderable": True,
-    }
+    },
 )
 class LaptimeFilter:
     """
@@ -25,6 +21,7 @@ class LaptimeFilter:
     multiple are provided, the result will be lap times matching all conditions.
     TODO: Add fields for combining filters with OR
     """
+
     driver_name: Optional[StringFilter] = strawberry.field(
         description="The driver name (e.g. 'John Doe')",
     )
@@ -60,7 +57,7 @@ class LaptimeFilter:
         track_config: Optional[StringFilter] = None,
         time: Optional[NumberFilter] = None,
         set_at: Optional[DateFilter] = None,
-        overall_best_only: Optional[bool] = None
+        overall_best_only: Optional[bool] = None,
     ):
         self.driver_name = driver_name
         self.driver_id = driver_id
@@ -103,17 +100,19 @@ class LaptimeFilter:
                     LapTime.car,
                     LapTime.trackName,
                     LapTime.trackConfig,
-                    func.min(LapTime.time).label("min_time")
+                    func.min(LapTime.time).label("min_time"),
                 )
                 .group_by(LapTime.car, LapTime.trackName, LapTime.trackConfig)
                 .alias()
             )
 
-            filters.extend([
-                LapTime.car == subquery.c.car,
-                LapTime.trackName == subquery.c.trackName,
-                LapTime.trackConfig == subquery.c.trackConfig,
-                LapTime.time == subquery.c.min_time
-            ])
+            filters.extend(
+                [
+                    LapTime.car == subquery.c.car,
+                    LapTime.trackName == subquery.c.trackName,
+                    LapTime.trackConfig == subquery.c.trackConfig,
+                    LapTime.time == subquery.c.min_time,
+                ]
+            )
 
         return filters

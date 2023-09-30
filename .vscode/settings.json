@@ -1,0 +1,9 @@
+{
+  "python.analysis.extraPaths": ["./backend"],
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.analysis.typeCheckingMode": "off",
+  "github.copilot.advanced": {},
+  "editor.formatOnSave": true
+}

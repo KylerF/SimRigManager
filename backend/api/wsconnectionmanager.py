@@ -6,6 +6,7 @@ class WebsocketConnectionManager:
     """
     Object to manage multiple websocket connections
     """
+
     def __init__(self):
         self.active_connections: List[WebSocket] = []
 

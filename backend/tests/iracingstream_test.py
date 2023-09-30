@@ -10,6 +10,7 @@ class TestIracingStream(unittest.TestCase):
     Additional files can be generated using the irsdk script
     (https://github.com/kutu/pyirsdk/blob/master/tutorials/02%20Using%20irsdk%20script.md)
     """
+
     def test_empty_stream(self):
         """
         Test creating a stream without a running iRacing instance and no test file
@@ -17,20 +18,20 @@ class TestIracingStream(unittest.TestCase):
         iracing_stream = IracingStream.get_stream()
 
         self.assertFalse(
-          iracing_stream.is_active,
-          msg="Stream should not think it is active when there is no data"
+            iracing_stream.is_active,
+            msg="Stream should not think it is active when there is no data",
         )
 
         self.assertEqual(
             iracing_stream.latest(),
             {},
-            msg="Stream should not have data when there is no data!"
+            msg="Stream should not have data when there is no data!",
         )
 
         iracing_stream.stop()
         self.assertIsNone(
             iracing_stream.ir,
-            msg="IRSDK object should have been destroyed upon closing stream"
+            msg="IRSDK object should have been destroyed upon closing stream",
         )
 
     def test_stationary_stream(self):
@@ -42,22 +43,19 @@ class TestIracingStream(unittest.TestCase):
         )
 
         self.assertTrue(
-          iracing_stream.is_active,
-          msg="Stream should be active on test file"
+            iracing_stream.is_active, msg="Stream should be active on test file"
         )
 
         snapshot = iracing_stream.latest()
 
         self.assertEqual(
-            snapshot["rpm"],
-            snapshot["idle_rpm"],
-            msg="Car should be idling"
+            snapshot["rpm"], snapshot["idle_rpm"], msg="Car should be idling"
         )
 
         iracing_stream.stop()
         self.assertIsNone(
             iracing_stream.ir,
-            msg="IRSDK object should have been destroyed upon closing stream"
+            msg="IRSDK object should have been destroyed upon closing stream",
         )
 
     def test_stationary_rev_stream(self):
@@ -69,21 +67,20 @@ class TestIracingStream(unittest.TestCase):
         )
 
         self.assertTrue(
-            iracing_stream.is_active,
-            msg="Stream should be active on test file"
+            iracing_stream.is_active, msg="Stream should be active on test file"
         )
 
         snapshot = iracing_stream.latest()
 
         self.assertTrue(
-            snapshot["redline"]-100 <= snapshot["rpm"] <= snapshot["redline"],
-            msg="Car should be within 100 RPM of redline (bouncing off rev limiter)"
+            snapshot["redline"] - 100 <= snapshot["rpm"] <= snapshot["redline"],
+            msg="Car should be within 100 RPM of redline (bouncing off rev limiter)",
         )
 
         iracing_stream.stop()
         self.assertIsNone(
             iracing_stream.ir,
-            msg="IRSDK object should have been destroyed upon closing stream"
+            msg="IRSDK object should have been destroyed upon closing stream",
         )
 
     def test_full_speed_stream(self):
@@ -95,22 +92,17 @@ class TestIracingStream(unittest.TestCase):
         )
 
         self.assertTrue(
-            iracing_stream.is_active,
-            msg="Stream should be active on test file"
+            iracing_stream.is_active, msg="Stream should be active on test file"
         )
 
         snapshot = iracing_stream.latest()
 
-        self.assertEqual(
-            snapshot["speed"],
-            198,
-            msg="Speed should be 198 MPH"
-        )
+        self.assertEqual(snapshot["speed"], 198, msg="Speed should be 198 MPH")
 
         iracing_stream.stop()
         self.assertIsNone(
             iracing_stream.ir,
-            msg="IRSDK object should have been destroyed upon closing stream"
+            msg="IRSDK object should have been destroyed upon closing stream",
         )
 
     def test_practice_session_stream(self):
@@ -122,8 +114,7 @@ class TestIracingStream(unittest.TestCase):
         )
 
         self.assertTrue(
-            iracing_stream.is_active,
-            msg="Stream should be active on test file"
+            iracing_stream.is_active, msg="Stream should be active on test file"
         )
 
         snapshot = iracing_stream.latest()
@@ -131,7 +122,7 @@ class TestIracingStream(unittest.TestCase):
         self.assertEqual(
             snapshot["track_name"],
             "Summit Point Raceway",
-            msg="Track name should be 'Summit Point Raceway'"
+            msg="Track name should be 'Summit Point Raceway'",
         )
 
     def test_test_drive_session_stream(self):
@@ -143,8 +134,7 @@ class TestIracingStream(unittest.TestCase):
         )
 
         self.assertTrue(
-            iracing_stream.is_active,
-            msg="Stream should be active on test file"
+            iracing_stream.is_active, msg="Stream should be active on test file"
         )
 
         snapshot = iracing_stream.latest()
@@ -152,14 +142,14 @@ class TestIracingStream(unittest.TestCase):
         self.assertEqual(
             snapshot["track_name"],
             "Watkins Glen",
-            msg="Track name should be 'Watkins Glen'"
+            msg="Track name should be 'Watkins Glen'",
         )
 
         self.assertAlmostEqual(
             snapshot["best_lap_time"],
             107.39,
             places=2,
-            msg="Best lap time should be 1:47.39"
+            msg="Best lap time should be 1:47.39",
         )
 
 
