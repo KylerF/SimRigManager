@@ -10,6 +10,7 @@ import { State, selectAPIActive, selectControllers } from 'store/reducers';
 import { LoadControllers, StartStream } from 'store/actions/controller.actions';
 import { StateContainer } from 'models/state';
 import { Controller } from 'models/controller';
+import { IracingDataFrame } from 'src/app/models/iracing/data-frame';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,7 @@ import { Controller } from 'models/controller';
  */
 export class HomeComponent implements OnInit {
   apiActive$: Observable<boolean>;
-  iracingData$: Observable<any>;
+  iracingData$: Observable<IracingDataFrame>;
   selectedDriver: Driver;
   controllers$: Observable<StateContainer<Controller[]>>;
 

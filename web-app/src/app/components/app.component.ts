@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
-import { Driver } from 'models/driver';
-import { selectActiveDriver, State } from 'store/reducers';
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 import { NotificationService } from 'services/notification.service';
 import { loadActiveDriver } from 'store/actions/driver.actions';
+import { selectActiveDriver, State } from 'store/reducers';
+import { Driver } from 'models/driver';
 
 @Component({
   selector: 'app-root',

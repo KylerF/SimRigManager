@@ -4,10 +4,9 @@ for the API
 
 Schemas are provided for CRUD operations on all models
 """
-
-from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 
 class Availability(BaseModel):

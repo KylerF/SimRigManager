@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { map, mergeMap, catchError, takeUntil } from 'rxjs/operators';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { asyncScheduler, Observable, timer } from 'rxjs';
-import { map, mergeMap, catchError, takeUntil } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
-import { AvailabilityService } from 'services/availability.service';
 import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
+import { AvailabilityService } from 'services/availability.service';
 
 @Injectable()
 export class ApiHealthcheckEffects {

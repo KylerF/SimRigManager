@@ -1,10 +1,10 @@
 <div class="mb-1">
 	<h1>High Scores</h1>
 </div>
-<div *ngIf="(laptimesState$ | async) as laptimes">
+<div *ngIf="(datasource.state$ | async) as laptimes">
   <div *ngIf="!laptimes.error; else error">
     <div *ngIf="!laptimes.loading || laptimes.lastUpdated; else loading">
-      <div *ngIf="laptimes.state.length; else noLaptimes">
+      <div *ngIf="laptimes.state.laptimes.length; else noLaptimes">
         <div class="d-flex justify-content-between flex-wrap">
           <div class="mb-2">
             <div id="searchBar" class="input-group">
@@ -75,116 +75,112 @@
           </div>
         </div>
 
-        <div *ngIf="(filteredLaptimes$ | async) as filteredLaptimes">
-          <div *ngIf="filteredLaptimes.length else noFiltered">
-            <cdk-virtual-scroll-viewport class="table-container" [itemSize]="50">
-              <table class="table table-bordered reactive-font">
-                <thead id="scoreboardHeader">
-                  <tr>
-                    <th class="col-md-1" (click)="sortScores('driver', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Driver
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'driver' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
-                          <span *ngIf="sortColumn === 'driver' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
-                        </div>
-                      </div>
-                    </th>
-                    <th class="col-md-2" (click)="sortScores('car', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Car
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'car' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
-                          <span *ngIf="sortColumn === 'car' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
-                        </div>
-                      </div>
-                    </th>
-                    <th class="col-md-3" (click)="sortScores('trackName', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Track
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'trackName' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
-                          <span *ngIf="sortColumn === 'trackName' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
-                        </div>
-                      </div>
-                    </th>
-                    <th class="col-md-1" (click)="sortScores('trackConfig', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Config
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'trackConfig' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
-                          <span *ngIf="sortColumn === 'trackConfig' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
-                        </div>
-                      </div>
-                    </th>
-                    <th class="col-md-1" (click)="sortScores('time', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Time
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'time' && sortOrder === 'asc'" class="bi bi-sort-down-alt"></span>
-                          <span *ngIf="sortColumn === 'time' && sortOrder === 'desc'" class="bi bi-sort-up"></span>
-                        </div>
-                      </div>
-                    </th>
-                    <th class="col-md-1" (click)="sortScores('setAt', 'toggle')">
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          Set
-                        </div>
-                        <div class="ms-auto m-1">
-                          <span *ngIf="sortColumn === 'setAt' && sortOrder === 'asc'" class="bi bi-sort-up"></span>
-                          <span *ngIf="sortColumn === 'setAt' && sortOrder === 'desc'" class="bi bi-sort-down-alt"></span>
-                        </div>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *cdkVirtualFor="let lapTime of filteredLaptimes">
-                    <td>
-                      <div class="d-flex flex-nowrap">
-                        <div class="m-1">
-                          <app-driver-avatar [driver]="lapTime.driver" [size]="'small'"></app-driver-avatar>
-                        </div>
-                        <div class="m-1">
-                          {{ lapTime.driver.name }}
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      {{ lapTime.car }}
-                    </td>
-                    <td>
-                      {{ lapTime.trackName }}
-                    </td>
-                    <td>
-                      {{ lapTime.trackConfig }}
-                    </td>
-                    <td>
-                      {{ lapTime.time * 1000 | date:'mm:ss.SSS':'UTC' }}
-                    </td>
-                    <td>
-                      {{ lapTime.setAt | dateAgo }}
-                    </td>
-                    <td hidden>
-                      {{ lapTime.setAt }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </cdk-virtual-scroll-viewport>
-          </div>
-        </div>
+        <cdk-virtual-scroll-viewport #scrollViewport class="table-container" [itemSize]="50">
+          <table class="table table-bordered reactive-font">
+            <thead id="scoreboardHeader">
+              <tr>
+                <th class="col-md-1" (click)="sortScores('driverName', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Driver
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.driverName === 'ASC'" class="bi bi-sort-down-alt"></span>
+                      <span *ngIf="filterParams.order.driverName === 'DESC'" class="bi bi-sort-up"></span>
+                    </div>
+                  </div>
+                </th>
+                <th class="col-md-2" (click)="sortScores('car', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Car
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.car === 'ASC'" class="bi bi-sort-down-alt"></span>
+                      <span *ngIf="filterParams.order.car === 'DESC'" class="bi bi-sort-up"></span>
+                    </div>
+                  </div>
+                </th>
+                <th class="col-md-3" (click)="sortScores('trackName', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Track
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.trackName === 'ASC'" class="bi bi-sort-down-alt"></span>
+                      <span *ngIf="filterParams.order.trackName === 'DESC'" class="bi bi-sort-up"></span>
+                    </div>
+                  </div>
+                </th>
+                <th class="col-md-1" (click)="sortScores('trackConfig', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Config
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.trackConfig === 'ASC'" class="bi bi-sort-down-alt"></span>
+                      <span *ngIf="filterParams.order.trackConfig === 'DESC'" class="bi bi-sort-up"></span>
+                    </div>
+                  </div>
+                </th>
+                <th class="col-md-1" (click)="sortScores('time', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Time
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.time === 'ASC'" class="bi bi-sort-down-alt"></span>
+                      <span *ngIf="filterParams.order.time === 'DESC'" class="bi bi-sort-up"></span>
+                    </div>
+                  </div>
+                </th>
+                <th class="col-md-1" (click)="sortScores('setAt', 'toggle')">
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      Set
+                    </div>
+                    <div class="ms-auto m-1">
+                      <span *ngIf="filterParams.order.setAt === 'ASC'" class="bi bi-sort-up"></span>
+                      <span *ngIf="filterParams.order.setAt === 'DESC'" class="bi bi-sort-down-alt"></span>
+                    </div>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *cdkVirtualFor="let lapTime of datasource">
+                <td>
+                  <div class="d-flex flex-nowrap">
+                    <div class="m-1">
+                      <app-driver-avatar [driver]="lapTime.driver" [size]="'small'"></app-driver-avatar>
+                    </div>
+                    <div class="m-1">
+                      {{ lapTime.driver.name }}
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  {{ lapTime.car }}
+                </td>
+                <td>
+                  {{ lapTime.trackName }}
+                </td>
+                <td>
+                  {{ lapTime.trackConfig }}
+                </td>
+                <td>
+                  {{ lapTime.time * 1000 | date:'mm:ss.SSS':'UTC' }}
+                </td>
+                <td>
+                  {{ lapTime.setAt | dateAgo }}
+                </td>
+                <td hidden>
+                  {{ lapTime.setAt }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
   </div>

@@ -4,9 +4,9 @@ Database table schemas (SQLAlchemy models)
 
 from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from sqlalchemy.sql.sqltypes import Boolean
 
 from database.database import Base
 

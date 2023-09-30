@@ -4,15 +4,15 @@ import { Mutation, Query, Subscription } from 'apollo-angular';
 import { catchError } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 
+import { Driver, DriverAvatar } from 'models/driver';
+import { DriverStats } from 'models/driver-stats';
+import { APIHelper } from 'helpers/api-helper';
+import { NewDriver } from 'models/new-driver';
 import {
   SUBSCRIBE_TO_ACTIVE_DRIVER,
   GET_ALL_DRIVERS,
   SELECT_DRIVER,
 } from 'graphql/queries/drivers';
-import { Driver, DriverAvatar } from 'models/driver';
-import { DriverStats } from 'models/driver-stats';
-import { APIHelper } from 'helpers/api-helper';
-import { NewDriver } from 'models/new-driver';
 
 interface ActiveDriverResponse {
   activeDriver: Driver;
@@ -250,9 +250,8 @@ export class DriverService {
   }
 
   /**
-   * Save the active driver in local storage
+   * Save the active driver to local storage
    *
-   * @param driver the driver to save
    * @returns true if successful, false otherwise
    */
   private saveToLocalStorage(): boolean {

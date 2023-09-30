@@ -19,11 +19,21 @@ class DriverOrder:
     multiple are provided, the result will be ordered by the first field, then
     the second, etc.
     """
-    id: Optional[OrderDirection] = None
-    name: Optional[OrderDirection] = None
-    nickname: Optional[OrderDirection] = None
-    profile_pic: Optional[OrderDirection] = None
-    track_time: Optional[OrderDirection] = None
+    id: Optional[OrderDirection] = strawberry.field(
+        description="The driver ID (e.g. 1)",
+    )
+    name: Optional[OrderDirection] = strawberry.field(
+        description="The driver name (e.g. 'John Doe')",
+    )
+    nickname: Optional[OrderDirection] = strawberry.field(
+        description="The driver nickname (e.g. 'JD')",
+    )
+    profile_pic: Optional[OrderDirection] = strawberry.field(
+        description="The driver profile picture URL",
+    )
+    track_time: Optional[OrderDirection] = strawberry.field(
+        description="The driver's total track time in seconds",
+    )
 
     def __init__(
         self,

@@ -102,7 +102,8 @@ class IracingStream:
                     "is_on_track": self.ir["IsOnTrack"],
                     "incident_count": self.ir["PlayerCarMyIncidentCount"],
                     "best_lap_time": self.ir["LapBestLapTime"],
-                    "session_time": self.ir["SessionTime"]
+                    "session_time": self.ir["SessionTime"],
+                    "session_id": self.ir["SessionUniqueID"],
                 })
 
                 # Fix redline RPM if needed

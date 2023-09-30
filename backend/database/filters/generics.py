@@ -13,12 +13,24 @@ import strawberry
     name="NumberFilter"
 )
 class NumberFilter:
-    eq: Optional[float] = None
-    ne: Optional[float] = None
-    gt: Optional[float] = None
-    gte: Optional[float] = None
-    lt: Optional[float] = None
-    lte: Optional[float] = None
+    eq: Optional[float] = strawberry.field(
+        description="Equals"
+    )
+    ne: Optional[float] = strawberry.field(
+        description="Not equal"
+    )
+    gt: Optional[float] = strawberry.field(
+        description="Greater than"
+    )
+    gte: Optional[float] = strawberry.field(
+        description="Greater than or equal"
+    )
+    lt: Optional[float] = strawberry.field(
+        description="Less than"
+    )
+    lte: Optional[float] = strawberry.field(
+        description="Less than or equal"
+    )
 
     def __init__(
         self,
@@ -56,17 +68,20 @@ class NumberFilter:
 
 
 @strawberry.input(
-    description="""
-    Filter by date. The date must be in
-    ISO 8601 format.
-    For example: 2021-01-01T00:00:00.000Z
-    """,
+    description="Filter by date. The date must be in ISO 8601 format. \
+    For example: 2021-01-01T00:00:00.000Z",
     name="DateFilter"
 )
 class DateFilter:
-    eq: Optional[str] = None
-    before: Optional[str] = None
-    after: Optional[str] = None
+    eq: Optional[str] = strawberry.field(
+        description="Equals"
+    )
+    before: Optional[str] = strawberry.field(
+        description="Before"
+    )
+    after: Optional[str] = strawberry.field(
+        description="After"
+    )
 
     def __init__(
         self,
@@ -93,10 +108,7 @@ class DateFilter:
 
 
 @strawberry.input(
-    description="""
-    Filter string using equality, starts with,
-    ends with, or contains
-    """,
+    description="Filter string using equality, starts with, ends with, or contains",
     name="StringFilter"
 )
 class StringFilter:
@@ -113,14 +125,30 @@ class StringFilter:
     - like: Matches provided regular expression
     - contains: Contains provided string
     """
-    eq: Optional[str] = None
-    ne: Optional[str] = None
-    ieq: Optional[str] = None
-    ine: Optional[str] = None
-    starts_with: Optional[str] = None
-    ends_with: Optional[str] = None
-    like: Optional[str] = None
-    contains: Optional[str] = None
+    eq: Optional[str] = strawberry.field(
+        description="Equals"
+    )
+    ne: Optional[str] = strawberry.field(
+        description="Not equal"
+    )
+    ieq: Optional[str] = strawberry.field(
+        description="Case insensitive equal"
+    )
+    ine: Optional[str] = strawberry.field(
+        description="Case insensitive not equal"
+    )
+    starts_with: Optional[str] = strawberry.field(
+        description="Starts with"
+    )
+    ends_with: Optional[str] = strawberry.field(
+        description="Ends with"
+    )
+    like: Optional[str] = strawberry.field(
+        description='Matches SQL regular expression, e.g. "%foo%"'
+    )
+    contains: Optional[str] = strawberry.field(
+        description="Contains"
+    )
 
     def __init__(
         self,
@@ -170,8 +198,12 @@ class StringFilter:
     name="BooleanFilter"
 )
 class BooleanFilter:
-    eq: Optional[bool] = None
-    neq: Optional[bool] = None
+    eq: Optional[bool] = strawberry.field(
+        description="Equals"
+    )
+    neq: Optional[bool] = strawberry.field(
+        description="Not equal"
+    )
 
     def __init__(
         self,

@@ -1,8 +1,9 @@
-import * as quoteActions from 'store/actions/quote.actions';
-import { Quote } from 'models/quote';
-import { StateContainer } from 'models/state';
-import * as moment from 'moment';
 import { createReducer, on } from '@ngrx/store';
+import * as moment from 'moment';
+
+import * as quoteActions from 'store/actions/quote.actions';
+import { StateContainer } from 'models/state';
+import { Quote } from 'models/quote';
 
 export const quoteFeatureKey = 'quote';
 

@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Controller } from 'models/controller';
 import { ControllerSettings } from 'models/controller-settings';
-import { Driver } from 'models/driver';
 import { WledMessage } from 'src/app/models/wled/wled-message';
+import { Controller } from 'models/controller';
+import { Driver } from 'models/driver';
 
 export enum ControllerActionTypes {
   // Actions for getting the list of controllers

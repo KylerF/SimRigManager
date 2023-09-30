@@ -2,6 +2,7 @@ from typing import List, Optional
 import strawberry
 
 from database.filters.drivers import DriverFilter
+from database.ordering.drivers import DriverOrder
 from database.modeltypes import DriverType
 from database.database import get_db
 from database.crud import (
@@ -12,17 +13,17 @@ from database.ordering.drivers import DriverOrder
 
 
 @strawberry.type(
-    description="Used to query for driver data",
+    description="Used to query driver data",
     name="DriverQuery",
 )
 class DriverQuery:
     @strawberry.field(
-        description="Get all drivers"
+        description="Query for drivers",
     )
     def drivers(
         self,
-        skip: int = 0,
-        limit: int = -1,
+        skip: Optional[int] = 0,
+        limit: Optional[int] = -1,
         where: Optional[DriverFilter] = None,
         order: Optional[DriverOrder] = None,
     ) -> List[DriverType]:
