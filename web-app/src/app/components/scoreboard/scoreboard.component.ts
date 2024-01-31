@@ -34,7 +34,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   };
 
   showFilter = 'overall';
-  timeFilter = 'forever';
+  timeFilter = 'alltime';
 
   searchColumn = 'driverName';
   searchText: string = '';
@@ -97,6 +97,34 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
         contains: this.searchText,
       };
     }
+
+    // Add time filter
+    let afterDate = new Date(0).toISOString();
+
+    switch (this.timeFilter) {
+      case 'today':
+        afterDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'week':
+        afterDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'month':
+        afterDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'threemonths':
+        afterDate = new Date(new Date().getTime() - 90 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'sixmonths':
+        afterDate = new Date(new Date().getTime() - 180 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'year':
+        afterDate = new Date(new Date().getTime() - 365 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+    }
+
+    this.filterParams.where.setAt = {
+      after: afterDate,
+    };
 
     this.datasource.disconnect();
     this.datasource = new LaptimeDataSource(this.store, this.filterParams);
