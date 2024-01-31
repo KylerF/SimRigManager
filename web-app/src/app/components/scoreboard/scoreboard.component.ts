@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Observable, Subject, debounceTime, distinctUntilChanged, take } from 'rxjs';
 import { LapTime } from 'models/lap-time';
+import { Driver } from 'models/driver';
+import { Store } from '@ngrx/store';
 
 import { LapTimeQueryParams, SortOrder } from 'src/app/models/lap-time-filter-params';
 
 import { LaptimeDataSource } from './scoreboard.datasource';
-import { State } from 'store/reducers';
+import { State, selectActiveDriver } from 'store/reducers';
 
 @Component({
   selector: 'app-scoreboard',
@@ -19,6 +20,7 @@ import { State } from 'store/reducers';
  * Component to render the scoreboard table
  */
 export class ScoreboardComponent implements OnInit, OnDestroy {
+  activeDriver$: Observable<Driver>;
   newLapTimeStream: Observable<LapTime>;
 
   filterParams: LapTimeQueryParams = {
@@ -34,8 +36,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   showFilter = 'overall';
   timeFilter = 'forever';
 
-  searchColumn = 'driver';
+  searchColumn = 'driverName';
   searchText: string = '';
+  searchTextChanged: Subject<string> = new Subject<string>();
   sortColumn: string;
   sortOrder: string;
 
@@ -44,9 +47,18 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
   datasource: LaptimeDataSource;
 
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>) {
+    // Debounce the search input
+    this.searchTextChanged
+      .pipe(debounceTime(250), distinctUntilChanged())
+      .subscribe((inputText) => {
+        this.searchText = inputText;
+        this.filterScores();
+      });
+  }
 
   ngOnInit() {
+    this.activeDriver$ = this.store.select(selectActiveDriver);
     this.datasource = new LaptimeDataSource(this.store, this.filterParams);
   }
 
@@ -56,19 +68,43 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Show best overall lap times
+   * Filter scores with the current parameters
    */
-  showOverallBestTimes() {}
+  filterScores() {
+    // Reset filter params to default
+    this.filterParams = {
+      ...this.filterParams,
+      where: { overallBestOnly: true },
+    };
 
-  /**
-   * Show best lap times for the active driver
-   */
-  showDriverBestTimes() {}
+    // Add overall/personal best filter
+    if (this.showFilter == 'overall') {
+      this.filterParams.where.overallBestOnly = true;
+    } else {
+      this.filterParams.where.overallBestOnly = false;
 
-  /**
-   * Filter scores with a given condition
-   */
-  filterScores() {}
+      // Add driver filter
+      this.activeDriver$.pipe(take(1)).subscribe((driver) => {
+        this.filterParams.where.driverId = {
+          eq: driver.id,
+        };
+      });
+    }
+
+    // Add search filter
+    if (this.searchText) {
+      this.filterParams.where[this.searchColumn] = {
+        contains: this.searchText,
+      };
+    }
+
+    this.datasource.disconnect();
+    this.datasource = new LaptimeDataSource(this.store, this.filterParams);
+  }
+
+  searchInput() {
+    this.searchTextChanged.next(this.searchText);
+  }
 
   /**
    * Sort scores by the given column
@@ -82,6 +118,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
             this.filterParams.order[column] == SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC,
         },
       };
+
+      this.datasource.disconnect();
+      this.datasource = new LaptimeDataSource(this.store, this.filterParams);
     }
   }
 }
