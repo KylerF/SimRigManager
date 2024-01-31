@@ -56,8 +56,8 @@ import { SharedComponentsModule } from './components/components.module';
       DriverEffects,
     ]),
     StoreModule.forRoot(reducers, { metaReducers }),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    !environment.production ? StoreDevtoolsModule.instrument({connectInZone: true}) : [],
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production , connectInZone: true}),
     GraphQLModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,

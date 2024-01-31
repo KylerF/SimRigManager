@@ -87,18 +87,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "simrigmanager-web-app:build"
+            "buildTarget": "simrigmanager-web-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "simrigmanager-web-app:build:production"
+              "buildTarget": "simrigmanager-web-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "simrigmanager-web-app:build"
+            "buildTarget": "simrigmanager-web-app:build"
           }
         },
         "test": {
