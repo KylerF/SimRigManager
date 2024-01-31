@@ -19,6 +19,7 @@ class DriverSubscription:
         while True:
             db = next(get_db())
             active_driver = get_active_driver(db)
+            db.close()
 
             if active_driver:
                 if not last_driver or active_driver.driver.id != last_driver.id:
