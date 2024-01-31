@@ -12,11 +12,11 @@ from api.utils import update_driver_cache, get_active_driver_from_cache
 from database.database import get_db
 from database import crud
 from database.schemas import (
-    Driver,
+    ActiveDriverCreate,
     DriverCreate,
     DriverUpdate,
     DriverStats,
-    ActiveDriverCreate,
+    Driver,
 )
 
 """

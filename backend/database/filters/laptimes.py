@@ -103,7 +103,7 @@ class LaptimeFilter:
                     func.min(LapTime.time).label("min_time"),
                 )
                 .group_by(LapTime.car, LapTime.trackName, LapTime.trackConfig)
-                .alias()
+                .alias("overall_best_lap_times")
             )
 
             filters.extend(
