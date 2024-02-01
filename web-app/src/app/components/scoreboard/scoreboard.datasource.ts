@@ -75,6 +75,15 @@ export class LaptimeDataSource extends DataSource<LapTime | undefined> {
   }
 
   /**
+   * Updates the filter parameters and re-fetches the data
+   */
+  public updateFilterParams(filterParams: LapTimeQueryParams) {
+    this.filterParams = filterParams;
+    this.fetchedPages.clear();
+    this.fetchPage(0);
+  }
+
+  /**
    * Returns the page number for the given index.
    *
    * @param index the index of the item

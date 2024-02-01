@@ -128,8 +128,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.datasource.disconnect();
-    this.datasource = new LaptimeDataSource(this.store, this.filterParams);
+    this.datasource.updateFilterParams(this.filterParams);
   }
 
   searchInput() {
@@ -149,8 +148,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
         },
       };
 
-      this.datasource.disconnect();
-      this.datasource = new LaptimeDataSource(this.store, this.filterParams);
+      this.datasource.updateFilterParams(this.filterParams);
     }
   }
 }
