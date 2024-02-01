@@ -99,7 +99,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     }
 
     // Add time filter
-    let afterDate = new Date(0).toISOString();
+    let afterDate = null;
 
     switch (this.timeFilter) {
       case 'today':
@@ -122,9 +122,11 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.filterParams.where.setAt = {
-      after: afterDate,
-    };
+    if (afterDate) {
+      this.filterParams.where.setAt = {
+        after: afterDate,
+      };
+    }
 
     this.datasource.disconnect();
     this.datasource = new LaptimeDataSource(this.store, this.filterParams);
