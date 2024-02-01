@@ -360,7 +360,7 @@ class IracingFrame(BaseModel):
     ShiftIndicatorPct: Optional[float] = None
     ShiftPowerPct: Optional[int] = None
     ShiftGrindRPM: Optional[int] = None
-    ThrottleRaw: Optional[int] = None
+    ThrottleRaw: Optional[float] = None
     BrakeRaw: Optional[float] = None
     HandbrakeRaw: Optional[int] = None
     SteeringWheelPeakForceNm: Optional[int] = None
