@@ -87,7 +87,7 @@ class LapTime(Base):
     time = Column(Float)
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
-    driver = relationship("Driver", back_populates="laptimes", lazy="subquery")
+    driver = relationship("Driver", back_populates="laptimes", lazy="select")
 
     @hybrid_property
     def driverName(self):
