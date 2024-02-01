@@ -153,7 +153,7 @@ class DriverInfo(BaseModel):
     DriverHeadPosY: Optional[float] = None
     DriverHeadPosZ: Optional[float] = None
     DriverCarIsElectric: Optional[int] = None
-    DriverCarIdleRPM: Optional[int] = None
+    DriverCarIdleRPM: Optional[float] = None
     DriverCarRedLine: Optional[int] = None
     DriverCarEngCylinderCount: Optional[int] = None
     DriverCarFuelKgPerLtr: Optional[float] = None
@@ -356,9 +356,9 @@ class IracingFrame(BaseModel):
     SteeringWheelPctTorqueSignStops: Optional[float] = None
     SteeringWheelPctDamper: Optional[float] = None
     SteeringWheelAngleMax: Optional[float] = None
-    SteeringWheelLimiter: Optional[int] = None
+    SteeringWheelLimiter: Optional[float] = None
     ShiftIndicatorPct: Optional[float] = None
-    ShiftPowerPct: Optional[int] = None
+    ShiftPowerPct: Optional[float] = None
     ShiftGrindRPM: Optional[int] = None
     ThrottleRaw: Optional[float] = None
     BrakeRaw: Optional[float] = None
