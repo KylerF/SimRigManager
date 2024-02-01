@@ -65,27 +65,14 @@ class TestRpmGauge(unittest.TestCase):
         self.assertEqual(
             self.rpm_strip.to_color_list()[0],
             Color("green"),
-            msg="Wrong start color on first strip",
-        )
-
-        self.assertEqual(
-            self.rpm_strip.to_color_list()[-1],
-            Color("green"),
-            msg="Wrong start color on second strip",
+            msg="Wrong start color",
         )
 
         self.assertAlmostEqual(
-            self.rpm_strip.to_color_list()[12].rgb[0],
-            self.rpm_strip.to_color_list()[12].rgb[1],
+            self.rpm_strip.to_color_list()[24].rgb[0],
+            self.rpm_strip.to_color_list()[24].rgb[1],
             delta=0.2,
-            msg="At half revs, end color should be yellowish on first strip",
-        )
-
-        self.assertAlmostEqual(
-            self.rpm_strip.to_color_list()[36].rgb[0],
-            self.rpm_strip.to_color_list()[36].rgb[1],
-            delta=0.2,
-            msg="At half revs, end color should be yellowish on second strip",
+            msg="At half revs, end color should be yellowish",
         )
 
     def test_rpm_20000(self):
@@ -102,25 +89,13 @@ class TestRpmGauge(unittest.TestCase):
         self.assertEqual(
             self.rpm_strip.to_color_list()[0],
             Color("green"),
-            msg="Wrong start color on the first strip",
+            msg="Wrong start color",
         )
 
         self.assertEqual(
-            self.rpm_strip.to_color_list()[-1],
-            Color("green"),
-            msg="Wrong start color on the second strip",
-        )
-
-        self.assertEqual(
-            self.rpm_strip.to_color_list()[24],
+            self.rpm_strip.to_color_list()[49],
             Color("red"),
-            msg="Wrong end color on the first strip",
-        )
-
-        self.assertEqual(
-            self.rpm_strip.to_color_list()[25],
-            Color("red"),
-            msg="Wrong start color on the second strip",
+            msg="Wrong end color",
         )
 
 
