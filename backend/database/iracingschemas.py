@@ -157,7 +157,7 @@ class DriverInfo(BaseModel):
     DriverCarRedLine: Optional[int] = None
     DriverCarEngCylinderCount: Optional[int] = None
     DriverCarFuelKgPerLtr: Optional[float] = None
-    DriverCarFuelMaxLtr: Optional[int] = None
+    DriverCarFuelMaxLtr: Optional[float] = None
     DriverCarMaxFuelPct: Optional[float] = None
     DriverCarGearNumForward: Optional[int] = None
     DriverCarGearNeutral: Optional[int] = None
