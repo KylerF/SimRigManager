@@ -67,6 +67,11 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     this.datasource.disconnect();
   }
 
+  updateDatasource() {
+    this.datasource.disconnect();
+    this.datasource = new LaptimeDataSource(this.store, this.filterParams);
+  }
+
   /**
    * Filter scores with the current parameters
    */
@@ -128,7 +133,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.datasource.updateFilterParams(this.filterParams);
+    this.updateDatasource();
   }
 
   searchInput() {
@@ -148,7 +153,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
         },
       };
 
-      this.datasource.updateFilterParams(this.filterParams);
+      this.updateDatasource();
     }
   }
 }
