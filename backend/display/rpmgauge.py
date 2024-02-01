@@ -5,6 +5,7 @@ class RpmGauge:
     """
     An LED strip rpm gauge that maps the car's RPM to a color gradient
     """
+
     def __init__(self, led_count, color_theme, rpm=0, idle_rpm=0, redline=20000):
         self.led_count = led_count
         self.start_color = color_theme.primary_color
@@ -14,9 +15,7 @@ class RpmGauge:
         self.redline = redline
 
         self.full_gradient = list(
-            self.start_color.range_to(
-                self.end_color, self.led_count
-            )
+            self.start_color.range_to(self.end_color, self.led_count)
         )
 
     def set_rpm(self, rpm):
