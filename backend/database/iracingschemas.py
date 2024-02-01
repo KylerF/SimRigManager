@@ -214,7 +214,7 @@ class IracingFrame(BaseModel):
     ChanQuality: Optional[float] = None
     ChanPartnerQuality: Optional[int] = None
     CpuUsageBG: Optional[float] = None
-    ChanClockSkew: Optional[int] = None
+    ChanClockSkew: Optional[float] = None
     MemPageFaultSec: Optional[int] = None
     MemSoftPageFaultSec: Optional[float] = None
     PlayerCarPosition: Optional[int] = None
