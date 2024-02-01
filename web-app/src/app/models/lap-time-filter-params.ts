@@ -12,6 +12,9 @@ export interface LapTimeFilterParams {
   driverName?: {
     contains?: string;
   };
+  driverId?: {
+    eq: number;
+  };
   car?: {
     contains?: string;
   };

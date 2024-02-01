@@ -9,12 +9,12 @@ import { HttpLink } from 'apollo-angular/http';
 import { APIHelper } from 'helpers/api-helper';
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
-  // Create an http link:
+  // Create an http link
   const http = httpLink.create({
     uri: `${APIHelper.getBaseUrl()}/graphql`,
   });
 
-  // Create a WebSocket link:
+  // Create a WebSocket link
   const ws = new GraphQLWsLink(
     createClient({
       url: `${APIHelper.getBaseUrl('ws')}/graphql`,
@@ -22,10 +22,10 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
     })
   );
 
-  // using the ability to split links, you can send data to each link
+  // Using the ability to split links, you can send data to each link
   // depending on what kind of operation is being sent
   const link = split(
-    // split based on operation type
+    // Split based on operation type
     ({ query }) => {
       const definition = getMainDefinition(query);
       return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
