@@ -183,7 +183,8 @@ def get_laptimes(
         query = query.order_by(order)
 
     # Return with requested limit and offset
-    return query.offset(skip).limit(limit).all()
+    query = query.offset(skip).limit(limit)
+    return query.all()
 
 
 def create_laptime(db: Session, laptime: schemas.LapTimeCreate):

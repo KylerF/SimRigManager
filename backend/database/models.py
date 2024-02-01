@@ -2,8 +2,17 @@
 Database table schemas (SQLAlchemy models)
 """
 
-from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, String
-from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    Float,
+    DateTime,
+    String,
+    select,
+    SQLColumnExpression,
+)
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -78,9 +87,20 @@ class LapTime(Base):
     time = Column(Float)
     setAt = Column(DateTime(timezone=True), server_default=func.now())
 
-    driver = relationship("Driver", back_populates="laptimes", lazy="subquery")
+    driver = relationship("Driver", back_populates="laptimes", lazy="select")
 
-    driverName = association_proxy("driver", "name")
+    @hybrid_property
+    def driverName(self):
+        return self.driver.name
+
+    @driverName.inplace.expression
+    @classmethod
+    def _driverName_expression(cls) -> SQLColumnExpression[str]:
+        return (
+            select(Driver.name)
+            .where(Driver.id == cls.driverId)
+            .label("laptime_driver_name")
+        )
 
 
 class LightController(Base):
