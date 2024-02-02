@@ -3,6 +3,8 @@ Pydantic schemas for iRacing data
 TODO: Can these be generated dynamically? Fields are different depending on
 car, and new fields are added often with iRacing updates.
 UPDATE: Yes: https://github.com/koxudaxi/datamodel-code-generator
+UPDATE: Depends on having all the data available, which is not the case since
+certain data is only available in certain sessions with certain cars.
 """
 
 from typing import List, Optional
