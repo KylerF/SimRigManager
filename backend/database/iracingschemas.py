@@ -4,6 +4,7 @@ TODO: Can these be generated dynamically? Fields are different depending on
 car, and new fields are added often with iRacing updates.
 UPDATE: Yes: https://github.com/koxudaxi/datamodel-code-generator
 """
+
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -384,10 +385,10 @@ class IracingFrame(BaseModel):
     ReplayPlaySlowMotion: Optional[bool] = None
     ReplaySessionTime: Optional[float] = None
     ReplaySessionNum: Optional[int] = None
-    TireLF_RumblePitch: Optional[int] = None
-    TireRF_RumblePitch: Optional[int] = None
-    TireLR_RumblePitch: Optional[int] = None
-    TireRR_RumblePitch: Optional[int] = None
+    TireLF_RumblePitch: Optional[float] = None
+    TireRF_RumblePitch: Optional[float] = None
+    TireLR_RumblePitch: Optional[float] = None
+    TireRR_RumblePitch: Optional[float] = None
     SteeringWheelTorque_ST: Optional[List[float]] = None
     SteeringWheelTorque: Optional[float] = None
     VelocityZ_ST: Optional[List[float]] = None
