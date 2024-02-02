@@ -451,7 +451,7 @@ class IracingFrame(BaseModel):
     FuelUsePerHour: Optional[float] = None
     OilTemp: Optional[float] = None
     OilPress: Optional[float] = None
-    OilLevel: Optional[int] = None
+    OilLevel: Optional[float] = None
     Voltage: Optional[float] = None
     ManifoldPress: Optional[float] = None
     PowerMGU_K: Optional[float] = None
