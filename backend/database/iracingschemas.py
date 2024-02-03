@@ -15,7 +15,7 @@ class WeekendOptions(BaseModel):
     NumStarters: Optional[int] = None
     StartingGrid: Optional[str] = None
     QualifyScoring: Optional[str] = None
-    CourseCautions: Optional[bool] = None
+    CourseCautions: Optional[str] = None
     StandingStart: Optional[int] = None
     ShortParadeLap: Optional[int] = None
     Restarts: Optional[str] = None
@@ -37,7 +37,7 @@ class WeekendOptions(BaseModel):
     HasOpenRegistration: Optional[int] = None
     HardcoreLevel: Optional[int] = None
     NumJokerLaps: Optional[int] = None
-    IncidentLimit: Optional[str] = None
+    IncidentLimit: Optional[int] = None
     FastRepairsLimit: Optional[int] = None
     GreenWhiteCheckeredLimit: Optional[int] = None
 
