@@ -13,8 +13,8 @@ public class Worker : BackgroundService
 
   void iRacing_NewData(DataSample data)
   {
-    var tractionControl = data.Telemetry.dcTractionControl;
-    _logger.LogInformation($"Traction Control: {tractionControl}");
+    var telemetry = data.Telemetry;
+    _logger.LogInformation($"Traction Control: {telemetry}");
   }
 
 
