@@ -8,9 +8,7 @@ from sqlalchemy import create_engine
 
 url = "sqlite:///./simrig.db"
 
-engine = create_engine(
-    url, connect_args={"check_same_thread": False}, pool_size=10, max_overflow=20
-)
+engine = create_engine(url, connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(
     autocommit=False, expire_on_commit=False, autoflush=False, bind=engine

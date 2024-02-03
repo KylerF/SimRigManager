@@ -3,6 +3,12 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "python.analysis.typeCheckingMode": "off",
   "github.copilot.advanced": {},
   "editor.formatOnSave": true
