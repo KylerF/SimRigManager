@@ -6,3 +6,6 @@ src/data/*
 
 # Ignore saved config options
 config.json
+
+# Logs
+yarn-error.log

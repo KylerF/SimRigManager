@@ -1,147 +1,180 @@
 <div class="mb-1">
-	<h1>High Scores</h1>
+  <h1>High Scores</h1>
 </div>
-<div *ngIf="(datasource.state$ | async) as laptimes">
+<div class="d-flex justify-content-between flex-wrap">
+  <div class="mb-2">
+    <div id="searchBar" class="input-group">
+      <input
+        type="search"
+        class="form-control"
+        placeholder="Search"
+        aria-label="Search"
+        [(ngModel)]="searchText"
+        (ngModelChange)="searchInput()"
+      />
+      <div class="input-group-append">
+        <div *ngIf="!searchText.length" class="input-group-text">by</div>
+        <div *ngIf="searchText.length" class="input-group-text">
+          <span class="bi bi-arrow-left"></span>
+        </div>
+      </div>
+      <div class="input-group-append">
+        <select
+          class="form-select"
+          id="searchSelect"
+          [(ngModel)]="searchColumn"
+          (ngModelChange)="filterScores()"
+        >
+          <option value="driverName">Driver</option>
+          <option value="car">Car</option>
+          <option value="trackName">Track</option>
+          <option value="trackConfig">Config</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <div id="filterOptions" class="input-group">
+      <span class="input-group-text">Showing</span>
+      <div class="input-group-append">
+        <select
+          class="form-select"
+          id="showOptionSelect"
+          [(ngModel)]="showFilter"
+          (ngModelChange)="filterScores()"
+        >
+          <option value="overall">Overall best times</option>
+          <option value="my">My best times</option>
+        </select>
+      </div>
+      <span class="input-group-text">of</span>
+      <select
+        class="form-select"
+        id="timeOptionSelect"
+        [(ngModel)]="timeFilter"
+        (ngModelChange)="filterScores()"
+      >
+        <option value="alltime">All time</option>
+        <option value="today">Today</option>
+        <option value="week">Past week</option>
+        <option value="month">Past month</option>
+        <option value="threemonths">Past 3 months</option>
+        <option value="sixmonths">Past 6 months</option>
+        <option value="year">Past year</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="datasource.state$ | async as laptimes">
   <div *ngIf="!laptimes.error; else error">
     <div *ngIf="!laptimes.loading || laptimes.lastUpdated; else loading">
       <div *ngIf="laptimes.state.laptimes.length; else noLaptimes">
-        <div class="d-flex justify-content-between flex-wrap">
-          <div class="mb-2">
-            <div id="searchBar" class="input-group">
-              <input type="search" class="form-control" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" (ngModelChange)="filterScores()">
-              <div class="input-group-append">
-                <div *ngIf="!searchText.length" class="input-group-text">by</div>
-                <div *ngIf="searchText.length" class="input-group-text">
-                  <span class="bi bi-arrow-left"></span>
-                </div>
-              </div>
-              <div class="input-group-append">
-                <select class="form-select" id="searchSelect" [(ngModel)]="searchColumn" (ngModelChange)="filterScores()">
-                  <option value="driver">
-                    Driver
-                  </option>
-                  <option value="car">
-                    Car
-                  </option>
-                  <option value="trackName">
-                    Track
-                  </option>
-                  <option value="trackConfig">
-                    Config
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-2">
-            <div id="filterOptions" class="input-group">
-              <span class="input-group-text">Showing</span>
-              <div class="input-group-append">
-                <select class="form-select" id="showOptionSelect" [(ngModel)]="showFilter" (ngModelChange)="filterScores()">
-                  <option value="overall">
-                    Overall best times
-                  </option>
-                  <option value="my">
-                    My best times
-                  </option>
-                </select>
-              </div>
-              <span class="input-group-text">of</span>
-              <select class="form-select" id="timeOptionSelect" [(ngModel)]="timeFilter" (ngModelChange)="filterScores()">
-                <option value="forever">
-                  All time
-                </option>
-                <option value="today">
-                  Today
-                </option>
-                <option value="week">
-                  This week
-                </option>
-                <option value="month">
-                  This month
-                </option>
-                <option value="threemonths">
-                  Last 3 months
-                </option>
-                <option value="sixmonths">
-                  Last 6 months
-                </option>
-                <option value="year">
-                  This year
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <cdk-virtual-scroll-viewport #scrollViewport class="table-container" [itemSize]="50">
+        <cdk-virtual-scroll-viewport
+          #scrollViewport
+          class="table-container"
+          [itemSize]="50"
+        >
           <table class="table table-bordered reactive-font">
             <thead id="scoreboardHeader">
               <tr>
-                <th class="col-md-1" (click)="sortScores('driverName', 'toggle')">
+                <th
+                  class="col-md-1"
+                  (click)="sortScores('driverName', 'toggle')"
+                >
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Driver
-                    </div>
+                    <div class="m-1">Driver</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.driverName === 'ASC'" class="bi bi-sort-down-alt"></span>
-                      <span *ngIf="filterParams.order.driverName === 'DESC'" class="bi bi-sort-up"></span>
+                      <span
+                        *ngIf="filterParams.order.driverName === 'ASC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.driverName === 'DESC'"
+                        class="bi bi-sort-up"
+                      ></span>
                     </div>
                   </div>
                 </th>
                 <th class="col-md-2" (click)="sortScores('car', 'toggle')">
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Car
-                    </div>
+                    <div class="m-1">Car</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.car === 'ASC'" class="bi bi-sort-down-alt"></span>
-                      <span *ngIf="filterParams.order.car === 'DESC'" class="bi bi-sort-up"></span>
+                      <span
+                        *ngIf="filterParams.order.car === 'ASC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.car === 'DESC'"
+                        class="bi bi-sort-up"
+                      ></span>
                     </div>
                   </div>
                 </th>
-                <th class="col-md-3" (click)="sortScores('trackName', 'toggle')">
+                <th
+                  class="col-md-3"
+                  (click)="sortScores('trackName', 'toggle')"
+                >
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Track
-                    </div>
+                    <div class="m-1">Track</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.trackName === 'ASC'" class="bi bi-sort-down-alt"></span>
-                      <span *ngIf="filterParams.order.trackName === 'DESC'" class="bi bi-sort-up"></span>
+                      <span
+                        *ngIf="filterParams.order.trackName === 'ASC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.trackName === 'DESC'"
+                        class="bi bi-sort-up"
+                      ></span>
                     </div>
                   </div>
                 </th>
-                <th class="col-md-1" (click)="sortScores('trackConfig', 'toggle')">
+                <th
+                  class="col-md-1"
+                  (click)="sortScores('trackConfig', 'toggle')"
+                >
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Config
-                    </div>
+                    <div class="m-1">Config</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.trackConfig === 'ASC'" class="bi bi-sort-down-alt"></span>
-                      <span *ngIf="filterParams.order.trackConfig === 'DESC'" class="bi bi-sort-up"></span>
+                      <span
+                        *ngIf="filterParams.order.trackConfig === 'ASC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.trackConfig === 'DESC'"
+                        class="bi bi-sort-up"
+                      ></span>
                     </div>
                   </div>
                 </th>
                 <th class="col-md-1" (click)="sortScores('time', 'toggle')">
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Time
-                    </div>
+                    <div class="m-1">Time</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.time === 'ASC'" class="bi bi-sort-down-alt"></span>
-                      <span *ngIf="filterParams.order.time === 'DESC'" class="bi bi-sort-up"></span>
+                      <span
+                        *ngIf="filterParams.order.time === 'ASC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.time === 'DESC'"
+                        class="bi bi-sort-up"
+                      ></span>
                     </div>
                   </div>
                 </th>
                 <th class="col-md-1" (click)="sortScores('setAt', 'toggle')">
                   <div class="d-flex flex-nowrap">
-                    <div class="m-1">
-                      Set
-                    </div>
+                    <div class="m-1">Set</div>
                     <div class="ms-auto m-1">
-                      <span *ngIf="filterParams.order.setAt === 'ASC'" class="bi bi-sort-up"></span>
-                      <span *ngIf="filterParams.order.setAt === 'DESC'" class="bi bi-sort-down-alt"></span>
+                      <span
+                        *ngIf="filterParams.order.setAt === 'ASC'"
+                        class="bi bi-sort-up"
+                      ></span>
+                      <span
+                        *ngIf="filterParams.order.setAt === 'DESC'"
+                        class="bi bi-sort-down-alt"
+                      ></span>
                     </div>
                   </div>
                 </th>
@@ -152,7 +185,10 @@
                 <td>
                   <div class="d-flex flex-nowrap">
                     <div class="m-1">
-                      <app-driver-avatar [driver]="lapTime.driver" [size]="'small'"></app-driver-avatar>
+                      <app-driver-avatar
+                        [driver]="lapTime.driver"
+                        [size]="'small'"
+                      ></app-driver-avatar>
                     </div>
                     <div class="m-1">
                       {{ lapTime.driver.name }}
@@ -169,7 +205,7 @@
                   {{ lapTime.trackConfig }}
                 </td>
                 <td>
-                  {{ lapTime.time * 1000 | date:'mm:ss.SSS':'UTC' }}
+                  {{ lapTime.time * 1000 | date : 'mm:ss.SSS' : 'UTC' }}
                 </td>
                 <td>
                   {{ lapTime.setAt | dateAgo }}
@@ -191,10 +227,7 @@
 </ng-template>
 
 <ng-template #error>
-  <app-error-message
-    title="Error"
-    message="Unable to access laptimes"
-  >
+  <app-error-message title="Error" message="Unable to access laptimes">
   </app-error-message>
 </ng-template>
 

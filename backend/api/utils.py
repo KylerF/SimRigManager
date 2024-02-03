@@ -2,13 +2,14 @@
 Common utility functions used throughout the API, namely access to the Redis
 cache for real-time iRacing data and active driver changes
 """
+
 from os import getenv
 import redis
 import json
 
 from api.wsconnectionmanager import WebsocketConnectionManager
-from database.database import get_db
 from database import schemas, iracingschemas, crud
+from database.database import get_db
 from database import models
 
 
