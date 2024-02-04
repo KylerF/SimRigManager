@@ -38,7 +38,7 @@ class WeekendOptions(BaseModel):
     HardcoreLevel: Optional[int] = None
     NumJokerLaps: Optional[int] = None
     IncidentLimit: Optional[str] = None
-    FastRepairsLimit: Optional[int] = None
+    FastRepairsLimit: Optional[str] = None
     GreenWhiteCheckeredLimit: Optional[int] = None
 
 
@@ -132,7 +132,7 @@ class Driver(BaseModel):
     LicLevel: Optional[int] = None
     LicSubLevel: Optional[int] = None
     LicString: Optional[str] = None
-    LicColor: Optional[int] = None
+    LicColor: Optional[str] = None
     IsSpectator: Optional[int] = None
     CarDesignStr: Optional[str] = None
     HelmetDesignStr: Optional[str] = None
