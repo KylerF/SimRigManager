@@ -19,33 +19,6 @@ def get_iracing_data():
     """
     session_data = read_redis_key("session_data")
 
-    """
-    # Some mapping needs to occur on specific fields. They can be one of
-    # several types, which is handled with Unions in pydantic, but is not
-    # supported by the GraphQL spec: https://strawberry.rocks/docs/integrations/pydantic#custom-conversion-logic
-    weekend_info = session_data.get("WeekendInfo")
-    if weekend_info:
-        weekend_options = weekend_info.get("WeekendOptions")
-        if weekend_options:
-            session_data["WeekendInfo"]["WeekendOptions"]["CourseCautions"] = str(
-                weekend_options.get("CourseCautions")
-            )
-            session_data["WeekendInfo"]["WeekendOptions"]["IncidentLimit"] = str(
-                weekend_options.get("IncidentLimit")
-            )
-            session_data["WeekendInfo"]["WeekendOptions"]["FastRepairsLimit"] = str(
-                weekend_options.get("FastRepairsLimit")
-            )
-
-    driver_info = session_data.get("DriverInfo")
-    if driver_info:
-        drivers = driver_info.get("Drivers")
-        for index, _ in enumerate(drivers):
-            session_data["DriverInfo"]["Drivers"][index]["LicColor"] = str(
-                session_data["DriverInfo"]["Drivers"][index]["LicColor"]
-            )
-    """
-
     if session_data.get("SessionTime"):
         return iracingschemas.IracingFrame(**session_data)
 

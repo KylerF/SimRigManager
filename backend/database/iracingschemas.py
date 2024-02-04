@@ -7,7 +7,7 @@ UPDATE: Depends on having all the data available, which is not the case since
 certain data is only available in certain sessions with certain cars.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Union
 from pydantic import BaseModel
 
 
@@ -15,7 +15,7 @@ class WeekendOptions(BaseModel):
     NumStarters: Optional[int] = None
     StartingGrid: Optional[str] = None
     QualifyScoring: Optional[str] = None
-    CourseCautions: Optional[str] = None
+    CourseCautions: Union[bool, str, None] = None
     StandingStart: Optional[int] = None
     ShortParadeLap: Optional[int] = None
     Restarts: Optional[str] = None
@@ -37,8 +37,8 @@ class WeekendOptions(BaseModel):
     HasOpenRegistration: Optional[int] = None
     HardcoreLevel: Optional[int] = None
     NumJokerLaps: Optional[int] = None
-    IncidentLimit: Optional[str] = None
-    FastRepairsLimit: Optional[str] = None
+    IncidentLimit: Union[int, str, None] = None
+    FastRepairsLimit: Union[int, str, None] = None
     GreenWhiteCheckeredLimit: Optional[int] = None
 
 
@@ -132,7 +132,7 @@ class Driver(BaseModel):
     LicLevel: Optional[int] = None
     LicSubLevel: Optional[int] = None
     LicString: Optional[str] = None
-    LicColor: Optional[str] = None
+    LicColor: Union[int, str, None] = None
     IsSpectator: Optional[int] = None
     CarDesignStr: Optional[str] = None
     HelmetDesignStr: Optional[str] = None
