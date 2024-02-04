@@ -7,15 +7,16 @@ UPDATE: Depends on having all the data available, which is not the case since
 certain data is only available in certain sessions with certain cars.
 """
 
-from typing import List, Optional, Union
-from pydantic import BaseModel
+from typing import List, Optional
+import strawberry
 
 
-class WeekendOptions(BaseModel):
+@strawberry.type
+class WeekendOptions:
     NumStarters: Optional[int] = None
     StartingGrid: Optional[str] = None
     QualifyScoring: Optional[str] = None
-    CourseCautions: Union[bool, str, None] = None
+    CourseCautions: str = None
     StandingStart: Optional[int] = None
     ShortParadeLap: Optional[int] = None
     Restarts: Optional[str] = None
@@ -37,16 +38,18 @@ class WeekendOptions(BaseModel):
     HasOpenRegistration: Optional[int] = None
     HardcoreLevel: Optional[int] = None
     NumJokerLaps: Optional[int] = None
-    IncidentLimit: Union[int, str, None] = None
-    FastRepairsLimit: Union[int, str, None] = None
+    IncidentLimit: Optional[str] = None
+    FastRepairsLimit: Optional[str] = None
     GreenWhiteCheckeredLimit: Optional[int] = None
 
 
-class TelemetryOptions(BaseModel):
+@strawberry.type
+class TelemetryOptions:
     TelemetryDiskFile: Optional[str] = None
 
 
-class WeekendInfo(BaseModel):
+@strawberry.type
+class WeekendInfo:
     TrackName: Optional[str] = None
     TrackID: Optional[int] = None
     TrackLength: Optional[str] = None
@@ -101,7 +104,8 @@ class WeekendInfo(BaseModel):
     TelemetryOptions: TelemetryOptions
 
 
-class Driver(BaseModel):
+@strawberry.type
+class Driver:
     CarIdx: Optional[int] = None
     UserName: Optional[str] = None
     AbbrevName: Optional[str] = None
@@ -132,7 +136,7 @@ class Driver(BaseModel):
     LicLevel: Optional[int] = None
     LicSubLevel: Optional[int] = None
     LicString: Optional[str] = None
-    LicColor: Union[int, str, None] = None
+    LicColor: Optional[str] = None
     IsSpectator: Optional[int] = None
     CarDesignStr: Optional[str] = None
     HelmetDesignStr: Optional[str] = None
@@ -148,7 +152,8 @@ class Driver(BaseModel):
     TeamIncidentCount: Optional[int] = None
 
 
-class DriverInfo(BaseModel):
+@strawberry.type
+class DriverInfo:
     DriverCarIdx: Optional[int] = None
     DriverUserID: Optional[int] = None
     PaceCarIdx: Optional[int] = None
@@ -180,7 +185,8 @@ class DriverInfo(BaseModel):
     Drivers: Optional[List[Driver]] = None
 
 
-class IracingFrame(BaseModel):
+@strawberry.type
+class IracingFrame:
     SessionTime: Optional[float] = None
     SessionTick: Optional[int] = None
     SessionNum: Optional[int] = None
