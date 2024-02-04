@@ -2,6 +2,7 @@
 Pydantic schema mappings for the GraphQL server. This uses an expiremental
 method of tanslating pydantic schemas directly to GraphQL types.
 """
+
 import strawberry
 
 from database import schemas, iracingschemas
@@ -39,7 +40,7 @@ class LightControllerType:
     description="iRacing driver schema", model=iracingschemas.Driver, all_fields=True
 )
 class IracingDriverType:
-    pass
+    LicColor: str
 
 
 @strawberry.experimental.pydantic.type(
@@ -57,7 +58,9 @@ class TelemetryOptionsType:
     all_fields=True,
 )
 class WeekendOptionsType:
-    pass
+    CourseCautions: str
+    IncidentLimit: str
+    FastRepairsLimit: str
 
 
 @strawberry.experimental.pydantic.type(
