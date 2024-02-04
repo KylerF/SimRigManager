@@ -19,7 +19,9 @@ def get_iracing_data():
     """
     session_data = read_redis_key("session_data")
 
-    # Some mapping needs to occur on specific fields
+    # Some mapping needs to occur on specific fields. They can be one of
+    # several types, which is handled with Unions in pydantic, but is not
+    # supported by the GraphQL spec: link here
     weekend_info = session_data.get("WeekendInfo")
     if weekend_info:
         weekend_options = weekend_info.get("WeekendOptions")
@@ -29,6 +31,17 @@ def get_iracing_data():
             )
             session_data["WeekendInfo"]["WeekendOptions"]["IncidentLimit"] = str(
                 weekend_options.get("IncidentLimit")
+            )
+            session_data["WeekendInfo"]["WeekendOptions"]["FastRepairsLimit"] = str(
+                weekend_options.get("FastRepairsLimit")
+            )
+
+    driver_info = session_data.get("DriverInfo")
+    if driver_info:
+        drivers = driver_info.get("Drivers")
+        for index, _ in enumerate(drivers):
+            session_data["DriverInfo"]["Drivers"][index]["LicColor"] = str(
+                session_data["DriverInfo"]["Drivers"][index]["LicColor"]
             )
 
     if session_data.get("SessionTime"):
