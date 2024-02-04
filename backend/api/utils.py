@@ -19,6 +19,18 @@ def get_iracing_data():
     """
     session_data = read_redis_key("session_data")
 
+    # Some mapping needs to occur on specific fields
+    weekend_info = session_data.get("WeekendInfo")
+    if weekend_info:
+        weekend_options = weekend_info.get("WeekendOptions")
+        if weekend_options:
+            session_data["WeekendInfo"]["WeekendOptions"]["CourseCautions"] = str(
+                weekend_options.get("CourseCautions")
+            )
+            session_data["WeekendInfo"]["WeekendOptions"]["IncidentLimit"] = str(
+                weekend_options.get("IncidentLimit")
+            )
+
     if session_data.get("SessionTime"):
         return iracingschemas.IracingFrame(**session_data)
 

@@ -37,7 +37,7 @@ class WeekendOptions(BaseModel):
     HasOpenRegistration: Optional[int] = None
     HardcoreLevel: Optional[int] = None
     NumJokerLaps: Optional[int] = None
-    IncidentLimit: Optional[int] = None
+    IncidentLimit: Optional[str] = None
     FastRepairsLimit: Optional[int] = None
     GreenWhiteCheckeredLimit: Optional[int] = None
 
