@@ -1,7 +1,6 @@
 """
 Pydantic schema mappings for the GraphQL server. This uses an expiremental
 method of tanslating pydantic schemas directly to GraphQL types.
-TODO: Are pydantic types even necessary? Can't we just use the strawberry types?
 """
 
 import strawberry
@@ -41,6 +40,10 @@ class LightControllerType:
     description="iRacing driver schema", model=iracingschemas.Driver
 )
 class IracingDriverType:
+    # Override scalar union types
+    LicColor: str
+
+    # Auto the rest
     CarIdx: strawberry.auto
     UserName: strawberry.auto
     AbbrevName: strawberry.auto
@@ -71,7 +74,6 @@ class IracingDriverType:
     LicLevel: strawberry.auto
     LicSubLevel: strawberry.auto
     LicString: strawberry.auto
-    LicColor: str
     IsSpectator: strawberry.auto
     CarDesignStr: strawberry.auto
     HelmetDesignStr: strawberry.auto
@@ -101,10 +103,16 @@ class TelemetryOptionsType:
     model=iracingschemas.WeekendOptions,
 )
 class WeekendOptionsType:
+    # Override scalar union types
+    IncidentLimit: str
+    FastRepairsLimit: str
+    GreenWhiteCheckeredLimit: str
+    CourseCautions: str
+
+    # Auto the rest
     NumStarters: strawberry.auto
     StartingGrid: strawberry.auto
     QualifyScoring: strawberry.auto
-    CourseCautions: str
     StandingStart: strawberry.auto
     ShortParadeLap: strawberry.auto
     Restarts: strawberry.auto
@@ -126,10 +134,6 @@ class WeekendOptionsType:
     HasOpenRegistration: strawberry.auto
     HardcoreLevel: strawberry.auto
     NumJokerLaps: strawberry.auto
-    IncidentLimit: str
-    FastRepairsLimit: str
-    GreenWhiteCheckeredLimit: str
-
 
 
 @strawberry.experimental.pydantic.type(
