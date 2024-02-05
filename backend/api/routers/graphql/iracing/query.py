@@ -1,6 +1,6 @@
 import strawberry
 
-from database.iracingschemas import IracingFrame
+from database.modeltypes import IracingFrameType
 from api.utils import get_iracing_data
 
 
@@ -10,6 +10,6 @@ from api.utils import get_iracing_data
 )
 class IracingQuery:
     @strawberry.field(description="Get the latest frame of iRacing data")
-    def iracing(self) -> IracingFrame:
+    def iracing(self) -> IracingFrameType:
         frame = get_iracing_data()
-        return IracingFrame(frame)
+        return IracingFrameType.from_pydantic(frame)
