@@ -4,7 +4,7 @@ sqlalchemy_utils==0.41.1
 python-multipart==0.0.6
 sse-starlette==2.0.0
 sqlalchemy==2.0.25
-starlette==0.35.1
+starlette==0.36.2
 pydantic==2.6.0
 aiofiles==23.2.1
 fastapi==0.109.1
