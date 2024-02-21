@@ -2,7 +2,7 @@
 Functions to perform CRUD operations on the database
 """
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query
 from sqlalchemy import func
 from typing import List
 
@@ -482,7 +482,7 @@ def delete_quote(db: Session, quote: schemas.QuoteDelete):
     return stored_quote
 
 
-def get_count(query):
+def get_count(query: Query):
     """
     Helper function to count the rows returned by a given query
     """
