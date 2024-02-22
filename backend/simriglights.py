@@ -6,6 +6,7 @@ kicking off tasks for:
   - Controlling WLED fixtures
   - Hosting the SimRig API for web applications
 """
+
 from logging.handlers import RotatingFileHandler
 from colour import Color
 import configparser

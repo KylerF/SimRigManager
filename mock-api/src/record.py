@@ -3,6 +3,7 @@ Simple websocket client to record iRacing data via the SimRig API.
 Recorded data is saved to a JSON file, and can be loaded later to
 replay the session.
 """
+
 from os import path, getcwd
 import websocket
 import argparse
@@ -13,6 +14,7 @@ import ujson
 iracing_data = []
 output_file = ""
 
+
 def save_data():
     """
     Save the recorded iRacing data to a JSON file
@@ -22,7 +24,8 @@ def save_data():
 
     print(f"Saving data to {output_file}")
     with open(output_file, "w") as file:
-        ujson.dump(iracing_data, file, indent = 4)
+        ujson.dump(iracing_data, file, indent=4)
+
 
 def on_message(ws, message):
     """
@@ -35,14 +38,14 @@ def on_message(ws, message):
 
     iracing_data.append(ujson.loads(message))
 
+
 def on_open(ws):
     print("Press CTRL+C to stop recording")
 
+
 def on_close(ws, close_status_code, close_msg):
-    print(
-        "### closed: status={0}, msg={1} ###"
-        .format(close_status_code, close_msg)
-    )
+    print("### closed: status={0}, msg={1} ###".format(close_status_code, close_msg))
+
 
 def on_error(ws, error):
     print(error)
@@ -52,30 +55,21 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="iRacing data recorder")
     parser.add_argument("file", help="output file name")
     parser.add_argument(
-        "--host",
-        default="localhost",
-        help="hostname of iracing server"
+        "--host", default="localhost", help="hostname of iracing server"
     )
-    parser.add_argument(
-        "--port",
-        default=8000,
-        help="port of iracing server"
-    )
+    parser.add_argument("--port", default=8000, help="port of iracing server")
     args = parser.parse_args()
 
     current_path = path.abspath(getcwd())
-    output_file = path.join(
-        current_path, "data",
-        f"{args.file}.json"
-    )
+    output_file = path.join(current_path, "data", f"{args.file}.json")
 
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
         f"ws://{args.host}:{args.port}/iracing/stream",
-        on_open = on_open,
+        on_open=on_open,
         on_message=on_message,
         on_error=on_error,
-        on_close=on_close
+        on_close=on_close,
     )
 
     atexit.register(save_data)

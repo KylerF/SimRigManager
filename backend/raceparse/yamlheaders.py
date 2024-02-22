@@ -5,6 +5,7 @@ with future iRacing versions, it is enumerated here.
 
 https://sajax.github.io/irsdkdocs/yaml/
 """
+
 iracing_yaml_headers = [
     # "CameraInfo",
     "DriverInfo",

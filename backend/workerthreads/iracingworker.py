@@ -82,7 +82,8 @@ class IracingWorker(threading.Thread):
                         self.active_driver = crud.update_driver(
                             self.db,
                             DriverUpdate(
-                                id=self.active_driver.id, trackTime=math.floor(track_time)
+                                id=self.active_driver.id,
+                                trackTime=math.floor(track_time),
                             ),
                         )
 
@@ -179,5 +180,6 @@ class IracingWorker(threading.Thread):
                 # Update Redis key for streaming
                 if new_laptime:
                     set_redis_key(
-                        "session_best_lap", schemas.LapTime(**new_laptime.__dict__).json()
+                        "session_best_lap",
+                        schemas.LapTime(**new_laptime.__dict__).json(),
                     )

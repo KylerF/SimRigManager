@@ -3,6 +3,7 @@ Generic filters for SQLAlchemy models. They are used to compose filters for
 specific models in the GraphQL API, but can be extended to be used in other
 places as well.
 """
+
 from sqlalchemy import Column
 from typing import Optional
 import strawberry
