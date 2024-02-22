@@ -1,13 +1,16 @@
 <div *ngIf="!iracingDataAvailable" id="noData" class="center-vh pulse">
-  <h1 class="display-3">
-    Waiting for telemetry data
-  </h1>
+  <h1 class="display-3">Waiting for telemetry data</h1>
 </div>
 
 <div *ngIf="iracingDataAvailable" id="mainGrid" class="container-fluid">
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-wheel-display [keepAlive]="true"></app-wheel-display>
         <div class="example-handle" cdkDragHandle>
           <i class="drag-handle bi bi-arrows-move"></i>
@@ -15,24 +18,46 @@
       </div>
     </div>
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-speedometer-display [keepAlive]="true"></app-speedometer-display>
       </div>
     </div>
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
-        <app-gear-indicator-display [keepAlive]="true"></app-gear-indicator-display>
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
+        <app-gear-indicator-display
+          [keepAlive]="true"
+        ></app-gear-indicator-display>
       </div>
     </div>
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-weekend-info-display [keepAlive]="true"></app-weekend-info-display>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-pedals-display [keepAlive]="true"></app-pedals-display>
       </div>
     </div>
@@ -40,15 +65,27 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
-        <app-incident-count-display [keepAlive]="true"></app-incident-count-display>
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
+        <app-incident-count-display
+          [keepAlive]="true"
+        ></app-incident-count-display>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-flag-display [keepAlive]="true"></app-flag-display>
       </div>
     </div>
@@ -56,15 +93,27 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
-        <app-resource-usage-display [keepAlive]="true"></app-resource-usage-display>
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
+        <app-resource-usage-display
+          [keepAlive]="true"
+        ></app-resource-usage-display>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-rpm-display [keepAlive]="true"></app-rpm-display>
       </div>
     </div>
@@ -72,7 +121,12 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-delta-display [keepAlive]="true"></app-delta-display>
       </div>
     </div>
@@ -80,23 +134,42 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
-        <app-best-lap-time-display [keepAlive]="true"></app-best-lap-time-display>
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
+        <app-best-lap-time-display
+          [keepAlive]="true"
+        ></app-best-lap-time-display>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
-        <app-current-lap-time-display [keepAlive]="true"></app-current-lap-time-display>
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
+        <app-current-lap-time-display
+          [keepAlive]="true"
+        ></app-current-lap-time-display>
       </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-lap-count-display [keepAlive]="true"></app-lap-count-display>
       </div>
     </div>
@@ -104,7 +177,12 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-car-display [keepAlive]="true"></app-car-display>
       </div>
     </div>
@@ -112,7 +190,12 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-position-display [keepAlive]="true"></app-position-display>
       </div>
     </div>
@@ -120,7 +203,12 @@
 
   <div class="row">
     <div class="col">
-      <div class="telemetry-component" cdkDrag cdkDragBoundary="#mainGrid" (cdkDragEnded)="onDragEnded($event)">
+      <div
+        class="telemetry-component"
+        cdkDrag
+        cdkDragBoundary="#mainGrid"
+        (cdkDragEnded)="onDragEnded($event)"
+      >
         <app-raw-data-display [keepAlive]="true"></app-raw-data-display>
       </div>
     </div>

@@ -1,77 +1,104 @@
 <div *ngIf="!error" class="d-flex flex-row flex-wrap">
-    <div id="profile-card" *ngIf="driver" class="card p-2">
-        <div class="card-header">
-            <div (click)="fileInput.click()">
-                <div class="profile-pic">
-                    <app-driver-avatar [driver]="driver" [size]="'large'"></app-driver-avatar>
-                    <div class="upload-button">
-                        <button *ngIf="!driver.profilePic" class="btn btn-secondary">
-                            <span class="bi bi-upload"></span>  Upload
-                        </button>
-                        <button *ngIf="driver.profilePic" class="btn btn-secondary">
-                            <span class="bi bi-pencil-fill"></span>  Change Avatar
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <input type="file" accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/webp" class="file-input" (change)="setProfilePic($event)" #fileInput>
+  <div id="profile-card" *ngIf="driver" class="card p-2">
+    <div class="card-header">
+      <div (click)="fileInput.click()">
+        <div class="profile-pic">
+          <app-driver-avatar
+            [driver]="driver"
+            [size]="'large'"
+          ></app-driver-avatar>
+          <div class="upload-button">
+            <button *ngIf="!driver.profilePic" class="btn btn-secondary">
+              <span class="bi bi-upload"></span> Upload
+            </button>
+            <button *ngIf="driver.profilePic" class="btn btn-secondary">
+              <span class="bi bi-pencil-fill"></span> Change Avatar
+            </button>
+          </div>
         </div>
+      </div>
 
-        <div class="card-body">
-            <form *ngIf="editingProfile">
-                <div class="form-group">
-                    <label for="nameInput">Name</label>
-                    <input type="text" class="form-control" id="nameInput" name="nameInput" [(ngModel)]="driver.name">
-                </div>
-                <div class="form-group">
-                    <label for="nickNameInput">Nickname</label>
-                    <input type="text" class="form-control" id="nickNameInput" name="nickNameInput" [(ngModel)]="driver.nickname">
-                </div>
-                <div class="py-2">
-                    <input type="submit" class="btn btn-success" value="Save" (click)="saveProfile()"/>
-                    <button class="btn btn-cancel" (click)="cancelEdit()">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-            <div *ngIf="!editingProfile">
-                <h4 class="display-4">{{ driver.name }}</h4>
-                <h5>"{{ driver.nickname }}"</h5>
-                <div class="d-grid">
-                    <button type="button" class="btn btn-primary btn-block" (click)="editProfile()">
-                        Edit Profile
-                    </button>
-                </div>
-            </div>
-        </div>
+      <input
+        type="file"
+        accept="image/apng, image/avif, image/gif, image/jpeg, image/png, image/webp"
+        class="file-input"
+        (change)="setProfilePic($event)"
+        #fileInput
+      />
     </div>
 
-    <div class="px-2">
-        <div id="stats" class="card">
-            <div class="card-header text-center">
-                <h3>Driver Stats</h3>
-            </div>
-            <div *ngIf="driverStats" class="card-body">
-                <h4>
-                    Track Time: {{ driverStats.trackTime | hoursMinutesSeconds }}
-                </h4>
-                <h4>
-                    Records Held: {{ driverStats.recordsHeld }}
-                </h4>
-                <h4>
-                    Favorite Track: {{ driverStats.favoriteTrack }}
-                </h4>
-                <button class="btn btn-danger btn-block" type="button" (click)="showDeleteProfileDialog()">
-                    Delete Profile
-                </button>
-            </div>
+    <div class="card-body">
+      <form *ngIf="editingProfile">
+        <div class="form-group">
+          <label for="nameInput">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nameInput"
+            name="nameInput"
+            [(ngModel)]="driver.name"
+          />
         </div>
+        <div class="form-group">
+          <label for="nickNameInput">Nickname</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nickNameInput"
+            name="nickNameInput"
+            [(ngModel)]="driver.nickname"
+          />
+        </div>
+        <div class="py-2">
+          <input
+            type="submit"
+            class="btn btn-success"
+            value="Save"
+            (click)="saveProfile()"
+          />
+          <button class="btn btn-cancel" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+      <div *ngIf="!editingProfile">
+        <h4 class="display-4">{{ driver.name }}</h4>
+        <h5>"{{ driver.nickname }}"</h5>
+        <div class="d-grid">
+          <button
+            type="button"
+            class="btn btn-primary btn-block"
+            (click)="editProfile()"
+          >
+            Edit Profile
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="px-2">
+    <div id="stats" class="card">
+      <div class="card-header text-center">
+        <h3>Driver Stats</h3>
+      </div>
+      <div *ngIf="driverStats" class="card-body">
+        <h4>Track Time: {{ driverStats.trackTime | hoursMinutesSeconds }}</h4>
+        <h4>Records Held: {{ driverStats.recordsHeld }}</h4>
+        <h4>Favorite Track: {{ driverStats.favoriteTrack }}</h4>
+        <button
+          class="btn btn-danger btn-block"
+          type="button"
+          (click)="showDeleteProfileDialog()"
+        >
+          Delete Profile
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <app-error-message
-    *ngIf="error"
-    title="Error"
-    message="Unable to access your driver profile">
+  *ngIf="error"
+  title="Error"
+  message="Unable to access your driver profile"
+>
 </app-error-message>

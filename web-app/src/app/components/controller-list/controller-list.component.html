@@ -1,20 +1,14 @@
 <h1>Light Controllers</h1>
-<div *ngIf="(controllers$ | async) as controllers">
+<div *ngIf="controllers$ | async as controllers">
   <div *ngIf="!controllers.error; else error">
     <div *ngIf="!controllers.loading || controllers.lastUpdated; else loading">
       <div *ngIf="controllers.state.length; else noControllers">
         <table class="table reactive-font">
           <thead>
             <tr>
-              <th scope="col">
-                Name
-              </th>
-              <th scope="col">
-                IP Address
-              </th>
-              <th scope="col">
-                Actions
-              </th>
+              <th scope="col">Name</th>
+              <th scope="col">IP Address</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +20,7 @@
                 <span
                   *ngIf="controller.isAvailable === false"
                   class="bi bi-exclamation-circle-fill"
-                  style="color:red"
+                  style="color: red"
                   title="Connection failed"
                 >
                 </span>
@@ -38,12 +32,12 @@
                 <span
                   *ngIf="controller.isAvailable"
                   class="bi bi-check-circle-fill"
-                  style="color:green"
+                  style="color: green"
                   title="Controller is available"
                 >
                 </span>
                 <a
-                  href="http://{{controller.ipAddress}}"
+                  href="http://{{ controller.ipAddress }}"
                   target="_blank"
                   rel="noopener"
                   title="WLED controls"
@@ -61,7 +55,12 @@
                   >
                     <span
                       class="bi bi-power"
-                      [ngStyle]="{'color': (controller.state && controller.state.on) ? 'white' : 'red'}"
+                      [ngStyle]="{
+                        color:
+                          controller.state && controller.state.on
+                            ? 'white'
+                            : 'red'
+                      }"
                     >
                     </span>
                   </button>
@@ -111,8 +110,6 @@
 <ng-template #noControllers>
   <div class="text-center py-4">
     <h3>No controllers found</h3>
-    <p>
-      You can add a new controller by clicking the button below.
-    </p>
+    <p>You can add a new controller by clicking the button below.</p>
   </div>
 </ng-template>

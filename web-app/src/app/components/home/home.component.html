@@ -3,24 +3,40 @@
 
   <app-quote></app-quote>
 
-  <h3>
-      Status:
-  </h3>
+  <h3>Status:</h3>
   <div *ngIf="apiActive$ | async" class="alert alert-success">
-    <span class="bi bi-circle-fill" style="color:green"></span><b> SimRig API: </b>SimRig API is active
+    <span class="bi bi-circle-fill" style="color: green"></span
+    ><b> SimRig API: </b>SimRig API is active
   </div>
 
-  <app-error-message *ngIf="(apiActive$ | async) === false" title="SimRig API" message="SimRig API is offline"></app-error-message>
+  <app-error-message
+    *ngIf="(apiActive$ | async) === false"
+    title="SimRig API"
+    message="SimRig API is offline"
+  ></app-error-message>
 
   <div *ngIf="(apiActive$ | async) && (iracingData$ | async) as iracing">
     <div *ngIf="iracing.SessionTime" class="accordion" id="iracing-accordion">
       <div class="accordion-item">
         <div class="accordion-header" id="iracing-status-header">
-          <div class="accordion-button collapsed alert-success" type="button" data-bs-toggle="collapse" data-bs-target="#iracing-info" aria-expanded="false" aria-controls="iracing-info">
-              <span class="bi bi-circle-fill" style="color:green"></span>&nbsp;<b>iRacing:</b>&nbsp;Connected to an iRacing session
+          <div
+            class="accordion-button collapsed alert-success"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#iracing-info"
+            aria-expanded="false"
+            aria-controls="iracing-info"
+          >
+            <span class="bi bi-circle-fill" style="color: green"></span
+            >&nbsp;<b>iRacing:</b>&nbsp;Connected to an iRacing session
           </div>
         </div>
-        <div id="iracing-info" class="accordion-collapse collapse" aria-labelledby="iracing-status-header" data-bs-parent="#iracing-accordion">
+        <div
+          id="iracing-info"
+          class="accordion-collapse collapse"
+          aria-labelledby="iracing-status-header"
+          data-bs-parent="#iracing-accordion"
+        >
           <div class="accordion-body">
             <div id="sessionInfo">
               {{ iracing.WeekendInfo.EventType }}
@@ -30,7 +46,8 @@
             <div id="sessionTime">
               Session time:
               {{ iracing.SessionTime | hoursMinutesSeconds }}
-            </div><br>
+            </div>
+            <br />
             <a routerLink="/telemetry">
               <button class="btn btn-primary" type="button">
                 <span class="bi bi-speedometer"></span>
@@ -43,21 +60,38 @@
     </div>
   </div>
 
-  <div *ngIf="(apiActive$ | async) && (iracingData$ | async) === null" class="alert alert-warning">
-    <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for iRacing data
+  <div
+    *ngIf="(apiActive$ | async) && (iracingData$ | async) === null"
+    class="alert alert-warning"
+  >
+    <app-hourglass-icon></app-hourglass-icon><b> iRacing: </b>Waiting for
+    iRacing data
   </div>
 
-  <app-error-message *ngIf="(apiActive$ | async) === false && (iracingData$ | async) === null" title="iRacing" message="Unable to access iRacing data"></app-error-message>
+  <app-error-message
+    *ngIf="(apiActive$ | async) === false && (iracingData$ | async) === null"
+    title="iRacing"
+    message="Unable to access iRacing data"
+  ></app-error-message>
 
-  <div *ngIf="(controllers$ | async) as controllers">
+  <div *ngIf="controllers$ | async as controllers">
     <div *ngFor="let controller of controllers.state">
       <div *ngIf="controller.isAvailable" class="alert alert-success">
-        <span class="bi bi-circle-fill" style="color:green"></span><b> WLED: </b> {{ controller.name }} is online
-     </div>
+        <span class="bi bi-circle-fill" style="color: green"></span
+        ><b> WLED: </b> {{ controller.name }} is online
+      </div>
 
-      <app-error-message *ngIf="!controller.isAvailable" title="WLED" message="{{ controller.name }} is offline"></app-error-message>
+      <app-error-message
+        *ngIf="!controller.isAvailable"
+        title="WLED"
+        message="{{ controller.name }} is offline"
+      ></app-error-message>
     </div>
   </div>
 
-  <app-error-message *ngIf="(apiActive$ | async) === false" title="WLED" message="Unable to get WLED controllers"></app-error-message>
+  <app-error-message
+    *ngIf="(apiActive$ | async) === false"
+    title="WLED"
+    message="Unable to get WLED controllers"
+  ></app-error-message>
 </div>
