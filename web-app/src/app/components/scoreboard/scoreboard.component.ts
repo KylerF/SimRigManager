@@ -108,28 +108,28 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
     switch (this.timeFilter) {
       case 'today':
-        afterDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
         break;
       case 'week':
-        afterDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
         break;
       case 'month':
-        afterDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
         break;
       case 'threemonths':
-        afterDate = new Date(new Date().getTime() - 90 * 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 90 * 24 * 60 * 60 * 1000);
         break;
       case 'sixmonths':
-        afterDate = new Date(new Date().getTime() - 180 * 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 180 * 24 * 60 * 60 * 1000);
         break;
       case 'year':
-        afterDate = new Date(new Date().getTime() - 365 * 24 * 60 * 60 * 1000).toISOString();
+        afterDate = new Date(new Date().getTime() - 365 * 24 * 60 * 60 * 1000);
         break;
     }
 
     if (afterDate) {
       this.filterParams.where.setAt = {
-        after: afterDate,
+        after: afterDate.toISOString().replace('T', ' '),
       };
     }
 
