@@ -29,7 +29,7 @@ export interface WeekendInfo {
   TrackWindVel?: string;
   TrackWindDir?: string;
   TrackRelativeHumidity?: string;
-  TrackFogLevel?: string;
+  TrackFogLevel?: number;
   TrackCleanup?: number;
   TrackDynamicTrack?: number;
   TrackVersion?: string;

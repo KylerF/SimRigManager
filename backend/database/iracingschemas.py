@@ -25,7 +25,7 @@ class WeekendOptions(BaseModel):
     WindSpeed: Optional[str] = None
     WeatherTemp: Optional[str] = None
     RelativeHumidity: Optional[str] = None
-    FogLevel: Optional[str] = None
+    FogLevel: Optional[float] = None
     TimeOfDay: Optional[str] = None
     Date: Optional[str] = None
     EarthRotationSpeedupFactor: Optional[int] = None
@@ -72,7 +72,7 @@ class WeekendInfo(BaseModel):
     TrackWindVel: Optional[str] = None
     TrackWindDir: Optional[str] = None
     TrackRelativeHumidity: Optional[str] = None
-    TrackFogLevel: Optional[str] = None
+    TrackFogLevel: Optional[float] = None
     TrackCleanup: Optional[int] = None
     TrackDynamicTrack: Optional[int] = None
     TrackVersion: Optional[str] = None
@@ -314,7 +314,7 @@ class IracingFrame(BaseModel):
     WindVel: Optional[float] = None
     WindDir: Optional[float] = None
     RelativeHumidity: Optional[float] = None
-    FogLevel: Optional[int] = None
+    FogLevel: Optional[float] = None
     SolarAltitude: Optional[float] = None
     SolarAzimuth: Optional[float] = None
     DCLapStatus: Optional[int] = None
