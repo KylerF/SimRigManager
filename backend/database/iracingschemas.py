@@ -25,7 +25,7 @@ class WeekendOptions(BaseModel):
     WindSpeed: Optional[str] = None
     WeatherTemp: Optional[str] = None
     RelativeHumidity: Optional[str] = None
-    FogLevel: Optional[float] = None
+    FogLevel: Optional[str] = None
     TimeOfDay: Optional[str] = None
     Date: Optional[str] = None
     EarthRotationSpeedupFactor: Optional[int] = None

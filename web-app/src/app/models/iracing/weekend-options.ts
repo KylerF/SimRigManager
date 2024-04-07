@@ -15,7 +15,7 @@ export interface WeekendOptions {
   WindSpeed?: string;
   WeatherTemp?: string;
   RelativeHumidity?: string;
-  FogLevel?: number;
+  FogLevel?: string;
   TimeOfDay?: string;
   Date?: string;
   EarthRotationSpeedupFactor?: number;
