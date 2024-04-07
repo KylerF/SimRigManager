@@ -72,7 +72,7 @@ class WeekendInfo(BaseModel):
     TrackWindVel: Optional[str] = None
     TrackWindDir: Optional[str] = None
     TrackRelativeHumidity: Optional[str] = None
-    TrackFogLevel: Optional[float] = None
+    TrackFogLevel: Optional[str] = None
     TrackCleanup: Optional[int] = None
     TrackDynamicTrack: Optional[int] = None
     TrackVersion: Optional[str] = None
