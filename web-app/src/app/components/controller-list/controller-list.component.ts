@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { State, selectControllers } from 'store/reducers';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
-import { State, selectControllers } from 'store/reducers';
 
 import { ControllerSettingsComponent } from 'components/controller-settings/controller-settings.component';
+import { LoadControllers, DeleteController, StartStream } from 'store/actions/controller.actions';
 import { NewControllerComponent } from 'components/new-controller/new-controller.component';
 import { ControllerService } from 'services/controller.service';
 import { DriverService } from 'services/driver.service';
 import { Controller } from 'models/controller';
 import { first, Observable, take } from 'rxjs';
-import { LoadControllers, DeleteController, StartStream } from 'store/actions/controller.actions';
 import { StateContainer } from 'models/state';
 
 @Component({
@@ -61,7 +61,6 @@ export class ControllerListComponent implements OnInit, OnDestroy {
         next: (controllers) => {
           controllers.state.forEach((controller) => {
             if (controller.isAvailable == undefined) {
-              this.controllerService.disconnectController(controller);
               this.store.dispatch(StartStream({ controller: controller }));
             }
           });

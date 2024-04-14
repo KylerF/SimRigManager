@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
-import { DriverService } from 'src/app/services/driver.service';
+import { DriverService } from 'services/driver.service';
 import { Driver } from 'models/driver';
 
 @Component({

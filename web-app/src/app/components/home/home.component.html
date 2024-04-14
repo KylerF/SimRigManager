@@ -81,8 +81,16 @@
         ><b> WLED: </b> {{ controller.name }} is online
       </div>
 
+      <div
+        *ngIf="controller.isAvailable === undefined"
+        class="alert alert-secondary"
+      >
+        <span class="bi bi-circle-fill" style="color: grey"></span
+        ><b> WLED: </b> {{ controller.name }} loading
+      </div>
+
       <app-error-message
-        *ngIf="!controller.isAvailable"
+        *ngIf="controller.isAvailable === false"
         title="WLED"
         message="{{ controller.name }} is offline"
       ></app-error-message>

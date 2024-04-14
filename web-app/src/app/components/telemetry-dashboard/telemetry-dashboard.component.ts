@@ -27,7 +27,7 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
 
   /**
    * Inject dependencies and set up a websocket connection
-   * to the iRacing streams
+   * to the iRacing stream
    *
    * @param iracingDataService service to stream iRacing data
    * @param renderer render graphics in response to changes

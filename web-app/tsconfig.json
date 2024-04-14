@@ -13,7 +13,8 @@
       "store/*": ["./src/app/store/*"],
       "graphql/*": ["./src/app/graphql/*"],
       "environments/*": ["./src/environments/*"],
-      "helpers/*": ["./src/app/_helpers/*"]
+      "helpers/*": ["./src/app/_helpers/*"],
+      "animations/*": ["./src/app/animations/*"]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

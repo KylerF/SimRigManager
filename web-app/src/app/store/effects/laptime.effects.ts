@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
-import { LapTimeGQL, LapTimeService } from 'src/app/services/lap-time.service';
+import { LapTimeGQL, LapTimeService } from 'services/lap-time.service';
 import { catchError, map, mergeMap, of, takeUntil } from 'rxjs';
 import * as laptimeActions from 'store/actions/laptime.actions';
 

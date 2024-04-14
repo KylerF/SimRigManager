@@ -6,13 +6,13 @@
 import { gql } from 'apollo-angular';
 
 export const SUBSCRIBE_TO_WEEKEND_INFO = gql`
-  subscription weekendInfo {
+  subscription weekendInfo($withSessionTime: Boolean! = true) {
     iracing {
       WeekendInfo {
         EventType
         TrackDisplayName
       }
-      SessionTime
+      SessionTime @include(if: $withSessionTime)
     }
   }
 `;

@@ -1,7 +1,7 @@
 #
 # Docker container configuration for the SimRig Mock API server.
 #
-# Pulls the Node.js base image, copies source files into the container, 
+# Pulls the Node.js base image, copies source files into the container,
 # installs dependencies and runs the application.
 #
 
@@ -25,7 +25,7 @@ COPY . .
 EXPOSE 8001
 
 # Run tests
-RUN yarn test
+RUN yarn run test
 
 # Run the app
 CMD ["yarn", "start"]
