@@ -39,10 +39,9 @@ COPY . .
 # The app runs on 4200 within the container, so need to expose it
 EXPOSE 4200
 
-# Run linting and tests
+# Run linting and unit tests
 RUN yarn run lint
-# RUN yarn run e2e
-RUN yarn test
+RUN yarn run test
 
 # Run the app using Angular cli
 CMD [ "yarn", "run", "start" ]

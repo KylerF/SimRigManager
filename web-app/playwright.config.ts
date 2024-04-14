@@ -13,6 +13,7 @@ const config: PlaywrightTestConfig = {
   workers: 2,
   reporter: 'list',
   use: {
+    baseURL: 'http://web-app/',
     headless: true,
     actionTimeout: 30 * 1000,
     trace: 'on-first-retry',
@@ -26,12 +27,13 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
-
+  /*
   webServer: {
     command: 'npm run start',
     port: 4200,
     timeout: 120 * 1000,
   },
+  */
 };
 
 export default config;
