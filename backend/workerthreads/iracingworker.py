@@ -2,6 +2,7 @@ from redis.exceptions import ConnectionError
 from time import sleep
 import threading
 import logging
+import serial
 import math
 import json
 
@@ -117,6 +118,11 @@ class IracingWorker(threading.Thread):
                 # Get the RPM and update the light controller
                 self.rpm_strip.set_rpm(self.latest["rpm"])
                 self.controller.update(self.rpm_strip.to_color_list())
+
+                # Get speed/RPM and update the OLED display
+                s = serial.Serial("COM17")
+                msg = f"iracing,speed,{self.latest["speed"]},rpm,{self.latest["rpm"]}\r\n"
+                s.write(str.encode(msg))
 
                 # Check for a new session
                 session_id = self.latest["session_id"]
