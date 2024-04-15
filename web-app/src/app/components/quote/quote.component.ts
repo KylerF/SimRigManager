@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { LoadQuote } from 'store/actions/quote.actions';
-import { shortFadeIn } from 'src/app/animations/fades';
+import { shortFadeIn } from 'animations/fades';
 import { State, selectQuote } from 'store/reducers';
 import { StateContainer } from 'models/state';
 import { Quote } from 'models/quote';

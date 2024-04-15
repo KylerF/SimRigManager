@@ -4,7 +4,7 @@ import { LapTime } from 'models/lap-time';
 import { Driver } from 'models/driver';
 import { Store } from '@ngrx/store';
 
-import { LapTimeQueryParams, SortOrder } from 'src/app/models/lap-time-filter-params';
+import { LapTimeQueryParams, SortOrder } from 'models/lap-time-filter-params';
 
 import { LaptimeDataSource } from './scoreboard.datasource';
 import { State, selectActiveDriver } from 'store/reducers';

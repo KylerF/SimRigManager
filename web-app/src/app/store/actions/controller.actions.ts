@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 
 import { ControllerSettings } from 'models/controller-settings';
-import { WledMessage } from 'src/app/models/wled/wled-message';
+import { WledMessage } from 'models/wled/wled-message';
 import { Controller } from 'models/controller';
 import { Driver } from 'models/driver';
 

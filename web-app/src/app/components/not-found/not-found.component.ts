@@ -1,4 +1,4 @@
-import { longDelayedFadeIn } from 'src/app/animations/fades';
+import { longDelayedFadeIn } from 'animations/fades';
 import { Component } from '@angular/core';
 
 @Component({

@@ -10,7 +10,6 @@
     "postbuild": "yarn run copywebconfig",
     "prod": "ng build --configuration=production && serve -s dist/simrigmanager-web-app -l 4201",
     "test": "ng test",
-    "e2e": "playwright test",
     "lint": "ng lint",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css,scss,json}\"",
     "prune": "rm -rf ./.angular && rm -rf ./dist && docker-compose down && docker system prune -a && docker volume prune",

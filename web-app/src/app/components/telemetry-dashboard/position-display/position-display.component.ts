@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { isEmpty } from 'lodash-es';
 
 import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/base-telemetry-display/base-telemetry-display.component';
-import { IracingDataService } from 'src/app/services/iracing-data.service';
+import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
   selector: 'app-position-display',

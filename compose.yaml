@@ -56,3 +56,18 @@ services:
       - "6379:6379"
     environment:
       - REDIS_REPLICATION_MODE=master
+
+  # Configure Playwright e2e tests
+  e2e:
+    build:
+      context: ./e2e
+    volumes:
+      - ./web-app:/usr/src/web-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - web-app
+      - backend
+    # TODO: Disabling for now
+    profiles:
+      - donotstart

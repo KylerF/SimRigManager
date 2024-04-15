@@ -5,19 +5,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ControllerSettings } from 'models/controller-settings';
-import { WledMessage } from 'src/app/models/wled/wled-message';
+import { WledMessage } from 'models/wled/wled-message';
 import { Controller } from 'models/controller';
 import { APIHelper } from 'helpers/api-helper';
 import { State } from 'models/wled/state';
 import { Driver } from 'models/driver';
-@Injectable({
-  providedIn: 'root',
-})
 
 /**
  * Service to retrieve, add, update, delete, interact with and check
  * the status of WLED light controllers
  */
+@Injectable({ providedIn: 'root' })
 export class ControllerService {
   private endpoint = 'controllers';
   private settingsEndpoint = 'controllersettings';
@@ -88,7 +86,10 @@ export class ControllerService {
   getConnection(controller: Controller): WebSocketSubject<WledMessage> {
     if (this.connections.has(controller.id)) {
       // Return existing connection
-      return this.connections.get(controller.id);
+      let existing = this.connections.get(controller.id);
+      if (!existing.closed) {
+        return existing;
+      }
     }
 
     // Create new connection

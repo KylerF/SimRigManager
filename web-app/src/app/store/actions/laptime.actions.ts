@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 
 import { LapTimeQueryParams } from 'models/lap-time-filter-params';
-import { LapTime } from 'src/app/models/lap-time';
+import { LapTime } from 'models/lap-time';
 
 export enum LaptimeActionTypes {
   LoadLaptimes = '[Laptime] Load Laptimes',
