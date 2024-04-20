@@ -41,7 +41,7 @@ class Driver(DriverBase):
     trackTime: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class DriverStats(BaseModel):
@@ -63,7 +63,7 @@ class ActiveDriver(ActiveDriverBase):
     driver: Driver
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LapTimeBase(BaseModel):
@@ -83,7 +83,7 @@ class LapTime(LapTimeBase):
     setAt: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LightControllerBase(BaseModel):
@@ -113,7 +113,7 @@ class LightController(LightControllerBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LightControllerSettingsBase(BaseModel):
@@ -159,7 +159,7 @@ class LightControllerSettings(LightControllerSettingsBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class QuoteBase(BaseModel):
@@ -186,4 +186,4 @@ class Quote(QuoteBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -187,5 +187,5 @@ class IracingWorker(threading.Thread):
                 if new_laptime:
                     set_redis_key(
                         "session_best_lap",
-                        schemas.LapTime(**new_laptime.__dict__).json(),
+                        schemas.LapTime.from_orm(new_laptime).json()
                     )

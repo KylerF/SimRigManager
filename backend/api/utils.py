@@ -52,7 +52,7 @@ def update_driver_cache(driver):
     """
     Helper function to update the active driver in the Redis cache
     """
-    return set_redis_key("active_driver", schemas.Driver(**driver.__dict__).json())
+    return set_redis_key("active_driver", schemas.Driver.from_orm(driver).json())
 
 
 def get_session_best_lap():
@@ -66,7 +66,7 @@ def set_session_best_lap(laptime: models.LapTime):
     """
     Update the session best lap time for streaming
     """
-    return set_redis_key("session_best_lap", schemas.LapTime(**laptime.__dict__).json())
+    return set_redis_key("session_best_lap", schemas.LapTime.from_orm(laptime).json())
 
 
 def read_redis_key(key):
