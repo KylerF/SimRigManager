@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GraphQLModule } from './graphql.module';
 
@@ -40,12 +40,12 @@ import { SharedComponentsModule } from './components/components.module';
     ApiStatusBannerComponent,
     NotificationComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     NgbModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([
@@ -72,7 +72,6 @@ import { SharedComponentsModule } from './components/components.module';
     SharedComponentsModule,
     AppRoutingModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [provideHttpClient(withInterceptorsFromDi())],
 })
 export class AppModule {}

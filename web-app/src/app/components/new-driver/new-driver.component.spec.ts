@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -12,8 +12,8 @@ describe('NewDriverComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NewDriverComponent],
-      imports: [HttpClientModule],
-      providers: [NgbActiveModal, UntypedFormBuilder],
+      imports: [],
+      providers: [NgbActiveModal, UntypedFormBuilder, provideHttpClient(withInterceptorsFromDi())],
     }).compileComponents();
   });
 

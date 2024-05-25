@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { StoreModule } from '@ngrx/store';
 
@@ -11,7 +11,8 @@ describe('ControllerListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ControllerListComponent],
-      imports: [HttpClientModule, StoreModule.forRoot({})],
+      imports: [StoreModule.forRoot({})],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     }).compileComponents();
   });
 

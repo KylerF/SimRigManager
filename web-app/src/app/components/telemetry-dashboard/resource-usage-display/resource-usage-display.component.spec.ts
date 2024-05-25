@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { ResourceUsageDisplayComponent } from './resource-usage-display.component';
 
@@ -10,7 +10,8 @@ describe('ResourceUsageDisplayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ResourceUsageDisplayComponent],
-      imports: [HttpClientModule],
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     }).compileComponents();
   });
 

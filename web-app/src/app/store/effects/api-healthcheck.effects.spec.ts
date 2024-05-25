@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { ApiHealthcheckEffects } from './api-healthcheck.effects';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ApiHealthcheckEffects', () => {
   let actions$: Observable<any>;
@@ -11,8 +12,13 @@ describe('ApiHealthcheckEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [ApiHealthcheckEffects, provideMockActions(() => actions$)],
+      imports: [],
+      providers: [
+        ApiHealthcheckEffects,
+        provideMockActions(() => actions$),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     effects = TestBed.inject(ApiHealthcheckEffects);

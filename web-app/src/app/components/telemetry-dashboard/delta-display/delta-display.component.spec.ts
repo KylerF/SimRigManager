@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { DeltaDisplayComponent } from './delta-display.component';
 
@@ -10,7 +10,8 @@ describe('DeltaDisplayComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DeltaDisplayComponent],
-      imports: [HttpClientModule],
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     }).compileComponents();
   });
 

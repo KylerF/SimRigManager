@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ApolloTestingModule, ApolloTestingController } from 'apollo-angular/testing';
 
 import { DriverEffects } from './driver.effects';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DriverEffects', () => {
   let controller: ApolloTestingController;
@@ -13,8 +14,13 @@ describe('DriverEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ApolloTestingModule],
-      providers: [DriverEffects, provideMockActions(() => actions$)],
+      imports: [ApolloTestingModule],
+      providers: [
+        DriverEffects,
+        provideMockActions(() => actions$),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
 
     effects = TestBed.inject(DriverEffects);

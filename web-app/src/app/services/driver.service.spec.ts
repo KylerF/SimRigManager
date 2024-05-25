@@ -2,7 +2,7 @@
  * Unit tests for the DriverService
  */
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApolloTestingModule, ApolloTestingController } from 'apollo-angular/testing';
 
 import { DriverService, ActiveDriverGQL } from './driver.service';
@@ -30,7 +30,8 @@ describe('ActiveDriverGQL', () => {
 describe('DriverService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
+      imports: [],
+      providers: [provideHttpClient(withInterceptorsFromDi())],
     });
   });
 

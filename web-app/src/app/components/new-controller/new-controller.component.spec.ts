@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,8 +13,8 @@ describe('NewControllerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [NewControllerComponent],
-      imports: [HttpClientModule, StoreModule.forRoot({})],
-      providers: [NgbActiveModal, UntypedFormBuilder],
+      imports: [StoreModule.forRoot({})],
+      providers: [NgbActiveModal, UntypedFormBuilder, provideHttpClient(withInterceptorsFromDi())],
     }).compileComponents();
   });
 

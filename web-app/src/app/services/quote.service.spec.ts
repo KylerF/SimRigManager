@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
@@ -9,8 +9,8 @@ describe('QuoteService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterModule],
-      providers: [QuoteService],
+      imports: [RouterModule],
+      providers: [QuoteService, provideHttpClient(withInterceptorsFromDi())],
     });
     service = TestBed.inject(QuoteService);
   });
