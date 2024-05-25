@@ -232,7 +232,7 @@ class IracingFrame(BaseModel):
     PlayerCarWeightPenalty: Optional[int] = None
     PlayerCarPowerAdjust: Optional[int] = None
     PlayerCarDryTireSetLimit: Optional[int] = None
-    PlayerCarTowTime: Optional[int] = None
+    PlayerCarTowTime: Optional[float] = None
     PlayerCarInPitStall: Optional[bool] = None
     PlayerCarPitSvStatus: Optional[int] = None
     PlayerTireCompound: Optional[int] = None
