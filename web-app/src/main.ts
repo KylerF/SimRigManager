@@ -14,16 +14,3 @@ if (environment.production) {
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch((err) => console.error(err));
-
-// Update color mode based on OS setting
-function updateTheme() {
-  document
-    .querySelector('html')
-    .setAttribute(
-      'data-bs-theme',
-      window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-    );
-}
-
-updateTheme();
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);

@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { UpdateApiHealthcheck } from 'store/actions/api-healthcheck.actions';
 import { NotificationService } from 'services/notification.service';
+import { ColorSchemeService } from 'services/color-scheme.service';
 import { loadActiveDriver } from 'store/actions/driver.actions';
 import { selectActiveDriver, State } from 'store/reducers';
 import { Driver } from 'models/driver';
@@ -18,12 +19,17 @@ export class AppComponent implements OnInit {
 
   error: string;
 
-  constructor(private store: Store<State>, private notificationService: NotificationService) {}
+  constructor(
+    private store: Store<State>,
+    private notificationService: NotificationService,
+    private colorSchemeService: ColorSchemeService
+  ) {}
 
   /**
    * Get the active driver and subscribe to changes
    */
   ngOnInit() {
+    this.colorSchemeService.setColorScheme();
     this.pollAPIAvailable();
     this.subscribeToActiveDriver();
 
