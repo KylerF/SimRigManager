@@ -1,6 +1,6 @@
 import * as controllerActions from 'store/actions/controller.actions';
 import { createReducer, on } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { Controller } from 'models/controller';
 import { StateContainer } from 'models/state';

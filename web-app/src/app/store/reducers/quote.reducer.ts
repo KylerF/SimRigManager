@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import * as quoteActions from 'store/actions/quote.actions';
 import { StateContainer } from 'models/state';

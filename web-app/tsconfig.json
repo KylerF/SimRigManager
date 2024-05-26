@@ -18,15 +18,18 @@
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "esModuleInterop": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ESNext",
-    "lib": ["es2020", "dom", "esnext.asynciterable"],
-    "allowSyntheticDefaultImports": true,
+    "lib": [
+      "es2020",
+      "dom",
+      "esnext.asynciterable"
+    ],
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
