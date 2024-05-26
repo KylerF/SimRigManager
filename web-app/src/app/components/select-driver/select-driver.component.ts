@@ -26,6 +26,8 @@ export class SelectDriverComponent implements OnInit {
   loading: boolean = true;
   error: any;
 
+  iracingLink: String = 'https://members-ng.iracing.com';
+
   constructor(
     private modalService: NgbModal, // Service to display and interface with modal dialogs
     private store: Store
