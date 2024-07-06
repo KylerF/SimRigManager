@@ -186,6 +186,5 @@ class IracingWorker(threading.Thread):
                 # Update Redis key for streaming
                 if new_laptime:
                     set_redis_key(
-                        "session_best_lap",
-                        schemas.LapTime.from_orm(new_laptime).json()
+                        "session_best_lap", schemas.LapTime.from_orm(new_laptime).json()
                     )
