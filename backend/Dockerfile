@@ -6,7 +6,7 @@
 #
 
 # Pull the Python image
-FROM python:alpine
+FROM python:3.11-alpine
 
 # Create the source directory inside the container
 RUN mkdir -p /usr/src/backend

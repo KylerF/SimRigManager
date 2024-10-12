@@ -6,7 +6,7 @@
 #
 
 # Pull the Node.js Docker image
-FROM node:lts-alpine as build
+FROM node:lts-alpine AS build
 
 # Install Chrome Headless for testing
 RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories \
