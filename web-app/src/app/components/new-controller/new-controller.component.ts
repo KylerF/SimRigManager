@@ -10,10 +10,10 @@ import { StateContainer } from 'models/state';
 import { Store } from '@ngrx/store';
 
 @Component({
-    selector: 'app-new-controller',
-    templateUrl: './new-controller.component.html',
-    styleUrls: ['./new-controller.component.scss'],
-    standalone: false
+  selector: 'app-new-controller',
+  templateUrl: './new-controller.component.html',
+  styleUrls: ['./new-controller.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -112,3 +112,4 @@ export class NewControllerComponent implements OnInit {
     return this.newControllerForm.controls;
   }
 }
+

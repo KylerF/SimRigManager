@@ -13,10 +13,10 @@ import { first, Observable, take } from 'rxjs';
 import { StateContainer } from 'models/state';
 
 @Component({
-    selector: 'app-controller-list',
-    templateUrl: './controller-list.component.html',
-    styleUrls: ['./controller-list.component.scss'],
-    standalone: false
+  selector: 'app-controller-list',
+  templateUrl: './controller-list.component.html',
+  styleUrls: ['./controller-list.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -147,3 +147,4 @@ export class ControllerListComponent implements OnInit, OnDestroy {
     });
   }
 }
+

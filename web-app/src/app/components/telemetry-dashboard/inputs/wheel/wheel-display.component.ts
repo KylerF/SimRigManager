@@ -6,10 +6,10 @@ import { IracingDataService } from 'services/iracing-data.service';
 import { CarImageHelper } from 'helpers/car-image-helper';
 
 @Component({
-    selector: 'app-wheel-display',
-    templateUrl: './wheel-display.component.html',
-    styleUrls: ['./wheel-display.component.scss'],
-    standalone: false
+  selector: 'app-wheel-display',
+  templateUrl: './wheel-display.component.html',
+  styleUrls: ['./wheel-display.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -20,7 +20,10 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
   car: string;
   wheelImage: string;
 
-  constructor(iracingDataService: IracingDataService, private renderer: Renderer2) {
+  constructor(
+    iracingDataService: IracingDataService,
+    private renderer: Renderer2
+  ) {
     super(iracingDataService);
   }
 
@@ -62,3 +65,4 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
     }
   }
 }
+

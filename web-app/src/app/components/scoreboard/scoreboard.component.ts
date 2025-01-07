@@ -10,11 +10,11 @@ import { LaptimeDataSource } from './scoreboard.datasource';
 import { State, selectActiveDriver } from 'store/reducers';
 
 @Component({
-    selector: 'app-scoreboard',
-    templateUrl: './scoreboard.component.html',
-    styleUrls: ['./scoreboard.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'app-scoreboard',
+  templateUrl: './scoreboard.component.html',
+  styleUrls: ['./scoreboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 
 /**
@@ -158,3 +158,4 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     }
   }
 }
+

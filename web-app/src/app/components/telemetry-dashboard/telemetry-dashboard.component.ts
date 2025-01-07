@@ -6,10 +6,10 @@ import { isEmpty } from 'lodash-es';
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-    selector: 'app-telemtry-display',
-    templateUrl: './telemetry-dashboard.component.html',
-    styleUrls: ['./telemetry-dashboard.component.scss'],
-    standalone: false
+  selector: 'app-telemtry-display',
+  templateUrl: './telemetry-dashboard.component.html',
+  styleUrls: ['./telemetry-dashboard.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -77,3 +77,4 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
     //console.log($event.source.getFreeDragPosition());
   }
 }
+

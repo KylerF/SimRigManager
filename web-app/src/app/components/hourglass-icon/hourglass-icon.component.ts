@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { timer } from 'rxjs';
 
 @Component({
-    selector: 'app-hourglass-icon',
-    templateUrl: './hourglass-icon.component.html',
-    styleUrls: ['./hourglass-icon.component.scss'],
-    standalone: false
+  selector: 'app-hourglass-icon',
+  templateUrl: './hourglass-icon.component.html',
+  styleUrls: ['./hourglass-icon.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -33,3 +33,4 @@ export class HourglassIconComponent implements OnInit {
     this.stage = (this.stage + 1) % 4;
   }
 }
+

@@ -4,10 +4,10 @@ import { DriverService } from 'services/driver.service';
 import { Driver } from 'models/driver';
 
 @Component({
-    selector: 'app-driver-avatar',
-    templateUrl: './driver-avatar.component.html',
-    styleUrls: ['./driver-avatar.component.scss'],
-    standalone: false
+  selector: 'app-driver-avatar',
+  templateUrl: './driver-avatar.component.html',
+  styleUrls: ['./driver-avatar.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -44,3 +44,4 @@ export class DriverAvatarComponent implements OnInit, OnChanges {
     }
   }
 }
+

@@ -5,10 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-    selector: 'app-gear-indicator-display',
-    templateUrl: './gear-indicator-display.component.html',
-    styleUrls: ['./gear-indicator-display.component.scss'],
-    standalone: false
+  selector: 'app-gear-indicator-display',
+  templateUrl: './gear-indicator-display.component.html',
+  styleUrls: ['./gear-indicator-display.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -42,3 +42,4 @@ export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent
     });
   }
 }
+

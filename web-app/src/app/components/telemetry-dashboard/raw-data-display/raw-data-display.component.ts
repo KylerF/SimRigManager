@@ -6,10 +6,10 @@ import { APIHelper } from 'helpers/api-helper';
 import { isEmpty, keys } from 'lodash-es';
 
 @Component({
-    selector: 'app-raw-data-display',
-    templateUrl: './raw-data-display.component.html',
-    styleUrls: ['./raw-data-display.component.scss'],
-    standalone: false
+  selector: 'app-raw-data-display',
+  templateUrl: './raw-data-display.component.html',
+  styleUrls: ['./raw-data-display.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -50,3 +50,4 @@ export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent imple
     });
   }
 }
+

@@ -9,17 +9,20 @@ import { selectActiveDriver, State } from 'store/reducers';
 import { Driver } from 'models/driver';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
 })
 export class AppComponent implements OnInit {
   activeDriver$: Observable<Driver>;
 
   error: string;
 
-  constructor(private store: Store<State>, private notificationService: NotificationService) {}
+  constructor(
+    private store: Store<State>,
+    private notificationService: NotificationService
+  ) {}
 
   /**
    * Get the active driver and subscribe to changes
@@ -45,3 +48,4 @@ export class AppComponent implements OnInit {
     this.store.dispatch(UpdateApiHealthcheck());
   }
 }
+

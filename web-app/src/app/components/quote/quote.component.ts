@@ -9,11 +9,11 @@ import { StateContainer } from 'models/state';
 import { Quote } from 'models/quote';
 
 @Component({
-    selector: 'app-quote',
-    templateUrl: './quote.component.html',
-    styleUrls: ['./quote.component.scss'],
-    animations: [shortFadeIn],
-    standalone: false
+  selector: 'app-quote',
+  templateUrl: './quote.component.html',
+  styleUrls: ['./quote.component.scss'],
+  animations: [shortFadeIn],
+  standalone: true,
 })
 
 /**
@@ -34,3 +34,4 @@ export class QuoteComponent implements OnInit {
     this.store.dispatch(LoadQuote());
   }
 }
+

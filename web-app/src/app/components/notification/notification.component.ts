@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NotificationService } from 'services/notification.service';
 
 @Component({
-    selector: 'app-notifications',
-    templateUrl: './notification.component.html',
-    styleUrls: ['./notification.component.scss'],
-    standalone: false
+  selector: 'app-notifications',
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.scss'],
+  standalone: true,
 })
 export class NotificationComponent {
   constructor(public notificationService: NotificationService) {}
@@ -14,3 +14,4 @@ export class NotificationComponent {
     return toast.textOrTpl instanceof NotificationService;
   }
 }
+

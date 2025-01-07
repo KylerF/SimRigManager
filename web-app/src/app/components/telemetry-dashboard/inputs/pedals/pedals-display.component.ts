@@ -5,10 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-    selector: 'app-pedals-display',
-    templateUrl: './pedals-display.component.html',
-    styleUrls: ['./pedals-display.component.scss'],
-    standalone: false
+  selector: 'app-pedals-display',
+  templateUrl: './pedals-display.component.html',
+  styleUrls: ['./pedals-display.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -40,3 +40,4 @@ export class PedalsDisplayComponent extends BaseTelemetryDisplayComponent implem
     });
   }
 }
+

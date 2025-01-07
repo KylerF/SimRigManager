@@ -10,10 +10,10 @@ import { Observable } from 'rxjs';
 import { StateContainer } from 'models/state';
 
 @Component({
-    selector: 'app-select-driver',
-    templateUrl: './select-driver.component.html',
-    styleUrls: ['./select-driver.component.scss'],
-    standalone: false
+  selector: 'app-select-driver',
+  templateUrl: './select-driver.component.html',
+  styleUrls: ['./select-driver.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -73,3 +73,4 @@ export class SelectDriverComponent implements OnInit {
       });
   }
 }
+

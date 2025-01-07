@@ -6,10 +6,10 @@ import { DriverService } from 'services/driver.service';
 import { NewDriver } from 'models/new-driver';
 
 @Component({
-    selector: 'app-new-driver',
-    templateUrl: './new-driver.component.html',
-    styleUrls: ['./new-driver.component.scss'],
-    standalone: false
+  selector: 'app-new-driver',
+  templateUrl: './new-driver.component.html',
+  styleUrls: ['./new-driver.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -71,3 +71,4 @@ export class NewDriverComponent implements OnInit {
     return this.newDriverForm.controls;
   }
 }
+

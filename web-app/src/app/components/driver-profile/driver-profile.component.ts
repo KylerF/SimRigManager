@@ -11,10 +11,10 @@ import { selectActiveDriver, State } from 'store/reducers';
 import * as driverActions from 'store/actions/driver.actions';
 
 @Component({
-    selector: 'app-driver-profile',
-    templateUrl: './driver-profile.component.html',
-    styleUrls: ['./driver-profile.component.scss'],
-    standalone: false
+  selector: 'app-driver-profile',
+  templateUrl: './driver-profile.component.html',
+  styleUrls: ['./driver-profile.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -136,3 +136,4 @@ export class DriverProfileComponent implements OnInit {
       });
   }
 }
+

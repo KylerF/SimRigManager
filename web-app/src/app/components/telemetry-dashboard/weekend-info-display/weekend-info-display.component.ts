@@ -5,10 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-    selector: 'app-weekend-info-display',
-    templateUrl: './weekend-info-display.component.html',
-    styleUrls: ['./weekend-info-display.component.scss'],
-    standalone: false
+  selector: 'app-weekend-info-display',
+  templateUrl: './weekend-info-display.component.html',
+  styleUrls: ['./weekend-info-display.component.scss'],
+  standalone: true,
 })
 
 /**
@@ -35,3 +35,4 @@ export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent i
     });
   }
 }
+
