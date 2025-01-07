@@ -9,7 +9,7 @@ import { NewDriver } from 'models/new-driver';
   selector: 'app-new-driver',
   templateUrl: './new-driver.component.html',
   styleUrls: ['./new-driver.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -71,4 +71,3 @@ export class NewDriverComponent implements OnInit {
     return this.newDriverForm.controls;
   }
 }
-

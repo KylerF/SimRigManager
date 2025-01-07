@@ -30,6 +30,7 @@ module.exports = {
             type: 'attribute',
           },
         ],
+        '@angular-eslint/prefer-standalone': ['off'],
       },
     },
     {

@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'hoursMinutesSeconds',
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -23,4 +23,3 @@ export class HoursMinutesSecondsPipe implements PipeTransform {
     );
   }
 }
-

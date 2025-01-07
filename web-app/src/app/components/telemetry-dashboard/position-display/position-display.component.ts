@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-position-display',
   templateUrl: './position-display.component.html',
   styleUrls: ['./position-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 /**
  * Component to show the driver's position
@@ -30,4 +30,3 @@ export class PositionDisplayComponent extends BaseTelemetryDisplayComponent impl
     });
   }
 }
-

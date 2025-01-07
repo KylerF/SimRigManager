@@ -14,7 +14,7 @@ import { GetControllerSettings, UpdateControllerSettings } from 'store/actions/c
   selector: 'app-controller-settings',
   templateUrl: './controller-settings.component.html',
   styleUrls: ['./controller-settings.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -164,4 +164,3 @@ export class ControllerSettingsComponent implements OnInit {
     return this.controllerSettingsForm.controls;
   }
 }
-

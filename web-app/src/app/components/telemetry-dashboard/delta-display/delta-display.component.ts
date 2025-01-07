@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-delta-display',
   templateUrl: './delta-display.component.html',
   styleUrls: ['./delta-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   delta: number;
@@ -27,4 +27,3 @@ export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent impleme
     });
   }
 }
-

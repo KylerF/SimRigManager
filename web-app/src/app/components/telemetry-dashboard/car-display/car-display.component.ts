@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-car-display',
   templateUrl: './car-display.component.html',
   styleUrls: ['./car-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -35,4 +35,3 @@ export class CarDisplayComponent extends BaseTelemetryDisplayComponent implement
     });
   }
 }
-

@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-incident-count-display',
   templateUrl: './incident-count-display.component.html',
   styleUrls: ['./incident-count-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -38,4 +38,3 @@ export class IncidentCountDisplayComponent extends BaseTelemetryDisplayComponent
     });
   }
 }
-

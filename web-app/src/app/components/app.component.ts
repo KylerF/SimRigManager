@@ -12,7 +12,7 @@ import { Driver } from 'models/driver';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 export class AppComponent implements OnInit {
   activeDriver$: Observable<Driver>;
@@ -48,4 +48,3 @@ export class AppComponent implements OnInit {
     this.store.dispatch(UpdateApiHealthcheck());
   }
 }
-

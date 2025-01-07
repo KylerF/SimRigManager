@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-rpm-display',
   templateUrl: './rpm-display.component.html',
   styleUrls: ['./rpm-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -41,4 +41,3 @@ export class RpmDisplayComponent extends BaseTelemetryDisplayComponent implement
     });
   }
 }
-

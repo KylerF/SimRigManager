@@ -14,7 +14,7 @@ import { State, selectActiveDriver } from 'store/reducers';
   templateUrl: './scoreboard.component.html',
   styleUrls: ['./scoreboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -158,4 +158,3 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     }
   }
 }
-

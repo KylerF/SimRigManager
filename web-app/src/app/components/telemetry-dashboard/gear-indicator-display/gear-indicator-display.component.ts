@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-gear-indicator-display',
   templateUrl: './gear-indicator-display.component.html',
   styleUrls: ['./gear-indicator-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -42,4 +42,3 @@ export class GearIndicatorDisplayComponent extends BaseTelemetryDisplayComponent
     });
   }
 }
-

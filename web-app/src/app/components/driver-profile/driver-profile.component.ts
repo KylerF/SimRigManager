@@ -14,7 +14,7 @@ import * as driverActions from 'store/actions/driver.actions';
   selector: 'app-driver-profile',
   templateUrl: './driver-profile.component.html',
   styleUrls: ['./driver-profile.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -136,4 +136,3 @@ export class DriverProfileComponent implements OnInit {
       });
   }
 }
-

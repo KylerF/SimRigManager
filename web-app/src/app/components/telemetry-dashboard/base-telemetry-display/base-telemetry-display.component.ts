@@ -7,7 +7,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-base-telemetry-display',
   templateUrl: './base-telemetry-display.component.html',
   styleUrls: ['./base-telemetry-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -47,4 +47,3 @@ export class BaseTelemetryDisplayComponent implements OnInit, OnDestroy {
     }
   }
 }
-

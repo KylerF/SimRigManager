@@ -9,7 +9,7 @@ import { CarImageHelper } from 'helpers/car-image-helper';
   selector: 'app-wheel-display',
   templateUrl: './wheel-display.component.html',
   styleUrls: ['./wheel-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -65,4 +65,3 @@ export class WheelDisplayComponent extends BaseTelemetryDisplayComponent impleme
     }
   }
 }
-

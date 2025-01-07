@@ -9,7 +9,7 @@ import { Constants } from 'helpers/constants';
   selector: 'app-speedometer-display',
   templateUrl: './speedometer.component.html',
   styleUrls: ['./speedometer.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -44,4 +44,3 @@ export class SpeedometerComponent extends BaseTelemetryDisplayComponent implemen
     });
   }
 }
-

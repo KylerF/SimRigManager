@@ -13,7 +13,7 @@ import { StateContainer } from 'models/state';
   selector: 'app-select-driver',
   templateUrl: './select-driver.component.html',
   styleUrls: ['./select-driver.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -73,4 +73,3 @@ export class SelectDriverComponent implements OnInit {
       });
   }
 }
-

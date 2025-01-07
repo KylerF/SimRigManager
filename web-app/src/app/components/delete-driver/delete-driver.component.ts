@@ -8,7 +8,7 @@ import { Driver } from 'models/driver';
   selector: 'app-delete-driver',
   templateUrl: './delete-driver.component.html',
   styleUrls: ['./delete-driver.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -42,4 +42,3 @@ export class DeleteDriverComponent {
     this.activeModal.dismiss();
   }
 }
-

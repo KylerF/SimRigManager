@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-resource-usage-display',
   templateUrl: './resource-usage-display.component.html',
   styleUrls: ['./resource-usage-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -40,4 +40,3 @@ export class ResourceUsageDisplayComponent extends BaseTelemetryDisplayComponent
     });
   }
 }
-

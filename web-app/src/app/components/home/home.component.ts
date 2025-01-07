@@ -16,7 +16,7 @@ import { IracingDataFrame } from 'models/iracing/data-frame';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -79,4 +79,3 @@ export class HomeComponent implements OnInit {
     });
   }
 }
-

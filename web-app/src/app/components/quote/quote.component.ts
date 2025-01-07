@@ -13,7 +13,7 @@ import { Quote } from 'models/quote';
   templateUrl: './quote.component.html',
   styleUrls: ['./quote.component.scss'],
   animations: [shortFadeIn],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -34,4 +34,3 @@ export class QuoteComponent implements OnInit {
     this.store.dispatch(LoadQuote());
   }
 }
-

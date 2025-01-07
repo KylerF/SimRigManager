@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-pedals-display',
   templateUrl: './pedals-display.component.html',
   styleUrls: ['./pedals-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -40,4 +40,3 @@ export class PedalsDisplayComponent extends BaseTelemetryDisplayComponent implem
     });
   }
 }
-

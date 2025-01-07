@@ -9,7 +9,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-flag-display',
   templateUrl: './flag-display.component.html',
   styleUrls: ['./flag-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -43,4 +43,3 @@ export class FlagDisplayComponent extends BaseTelemetryDisplayComponent implemen
     });
   }
 }
-

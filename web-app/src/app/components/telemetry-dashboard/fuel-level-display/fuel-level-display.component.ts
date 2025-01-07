@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-fuel-level-display',
   templateUrl: './fuel-level-display.component.html',
   styleUrls: ['./fuel-level-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -34,4 +34,3 @@ export class FuelLevelDisplayComponent extends BaseTelemetryDisplayComponent imp
     });
   }
 }
-

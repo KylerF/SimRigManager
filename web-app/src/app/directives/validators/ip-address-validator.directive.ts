@@ -11,7 +11,7 @@ import { ipAddressValidatorFunction } from './ip-address-validator-function';
       multi: true,
     },
   ],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -24,4 +24,3 @@ export class IpAddressValidator implements Validator {
     return ipAddressValidatorFunction()(control);
   }
 }
-

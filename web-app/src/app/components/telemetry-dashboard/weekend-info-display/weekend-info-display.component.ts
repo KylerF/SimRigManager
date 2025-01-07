@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-weekend-info-display',
   templateUrl: './weekend-info-display.component.html',
   styleUrls: ['./weekend-info-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -35,4 +35,3 @@ export class WeekendInfoDisplayComponent extends BaseTelemetryDisplayComponent i
     });
   }
 }
-

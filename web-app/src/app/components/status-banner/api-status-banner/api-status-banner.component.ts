@@ -4,9 +4,8 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-api-status-banner',
   templateUrl: './api-status-banner.component.html',
   styleUrls: ['./api-status-banner.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 export class ApiStatusBannerComponent {
   constructor() {}
 }
-

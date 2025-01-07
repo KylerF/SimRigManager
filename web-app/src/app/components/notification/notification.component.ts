@@ -5,7 +5,7 @@ import { NotificationService } from 'services/notification.service';
   selector: 'app-notifications',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 export class NotificationComponent {
   constructor(public notificationService: NotificationService) {}
@@ -14,4 +14,3 @@ export class NotificationComponent {
     return toast.textOrTpl instanceof NotificationService;
   }
 }
-

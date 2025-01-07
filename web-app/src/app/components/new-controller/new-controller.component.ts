@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
   selector: 'app-new-controller',
   templateUrl: './new-controller.component.html',
   styleUrls: ['./new-controller.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -112,4 +112,3 @@ export class NewControllerComponent implements OnInit {
     return this.newControllerForm.controls;
   }
 }
-

@@ -9,7 +9,7 @@ import { isEmpty, keys } from 'lodash-es';
   selector: 'app-raw-data-display',
   templateUrl: './raw-data-display.component.html',
   styleUrls: ['./raw-data-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -50,4 +50,3 @@ export class RawDataDisplayComponent extends BaseTelemetryDisplayComponent imple
     });
   }
 }
-

@@ -8,7 +8,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-track-map-display',
   templateUrl: './track-map-display.component.html',
   styleUrls: ['./track-map-display.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -100,4 +100,3 @@ type Position = {
   x: number;
   y: number;
 };
-

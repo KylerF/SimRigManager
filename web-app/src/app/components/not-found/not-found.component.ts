@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
   animations: [longDelayedFadeIn],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -15,4 +15,3 @@ import { Component } from '@angular/core';
 export class NotFoundComponent {
   constructor() {}
 }
-

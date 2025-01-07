@@ -9,7 +9,7 @@ import { IracingDataService } from 'services/iracing-data.service';
   selector: 'app-telemtry-display',
   templateUrl: './telemetry-dashboard.component.html',
   styleUrls: ['./telemetry-dashboard.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -77,4 +77,3 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
     //console.log($event.source.getFreeDragPosition());
   }
 }
-

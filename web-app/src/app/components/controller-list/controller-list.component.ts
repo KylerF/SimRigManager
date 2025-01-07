@@ -16,7 +16,7 @@ import { StateContainer } from 'models/state';
   selector: 'app-controller-list',
   templateUrl: './controller-list.component.html',
   styleUrls: ['./controller-list.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -147,4 +147,3 @@ export class ControllerListComponent implements OnInit, OnDestroy {
     });
   }
 }
-

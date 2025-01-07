@@ -5,7 +5,7 @@ import { timer } from 'rxjs';
   selector: 'app-hourglass-icon',
   templateUrl: './hourglass-icon.component.html',
   styleUrls: ['./hourglass-icon.component.scss'],
-  standalone: true,
+  standalone: false,
 })
 
 /**
@@ -33,4 +33,3 @@ export class HourglassIconComponent implements OnInit {
     this.stage = (this.stage + 1) % 4;
   }
 }
-
