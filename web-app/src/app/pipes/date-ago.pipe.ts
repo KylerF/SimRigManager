@@ -9,7 +9,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: false,
 })
 export class DateAgoPipe implements PipeTransform {
-  transform(value: number, args?: any): any {
+  transform(value: Date, args?: any): any {
     if (value) {
       const date = new Date(value);
       const timezoneOffset = date.getTimezoneOffset() * 60000;
