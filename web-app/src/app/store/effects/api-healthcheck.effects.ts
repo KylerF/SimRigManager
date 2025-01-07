@@ -11,7 +11,10 @@ export class ApiHealthcheckEffects {
   private readonly POLL_INTERVAL = 5000;
   private stopPolling$ = new Observable<void>();
 
-  constructor(private actions$: Actions, private availabilityService: AvailabilityService) {}
+  constructor(
+    private actions$: Actions,
+    private availabilityService: AvailabilityService
+  ) {}
 
   /**
    * Check the backend API status periodically and update the store

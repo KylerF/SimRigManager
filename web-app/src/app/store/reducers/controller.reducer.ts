@@ -129,4 +129,3 @@ export const reducer = createReducer(
     lastUpdated: moment().toDate(),
   }))
 );
-

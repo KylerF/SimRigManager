@@ -7,7 +7,10 @@ import { QuoteService } from 'services/quote.service';
 
 @Injectable()
 export class QuoteEffects {
-  constructor(private actions$: Actions, private quoteService: QuoteService) {}
+  constructor(
+    private actions$: Actions,
+    private quoteService: QuoteService
+  ) {}
 
   /**
    * Retrieve a random quote from the API

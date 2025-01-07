@@ -31,7 +31,10 @@ export class LaptimeDataSource extends DataSource<LapTime | undefined> {
    * @param store passed in from the parent component
    * @param filterParams passed in from the parent component
    */
-  constructor(private store: Store<State>, private filterParams: LapTimeQueryParams) {
+  constructor(
+    private store: Store<State>,
+    private filterParams: LapTimeQueryParams
+  ) {
     super();
 
     this.state$ = this.store.pipe(select(selectLaptimesState()));

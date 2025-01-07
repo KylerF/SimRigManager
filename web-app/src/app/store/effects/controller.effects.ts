@@ -8,7 +8,10 @@ import { Controller } from 'models/controller';
 
 @Injectable()
 export class ControllerEffects {
-  constructor(private actions$: Actions, private controllerService: ControllerService) {}
+  constructor(
+    private actions$: Actions,
+    private controllerService: ControllerService
+  ) {}
 
   /**
    * Retrieve all WLED light controllers from the API
