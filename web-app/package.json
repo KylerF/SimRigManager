@@ -12,7 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "prettify": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css,scss,json}\"",
-    "prune": "rm -rf ./.angular && rm -rf ./dist && docker-compose down && docker system prune -a && docker volume prune",
+    "prune": "rm -rf ./.angular && rm -rf ./dist && docker compose down && docker system prune -a && docker volume prune",
     "reinstall": "rm -rf ./node_modules && rm yarn.lock && yarn install",
     "check-for-updates": "npx npm-check-updates -u"
   },
