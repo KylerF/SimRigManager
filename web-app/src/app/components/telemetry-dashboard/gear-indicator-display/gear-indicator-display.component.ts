@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-gear-indicator-display',
-  templateUrl: './gear-indicator-display.component.html',
-  styleUrls: ['./gear-indicator-display.component.scss'],
+    selector: 'app-gear-indicator-display',
+    templateUrl: './gear-indicator-display.component.html',
+    styleUrls: ['./gear-indicator-display.component.scss'],
+    standalone: false
 })
 
 /**

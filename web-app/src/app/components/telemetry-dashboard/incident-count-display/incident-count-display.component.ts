@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-incident-count-display',
-  templateUrl: './incident-count-display.component.html',
-  styleUrls: ['./incident-count-display.component.scss'],
+    selector: 'app-incident-count-display',
+    templateUrl: './incident-count-display.component.html',
+    styleUrls: ['./incident-count-display.component.scss'],
+    standalone: false
 })
 
 /**

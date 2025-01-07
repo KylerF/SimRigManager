@@ -10,9 +10,10 @@ import { StateContainer } from 'models/state';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'app-new-controller',
-  templateUrl: './new-controller.component.html',
-  styleUrls: ['./new-controller.component.scss'],
+    selector: 'app-new-controller',
+    templateUrl: './new-controller.component.html',
+    styleUrls: ['./new-controller.component.scss'],
+    standalone: false
 })
 
 /**

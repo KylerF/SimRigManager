@@ -13,9 +13,10 @@ import { Controller } from 'models/controller';
 import { IracingDataFrame } from 'models/iracing/data-frame';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 
 /**

@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-rpm-display',
-  templateUrl: './rpm-display.component.html',
-  styleUrls: ['./rpm-display.component.scss'],
+    selector: 'app-rpm-display',
+    templateUrl: './rpm-display.component.html',
+    styleUrls: ['./rpm-display.component.scss'],
+    standalone: false
 })
 
 /**

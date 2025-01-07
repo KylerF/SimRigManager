@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-resource-usage-display',
-  templateUrl: './resource-usage-display.component.html',
-  styleUrls: ['./resource-usage-display.component.scss'],
+    selector: 'app-resource-usage-display',
+    templateUrl: './resource-usage-display.component.html',
+    styleUrls: ['./resource-usage-display.component.scss'],
+    standalone: false
 })
 
 /**

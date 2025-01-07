@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { timer } from 'rxjs';
 
 @Component({
-  selector: 'app-hourglass-icon',
-  templateUrl: './hourglass-icon.component.html',
-  styleUrls: ['./hourglass-icon.component.scss'],
+    selector: 'app-hourglass-icon',
+    templateUrl: './hourglass-icon.component.html',
+    styleUrls: ['./hourglass-icon.component.scss'],
+    standalone: false
 })
 
 /**

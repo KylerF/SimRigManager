@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-weekend-info-display',
-  templateUrl: './weekend-info-display.component.html',
-  styleUrls: ['./weekend-info-display.component.scss'],
+    selector: 'app-weekend-info-display',
+    templateUrl: './weekend-info-display.component.html',
+    styleUrls: ['./weekend-info-display.component.scss'],
+    standalone: false
 })
 
 /**

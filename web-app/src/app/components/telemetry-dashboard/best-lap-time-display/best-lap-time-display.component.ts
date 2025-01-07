@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-best-lap-time-display',
-  templateUrl: './best-lap-time-display.component.html',
-  styleUrls: ['./best-lap-time-display.component.scss'],
+    selector: 'app-best-lap-time-display',
+    templateUrl: './best-lap-time-display.component.html',
+    styleUrls: ['./best-lap-time-display.component.scss'],
+    standalone: false
 })
 
 /**

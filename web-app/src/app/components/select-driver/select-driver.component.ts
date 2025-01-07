@@ -10,9 +10,10 @@ import { Observable } from 'rxjs';
 import { StateContainer } from 'models/state';
 
 @Component({
-  selector: 'app-select-driver',
-  templateUrl: './select-driver.component.html',
-  styleUrls: ['./select-driver.component.scss'],
+    selector: 'app-select-driver',
+    templateUrl: './select-driver.component.html',
+    styleUrls: ['./select-driver.component.scss'],
+    standalone: false
 })
 
 /**

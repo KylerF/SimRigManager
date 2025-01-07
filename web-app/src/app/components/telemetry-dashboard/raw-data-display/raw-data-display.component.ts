@@ -6,9 +6,10 @@ import { APIHelper } from 'helpers/api-helper';
 import { isEmpty, keys } from 'lodash-es';
 
 @Component({
-  selector: 'app-raw-data-display',
-  templateUrl: './raw-data-display.component.html',
-  styleUrls: ['./raw-data-display.component.scss'],
+    selector: 'app-raw-data-display',
+    templateUrl: './raw-data-display.component.html',
+    styleUrls: ['./raw-data-display.component.scss'],
+    standalone: false
 })
 
 /**

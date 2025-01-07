@@ -6,9 +6,10 @@ import { IracingDataService } from 'services/iracing-data.service';
 import { CarImageHelper } from 'helpers/car-image-helper';
 
 @Component({
-  selector: 'app-wheel-display',
-  templateUrl: './wheel-display.component.html',
-  styleUrls: ['./wheel-display.component.scss'],
+    selector: 'app-wheel-display',
+    templateUrl: './wheel-display.component.html',
+    styleUrls: ['./wheel-display.component.scss'],
+    standalone: false
 })
 
 /**

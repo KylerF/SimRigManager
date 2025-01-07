@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-fuel-level-display',
-  templateUrl: './fuel-level-display.component.html',
-  styleUrls: ['./fuel-level-display.component.scss'],
+    selector: 'app-fuel-level-display',
+    templateUrl: './fuel-level-display.component.html',
+    styleUrls: ['./fuel-level-display.component.scss'],
+    standalone: false
 })
 
 /**

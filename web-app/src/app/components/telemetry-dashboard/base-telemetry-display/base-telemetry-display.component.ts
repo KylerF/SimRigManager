@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-base-telemetry-display',
-  templateUrl: './base-telemetry-display.component.html',
-  styleUrls: ['./base-telemetry-display.component.scss'],
+    selector: 'app-base-telemetry-display',
+    templateUrl: './base-telemetry-display.component.html',
+    styleUrls: ['./base-telemetry-display.component.scss'],
+    standalone: false
 })
 
 /**

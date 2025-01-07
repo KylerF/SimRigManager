@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-lap-count-display',
-  templateUrl: './lap-count-display.component.html',
-  styleUrls: ['./lap-count-display.component.scss'],
+    selector: 'app-lap-count-display',
+    templateUrl: './lap-count-display.component.html',
+    styleUrls: ['./lap-count-display.component.scss'],
+    standalone: false
 })
 /**
  * Component to show the current session lap count

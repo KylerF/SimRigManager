@@ -5,9 +5,10 @@ import { DriverService } from 'services/driver.service';
 import { Driver } from 'models/driver';
 
 @Component({
-  selector: 'app-delete-driver',
-  templateUrl: './delete-driver.component.html',
-  styleUrls: ['./delete-driver.component.scss'],
+    selector: 'app-delete-driver',
+    templateUrl: './delete-driver.component.html',
+    styleUrls: ['./delete-driver.component.scss'],
+    standalone: false
 })
 
 /**

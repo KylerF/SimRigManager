@@ -13,9 +13,10 @@ import { first, Observable, take } from 'rxjs';
 import { StateContainer } from 'models/state';
 
 @Component({
-  selector: 'app-controller-list',
-  templateUrl: './controller-list.component.html',
-  styleUrls: ['./controller-list.component.scss'],
+    selector: 'app-controller-list',
+    templateUrl: './controller-list.component.html',
+    styleUrls: ['./controller-list.component.scss'],
+    standalone: false
 })
 
 /**

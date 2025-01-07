@@ -6,9 +6,10 @@ import { IracingDataService } from 'services/iracing-data.service';
 import { Constants } from 'helpers/constants';
 
 @Component({
-  selector: 'app-speedometer-display',
-  templateUrl: './speedometer.component.html',
-  styleUrls: ['./speedometer.component.scss'],
+    selector: 'app-speedometer-display',
+    templateUrl: './speedometer.component.html',
+    styleUrls: ['./speedometer.component.scss'],
+    standalone: false
 })
 
 /**

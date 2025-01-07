@@ -6,9 +6,10 @@ import { Constants } from 'helpers/constants';
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-flag-display',
-  templateUrl: './flag-display.component.html',
-  styleUrls: ['./flag-display.component.scss'],
+    selector: 'app-flag-display',
+    templateUrl: './flag-display.component.html',
+    styleUrls: ['./flag-display.component.scss'],
+    standalone: false
 })
 
 /**

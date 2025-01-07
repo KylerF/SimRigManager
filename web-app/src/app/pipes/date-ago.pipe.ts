@@ -4,8 +4,9 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Pipe to convert a unix date to 'x seconds/minutes/hours/days... ago' statement
  */
 @Pipe({
-  name: 'dateAgo',
-  pure: true,
+    name: 'dateAgo',
+    pure: true,
+    standalone: false
 })
 export class DateAgoPipe implements PipeTransform {
   transform(value: number, args?: any): any {

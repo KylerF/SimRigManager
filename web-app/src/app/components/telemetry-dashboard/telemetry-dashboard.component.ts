@@ -6,9 +6,10 @@ import { isEmpty } from 'lodash-es';
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-telemtry-display',
-  templateUrl: './telemetry-dashboard.component.html',
-  styleUrls: ['./telemetry-dashboard.component.scss'],
+    selector: 'app-telemtry-display',
+    templateUrl: './telemetry-dashboard.component.html',
+    styleUrls: ['./telemetry-dashboard.component.scss'],
+    standalone: false
 })
 
 /**

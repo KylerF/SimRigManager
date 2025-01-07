@@ -11,9 +11,10 @@ import { State } from 'store/reducers';
 import { GetControllerSettings, UpdateControllerSettings } from 'store/actions/controller.actions';
 
 @Component({
-  selector: 'app-controller-settings',
-  templateUrl: './controller-settings.component.html',
-  styleUrls: ['./controller-settings.component.scss'],
+    selector: 'app-controller-settings',
+    templateUrl: './controller-settings.component.html',
+    styleUrls: ['./controller-settings.component.scss'],
+    standalone: false
 })
 
 /**

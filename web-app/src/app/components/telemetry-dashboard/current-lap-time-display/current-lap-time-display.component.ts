@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-current-lap-time-display',
-  templateUrl: './current-lap-time-display.component.html',
-  styleUrls: ['./current-lap-time-display.component.scss'],
+    selector: 'app-current-lap-time-display',
+    templateUrl: './current-lap-time-display.component.html',
+    styleUrls: ['./current-lap-time-display.component.scss'],
+    standalone: false
 })
 
 /**

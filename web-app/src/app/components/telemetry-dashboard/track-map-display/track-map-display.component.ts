@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-track-map-display',
-  templateUrl: './track-map-display.component.html',
-  styleUrls: ['./track-map-display.component.scss'],
+    selector: 'app-track-map-display',
+    templateUrl: './track-map-display.component.html',
+    styleUrls: ['./track-map-display.component.scss'],
+    standalone: false
 })
 
 /**

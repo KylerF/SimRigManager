@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-delta-display',
-  templateUrl: './delta-display.component.html',
-  styleUrls: ['./delta-display.component.scss'],
+    selector: 'app-delta-display',
+    templateUrl: './delta-display.component.html',
+    styleUrls: ['./delta-display.component.scss'],
+    standalone: false
 })
 export class DeltaDisplayComponent extends BaseTelemetryDisplayComponent implements OnInit {
   delta: number;

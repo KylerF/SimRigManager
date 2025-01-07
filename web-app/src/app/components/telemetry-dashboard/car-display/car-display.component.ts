@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-car-display',
-  templateUrl: './car-display.component.html',
-  styleUrls: ['./car-display.component.scss'],
+    selector: 'app-car-display',
+    templateUrl: './car-display.component.html',
+    styleUrls: ['./car-display.component.scss'],
+    standalone: false
 })
 
 /**

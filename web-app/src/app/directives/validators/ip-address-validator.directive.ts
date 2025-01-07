@@ -3,14 +3,15 @@ import { Directive } from '@angular/core';
 import { ipAddressValidatorFunction } from './ip-address-validator-function';
 
 @Directive({
-  selector: '[appIpAddress]',
-  providers: [
-    {
-      provide: NG_VALIDATORS,
-      useExisting: IpAddressValidator,
-      multi: true,
-    },
-  ],
+    selector: '[appIpAddress]',
+    providers: [
+        {
+            provide: NG_VALIDATORS,
+            useExisting: IpAddressValidator,
+            multi: true,
+        },
+    ],
+    standalone: false
 })
 
 /**

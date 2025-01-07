@@ -5,9 +5,10 @@ import { BaseTelemetryDisplayComponent } from 'components/telemetry-dashboard/ba
 import { IracingDataService } from 'services/iracing-data.service';
 
 @Component({
-  selector: 'app-position-display',
-  templateUrl: './position-display.component.html',
-  styleUrls: ['./position-display.component.scss'],
+    selector: 'app-position-display',
+    templateUrl: './position-display.component.html',
+    styleUrls: ['./position-display.component.scss'],
+    standalone: false
 })
 /**
  * Component to show the driver's position
