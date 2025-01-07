@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import * as apiHealthcheckActions from 'store/actions/api-healthcheck.actions';
 import { AvailabilityCheck } from 'models/availability-check';

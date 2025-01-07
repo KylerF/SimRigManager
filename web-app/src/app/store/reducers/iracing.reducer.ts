@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import * as iracingActions from 'store/actions/iracing.actions';
 
@@ -27,3 +27,4 @@ export const reducer = createReducer(
     ...state,
   }))
 );
+

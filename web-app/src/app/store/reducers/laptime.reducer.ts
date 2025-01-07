@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import * as laptimeActions from 'store/actions/laptime.actions';
 import { LapTimeState } from 'models/lap-time';
@@ -74,3 +74,4 @@ export const reducer = createReducer(
     lastUpdated: moment().toDate(),
   }))
 );
+
