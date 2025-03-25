@@ -18,7 +18,7 @@ from workerthreads.iracingworker import IracingWorker
 from raceparse.iracingstream import IracingStream
 from quotes.init_quotes import init_quotes
 from display.colortheme import ColorTheme
-from display.rpmgauge import RpmGauge
+from display.display import Display, RpmGauge
 from api.apiserver import APIServer
 from database import models
 from e131.wled import Wled

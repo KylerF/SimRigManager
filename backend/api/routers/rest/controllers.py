@@ -13,6 +13,10 @@ from database.schemas import (
     LightControllerSettingsCreate,
     LightControllerSettingsUpdate,
     LightControllerSettingsDelete,
+    CustomControllerTypeCreate,
+    CustomControllerTypeUpdate,
+    CustomControllerTypeDelete,
+    CustomControllerType,
 )
 
 """
@@ -116,5 +120,38 @@ async def delete_controller(settings: LightControllerSettingsDelete):
     """
     db = next(get_db())
     result = crud.delete_light_controller(db, settings)
+
+    return result
+
+
+@router.post("/custom", response_model=CustomControllerType)
+async def create_custom_controller_type(custom_controller_type: CustomControllerTypeCreate):
+    """
+    Create a new custom controller type
+    """
+    db = next(get_db())
+    new_custom_controller_type = crud.create_custom_controller_type(db, custom_controller_type)
+
+    return new_custom_controller_type
+
+
+@router.patch("/custom", response_model=CustomControllerType)
+async def update_custom_controller_type(custom_controller_type: CustomControllerTypeUpdate):
+    """
+    Update a custom controller type
+    """
+    db = next(get_db())
+    updated_custom_controller_type = crud.update_custom_controller_type(db, custom_controller_type)
+
+    return updated_custom_controller_type
+
+
+@router.delete("/custom", response_model=CustomControllerType)
+async def delete_custom_controller_type(custom_controller_type: CustomControllerTypeDelete):
+    """
+    Delete a custom controller type
+    """
+    db = next(get_db())
+    result = crud.delete_custom_controller_type(db, custom_controller_type)
 
     return result

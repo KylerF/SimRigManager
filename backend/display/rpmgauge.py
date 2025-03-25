@@ -70,3 +70,21 @@ class RpmGauge:
 
         # Convert the 0-1 range into a value in the right range.
         return int(right_min + (value_scaled * right_span))
+
+    def get_rpm(self):
+        """
+        Get the current RPM
+        """
+        return self.rpm
+
+    def get_idle_rpm(self):
+        """
+        Get the idle RPM
+        """
+        return self.idle_rpm
+
+    def get_redline(self):
+        """
+        Get the redline RPM
+        """
+        return self.redline

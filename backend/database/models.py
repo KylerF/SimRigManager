@@ -114,6 +114,7 @@ class LightController(Base):
     name = Column(String, unique=True)
     ipAddress = Column(String, unique=True)
     universe = Column(Integer, default=1)
+    type = Column(String, default="generic")  # Built-in type or custom type name
 
     lightControllerSettings = relationship(
         "LightControllerSettings",
@@ -136,6 +137,7 @@ class LightControllerSettings(Base):
     colorThemeId = Column(Integer, ForeignKey("colorthemes.id"))
     autoPower = Column(Boolean, default=False)
     idleEffectId = Column(Integer, default=1)
+    customSettings = Column(String, nullable=True)  # JSON string for custom settings
 
     driver = relationship(
         "Driver", back_populates="lightControllerSettings", lazy="subquery"
