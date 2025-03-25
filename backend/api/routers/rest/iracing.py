@@ -6,6 +6,8 @@ import json
 
 from api.utils import get_iracing_data, get_ws_manager
 from api.ssegenerators import SSEGenerators
+from recorder.session_recorder import IracingSessionRecorder
+from recorder.session_player import IracingSessionPlayer
 
 """
 Router to get iRacing data
@@ -72,3 +74,73 @@ async def stream_iracing_data(request: Request):
     """
     event_generator = SSEGenerators.get_generator(request, "iracing")
     return EventSourceResponse(event_generator)
+
+
+@router.post("/record/start")
+async def start_recording():
+    """
+    Start recording the iRacing session
+    """
+    recorder = IracingSessionRecorder()
+    recorder.start()
+    return {"status": "recording started"}
+
+
+@router.post("/record/stop")
+async def stop_recording():
+    """
+    Stop recording the iRacing session
+    """
+    recorder = IracingSessionRecorder()
+    recorder.stop()
+    return {"status": "recording stopped"}
+
+
+@router.post("/playback/start")
+async def start_playback():
+    """
+    Start playback of the recorded iRacing session
+    """
+    player = IracingSessionPlayer()
+    player.play()
+    return {"status": "playback started"}
+
+
+@router.post("/playback/stop")
+async def stop_playback():
+    """
+    Stop playback of the recorded iRacing session
+    """
+    player = IracingSessionPlayer()
+    player.stop()
+    return {"status": "playback stopped"}
+
+
+@router.post("/playback/pause")
+async def pause_playback():
+    """
+    Pause playback of the recorded iRacing session
+    """
+    player = IracingSessionPlayer()
+    player.pause()
+    return {"status": "playback paused"}
+
+
+@router.post("/playback/rewind")
+async def rewind_playback():
+    """
+    Rewind playback of the recorded iRacing session
+    """
+    player = IracingSessionPlayer()
+    player.rewind()
+    return {"status": "playback rewinded"}
+
+
+@router.post("/playback/speed")
+async def set_playback_speed(speed: float):
+    """
+    Set playback speed of the recorded iRacing session
+    """
+    player = IracingSessionPlayer()
+    player.set_speed(speed)
+    return {"status": f"playback speed set to {speed}x"}

@@ -110,4 +110,104 @@ export class IracingDataService {
     this.streamOpen = false;
     this._connected.next(false);
   }
+
+  /**
+   * Start recording the iRacing session
+   */
+  startRecording(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/record/start`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/record/start`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Stop recording the iRacing session
+   */
+  stopRecording(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/record/stop`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/record/stop`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Start playback of the recorded iRacing session
+   */
+  startPlayback(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/playback/start`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/playback/start`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Stop playback of the recorded iRacing session
+   */
+  stopPlayback(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/playback/stop`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/playback/stop`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Pause playback of the recorded iRacing session
+   */
+  pausePlayback(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/playback/pause`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/playback/pause`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Rewind playback of the recorded iRacing session
+   */
+  rewindPlayback(): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/playback/rewind`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/playback/rewind`;
+    }
+
+    return this.http.post<any>(url, {}).pipe(catchError(APIHelper.handleError));
+  }
+
+  /**
+   * Set playback speed of the recorded iRacing session
+   *
+   * @param speed playback speed
+   */
+  setPlaybackSpeed(speed: number): Observable<any> {
+    let url = `${APIHelper.getBaseUrl()}/iracing/playback/speed`;
+
+    // If we're in the development environment, use the mock API
+    if (isDevMode()) {
+      url = `${APIHelper.getMockBaseUrl()}/iracing/playback/speed`;
+    }
+
+    return this.http.post<any>(url, { speed }).pipe(catchError(APIHelper.handleError));
+  }
 }

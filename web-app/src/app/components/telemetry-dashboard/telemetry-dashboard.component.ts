@@ -76,4 +76,76 @@ export class TelemetryDashboardComponent implements OnInit, OnDestroy {
     //TODO: save the position of the component
     //console.log($event.source.getFreeDragPosition());
   }
+
+  /**
+   * Start playback of the recorded session
+   */
+  startPlayback() {
+    this.iracingDataService.startPlayback().subscribe({
+      next: () => {
+        console.log('Playback started');
+      },
+      error: (err) => {
+        console.error('Error starting playback', err);
+      },
+    });
+  }
+
+  /**
+   * Stop playback of the recorded session
+   */
+  stopPlayback() {
+    this.iracingDataService.stopPlayback().subscribe({
+      next: () => {
+        console.log('Playback stopped');
+      },
+      error: (err) => {
+        console.error('Error stopping playback', err);
+      },
+    });
+  }
+
+  /**
+   * Pause playback of the recorded session
+   */
+  pausePlayback() {
+    this.iracingDataService.pausePlayback().subscribe({
+      next: () => {
+        console.log('Playback paused');
+      },
+      error: (err) => {
+        console.error('Error pausing playback', err);
+      },
+    });
+  }
+
+  /**
+   * Rewind playback of the recorded session
+   */
+  rewindPlayback() {
+    this.iracingDataService.rewindPlayback().subscribe({
+      next: () => {
+        console.log('Playback rewinded');
+      },
+      error: (err) => {
+        console.error('Error rewinding playback', err);
+      },
+    });
+  }
+
+  /**
+   * Set playback speed of the recorded session
+   *
+   * @param speed playback speed
+   */
+  setPlaybackSpeed(speed: number) {
+    this.iracingDataService.setPlaybackSpeed(speed).subscribe({
+      next: () => {
+        console.log(`Playback speed set to ${speed}x`);
+      },
+      error: (err) => {
+        console.error('Error setting playback speed', err);
+      },
+    });
+  }
 }
